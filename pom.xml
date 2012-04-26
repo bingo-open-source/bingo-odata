@@ -12,5 +12,6 @@
 	<packaging>pom</packaging>
 	<modules>
 		<module>odata-core</module>
+		<module>odata-server</module>
 	</modules>
 </project>
