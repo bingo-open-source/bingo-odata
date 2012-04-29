@@ -7,10 +7,10 @@ import org.joda.time.LocalDateTime;
 import org.joda.time.LocalTime;
 
 import bingo.odata.edm.EdmSimpleType;
-import bingo.odata.repack.org.apache.commons.codec.binary.Base64;
-import bingo.odata.repack.org.apache.commons.codec.binary.Hex;
 import bingo.odata.zinternal.InternalUtil;
 import bingo.odata.zinternal.TypeConverter;
+import bingo.utils.codec.binary.Base64;
+import bingo.utils.codec.binary.Hex;
 
 /**
  * A static factory to create immutable {@link OSimpleObject} instances.
@@ -114,7 +114,7 @@ public class OSimpleObjects {
             BigDecimal dValue = value == null ? null : new BigDecimal(value);
             return (OSimpleObject<V>) Impl.create(EdmSimpleType.DECIMAL, dValue);
         } else if (EdmSimpleType.BINARY.equals(type)) {
-            byte[] bValue = new Base64().decode(value);
+            byte[] bValue = Base64.decode(value);
             return (OSimpleObject<V>) Impl.create(EdmSimpleType.BINARY, bValue);
         } else if (EdmSimpleType.DATETIME.equals(type)) {
             LocalDateTime dValue = value == null ? null : new LocalDateTime(InternalUtil.parseDateTime(value));
@@ -133,7 +133,7 @@ public class OSimpleObjects {
     /** Returns a human-readable string value for a given object. */
     public static String getValueDisplayString(Object value) {
         if (value instanceof byte[])
-            value = "0x" + Hex.encodeHexString((byte[]) value);
+            value = "0x" + Hex.encode((byte[]) value);
         return value == null ? "null" : value.toString();
     }
 

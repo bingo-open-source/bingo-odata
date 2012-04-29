@@ -1,7 +1,7 @@
 package bingo.odata.consumer.behaviors;
 
 import bingo.odata.consumer.ODataClientRequest;
-import bingo.odata.repack.org.apache.commons.codec.binary.Base64;
+import bingo.utils.codec.binary.Base64;
 
 public class BasicAuthenticationBehavior implements OClientBehavior {
 
@@ -15,7 +15,7 @@ public class BasicAuthenticationBehavior implements OClientBehavior {
 
     public ODataClientRequest transform(ODataClientRequest request) {
         String userPassword = user + ":" + password;
-        String encoded = Base64.encodeBase64String(userPassword.getBytes());
+        String encoded = Base64.encode(userPassword.getBytes());
         encoded = encoded.replaceAll("\r\n?", "");
         return request.header("Authorization", "Basic " + encoded);
 

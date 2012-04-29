@@ -1,8 +1,8 @@
 package bingo.odata.expression;
 
 import bingo.odata.expression.OrderByExpression.Direction;
-import bingo.odata.repack.org.apache.commons.codec.binary.Hex;
 import bingo.odata.zinternal.InternalUtil;
+import bingo.utils.codec.binary.Hex;
 
 public class PrintExpressionVisitor implements ExpressionVisitor {
 
@@ -322,7 +322,7 @@ public class PrintExpressionVisitor implements ExpressionVisitor {
 
     
     public void visit(BinaryLiteral expr) {
-        append("binary(%s)", Hex.encodeHexString(expr.getValue()));
+        append("binary(%s)", Hex.encode(expr.getValue()));
     }
 
     

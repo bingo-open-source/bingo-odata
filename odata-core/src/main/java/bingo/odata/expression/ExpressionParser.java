@@ -15,11 +15,9 @@ import bingo.lang.Enumerator;
 import bingo.lang.Func1;
 import bingo.lang.Func2;
 import bingo.odata.Guid;
-import bingo.odata.Throwables;
 import bingo.odata.expression.OrderByExpression.Direction;
-import bingo.odata.repack.org.apache.commons.codec.DecoderException;
-import bingo.odata.repack.org.apache.commons.codec.binary.Hex;
 import bingo.odata.zinternal.InternalUtil;
+import bingo.utils.codec.binary.Hex;
 
 public class ExpressionParser {
 
@@ -491,12 +489,8 @@ public class ExpressionParser {
             } else if (word.equals("decimal")) {
                 return Expression.decimal(new BigDecimal(value));
             } else if (word.equals("X") || word.equals("binary")) {
-                try {
-                    byte[] bValue = Hex.decodeHex(value.toCharArray());
-                    return Expression.binary(bValue);
-                } catch (DecoderException e) {
-                    throw Throwables.propagate(e);
-                }
+                byte[] bValue = Hex.decode(value.toCharArray());
+                return Expression.binary(bValue);
             }
         }
         // long literal: 1234L

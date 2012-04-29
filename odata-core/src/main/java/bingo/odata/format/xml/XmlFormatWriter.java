@@ -25,10 +25,10 @@ import bingo.odata.edm.EdmCollectionType;
 import bingo.odata.edm.EdmEntitySet;
 import bingo.odata.edm.EdmSimpleType;
 import bingo.odata.edm.EdmType;
-import bingo.odata.repack.org.apache.commons.codec.binary.Base64;
 import bingo.odata.stax2.QName2;
 import bingo.odata.stax2.XMLWriter2;
 import bingo.odata.zinternal.InternalUtil;
+import bingo.utils.codec.binary.Base64;
 
 public class XmlFormatWriter {
 
@@ -136,7 +136,7 @@ public class XmlFormatWriter {
             } else if (type == EdmSimpleType.BINARY) {
                 byte[] bValue = (byte[]) value;
                 if (value != null) {
-                    sValue = Base64.encodeBase64String(bValue);
+                    sValue = Base64.encode(bValue);
                 }
             } else if (type == EdmSimpleType.GUID) {
                 if (value != null) {

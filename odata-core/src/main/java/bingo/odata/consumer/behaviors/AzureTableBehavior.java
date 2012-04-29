@@ -15,7 +15,7 @@ import bingo.odata.ODataConstants;
 import bingo.odata.Throwables;
 import bingo.odata.consumer.ODataClientRequest;
 import bingo.odata.consumer.ODataConsumer;
-import bingo.odata.repack.org.apache.commons.codec.binary.Base64;
+import bingo.utils.codec.binary.Base64;
 
 public class AzureTableBehavior implements OClientBehavior {
 
@@ -89,10 +89,10 @@ public class AzureTableBehavior implements OClientBehavior {
     }
 
     private static String base64Encode(byte[] value) {
-        return Base64.encodeBase64String(value).trim();
+        return Base64.encode(value).trim();
     }
 
     private static byte[] base64Decode(String value) {
-        return Base64.decodeBase64(value);
+        return Base64.decode(value);
     }
 }

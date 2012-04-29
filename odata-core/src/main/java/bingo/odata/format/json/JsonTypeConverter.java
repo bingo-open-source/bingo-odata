@@ -11,8 +11,8 @@ import bingo.odata.OProperties;
 import bingo.odata.OProperty;
 import bingo.odata.UnsignedByte;
 import bingo.odata.edm.EdmSimpleType;
-import bingo.odata.repack.org.apache.commons.codec.binary.Base64;
 import bingo.odata.zinternal.InternalUtil;
+import bingo.utils.codec.binary.Base64;
 
 public class JsonTypeConverter {
 
@@ -49,7 +49,7 @@ public class JsonTypeConverter {
             BigDecimal dValue = value == null ? null : new BigDecimal(value);
             return OProperties.decimal(name, dValue);
         } else if (EdmSimpleType.BINARY.equals(type)) {
-            byte[] bValue = value == null ? null : new Base64().decode(value);
+            byte[] bValue = value == null ? null : Base64.decode(value);
             return OProperties.binary(name, bValue);
         } else if (EdmSimpleType.DATETIME.equals(type)) {
             LocalDateTime dValue = null;

@@ -30,8 +30,8 @@ import bingo.odata.edm.EdmEntitySet;
 import bingo.odata.edm.EdmSimpleType;
 import bingo.odata.edm.EdmType;
 import bingo.odata.format.FormatWriter;
-import bingo.odata.repack.org.apache.commons.codec.binary.Base64;
 import bingo.odata.zinternal.InternalUtil;
+import bingo.utils.codec.binary.Base64;
 
 /**
  * Write content to an output stream in JSON format.
@@ -106,7 +106,7 @@ public abstract class JsonFormatWriter<T> implements FormatWriter<T> {
         if (pvalue == null) {
             jw.writeNull();
         } else if (type.equals(EdmSimpleType.BINARY)) {
-            jw.writeString(Base64.encodeBase64String((byte[]) pvalue));
+            jw.writeString(Base64.encode((byte[]) pvalue));
         } else if (type.equals(EdmSimpleType.BOOLEAN)) {
             jw.writeBoolean((Boolean) pvalue);
         } else if (type.equals(EdmSimpleType.BYTE)) {

@@ -1,8 +1,8 @@
 package bingo.odata.expression;
 
 import bingo.odata.expression.OrderByExpression.Direction;
-import bingo.odata.repack.org.apache.commons.codec.binary.Hex;
 import bingo.odata.zinternal.InternalUtil;
+import bingo.utils.codec.binary.Hex;
 
 public class FilterExpressionVisitor implements ExpressionVisitor {
 
@@ -57,7 +57,7 @@ public class FilterExpressionVisitor implements ExpressionVisitor {
 	}
 
 	public void visit(BinaryLiteral expr) {
-		push("binary'" + Hex.encodeHexString(expr.getValue()) + "'");
+		push("binary'" + Hex.encode(expr.getValue()) + "'");
 	}
 
 	public void visit(DateTimeLiteral expr) {
