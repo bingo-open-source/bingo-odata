@@ -15,7 +15,7 @@ import org.joda.time.Instant;
 import org.joda.time.LocalDateTime;
 import org.joda.time.LocalTime;
 
-import bingo.lang.Enumerator;
+import bingo.lang.Enumerable;
 import bingo.odata.Guid;
 import bingo.odata.UnsignedByte;
 
@@ -63,7 +63,7 @@ public class EdmSimpleType<V> extends EdmType {
     private EdmSimpleType(String fullyQualifiedTypeName, Class<V> canonicalJavaType, Class<?>... alternateJavaTypes) {
         super(fullyQualifiedTypeName);
         this.canonicalJavaType = canonicalJavaType;
-        this.javaTypes = Enumerator.<Class<?>> create(canonicalJavaType).concat(alternateJavaTypes).toSet();
+        this.javaTypes = Enumerable.<Class<?>> of(canonicalJavaType).concat(alternateJavaTypes).toSet();
     }
 
     @Override

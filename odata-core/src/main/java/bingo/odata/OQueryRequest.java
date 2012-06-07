@@ -2,7 +2,7 @@ package bingo.odata;
 
 import java.util.List;
 
-import bingo.lang.Enumerator;
+import bingo.lang.Enumerable;
 
 /**
  * A consumer-side query-request builder.  Call {@link #execute()} or simply iterate to issue the request.
@@ -12,7 +12,7 @@ import bingo.lang.Enumerator;
 public interface OQueryRequest<T> extends Iterable<T> {
 
     /**
-     * Sends the query-request to the OData service, returning a client-side {@link Enumerator} for subsequent in-memory operations.
+     * Sends the query-request to the OData service, returning a client-side {@link Enumerable} for subsequent in-memory operations.
      * <p>The returned enumerable transparently handles server-side paging and deferred enumeration.</p>
      * <p><code>OQueryRequest</code> itself also extends {@link Iterable} so that it can be used in a <code>for each</code> loop without calling execute().</p>
      *

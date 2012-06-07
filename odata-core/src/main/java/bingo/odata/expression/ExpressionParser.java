@@ -11,7 +11,7 @@ import org.joda.time.LocalTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
-import bingo.lang.Enumerator;
+import bingo.lang.Enumerable;
 import bingo.lang.Func1;
 import bingo.lang.Func2;
 import bingo.odata.Guid;
@@ -47,7 +47,7 @@ public class ExpressionParser {
         public static final String CEILING     = "ceiling";
     }
 
-    private static Set<String> METHODS = Enumerator.create(
+    private static Set<String> METHODS = Enumerable.of(
                                                Methods.CAST,
                                                    Methods.ISOF,
                                                    Methods.ENDSWITH,
@@ -96,11 +96,11 @@ public class ExpressionParser {
 
         List<CommonExpression> expressions = readExpressions(tokens);
         if (DUMP_EXPRESSION_INFO) {
-            dump(value, tokens, Enumerator.create(expressions).toArray(CommonExpression.class));
+            dump(value, tokens, Enumerable.of(expressions).toArray(CommonExpression.class));
         }
 
-        return Enumerator.create(expressions).select(new Func1<CommonExpression, OrderByExpression>() {
-            public OrderByExpression evaluate(CommonExpression input) {
+        return Enumerable.of(expressions).select(new Func1<CommonExpression, OrderByExpression>() {
+            public OrderByExpression apply(CommonExpression input) {
                 if (input instanceof OrderByExpression) {
                     return (OrderByExpression) input;
                 }
@@ -110,10 +110,10 @@ public class ExpressionParser {
     }
 
     private static void dump(String value, List<Token> tokens, CommonExpression... expressions) {
-        String msg = "[" + value + "] -> " + Enumerator.create(tokens).join("");
+        String msg = "[" + value + "] -> " + Enumerable.of(tokens).join("");
         if (expressions != null) {
-            msg = msg + " -> " + Enumerator.create(expressions).select(new Func1<CommonExpression, String>() {
-                public String evaluate(CommonExpression input) {
+            msg = msg + " -> " + Enumerable.of(expressions).select(new Func1<CommonExpression, String>() {
+                public String apply(CommonExpression input) {
                     return Expression.asPrintString(input);
                 }
             }).join(",");
@@ -129,8 +129,8 @@ public class ExpressionParser {
 
         //  since we support currently simple properties only we have to
         //  confine ourselves to EntitySimpleProperties.
-        return Enumerator.create(expressions).select(new Func1<CommonExpression, EntitySimpleProperty>() {
-            public EntitySimpleProperty evaluate(CommonExpression input) {
+        return Enumerable.of(expressions).select(new Func1<CommonExpression, EntitySimpleProperty>() {
+            public EntitySimpleProperty apply(CommonExpression input) {
                 if (input instanceof EntitySimpleProperty)
                     return (EntitySimpleProperty) input;
                 return null;
@@ -167,7 +167,7 @@ public class ExpressionParser {
                     Token wordToken = t;
                     if (wordToken.value.equals(op)) {
                         CommonExpression expression = readExpression(tokens.subList(i + (whitespaceRequired ? 2 : 1), ts));
-                        return fn.evaluate(expression);
+                        return fn.apply(expression);
                     }
                 }
             }
@@ -726,7 +726,7 @@ public class ExpressionParser {
         // Unary: not x, -x, cast(T), cast(x,T)
         rt = processUnaryExpression(tokens, "not", true, new Func1<CommonExpression, CommonExpression>() {
 
-            public CommonExpression evaluate(CommonExpression expression) {
+            public CommonExpression apply(CommonExpression expression) {
                 return Expression.not(expression);
             }
         });
@@ -735,7 +735,7 @@ public class ExpressionParser {
         }
         rt = processUnaryExpression(tokens, "-", false, new Func1<CommonExpression, CommonExpression>() {
 
-            public CommonExpression evaluate(CommonExpression expression) {
+            public CommonExpression apply(CommonExpression expression) {
                 return Expression.negate(expression);
             }
         });
@@ -893,7 +893,7 @@ public class ExpressionParser {
 
         @Override
         public String toString() {
-            return Enumerator.create(tokens).join("");
+            return Enumerable.of(tokens).join("");
         }
     }
 }

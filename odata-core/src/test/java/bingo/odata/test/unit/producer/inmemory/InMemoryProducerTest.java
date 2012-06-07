@@ -6,7 +6,7 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
-import bingo.lang.Enumerator;
+import bingo.lang.Enumerable;
 import bingo.lang.Func;
 import bingo.lang.Func1;
 import bingo.odata.OAtomStreamEntity;
@@ -32,12 +32,12 @@ public class InMemoryProducerTest {
     @Test
     public void inlineCountWithOneShotIterable() {
         InMemoryProducer producer = new InMemoryProducer("inlineCountWithOneShotIterable");
-        final List<String> testData = Enumerator.create("one", "two", "three").toList();
+        final List<String> testData = Enumerable.of("one", "two", "three").toList();
         Func<Iterable<String>> getTestData = new Func<Iterable<String>>() {
             
-            public Iterable<String> evaluate() {
+            public Iterable<String> apply() {
                 // worst case - a one shot iterable
-                return Enumerator.create(Funcs.constant(testData.iterator()));
+                return Enumerable.of(Funcs.constant(testData.iterator()));
             }
         };
         producer.register(String.class, String.class, "TestData", getTestData, Funcs.identity(String.class));
@@ -56,14 +56,14 @@ public class InMemoryProducerTest {
         final InMemoryProducer p = new InMemoryProducer("testStreamEntity");
         p.register(StreamEntity.class, "setName", new Func<Iterable<StreamEntity>>() {
             
-            public Iterable<StreamEntity> evaluate() {
-                return Enumerator.create(new StreamEntity());
+            public Iterable<StreamEntity> apply() {
+                return Enumerable.of(new StreamEntity());
             }
         }, "Id");
         p.register(String.class, String.class, "ss", new Func<Iterable<String>>() {
             
-            public Iterable<String> evaluate() {
-                return Enumerator.create("aaa");
+            public Iterable<String> apply() {
+                return Enumerable.of("aaa");
             }
         }, Funcs.identity(String.class));
 
@@ -83,8 +83,8 @@ public class InMemoryProducerTest {
         InMemoryProducer p = new InMemoryProducer(namespace);
         p.register(SimpleEntity.class, "setName", "typeName", new Func<Iterable<SimpleEntity>>() {
             
-            public Iterable<SimpleEntity> evaluate() {
-                return Enumerator.create(e1, new SimpleEntity());
+            public Iterable<SimpleEntity> apply() {
+                return Enumerable.of(e1, new SimpleEntity());
             }
         }, "Id");
 
@@ -108,17 +108,17 @@ public class InMemoryProducerTest {
         }
 
         InMemoryProducer producer = new InMemoryProducer("complexQuery");
-        final List<Entry> testData = Enumerator.create(new Entry(), new Entry()).toList();
+        final List<Entry> testData = Enumerable.of(new Entry(), new Entry()).toList();
         Func<Iterable<Entry>> getTestData = new Func<Iterable<Entry>>() {
             
-            public Iterable<Entry> evaluate() {
+            public Iterable<Entry> apply() {
                 // worst case - a one shot iterable
-                return Enumerator.create(Funcs.constant(testData.iterator()));
+                return Enumerable.of(Funcs.constant(testData.iterator()));
             }
         };
         producer.register(Entry.class, Integer.class, "TestData", getTestData, new Func1<Entry, Integer>() {
             
-            public Integer evaluate(Entry entry) {
+            public Integer apply(Entry entry) {
                 return entry.getId();
             }
         });
@@ -133,8 +133,8 @@ public class InMemoryProducerTest {
         InMemoryProducer p = new InMemoryProducer("testSimpleCount");
         p.register(SimpleEntity.class, "setName", "typeName", new Func<Iterable<SimpleEntity>>() {
             
-            public Iterable<SimpleEntity> evaluate() {
-                return Enumerator.create(new SimpleEntity(), new SimpleEntity());
+            public Iterable<SimpleEntity> apply() {
+                return Enumerable.of(new SimpleEntity(), new SimpleEntity());
             }
         }, "Id");
 
@@ -147,8 +147,8 @@ public class InMemoryProducerTest {
         InMemoryProducer p = new InMemoryProducer("testFilteredCount");
         p.register(SimpleEntity.class, "setName", "typeName", new Func<Iterable<SimpleEntity>>() {
             
-            public Iterable<SimpleEntity> evaluate() {
-                return Enumerator.create(new SimpleEntity(1), new SimpleEntity(2));
+            public Iterable<SimpleEntity> apply() {
+                return Enumerable.of(new SimpleEntity(1), new SimpleEntity(2));
             }
         }, "Id");
 
@@ -162,8 +162,8 @@ public class InMemoryProducerTest {
         InMemoryProducer p = new InMemoryProducer("testTopCount");
         p.register(SimpleEntity.class, "setName", "typeName", new Func<Iterable<SimpleEntity>>() {
             
-            public Iterable<SimpleEntity> evaluate() {
-                return Enumerator.create(new SimpleEntity(1), new SimpleEntity(2), new SimpleEntity(3), new SimpleEntity(4), new SimpleEntity(5));
+            public Iterable<SimpleEntity> apply() {
+                return Enumerable.of(new SimpleEntity(1), new SimpleEntity(2), new SimpleEntity(3), new SimpleEntity(4), new SimpleEntity(5));
             }
         }, "Id");
 
@@ -176,8 +176,8 @@ public class InMemoryProducerTest {
         InMemoryProducer p = new InMemoryProducer("testSkipCount");
         p.register(SimpleEntity.class, "setName", "typeName", new Func<Iterable<SimpleEntity>>() {
             
-            public Iterable<SimpleEntity> evaluate() {
-                return Enumerator.create(new SimpleEntity(1), new SimpleEntity(2), new SimpleEntity(3), new SimpleEntity(4), new SimpleEntity(5));
+            public Iterable<SimpleEntity> apply() {
+                return Enumerable.of(new SimpleEntity(1), new SimpleEntity(2), new SimpleEntity(3), new SimpleEntity(4), new SimpleEntity(5));
             }
         }, "Id");
 
@@ -197,12 +197,12 @@ public class InMemoryProducerTest {
         InMemoryProducer p = new InMemoryProducer("testKeysAreNotNull");
         p.register(SimpleEntity.class, "QQ", new Func<Iterable<SimpleEntity>>() {
             
-            public Iterable<SimpleEntity> evaluate() {
-                return Enumerator.create(new SimpleEntity());
+            public Iterable<SimpleEntity> apply() {
+                return Enumerable.of(new SimpleEntity());
             }
         }, "Id", "String");
 
-        Enumerator<EdmProperty> properties = Enumerator.create(p.getMetadata().getEdmEntitySet("QQ").getType().getProperties());
+        Enumerable<EdmProperty> properties = Enumerable.of(p.getMetadata().getEdmEntitySet("QQ").getType().getProperties());
         boolean found = false;
         for (EdmProperty property : properties) {
             if (property.getName().equals("Id") || property.getName().equals("String")) {

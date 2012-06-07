@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
 
-import bingo.lang.Enumerator;
+import bingo.lang.Enumerable;
 import bingo.odata.Throwables;
 
 /**
@@ -163,7 +163,7 @@ public class BeanModel {
             if (obj == null)
                 return null;
             else
-                return obj.getClass().isArray() ? Enumerator.create((Object[]) obj) : (Iterable<?>) obj;
+                return obj.getClass().isArray() ? Enumerable.of((Object[]) obj) : (Iterable<?>) obj;
         } catch (Exception e) {
             throw Throwables.propagate(e);
         }

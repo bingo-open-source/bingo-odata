@@ -1,6 +1,6 @@
 package bingo.odata.format.xml;
 
-import bingo.lang.Enumerator;
+import bingo.lang.Enumerable;
 import bingo.odata.stax2.Attribute2;
 import bingo.odata.stax2.QName2;
 import bingo.odata.stax2.StartElement2;
@@ -126,7 +126,7 @@ public class XmlFormatParser {
     public static final QName2 XML_BASE                     = new QName2(NS_XML, "base");
 
     protected static boolean isStartElement(XMLEvent2 event, QName2... names) {
-        return event.isStartElement() && Enumerator.create(names).contains(event.asStartElement().getName());
+        return event.isStartElement() && Enumerable.of(names).contains(event.asStartElement().getName());
     }
 
     protected static boolean isEndElement(XMLEvent2 event, QName2 qname) {

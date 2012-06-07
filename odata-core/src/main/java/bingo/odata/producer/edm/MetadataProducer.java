@@ -10,7 +10,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Stack;
 
-import bingo.lang.Enumerator;
+import bingo.lang.Enumerable;
 import bingo.odata.NamespacedAnnotation;
 import bingo.odata.OCollection;
 import bingo.odata.OCollections;
@@ -481,7 +481,7 @@ public class MetadataProducer implements ODataProducer {
         // --------------- SubTypes-------------------------------------
         if (c.pathHelper.isSelected(Edm.StructuralType.NavProps.SubTypes)) {
             if (c.pathHelper.isExpanded(Edm.StructuralType.NavProps.SubTypes)) {
-                List<EdmStructuralType> stypes = Enumerator.create(dataProducer.getMetadata().getSubTypes(st)).toList();
+                List<EdmStructuralType> stypes = Enumerable.of(dataProducer.getMetadata().getSubTypes(st)).toList();
                 List<OEntity> subtypes = new ArrayList<OEntity>(stypes.size());
                 // these are not root types...
                 EdmEntitySet baseSet = c.entitySet;

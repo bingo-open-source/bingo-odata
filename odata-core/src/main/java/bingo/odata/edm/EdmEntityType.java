@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import bingo.lang.Collections;
-import bingo.lang.Enumerator;
+import bingo.lang.Enumerable;
 import bingo.lang.Func;
 import bingo.lang.Named;
 import bingo.odata.OPredicates;
@@ -56,7 +56,7 @@ public class EdmEntityType extends EdmStructuralType {
     private List<String> findConventionalKeys() {
         for (EdmProperty prop : getProperties()) {
             if (prop.getName().equalsIgnoreCase("Id") && prop.getType().isSimple() && !prop.isNullable()) {
-                Enumerator.create(prop.getName()).toList();
+                Enumerable.of(prop.getName()).toList();
             }
         }
         return null;
@@ -97,7 +97,7 @@ public class EdmEntityType extends EdmStructuralType {
      * Finds a navigation property by name on this entity type <i>not including</i> inherited properties.
      */
     public EdmNavigationProperty findDeclaredNavigationProperty(String name) {
-        return Enumerator.create(navigationProperties).firstOrNull(OPredicates.nameEquals(EdmNavigationProperty.class, name));
+        return Enumerable.of(navigationProperties).firstOrNull(OPredicates.nameEquals(EdmNavigationProperty.class, name));
     }
 
     /**
@@ -235,7 +235,7 @@ public class EdmEntityType extends EdmStructuralType {
 
         public Func<EdmEntityType> builtFunc() {
             return new Func<EdmEntityType>() {
-                public EdmEntityType evaluate() {
+                public EdmEntityType apply() {
                     return (EdmEntityType) build();
                 }
             };

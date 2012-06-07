@@ -3,7 +3,7 @@ package bingo.odata.edm;
 import java.util.ArrayList;
 import java.util.List;
 
-import bingo.lang.Enumerator;
+import bingo.lang.Enumerable;
 import bingo.lang.Predicate;
 import bingo.lang.Strings;
 import bingo.odata.ODataConstants;
@@ -58,8 +58,8 @@ public class EdmDataServices {
     public EdmEntitySet getEdmEntitySet(final EdmEntityType type) {
         if (type == null)
             throw new IllegalArgumentException("type cannot be null");
-        EdmEntitySet ees = Enumerator.create(getEntitySets()).firstOrNull(new Predicate<EdmEntitySet>() {
-            public boolean evaluate(EdmEntitySet input) {
+        EdmEntitySet ees = Enumerable.of(getEntitySets()).firstOrNull(new Predicate<EdmEntitySet>() {
+            public boolean apply(EdmEntitySet input) {
                 return type.equals(input.getType());
             }
         });
@@ -155,7 +155,7 @@ public class EdmDataServices {
     }
 
     public Iterable<EdmStructuralType> getStructuralTypes() {
-        return Enumerator.create(getEntityTypes()).cast(EdmStructuralType.class).concat(Enumerator.create(getComplexTypes()).cast(EdmStructuralType.class));
+        return Enumerable.of(getEntityTypes()).cast(EdmStructuralType.class).concat(Enumerable.of(getComplexTypes()).cast(EdmStructuralType.class));
     }
 
     public Iterable<EdmAssociation> getAssociations() {
@@ -186,7 +186,7 @@ public class EdmDataServices {
     }
 
     public Iterable<EdmStructuralType> getSubTypes(EdmStructuralType t) {
-        return Enumerator.create(getStructuralTypes()).where(OPredicates.edmSubTypeOf(t));
+        return Enumerable.of(getStructuralTypes()).where(OPredicates.edmSubTypeOf(t));
     }
 
     public static Builder newBuilder() {

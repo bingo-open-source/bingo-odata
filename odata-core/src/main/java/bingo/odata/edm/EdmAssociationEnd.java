@@ -32,7 +32,7 @@ public class EdmAssociationEnd extends EdmItem {
     }
 
     public EdmEntityType getType() {
-        return type.evaluate();
+        return type.apply();
     }
 
     public EdmMultiplicity getMultiplicity() {

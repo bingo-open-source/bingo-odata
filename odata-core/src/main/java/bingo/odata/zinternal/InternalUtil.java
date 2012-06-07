@@ -17,7 +17,7 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISOPeriodFormat;
 
-import bingo.lang.Enumerator;
+import bingo.lang.Enumerable;
 import bingo.lang.Func1;
 import bingo.odata.ODataConstants;
 import bingo.odata.ODataVersion;
@@ -122,8 +122,8 @@ public class InternalUtil {
         rt.append(objClass.getSimpleName());
         rt.append('[');
 
-        String content = Enumerator.create(objClass.getFields()).select(new Func1<Field, String>() {
-            public String evaluate(Field f) {
+        String content = Enumerable.of(objClass.getFields()).select(new Func1<Field, String>() {
+            public String apply(Field f) {
                 try {
                     Object fValue = f.get(obj);
                     return f.getName() + ":" + fValue;
@@ -170,8 +170,8 @@ public class InternalUtil {
                     ORelatedEntitiesLinkInline ol = (ORelatedEntitiesLinkInline) l;
                     final String collectionName = ol.getTitle();
                     if (beanModel.canWrite(ol.getTitle())) {
-                        Collection<Object> relatedEntities = ol.getRelatedEntities() == null ? null : Enumerator.create(ol.getRelatedEntities()).select(new Func1<OEntity, Object>() {
-                            public Object evaluate(OEntity input) {
+                        Collection<Object> relatedEntities = ol.getRelatedEntities() == null ? null : Enumerable.of(ol.getRelatedEntities()).select(new Func1<OEntity, Object>() {
+                            public Object apply(OEntity input) {
                                 return toPojo(beanModel.getCollectionElementType(collectionName), input);
                             }
                         }).toList();
@@ -201,8 +201,8 @@ public class InternalUtil {
     public static String getEntityRelId(List<String> keyPropertyNames, final List<OProperty<?>> entityProperties, String entitySetName) {
         String key = null;
         if (keyPropertyNames != null) {
-            Object[] keyProperties = Enumerator.create(keyPropertyNames).select(new Func1<String, OProperty<?>>() {
-                public OProperty<?> evaluate(String input) {
+            Object[] keyProperties = Enumerable.of(keyPropertyNames).select(new Func1<String, OProperty<?>>() {
+                public OProperty<?> apply(String input) {
                     for (OProperty<?> entityProperty : entityProperties)
                         if (entityProperty.getName().equals(input))
                             return entityProperty;

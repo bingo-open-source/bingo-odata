@@ -15,7 +15,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.ContextResolver;
 
-import bingo.lang.Enumerator;
+import bingo.lang.Enumerable;
 import bingo.odata.ODataConstants;
 import bingo.odata.OEntityId;
 import bingo.odata.OEntityIds;
@@ -106,7 +106,7 @@ public class LinksRequestResource extends BaseResource {
             fw.write(uriInfo, sw, links);
             contentType = fw.getContentType();
         } else {
-            OEntityId entityId = Enumerator.create(response.getEntities()).firstOrNull();
+            OEntityId entityId = Enumerable.of(response.getEntities()).firstOrNull();
             if (entityId == null)
                 throw new NotFoundException();
 

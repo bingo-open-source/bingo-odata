@@ -2,7 +2,7 @@ package bingo.odata.edm;
 
 import java.util.Map;
 
-import bingo.lang.Enumerator;
+import bingo.lang.Enumerable;
 import bingo.lang.Func1;
 import bingo.odata.OCollection;
 import bingo.odata.OComplexObject;
@@ -21,8 +21,8 @@ public abstract class EdmType extends EdmItem {
     private static class LazyInit {
 
         private static final Map<String, EdmSimpleType<?>> POOL = 
-        	Enumerator.create(EdmSimpleType.ALL).toMap(new Func1<EdmSimpleType<?>, String>() {
-                public String evaluate(EdmSimpleType<?> t) {
+        	Enumerable.of(EdmSimpleType.ALL).toMap(new Func1<EdmSimpleType<?>, String>() {
+                public String apply(EdmSimpleType<?> t) {
                     return t.getFullyQualifiedTypeName();
                 }
             });

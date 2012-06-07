@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import bingo.lang.Enumerator;
+import bingo.lang.Enumerable;
 import bingo.lang.Func1;
 import bingo.odata.OCollection;
 import bingo.odata.OComplexObject;
@@ -330,8 +330,8 @@ public class JsonFormatParser {
 
                 Feed feed = parseFeed(metadata.getEdmEntitySet(navProp.getToRole().getType()), jsr);
 
-                rt.entities = Enumerator.create(feed.getEntries()).cast(JsonEntry.class).select(new Func1<JsonEntry, OEntity>() {
-                    public OEntity evaluate(JsonEntry input) {
+                rt.entities = Enumerable.of(feed.getEntries()).cast(JsonEntry.class).select(new Func1<JsonEntry, OEntity>() {
+                    public OEntity apply(JsonEntry input) {
                         return input.getEntity();
                     }
                 }).toList();

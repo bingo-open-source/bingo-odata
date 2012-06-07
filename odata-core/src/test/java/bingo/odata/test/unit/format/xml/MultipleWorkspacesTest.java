@@ -8,7 +8,7 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
-import bingo.lang.Enumerator;
+import bingo.lang.Enumerable;
 import bingo.odata.format.xml.AtomServiceDocumentFormatParser;
 import bingo.odata.format.xml.AtomWorkspaceInfo;
 import bingo.odata.stax2.XMLEventReader2;
@@ -42,6 +42,6 @@ public class MultipleWorkspacesTest {
     private List<AtomWorkspaceInfo> parseWorkspaces(String resourcePath) {
         InputStream xml = getClass().getResourceAsStream("/META-INF/" + resourcePath);
         XMLEventReader2 reader = DomXMLFactoryProvider2.getInstance().newXMLInputFactory2().createXMLEventReader(new InputStreamReader(xml));
-        return Enumerator.create(AtomServiceDocumentFormatParser.parseWorkspaces(reader)).toList();
+        return Enumerable.of(AtomServiceDocumentFormatParser.parseWorkspaces(reader)).toList();
     }
 }

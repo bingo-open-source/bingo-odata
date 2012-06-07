@@ -13,11 +13,11 @@ import java.util.TreeSet;
 
 import bingo.lang.Arrays;
 import bingo.lang.Collections;
-import bingo.lang.Enumerator;
+import bingo.lang.Enumerable;
 import bingo.lang.Func1;
-import bingo.lang.Mutable;
 import bingo.lang.NamedValue;
-import bingo.lang.Predicate1;
+import bingo.lang.Out;
+import bingo.lang.OutPredicate;
 import bingo.lang.Strings;
 import bingo.odata.edm.EdmEntitySet;
 import bingo.odata.edm.EdmEntityType;
@@ -118,8 +118,8 @@ public class OEntityKey {
         List<String> keys = eet.getKeys();
         if (keys.size() == 0) {
 
-            String idProp = Collections.firstOrNull(eet.getProperties(), new Predicate1<EdmProperty, String>() {
-            	public boolean evaluate(EdmProperty object, Mutable<String> result) {
+            String idProp = Collections.firstOrNull(eet.getProperties(), new OutPredicate<EdmProperty, String>() {
+            	public boolean apply(EdmProperty object, Out<String> result) {
                     if (Strings.equalsIgnoreCase(object.getName(), "id")) {
                         result.setValue(object.getName());
                         return true;
@@ -364,7 +364,7 @@ public class OEntityKey {
 
     private static final Set<Class<?>> EDM_SIMPLE_JAVA_TYPES = 
     	new HashSet<Class<?>>(Collections.selectMany(EdmSimpleType.ALL, new Func1<EdmSimpleType<?>, Collection<Class<?>>>() {
-	         public Collection<Class<?>> evaluate(EdmSimpleType<?> input) {
+	         public Collection<Class<?>> apply(EdmSimpleType<?> input) {
 	             return input.getJavaTypes();
 	         }
 	     }));
@@ -375,8 +375,8 @@ public class OEntityKey {
         if (values.length == 1) {
             keyValue = keyString(values[0], false);
         } else {
-            keyValue = Enumerator.create(values).select(new Func1<Object, String>() {
-                public String evaluate(Object input) {
+            keyValue = Enumerable.of(values).select(new Func1<Object, String>() {
+                public String apply(Object input) {
                     return keyString(input, true);
                 }
             }).orderBy().join(",");

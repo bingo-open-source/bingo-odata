@@ -40,7 +40,7 @@ public class EdmEntitySet extends EdmItem implements Named {
      * The entity type for which the entity set contains instances.
      */
     public EdmEntityType getType() {
-        return type == null ? null : type.evaluate();
+        return type == null ? null : type.apply();
     }
 
     @Override
@@ -67,7 +67,7 @@ public class EdmEntitySet extends EdmItem implements Named {
         @Override
         Builder newBuilder(EdmEntitySet entitySet, BuilderContext context) {
             this.name = entitySet.name;
-            EdmEntityType et = entitySet.type.evaluate();
+            EdmEntityType et = entitySet.type.apply();
             this.entityType = EdmEntityType.newBuilder(et, context);
             return this;
         }

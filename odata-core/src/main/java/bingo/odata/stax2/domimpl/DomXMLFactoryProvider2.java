@@ -14,7 +14,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
 import bingo.lang.Out;
-import bingo.lang.iterable.ReadOnlyIterator;
+import bingo.lang.iterable.ImmutableIteratorBase;
 import bingo.odata.Throwables;
 import bingo.odata.stax2.Attribute2;
 import bingo.odata.stax2.EndElement2;
@@ -126,7 +126,7 @@ public class DomXMLFactoryProvider2 extends XMLFactoryProvider2 {
             return iterator.next();
         }
 
-        private class EventIterator extends ReadOnlyIterator<XMLEvent2> {
+        private class EventIterator extends ImmutableIteratorBase<XMLEvent2> {
 
             private Element current;
             private boolean down = true;
