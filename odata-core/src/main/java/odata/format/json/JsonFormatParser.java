@@ -34,8 +34,8 @@ import odata.format.json.JsonFeedFormatParser.JsonFeed;
 import odata.format.json.JsonStreamReaderFactory.JsonStreamReader;
 import odata.format.json.JsonStreamReaderFactory.JsonStreamReader.JsonEvent;
 
-import bingo.lang.Enumerable;
 import bingo.lang.Func1;
+import bingo.lang.enumerable.EnumerableImpl;
 
 public class JsonFormatParser {
 
@@ -331,7 +331,7 @@ public class JsonFormatParser {
 
                 Feed feed = parseFeed(metadata.getEdmEntitySet(navProp.getToRole().getType()), jsr);
 
-                rt.entities = Enumerable.of(feed.getEntries()).cast(JsonEntry.class).select(new Func1<JsonEntry, OEntity>() {
+                rt.entities = EnumerableImpl.of(feed.getEntries()).cast(JsonEntry.class).select(new Func1<JsonEntry, OEntity>() {
                     public OEntity apply(JsonEntry input) {
                         return input.getEntity();
                     }

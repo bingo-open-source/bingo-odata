@@ -30,7 +30,7 @@ import odata.producer.EntityIdResponse;
 import odata.producer.ODataProducer;
 import odata.producer.exceptions.NotFoundException;
 
-import bingo.lang.Enumerable;
+import bingo.lang.enumerable.EnumerableImpl;
 
 public class LinksRequestResource extends BaseResource {
 
@@ -107,7 +107,7 @@ public class LinksRequestResource extends BaseResource {
             fw.write(uriInfo, sw, links);
             contentType = fw.getContentType();
         } else {
-            OEntityId entityId = Enumerable.of(response.getEntities()).firstOrNull();
+            OEntityId entityId = EnumerableImpl.of(response.getEntities()).firstOrNull();
             if (entityId == null)
                 throw new NotFoundException();
 

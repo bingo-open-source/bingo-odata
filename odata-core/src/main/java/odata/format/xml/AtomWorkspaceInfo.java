@@ -2,14 +2,14 @@ package odata.format.xml;
 
 import java.util.List;
 
-import bingo.lang.Enumerable;
 import bingo.lang.Func1;
+import bingo.lang.enumerable.EnumerableImpl;
 
 public class AtomWorkspaceInfo {
 
-    public static final Func1<AtomWorkspaceInfo, Enumerable<AtomCollectionInfo>> GET_COLLECTIONS = new Func1<AtomWorkspaceInfo, Enumerable<AtomCollectionInfo>>() {
-                                                                                                     public Enumerable<AtomCollectionInfo> apply(AtomWorkspaceInfo workspace) {
-                                                                                                         return Enumerable.of(workspace.getCollections());
+    public static final Func1<AtomWorkspaceInfo, EnumerableImpl<AtomCollectionInfo>> GET_COLLECTIONS = new Func1<AtomWorkspaceInfo, EnumerableImpl<AtomCollectionInfo>>() {
+                                                                                                     public EnumerableImpl<AtomCollectionInfo> apply(AtomWorkspaceInfo workspace) {
+                                                                                                         return EnumerableImpl.of(workspace.getCollections());
                                                                                                      }
                                                                                                  };
 

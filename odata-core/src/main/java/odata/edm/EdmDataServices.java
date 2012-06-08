@@ -11,9 +11,9 @@ import odata.edm.EdmItem.BuilderContext;
 import odata.producer.exceptions.NotFoundException;
 import odata.zinternal.lang.ImmutableList;
 
-import bingo.lang.Enumerable;
 import bingo.lang.Predicate;
 import bingo.lang.Strings;
+import bingo.lang.enumerable.EnumerableImpl;
 
 /**
  * The &lt;edmx:DataServices&gt; element contains the service metadata of a Data Service. This service metadata contains zero or more EDM conceptual schemas.
@@ -59,7 +59,7 @@ public class EdmDataServices {
     public EdmEntitySet getEdmEntitySet(final EdmEntityType type) {
         if (type == null)
             throw new IllegalArgumentException("type cannot be null");
-        EdmEntitySet ees = Enumerable.of(getEntitySets()).firstOrNull(new Predicate<EdmEntitySet>() {
+        EdmEntitySet ees = EnumerableImpl.of(getEntitySets()).firstOrNull(new Predicate<EdmEntitySet>() {
             public boolean apply(EdmEntitySet input) {
                 return type.equals(input.getType());
             }
@@ -156,7 +156,7 @@ public class EdmDataServices {
     }
 
     public Iterable<EdmStructuralType> getStructuralTypes() {
-        return Enumerable.of(getEntityTypes()).cast(EdmStructuralType.class).concat(Enumerable.of(getComplexTypes()).cast(EdmStructuralType.class));
+        return EnumerableImpl.of(getEntityTypes()).cast(EdmStructuralType.class).concat(EnumerableImpl.of(getComplexTypes()).cast(EdmStructuralType.class));
     }
 
     public Iterable<EdmAssociation> getAssociations() {
@@ -187,7 +187,7 @@ public class EdmDataServices {
     }
 
     public Iterable<EdmStructuralType> getSubTypes(EdmStructuralType t) {
-        return Enumerable.of(getStructuralTypes()).where(OPredicates.edmSubTypeOf(t));
+        return EnumerableImpl.of(getStructuralTypes()).where(OPredicates.edmSubTypeOf(t));
     }
 
     public static Builder newBuilder() {

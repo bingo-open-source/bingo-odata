@@ -43,7 +43,7 @@ import odata.expression.ToUpperMethodCallExpression;
 import odata.expression.TrimMethodCallExpression;
 import odata.zinternal.TypeConverter;
 
-import bingo.lang.Enumerable;
+import bingo.lang.enumerable.EnumerableImpl;
 
 public class InMemoryEvaluation {
 
@@ -412,7 +412,7 @@ public class InMemoryEvaluation {
     }
 
     @SuppressWarnings( { "unchecked"})
-    private static final Set<Class> SUPPORTED_CLASSES_FOR_BINARY_PROMOTION = Enumerable.of(BigDecimal.class, Double.class, Float.class, Byte.class, Integer.class, Short.class, Long.class).cast(
+    private static final Set<Class> SUPPORTED_CLASSES_FOR_BINARY_PROMOTION = EnumerableImpl.of(BigDecimal.class, Double.class, Float.class, Byte.class, Integer.class, Short.class, Long.class).cast(
                                                                                    Class.class).toSet();
 
     @SuppressWarnings("unchecked")
@@ -441,9 +441,9 @@ public class InMemoryEvaluation {
         // * If either operand is of type Edm.Decimal, the other operand is
         // converted to Edm.Decimal unless it is of type Edm.Single or
         // Edm.Double.
-        if (lhsClass.equals(BigDecimal.class) && Enumerable.of(Byte.class, Short.class, Integer.class, Long.class).cast(Class.class).contains(rhsClass))
+        if (lhsClass.equals(BigDecimal.class) && EnumerableImpl.of(Byte.class, Short.class, Integer.class, Long.class).cast(Class.class).contains(rhsClass))
             pair.rhs = BigDecimal.valueOf(((Number) pair.rhs).longValue());
-        else if (rhsClass.equals(BigDecimal.class) && Enumerable.of(Byte.class, Short.class, Integer.class, Long.class).cast(Class.class).contains(lhsClass))
+        else if (rhsClass.equals(BigDecimal.class) && EnumerableImpl.of(Byte.class, Short.class, Integer.class, Long.class).cast(Class.class).contains(lhsClass))
             pair.lhs = BigDecimal.valueOf(((Number) pair.lhs).longValue());
 
         // * Otherwise, if either operand is Edm.Double, the other operand is

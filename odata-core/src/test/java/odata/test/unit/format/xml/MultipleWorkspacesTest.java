@@ -13,7 +13,7 @@ import odata.stax2.domimpl.DomXMLFactoryProvider2;
 
 import org.junit.Test;
 
-import bingo.lang.Enumerable;
+import bingo.lang.enumerable.EnumerableImpl;
 
 public class MultipleWorkspacesTest {
 
@@ -43,6 +43,6 @@ public class MultipleWorkspacesTest {
     private List<AtomWorkspaceInfo> parseWorkspaces(String resourcePath) {
         InputStream xml = getClass().getResourceAsStream("/META-INF/" + resourcePath);
         XMLEventReader2 reader = DomXMLFactoryProvider2.getInstance().newXMLInputFactory2().createXMLEventReader(new InputStreamReader(xml));
-        return Enumerable.of(AtomServiceDocumentFormatParser.parseWorkspaces(reader)).toList();
+        return EnumerableImpl.of(AtomServiceDocumentFormatParser.parseWorkspaces(reader)).toList();
     }
 }

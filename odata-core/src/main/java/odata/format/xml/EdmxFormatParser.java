@@ -33,9 +33,9 @@ import odata.stax2.StartElement2;
 import odata.stax2.XMLEvent2;
 import odata.stax2.XMLEventReader2;
 
-import bingo.lang.Enumerable;
 import bingo.lang.Func1;
 import bingo.lang.Predicate;
+import bingo.lang.enumerable.EnumerableImpl;
 
 public class EdmxFormatParser extends XmlFormatParser {
 
@@ -86,12 +86,12 @@ public class EdmxFormatParser extends XmlFormatParser {
 
     private void resolve() {
 
-        final Map<String, EdmEntityType.Builder> allEetsByFQName = Enumerable.of(dataServices.getEntityTypes()).toMap(new Func1<EdmEntityType.Builder, String>() {
+        final Map<String, EdmEntityType.Builder> allEetsByFQName = EnumerableImpl.of(dataServices.getEntityTypes()).toMap(new Func1<EdmEntityType.Builder, String>() {
             public String apply(EdmEntityType.Builder input) {
                 return input.getFQAliasName() != null ? input.getFQAliasName() : input.getFullyQualifiedTypeName();
             }
         });
-        final Map<String, EdmAssociation.Builder> allEasByFQName = Enumerable.of(dataServices.getAssociations()).toMap(new Func1<EdmAssociation.Builder, String>() {
+        final Map<String, EdmAssociation.Builder> allEasByFQName = EnumerableImpl.of(dataServices.getAssociations()).toMap(new Func1<EdmAssociation.Builder, String>() {
             public String apply(EdmAssociation.Builder input) {
                 return input.getFQAliasName() != null ? input.getFQAliasName() : input.getFQNamespaceName();
             }
@@ -114,7 +114,7 @@ public class EdmxFormatParser extends XmlFormatParser {
                     final EdmNavigationProperty.Builder tmp = navProps.get(i);
                     final EdmAssociation.Builder ea = allEasByFQName.get(tmp.getRelationshipName());
 
-                    List<EdmAssociationEnd.Builder> finalEnds = Enumerable.of(tmp.getFromRoleName(), tmp.getToRoleName()).select(new Func1<String, EdmAssociationEnd.Builder>() {
+                    List<EdmAssociationEnd.Builder> finalEnds = EnumerableImpl.of(tmp.getFromRoleName(), tmp.getToRoleName()).select(new Func1<String, EdmAssociationEnd.Builder>() {
                         public EdmAssociationEnd.Builder apply(String input) {
                             if (ea.getEnd1().getRole().equals(input))
                                 return ea.getEnd1();
@@ -145,7 +145,7 @@ public class EdmxFormatParser extends XmlFormatParser {
                     final EdmAssociationSet.Builder tmpEas = edmEntityContainer.getAssociationSets().get(i);
                     final EdmAssociation.Builder ea = allEasByFQName.get(tmpEas.getAssociationName());
 
-                    List<EdmAssociationSetEnd.Builder> finalEnds = Enumerable.of(tmpEas.getEnd1(), tmpEas.getEnd2()).select(
+                    List<EdmAssociationSetEnd.Builder> finalEnds = EnumerableImpl.of(tmpEas.getEnd1(), tmpEas.getEnd2()).select(
                             new Func1<EdmAssociationSetEnd.Builder, EdmAssociationSetEnd.Builder>() {
                                 public EdmAssociationSetEnd.Builder apply(final EdmAssociationSetEnd.Builder input) {
 
@@ -155,7 +155,7 @@ public class EdmxFormatParser extends XmlFormatParser {
                                     if (eae == null)
                                         throw new IllegalArgumentException("Invalid role name " + input.getRoleName());
 
-                                    EdmEntitySet.Builder ees = Enumerable
+                                    EdmEntitySet.Builder ees = EnumerableImpl
                                             .of(edmEntityContainer.getEntitySets())
                                                 .first(OPredicates.nameEquals(EdmEntitySet.Builder.class, input.getEntitySetName()));
                                     return EdmAssociationSetEnd.newBuilder().setRole(eae).setEntitySet(ees);
@@ -170,7 +170,7 @@ public class EdmxFormatParser extends XmlFormatParser {
             for (final EdmEntityContainer.Builder edmEntityContainer : edmSchema.getEntityContainers()) {
                 for (int i = 0; i < edmEntityContainer.getFunctionImports().size(); i++) {
                     final EdmFunctionImport.Builder tmpEfi = edmEntityContainer.getFunctionImports().get(i);
-                    EdmEntitySet.Builder ees = Enumerable.of(edmEntityContainer.getEntitySets()).firstOrNull(new Predicate<EdmEntitySet.Builder>() {
+                    EdmEntitySet.Builder ees = EnumerableImpl.of(edmEntityContainer.getEntitySets()).firstOrNull(new Predicate<EdmEntitySet.Builder>() {
                         public boolean apply(EdmEntitySet.Builder input) {
                             return input.getName().equals(tmpEfi.getEntitySetName());
                         }

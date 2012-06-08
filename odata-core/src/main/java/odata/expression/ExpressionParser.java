@@ -15,9 +15,9 @@ import org.joda.time.LocalTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
-import bingo.lang.Enumerable;
 import bingo.lang.Func1;
 import bingo.lang.Func2;
+import bingo.lang.enumerable.EnumerableImpl;
 import bingo.utils.codec.binary.Hex;
 
 public class ExpressionParser {
@@ -48,7 +48,7 @@ public class ExpressionParser {
         public static final String CEILING     = "ceiling";
     }
 
-    private static Set<String> METHODS = Enumerable.of(
+    private static Set<String> METHODS = EnumerableImpl.of(
                                                Methods.CAST,
                                                    Methods.ISOF,
                                                    Methods.ENDSWITH,
@@ -97,10 +97,10 @@ public class ExpressionParser {
 
         List<CommonExpression> expressions = readExpressions(tokens);
         if (DUMP_EXPRESSION_INFO) {
-            dump(value, tokens, Enumerable.of(expressions).toArray(CommonExpression.class));
+            dump(value, tokens, EnumerableImpl.of(expressions).toArray(CommonExpression.class));
         }
 
-        return Enumerable.of(expressions).select(new Func1<CommonExpression, OrderByExpression>() {
+        return EnumerableImpl.of(expressions).select(new Func1<CommonExpression, OrderByExpression>() {
             public OrderByExpression apply(CommonExpression input) {
                 if (input instanceof OrderByExpression) {
                     return (OrderByExpression) input;
@@ -111,9 +111,9 @@ public class ExpressionParser {
     }
 
     private static void dump(String value, List<Token> tokens, CommonExpression... expressions) {
-        String msg = "[" + value + "] -> " + Enumerable.of(tokens).join("");
+        String msg = "[" + value + "] -> " + EnumerableImpl.of(tokens).join("");
         if (expressions != null) {
-            msg = msg + " -> " + Enumerable.of(expressions).select(new Func1<CommonExpression, String>() {
+            msg = msg + " -> " + EnumerableImpl.of(expressions).select(new Func1<CommonExpression, String>() {
                 public String apply(CommonExpression input) {
                     return Expression.asPrintString(input);
                 }
@@ -130,7 +130,7 @@ public class ExpressionParser {
 
         //  since we support currently simple properties only we have to
         //  confine ourselves to EntitySimpleProperties.
-        return Enumerable.of(expressions).select(new Func1<CommonExpression, EntitySimpleProperty>() {
+        return EnumerableImpl.of(expressions).select(new Func1<CommonExpression, EntitySimpleProperty>() {
             public EntitySimpleProperty apply(CommonExpression input) {
                 if (input instanceof EntitySimpleProperty)
                     return (EntitySimpleProperty) input;
@@ -894,7 +894,7 @@ public class ExpressionParser {
 
         @Override
         public String toString() {
-            return Enumerable.of(tokens).join("");
+            return EnumerableImpl.of(tokens).join("");
         }
     }
 }

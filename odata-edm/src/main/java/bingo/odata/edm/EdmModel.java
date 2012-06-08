@@ -24,7 +24,7 @@ public interface EdmModel extends EdmElement {
 	
 	Iterable<EdmModel> getReferencedModels();
 	
-	Iterable<EdmSchemaElement> getSchemaElement();
+	Iterable<EdmSchemaElement> getSchemaElements();
 	
 	Iterable<EdmVocabularyAnnotation> getVocabularyAnnotations();
 	

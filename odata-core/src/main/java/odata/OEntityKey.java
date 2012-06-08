@@ -23,12 +23,12 @@ import odata.zinternal.lang.NamedValues;
 
 import bingo.lang.Arrays;
 import bingo.lang.Collections;
-import bingo.lang.Enumerable;
 import bingo.lang.Func1;
 import bingo.lang.NamedValue;
 import bingo.lang.Out;
 import bingo.lang.OutPredicate;
 import bingo.lang.Strings;
+import bingo.lang.enumerable.EnumerableImpl;
 
 /**
  * An immutable entity-key, made up of either a single unnamed-value or multiple named-values.
@@ -376,7 +376,7 @@ public class OEntityKey {
         if (values.length == 1) {
             keyValue = keyString(values[0], false);
         } else {
-            keyValue = Enumerable.of(values).select(new Func1<Object, String>() {
+            keyValue = EnumerableImpl.of(values).select(new Func1<Object, String>() {
                 public String apply(Object input) {
                     return keyString(input, true);
                 }

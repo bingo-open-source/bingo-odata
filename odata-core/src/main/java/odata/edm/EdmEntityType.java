@@ -9,9 +9,9 @@ import odata.zinternal.lang.ImmutableList;
 import odata.zinternal.utils.CollectionUtils;
 
 import bingo.lang.Collections;
-import bingo.lang.Enumerable;
 import bingo.lang.Func;
 import bingo.lang.Named;
+import bingo.lang.enumerable.EnumerableImpl;
 
 /**
  * A CSDL EntityType element.
@@ -57,7 +57,7 @@ public class EdmEntityType extends EdmStructuralType {
     private List<String> findConventionalKeys() {
         for (EdmProperty prop : getProperties()) {
             if (prop.getName().equalsIgnoreCase("Id") && prop.getType().isSimple() && !prop.isNullable()) {
-                Enumerable.of(prop.getName()).toList();
+                EnumerableImpl.of(prop.getName()).toList();
             }
         }
         return null;
@@ -98,7 +98,7 @@ public class EdmEntityType extends EdmStructuralType {
      * Finds a navigation property by name on this entity type <i>not including</i> inherited properties.
      */
     public EdmNavigationProperty findDeclaredNavigationProperty(String name) {
-        return Enumerable.of(navigationProperties).firstOrNull(OPredicates.nameEquals(EdmNavigationProperty.class, name));
+        return EnumerableImpl.of(navigationProperties).firstOrNull(OPredicates.nameEquals(EdmNavigationProperty.class, name));
     }
 
     /**

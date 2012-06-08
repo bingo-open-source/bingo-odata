@@ -1,7 +1,7 @@
 package odata.producer.inmemory;
 
-import bingo.lang.Enumerable;
 import bingo.lang.Func1;
+import bingo.lang.enumerable.EnumerableImpl;
 
 public class EntityIdFunctionPropertyModelDelegate<TEntity, TKey> extends PropertyModelDelegate {
 
@@ -23,7 +23,7 @@ public class EntityIdFunctionPropertyModelDelegate<TEntity, TKey> extends Proper
 
     @Override
     public Iterable<String> getPropertyNames() {
-        return Enumerable.of(idPropertyName).concat(Enumerable.of(super.getPropertyNames()));
+        return EnumerableImpl.of(idPropertyName).concat(EnumerableImpl.of(super.getPropertyNames()));
     }
 
     @Override
