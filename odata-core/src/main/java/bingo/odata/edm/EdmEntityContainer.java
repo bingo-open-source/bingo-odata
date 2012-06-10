@@ -15,8 +15,65 @@
  */
 package bingo.odata.edm;
 
-public interface EdmEntityContainer extends EdmSchemaElement,EdmNamedElement,EdmVocabularyAnnotatable,EdmElement {
+import java.util.List;
 
-	Iterable<EdmEntityContainerElement> getElements();
+import bingo.lang.Enumerable;
+import bingo.lang.Enumerables;
+import bingo.lang.Immutables;
+
+public class EdmEntityContainer extends EdmNamedObject {
+
+	private final boolean isDefault;
 	
+	private final boolean lazyLoadingEnabled;
+	
+	private final List<EdmEntitySet> entitySets;
+	
+	private final List<EdmFunctionImport> functionImports;
+	
+	private final List<EdmAssociationSet> associationSets;
+	
+	public EdmEntityContainer(String name,boolean isDefault,boolean lazyLoadingEnabled,
+							   Iterable<EdmEntitySet> entitySets,
+							   Iterable<EdmFunctionImport> functionImports,
+							   Iterable<EdmAssociationSet> associationSets) {
+		
+		this.name = name;
+		this.isDefault = isDefault;
+		this.lazyLoadingEnabled = lazyLoadingEnabled;
+		this.entitySets = Immutables.listOf(entitySets);
+		this.functionImports = Immutables.listOf(functionImports);
+		this.associationSets = Immutables.listOf(associationSets);
+	}
+	
+	public EdmEntityContainer(String name,boolean isDefault,boolean lazyLoadingEnabled,
+							   Iterable<EdmEntitySet> entitySets,
+							   Iterable<EdmFunctionImport> functionImports,
+							   Iterable<EdmAssociationSet> associationSets,
+							   EdmDocumentation documentation) {
+
+		this(name,isDefault,lazyLoadingEnabled,entitySets,functionImports,associationSets);
+
+		this.documentation = documentation;
+	}
+
+	public boolean isDefault() {
+    	return isDefault;
+    }
+
+	public boolean isLazyLoadingEnabled() {
+    	return lazyLoadingEnabled;
+    }
+
+	public Enumerable<EdmEntitySet> getEntitySets() {
+    	return Enumerables.of(entitySets);
+    }
+
+	public Enumerable<EdmFunctionImport> getFunctionImports() {
+    	return Enumerables.of(functionImports);
+    }
+
+	public Enumerable<EdmAssociationSet> getAssociationSets() {
+    	return Enumerables.of(associationSets);
+    }
 }

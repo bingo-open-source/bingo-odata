@@ -15,9 +15,22 @@
  */
 package bingo.odata.edm;
 
-public interface EdmDocumentation {
+public class EdmDocumentation extends EdmObject {
 
-	String getSummary();
+	private final String summary;
 	
-	String getLongDescription();
+	private final String longDescription;
+	
+	public EdmDocumentation(String summary,String longDescription){
+		this.summary = summary;
+		this.longDescription = longDescription;
+	}
+
+	public String getSummary() {
+    	return summary;
+    }
+
+	public String getLongDescription() {
+    	return longDescription;
+    }
 }

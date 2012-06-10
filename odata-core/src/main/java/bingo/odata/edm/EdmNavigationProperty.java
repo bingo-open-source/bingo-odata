@@ -15,15 +15,36 @@
  */
 package bingo.odata.edm;
 
-public interface EdmNavigationProperty extends EdmProperty, EdmNamedElement, EdmVocabularyAnnotatable, EdmElement {
+public class EdmNavigationProperty extends EdmNamedObject {
+	
+	private final EdmAssociation relationship;
 
-	boolean isContainsTarget();
+	private final EdmAssociationEnd fromRole;
 	
-	Iterable<EdmStructuralProperty> getDependentProerpties();
+	private final EdmAssociationEnd toRole;
 	
-	boolean isPrincipal();
+	public EdmNavigationProperty(String name,EdmAssociation relationship,EdmAssociationEnd fromRole,EdmAssociationEnd toRole){
+		this.name = name;
+		this.relationship = relationship;
+		this.fromRole = fromRole;
+		this.toRole = toRole;
+	}
 	
-	EdmOnDeleteAction getOnDelete();
+	public EdmNavigationProperty(String name,EdmAssociation relationship,EdmAssociationEnd fromRole,EdmAssociationEnd toRole,EdmDocumentation documentation){
+		this(name,relationship,fromRole,toRole);
 	
-	EdmNavigationProperty getPartner();
+		this.documentation = documentation;
+	}
+
+	public EdmAssociation getRelationship() {
+    	return relationship;
+    }
+
+	public EdmAssociationEnd getFromRole() {
+    	return fromRole;
+    }
+
+	public EdmAssociationEnd getToRole() {
+    	return toRole;
+    }
 }

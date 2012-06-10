@@ -7,8 +7,8 @@ import java.util.List;
 import odata.OPredicates;
 import odata.zinternal.lang.ImmutableList;
 import odata.zinternal.utils.CollectionUtils;
-
 import bingo.lang.Collections;
+import bingo.lang.Enumerables;
 import bingo.lang.Named;
 
 /**
@@ -65,7 +65,7 @@ public abstract class EdmStructuralType extends EdmNonSimpleType implements Name
      * Finds a property by name, searching up the type hierarchy if necessary.
      */
     public EdmProperty findProperty(String name) {
-        return Collections.firstOrNull(getProperties(), OPredicates.edmPropertyNameEquals(name));
+        return Enumerables.firstOrNull(getProperties(), OPredicates.edmPropertyNameEquals(name));
     }
 
     /**
@@ -79,7 +79,7 @@ public abstract class EdmStructuralType extends EdmNonSimpleType implements Name
      * Finds a property by name on this structural type <i>not including</i> inherited properties.
      */
     public EdmProperty findDeclaredProperty(String name) {
-        return Collections.firstOrNull(getDeclaredProperties(), OPredicates.edmPropertyNameEquals(name));
+        return Enumerables.firstOrNull(getDeclaredProperties(), OPredicates.edmPropertyNameEquals(name));
     }
 
     /**
@@ -148,7 +148,7 @@ public abstract class EdmStructuralType extends EdmNonSimpleType implements Name
 
         public EdmProperty.Builder findProperty(String name) {
             // TODO share or remove
-            return Collections.firstOrNull(properties, OPredicates.nameEquals(EdmProperty.Builder.class, name));
+            return Enumerables.firstOrNull(properties, OPredicates.nameEquals(EdmProperty.Builder.class, name));
         }
     }
 }

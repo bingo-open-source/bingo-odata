@@ -20,15 +20,14 @@ import odata.expression.Expression;
 import odata.expression.ExpressionParser;
 import odata.expression.LiteralExpression;
 import odata.zinternal.lang.NamedValues;
-
 import bingo.lang.Arrays;
-import bingo.lang.Collections;
+import bingo.lang.Enumerables;
 import bingo.lang.Func1;
 import bingo.lang.NamedValue;
 import bingo.lang.Out;
 import bingo.lang.OutPredicate;
 import bingo.lang.Strings;
-import bingo.lang.enumerable.EnumerableImpl;
+import bingo.lang.enumerable.IteratedEnumerable;
 
 /**
  * An immutable entity-key, made up of either a single unnamed-value or multiple named-values.
@@ -69,7 +68,7 @@ public class OEntityKey {
     @SuppressWarnings("unchecked")
     public static OEntityKey create(Object... values) {
         if (values != null && values.length == 1 && values[0] instanceof Iterable<?>)
-            return create(Collections.toArray((Iterable<Object>) values[0]));
+            return create(Enumerables.toArray((Iterable<Object>) values[0]));
         if (values != null && values.length == 1 && values[0] instanceof OEntityKey)
             return (OEntityKey) values[0];
         if (values != null && values.length == 1 && values[0] instanceof OEntityId)
@@ -119,7 +118,7 @@ public class OEntityKey {
         List<String> keys = eet.getKeys();
         if (keys.size() == 0) {
 
-            String idProp = Collections.firstOrNull(eet.getProperties(), new OutPredicate<EdmProperty, String>() {
+            String idProp = Enumerables.firstOrNull(eet.getProperties(), new OutPredicate<EdmProperty, String>() {
             	public boolean apply(EdmProperty object, Out<String> result) {
                     if (Strings.equalsIgnoreCase(object.getName(), "id")) {
                         result.setValue(object.getName());
@@ -280,7 +279,7 @@ public class OEntityKey {
      */
     public Set<OProperty<?>> asComplexProperties() {
         assertComplex();
-        return toSortedSet(Collections.select(values, OFuncs.namedValueToPropertyRawCast()), OComparators.propertyByName());
+        return toSortedSet(Enumerables.select(values, OFuncs.namedValueToPropertyRawCast()), OComparators.propertyByName());
     }
 
     private static <T> SortedSet<T> toSortedSet(T[] values, Comparator<T> comparator) {
@@ -364,7 +363,7 @@ public class OEntityKey {
     }
 
     private static final Set<Class<?>> EDM_SIMPLE_JAVA_TYPES = 
-    	new HashSet<Class<?>>(Collections.selectMany(EdmSimpleType.ALL, new Func1<EdmSimpleType<?>, Collection<Class<?>>>() {
+    	new HashSet<Class<?>>(Enumerables.selectMany(EdmSimpleType.ALL, new Func1<EdmSimpleType<?>, Collection<Class<?>>>() {
 	         public Collection<Class<?>> apply(EdmSimpleType<?> input) {
 	             return input.getJavaTypes();
 	         }
@@ -376,7 +375,7 @@ public class OEntityKey {
         if (values.length == 1) {
             keyValue = keyString(values[0], false);
         } else {
-            keyValue = EnumerableImpl.of(values).select(new Func1<Object, String>() {
+            keyValue = IteratedEnumerable.of(values).select(new Func1<Object, String>() {
                 public String apply(Object input) {
                     return keyString(input, true);
                 }

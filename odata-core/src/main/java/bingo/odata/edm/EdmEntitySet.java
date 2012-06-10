@@ -15,11 +15,24 @@
  */
 package bingo.odata.edm;
 
-public interface EdmEntitySet extends EdmEntityContainerElement, EdmNamedElement, EdmVocabularyAnnotatable, EdmElement {
+import odata.producer.edm.Edm.EntityType;
 
-	EdmEntityType getElementType();
+public class EdmEntitySet extends EdmNamedObject {
+
+	private final EntityType entityType;
+
+	public EdmEntitySet(String name,EntityType entityType) {
+		this.name = name;
+		this.entityType = entityType;
+	}
 	
-	Iterable<EdmNavigationTargetMapping> getNavigationTargets();
+	public EdmEntitySet(String name,EntityType entityType,EdmDocumentation documentation) {
+		this(name,entityType);
+		
+		this.documentation = documentation;
+	}
 
-	EdmEntitySet findNavigationTarget(EdmNavigationProperty navigationProperty);
+	public EntityType getEntityType() {
+    	return entityType;
+    }
 }

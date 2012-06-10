@@ -15,11 +15,79 @@
  */
 package bingo.odata.edm;
 
-public interface EdmProperty extends EdmNamedElement,EdmVocabularyAnnotatable {
+public class EdmProperty extends EdmNamedObject {
 
-	EdmStructuredType getDeclaringType();
+	private final EdmStructualType declaringType;
 	
-	EdmPropertyKind getPropertyKind();
+	private final EdmType type;
 	
-	EdmTypeReference getType();
+	private final boolean nullable;
+	
+	private final String defaultValue;
+	
+	private final boolean fixedLength;
+	
+	private final int maxLength;
+	
+	private final int precision;
+	
+	private final int scale;
+	
+	public EdmProperty(EdmStructualType declaringType,String name,EdmType type,
+					   boolean nullable,String defaultValue,
+					   boolean fixedLength,int maxLength,int precision,int scale) {
+		
+		this.declaringType = declaringType;
+		this.name = name;
+		this.type = type;
+		
+		this.nullable     = nullable;
+		this.defaultValue = defaultValue;
+		this.fixedLength  = fixedLength;
+		this.maxLength    = maxLength;
+		this.precision    = precision;
+		this.scale        = scale;
+	}
+	
+	public EdmProperty(EdmStructualType declaringType,String name,EdmType type,
+			   boolean nullable,String defaultValue,
+			   boolean fixedLength,int maxLength,int precision,int scale,
+			   EdmDocumentation documentation) {
+		
+		this(declaringType,name,type,nullable,defaultValue,fixedLength,maxLength,precision,scale);
+		
+		this.documentation = documentation;
+	}
+	
+	public EdmStructualType getDeclaringType() {
+    	return declaringType;
+    }
+
+	public EdmType getType() {
+    	return type;
+    }
+
+	public boolean isNullable() {
+    	return nullable;
+    }
+
+	public String getDefaultValue() {
+    	return defaultValue;
+    }
+
+	public boolean isFixedLength() {
+    	return fixedLength;
+    }
+
+	public int getMaxLength() {
+    	return maxLength;
+    }
+
+	public int getPrecision() {
+    	return precision;
+    }
+
+	public int getScale() {
+    	return scale;
+    }
 }

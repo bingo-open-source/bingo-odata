@@ -7,11 +7,11 @@ import java.util.List;
 import odata.OPredicates;
 import odata.zinternal.lang.ImmutableList;
 import odata.zinternal.utils.CollectionUtils;
-
 import bingo.lang.Collections;
+import bingo.lang.Enumerables;
 import bingo.lang.Func;
 import bingo.lang.Named;
-import bingo.lang.enumerable.EnumerableImpl;
+import bingo.lang.enumerable.IteratedEnumerable;
 
 /**
  * A CSDL EntityType element.
@@ -57,7 +57,7 @@ public class EdmEntityType extends EdmStructuralType {
     private List<String> findConventionalKeys() {
         for (EdmProperty prop : getProperties()) {
             if (prop.getName().equalsIgnoreCase("Id") && prop.getType().isSimple() && !prop.isNullable()) {
-                EnumerableImpl.of(prop.getName()).toList();
+                IteratedEnumerable.of(prop.getName()).toList();
             }
         }
         return null;
@@ -84,7 +84,7 @@ public class EdmEntityType extends EdmStructuralType {
      * Finds a navigation property by name, searching up the type hierarchy if necessary.
      */
     public EdmNavigationProperty findNavigationProperty(String name) {
-        return Collections.firstOrNull(getNavigationProperties(),OPredicates.nameEquals(EdmNavigationProperty.class, name));
+        return Enumerables.firstOrNull(getNavigationProperties(),OPredicates.nameEquals(EdmNavigationProperty.class, name));
     }
 
     /**
@@ -98,7 +98,7 @@ public class EdmEntityType extends EdmStructuralType {
      * Finds a navigation property by name on this entity type <i>not including</i> inherited properties.
      */
     public EdmNavigationProperty findDeclaredNavigationProperty(String name) {
-        return EnumerableImpl.of(navigationProperties).firstOrNull(OPredicates.nameEquals(EdmNavigationProperty.class, name));
+        return IteratedEnumerable.of(navigationProperties).firstOrNull(OPredicates.nameEquals(EdmNavigationProperty.class, name));
     }
 
     /**

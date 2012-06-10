@@ -14,7 +14,7 @@ import odata.Throwables;
 import odata.stax2.QName2;
 import odata.stax2.XMLWriter2;
 
-import bingo.lang.enumerable.EnumerableImpl;
+import bingo.lang.enumerable.IteratedEnumerable;
 
 public class StaxXMLWriter2 implements XMLWriter2 {
 
@@ -66,7 +66,7 @@ public class StaxXMLWriter2 implements XMLWriter2 {
         try {
             Iterator<?> nsIterator = null;
             if (xmlns != null) {
-                nsIterator = EnumerableImpl.of(eventFactory.createNamespace(xmlns)).iterator();
+                nsIterator = IteratedEnumerable.of(eventFactory.createNamespace(xmlns)).iterator();
             }
 
             // writer.writeStartElement(prefix,localName,namespaceURI);

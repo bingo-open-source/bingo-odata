@@ -15,8 +15,24 @@
  */
 package bingo.odata.edm;
 
-public interface EdmFunction extends EdmFunctionCommon, EdmSchemaElement,EdmNamedElement,EdmVocabularyAnnotatable{
+public class EdmFunction extends EdmFunctionBase {
 
-	String getDefiningExpression();
+	private final String definingExpression;
+
+	public EdmFunction(String name, Iterable<EdmParameter> parameters, EdmType returnType,String definingExpression) {
+	    super(name, parameters, returnType);
+	    
+	    this.definingExpression = definingExpression;
+    }
 	
+	public EdmFunction(String name, Iterable<EdmParameter> parameters, EdmType returnType,String definingExpression,EdmDocumentation documentation) {
+		this(name,parameters,returnType,definingExpression);
+		
+		this.documentation = documentation;
+	}
+
+	public String getDefiningExpression() {
+    	return definingExpression;
+    }
+
 }

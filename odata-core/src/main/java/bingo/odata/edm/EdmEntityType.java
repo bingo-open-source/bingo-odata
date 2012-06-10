@@ -15,8 +15,37 @@
  */
 package bingo.odata.edm;
 
-public interface EdmEntityType extends EdmStructuredType, EdmSchemaType, EdmType, EdmTerm, EdmSchemaElement, EdmNamedElement, EdmVocabularyAnnotatable, EdmElement {
+import bingo.lang.Immutables;
 
-	Iterable<EdmStructuralProperty> getDeclaredKey();
+public class EdmEntityType extends EdmNamedStructualType {
 	
+	private final EdmEntityType baseType;
+	
+	public EdmEntityType(String name,Iterable<EdmProperty> properties){
+		this.name       = name;
+		this.properties = Immutables.listOf(properties);
+		this.baseType   = null;
+	}
+	
+	public EdmEntityType(String name,Iterable<EdmProperty> properties,boolean isAbstract){
+		this(name,properties);
+		
+		this.isAbstract = isAbstract;
+	}
+	
+	public EdmEntityType(String name,Iterable<EdmProperty> properties,boolean isAbstract,EdmEntityType baseType){
+		this.name       = name;
+		this.properties = Immutables.listOf(properties);
+		this.isAbstract = isAbstract;
+		this.baseType   = baseType;
+	}
+	
+	public EdmEntityType(String name,Iterable<EdmProperty> properties,boolean isAbstract,EdmEntityType baseType,EdmDocumentation documentation){
+		this(name,properties,isAbstract,baseType);
+		this.documentation = documentation;
+	}
+
+	public EdmEntityType getBaseType() {
+    	return baseType;
+    }
 }

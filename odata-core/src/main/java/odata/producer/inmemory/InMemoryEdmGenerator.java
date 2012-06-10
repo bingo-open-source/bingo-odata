@@ -30,7 +30,7 @@ import odata.edm.EdmType;
 
 import bingo.lang.Func1;
 import bingo.lang.Predicate;
-import bingo.lang.enumerable.EnumerableImpl;
+import bingo.lang.enumerable.IteratedEnumerable;
 
 public class InMemoryEdmGenerator implements EdmGenerator {
 
@@ -75,14 +75,14 @@ public class InMemoryEdmGenerator implements EdmGenerator {
         // create hashmaps from sets
         // --------------------------------------
         // create entityname:entityTypes
-        Map<String, EdmEntityType.Builder> entityTypesByName = EnumerableImpl.of(entityTypes).toMap(new Func1<EdmEntityType.Builder, String>() {
+        Map<String, EdmEntityType.Builder> entityTypesByName = IteratedEnumerable.of(entityTypes).toMap(new Func1<EdmEntityType.Builder, String>() {
             public String apply(EdmEntityType.Builder input) {
                 return input.getName();
             }
         });
 
         // create entityname:entitySet
-        Map<String, EdmEntitySet.Builder> entitySetByName = EnumerableImpl.of(entitySets).toMap(new Func1<EdmEntitySet.Builder, String>() {
+        Map<String, EdmEntitySet.Builder> entitySetByName = IteratedEnumerable.of(entitySets).toMap(new Func1<EdmEntitySet.Builder, String>() {
             public String apply(EdmEntitySet.Builder input) {
                 return input.getName();
             }
@@ -227,7 +227,7 @@ public class InMemoryEdmGenerator implements EdmGenerator {
             final EdmEntityType.Builder eet2 = entityTypesByName.get(eetName2);
 
             try {
-                EdmAssociation.Builder assoc = EnumerableImpl.of(associations).firstOrNull(new Predicate<EdmAssociation.Builder>() {
+                EdmAssociation.Builder assoc = IteratedEnumerable.of(associations).firstOrNull(new Predicate<EdmAssociation.Builder>() {
 
                     public boolean apply(EdmAssociation.Builder input) {
                         return input.getEnd1().getType().equals(eet2) && input.getEnd2().getType().equals(eet1);
@@ -311,7 +311,7 @@ public class InMemoryEdmGenerator implements EdmGenerator {
     private Collection<EdmProperty.Builder> toEdmProperties(EdmDecorator decorator, PropertyModel model, String[] keys, String structuralTypename) {
 
         List<EdmProperty.Builder> rt = new ArrayList<EdmProperty.Builder>();
-        Set<String> keySet = EnumerableImpl.of(keys).toSet();
+        Set<String> keySet = IteratedEnumerable.of(keys).toSet();
 
         for (String propName : model.getPropertyNames()) {
             Class<?> propType = model.getPropertyType(propName);

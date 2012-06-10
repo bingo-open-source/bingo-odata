@@ -32,7 +32,7 @@ import odata.expression.SubExpression;
 import odata.expression.SubstringOfMethodCallExpression;
 import odata.zinternal.TypeConverter;
 
-import bingo.lang.enumerable.EnumerableImpl;
+import bingo.lang.enumerable.IteratedEnumerable;
 
 /**
  * Evaluate an $filter expression.  The VariableResolver you attach to the
@@ -353,7 +353,7 @@ public class ExpressionEvaluator {
     }
 
     @SuppressWarnings( { "unchecked"})
-    private static final Set<Class> SUPPORTED_CLASSES_FOR_BINARY_PROMOTION = EnumerableImpl.of(BigDecimal.class, Double.class, Float.class, Byte.class, Integer.class, Short.class, Long.class).cast(
+    private static final Set<Class> SUPPORTED_CLASSES_FOR_BINARY_PROMOTION = IteratedEnumerable.of(BigDecimal.class, Double.class, Float.class, Byte.class, Integer.class, Short.class, Long.class).cast(
                                                                                    Class.class).toSet();
 
     @SuppressWarnings("unchecked")
@@ -385,9 +385,9 @@ public class ExpressionEvaluator {
         // * If either operand is of type Edm.Decimal, the other operand is
         // converted to Edm.Decimal unless it is of type Edm.Single or
         // Edm.Double.
-        if (lhsClass.equals(BigDecimal.class) && EnumerableImpl.of(Byte.class, Short.class, Integer.class, Long.class).cast(Class.class).contains(rhsClass)) {
+        if (lhsClass.equals(BigDecimal.class) && IteratedEnumerable.of(Byte.class, Short.class, Integer.class, Long.class).cast(Class.class).contains(rhsClass)) {
             pair.rhs = BigDecimal.valueOf(((Number) pair.rhs).longValue());
-        } else if (rhsClass.equals(BigDecimal.class) && EnumerableImpl.of(Byte.class, Short.class, Integer.class, Long.class).cast(Class.class).contains(lhsClass)) {
+        } else if (rhsClass.equals(BigDecimal.class) && IteratedEnumerable.of(Byte.class, Short.class, Integer.class, Long.class).cast(Class.class).contains(lhsClass)) {
             pair.lhs = BigDecimal.valueOf(((Number) pair.lhs).longValue());
         } // * Otherwise, if either operand is Edm.Double, the other operand is
         // converted to type Edm.Double.

@@ -15,14 +15,30 @@
  */
 package bingo.odata.edm;
 
-public interface EdmFunctionImport extends EdmFunctionCommon,EdmEntityContainerElement,EdmNamedElement,EdmVocabularyAnnotatable {
+public class EdmFunctionImport extends EdmFunctionBase {
 
-	EdmExpression getEntitySet();
+	private final EdmEntitySet entitySet;
+
+	public EdmFunctionImport(String name, Iterable<EdmParameter> parameters, EdmType returnType) {
+	    super(name, parameters, returnType);
+	    
+	    this.entitySet = null;
+    }
 	
-	boolean isBindable();
+	public EdmFunctionImport(String name, Iterable<EdmParameter> parameters, EdmType returnType, EdmEntitySet entitySet) {
+	    super(name, parameters, returnType);
+	    
+	    this.entitySet = entitySet;
+    }
 	
-	boolean isComposable();
 	
-	boolean isSideEffecting();
-	
+	public EdmFunctionImport(String name, Iterable<EdmParameter> parameters, EdmType returnType, EdmEntitySet entitySet, EdmDocumentation documentation) {
+	    this(name, parameters, returnType, entitySet);
+
+	    this.documentation = documentation;
+    }
+
+	public EdmEntitySet getEntitySet() {
+    	return entitySet;
+    }
 }

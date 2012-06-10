@@ -15,8 +15,15 @@
  */
 package bingo.odata.edm;
 
-public interface EdmCollectionType extends EdmType, EdmElement {
+public class EdmCollectionType extends EdmType {
 
-	EdmTypeReference getElementType();
+	private final EdmType elementType;
 	
+	public EdmCollectionType(EdmType elementType){
+		this.elementType = elementType;
+	}
+
+	public EdmType getElementType() {
+    	return elementType;
+    }
 }

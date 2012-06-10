@@ -15,8 +15,7 @@
  */
 package bingo.odata.edm;
 
-public interface EdmType {
+public abstract class EdmType extends EdmObjectWithDocumentation {
 
-	EdmTypeKind getTypeKind();
 	
 }

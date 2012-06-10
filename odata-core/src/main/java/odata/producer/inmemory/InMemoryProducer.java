@@ -59,7 +59,7 @@ import bingo.lang.Func;
 import bingo.lang.Func1;
 import bingo.lang.Predicate;
 import bingo.lang.Strings;
-import bingo.lang.enumerable.EnumerableImpl;
+import bingo.lang.enumerable.IteratedEnumerable;
 
 /**
  * An in-memory implementation of an ODATA Producer.  Uses the standard Java bean
@@ -372,7 +372,7 @@ public class InMemoryProducer implements ODataProducer {
 
                         for (final Object entity : values) {
                             if (relEntitySet == null) {
-                                InMemoryEntityInfo<?> oei = EnumerableImpl.of(eis.values()).firstOrNull(new Predicate<InMemoryEntityInfo<?>>() {
+                                InMemoryEntityInfo<?> oei = IteratedEnumerable.of(eis.values()).firstOrNull(new Predicate<InMemoryEntityInfo<?>>() {
                                     
                                     public boolean apply(InMemoryEntityInfo<?> input) {
                                         return entity.getClass().equals(input.entityClass);
@@ -391,7 +391,7 @@ public class InMemoryProducer implements ODataProducer {
                     OEntity relatedEntity = null;
 
                     if (entity != null) {
-                        InMemoryEntityInfo<?> oei = EnumerableImpl.of(eis.values()).firstOrNull(new Predicate<InMemoryEntityInfo<?>>() {
+                        InMemoryEntityInfo<?> oei = IteratedEnumerable.of(eis.values()).firstOrNull(new Predicate<InMemoryEntityInfo<?>>() {
                             
                             public boolean apply(InMemoryEntityInfo<?> input) {
                                 return entity.getClass().equals(input.entityClass);
@@ -412,7 +412,7 @@ public class InMemoryProducer implements ODataProducer {
         for (final EdmNavigationProperty ep : ees.getType().getNavigationProperties()) {
             // if $select is ever supported, check here and only include nave props
             // that are selected
-            boolean expanded = EnumerableImpl.of(links).any(new Predicate<OLink>() {
+            boolean expanded = IteratedEnumerable.of(links).any(new Predicate<OLink>() {
                 
                 public boolean apply(OLink t) {
                     return t.getTitle().equals(ep.getName());
@@ -445,7 +445,7 @@ public class InMemoryProducer implements ODataProducer {
         final EdmEntitySet ees = getMetadata().getEdmEntitySet(entitySetName);
         final InMemoryEntityInfo<?> ei = eis.get(entitySetName);
 
-        EnumerableImpl<Object> objects = EnumerableImpl.of(ei.get.apply()).cast(Object.class);
+        IteratedEnumerable<Object> objects = IteratedEnumerable.of(ei.get.apply()).cast(Object.class);
 
         // evaluate filter
         if (queryInfo != null && queryInfo.filter != null) {
@@ -455,7 +455,7 @@ public class InMemoryProducer implements ODataProducer {
         // compute inlineCount, must be done after evaluateing filter
         Integer inlineCount = null;
         if (queryInfo != null && queryInfo.inlineCount == InlineCount.ALLPAGES) {
-            objects = EnumerableImpl.of(objects.toList()); // materialize up front, since we're about to count
+            objects = IteratedEnumerable.of(objects.toList()); // materialize up front, since we're about to count
             inlineCount = objects.size();
         }
 
@@ -465,7 +465,7 @@ public class InMemoryProducer implements ODataProducer {
         }
 
         // work with oentities
-        EnumerableImpl<OEntity> entities = objects.select(new Func1<Object, OEntity>() {
+        IteratedEnumerable<OEntity> entities = objects.select(new Func1<Object, OEntity>() {
             public OEntity apply(Object input) {
                 return toOEntity(ees, input, queryInfo != null ? queryInfo.expand : null);
             }
@@ -505,8 +505,8 @@ public class InMemoryProducer implements ODataProducer {
         // determine skipToken if necessary
         String skipToken = null;
         if (entitiesList.size() > limit) {
-            entitiesList = EnumerableImpl.of(entitiesList).take(limit).toList();
-            skipToken = entitiesList.size() == 0 ? null : EnumerableImpl.of(entitiesList).last().getEntityKey().toKeyString();
+            entitiesList = IteratedEnumerable.of(entitiesList).take(limit).toList();
+            skipToken = entitiesList.size() == 0 ? null : IteratedEnumerable.of(entitiesList).last().getEntityKey().toKeyString();
         }
 
         return Responses.entities(entitiesList, ees, inlineCount, skipToken);
@@ -518,7 +518,7 @@ public class InMemoryProducer implements ODataProducer {
         final EdmEntitySet ees = getMetadata().getEdmEntitySet(entitySetName);
         final InMemoryEntityInfo<?> ei = eis.get(entitySetName);
 
-        EnumerableImpl<Object> objects = EnumerableImpl.of(ei.get.apply()).cast(Object.class);
+        IteratedEnumerable<Object> objects = IteratedEnumerable.of(ei.get.apply()).cast(Object.class);
 
         // evaluate filter
         if (queryInfo != null && queryInfo.filter != null) {
@@ -533,7 +533,7 @@ public class InMemoryProducer implements ODataProducer {
         // ignore ordering for count
 
         // work with oentities.
-        EnumerableImpl<OEntity> entities = objects.select(new Func1<Object, OEntity>() {
+        IteratedEnumerable<OEntity> entities = objects.select(new Func1<Object, OEntity>() {
             public OEntity apply(Object input) {
                 return toOEntity(ees, input, queryInfo != null ? queryInfo.expand : null);
             }
@@ -561,8 +561,8 @@ public class InMemoryProducer implements ODataProducer {
         return Responses.count(entities.size());
     }
 
-    private EnumerableImpl<Object> orderBy(EnumerableImpl<Object> iter, List<OrderByExpression> orderBys, final PropertyModel properties) {
-        for (final OrderByExpression orderBy : EnumerableImpl.of(orderBys).reverse())
+    private IteratedEnumerable<Object> orderBy(IteratedEnumerable<Object> iter, List<OrderByExpression> orderBys, final PropertyModel properties) {
+        for (final OrderByExpression orderBy : IteratedEnumerable.of(orderBys).reverse())
             iter = iter.orderBy(new Comparator<Object>() {
                 @SuppressWarnings("unchecked")
                 public int compare(Object o1, Object o2) {
@@ -671,7 +671,7 @@ public class InMemoryProducer implements ODataProducer {
 
         Iterable<Object> iter = (Iterable<Object>) ei.get.apply();
 
-        final Object rt = EnumerableImpl.of(iter).firstOrNull(new Predicate<Object>() {
+        final Object rt = IteratedEnumerable.of(iter).firstOrNull(new Predicate<Object>() {
             public boolean apply(Object input) {
                 HashMap<String, Object> idObjectMap = ei.id.apply(input);
 
