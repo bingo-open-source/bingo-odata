@@ -15,7 +15,7 @@
  */
 package bingo.odata.edm;
 
-abstract class EdmObjectWithDocumentation extends EdmObject {
+public abstract class EdmObjectWithDocumentation extends EdmObject {
 
 	protected EdmDocumentation documentation;
 

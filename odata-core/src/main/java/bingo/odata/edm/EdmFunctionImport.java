@@ -19,21 +19,21 @@ public class EdmFunctionImport extends EdmFunctionBase {
 
 	private final EdmEntitySet entitySet;
 
-	public EdmFunctionImport(String name, Iterable<EdmParameter> parameters, EdmType returnType) {
-	    super(name, parameters, returnType);
+	public EdmFunctionImport(String name,String qualifiedName,Iterable<EdmParameter> parameters, EdmType returnType) {
+	    super(name,qualifiedName,parameters, returnType);
 	    
 	    this.entitySet = null;
     }
 	
-	public EdmFunctionImport(String name, Iterable<EdmParameter> parameters, EdmType returnType, EdmEntitySet entitySet) {
-	    super(name, parameters, returnType);
+	public EdmFunctionImport(String name,String qualifiedName,Iterable<EdmParameter> parameters, EdmType returnType, EdmEntitySet entitySet) {
+	    super(name,qualifiedName,parameters, returnType);
 	    
 	    this.entitySet = entitySet;
     }
 	
 	
-	public EdmFunctionImport(String name, Iterable<EdmParameter> parameters, EdmType returnType, EdmEntitySet entitySet, EdmDocumentation documentation) {
-	    this(name, parameters, returnType, entitySet);
+	public EdmFunctionImport(String name,String qualifiedName, Iterable<EdmParameter> parameters, EdmType returnType, EdmEntitySet entitySet, EdmDocumentation documentation) {
+	    this(name, qualifiedName, parameters, returnType, entitySet);
 
 	    this.documentation = documentation;
     }

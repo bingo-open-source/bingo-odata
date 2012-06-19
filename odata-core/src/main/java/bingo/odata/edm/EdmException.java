@@ -15,13 +15,29 @@
  */
 package bingo.odata.edm;
 
-public class EdmComplexType extends EdmNamedStructualType {
+import bingo.odata.ODataException;
 
-	public EdmComplexType(String name, String qualifiedName, Iterable<EdmProperty> properties) {
-	    super(name, qualifiedName, properties);
-    }
+public class EdmException extends ODataException {
 
-	public EdmComplexType(String name, String qualifiedName, Iterable<EdmProperty> properties, boolean isAbstract) {
-	    super(name, qualifiedName, properties, isAbstract);
-    }
+	private static final long serialVersionUID = -5578859114407459434L;
+
+	public EdmException() {
+		
+	}
+
+	public EdmException(String message, Object... args) {
+		super(message, args);
+	}
+
+	public EdmException(String message, Throwable cause) {
+		super(message, cause);
+	}
+
+	public EdmException(String message) {
+		super(message);
+	}
+
+	public EdmException(Throwable cause) {
+		super(cause);
+	}
 }

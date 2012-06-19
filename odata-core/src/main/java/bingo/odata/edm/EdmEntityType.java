@@ -15,37 +15,73 @@
  */
 package bingo.odata.edm;
 
+import java.util.List;
+
+import bingo.lang.Enumerable;
+import bingo.lang.Enumerables;
 import bingo.lang.Immutables;
 
 public class EdmEntityType extends EdmNamedStructualType {
 	
 	private final EdmEntityType baseType;
+	private final boolean hasStream;
+	private final List<String> keys;
+	private final List<EdmNavigationProperty> navigationProperties;
 	
-	public EdmEntityType(String name,Iterable<EdmProperty> properties){
-		this.name       = name;
-		this.properties = Immutables.listOf(properties);
-		this.baseType   = null;
-	}
-	
-	public EdmEntityType(String name,Iterable<EdmProperty> properties,boolean isAbstract){
-		this(name,properties);
+	public EdmEntityType(String name,
+						  String qualifiedName,
+						  Iterable<EdmProperty> properties,
+						  Iterable<EdmNavigationProperty> navigationProperties,
+						  Iterable<String> keys, 
+						  boolean isAbstract,
+						  boolean hasStream,
+						  EdmEntityType baseType){
 		
-		this.isAbstract = isAbstract;
-	}
-	
-	public EdmEntityType(String name,Iterable<EdmProperty> properties,boolean isAbstract,EdmEntityType baseType){
-		this.name       = name;
-		this.properties = Immutables.listOf(properties);
-		this.isAbstract = isAbstract;
+		super(name,qualifiedName,properties,isAbstract);
+		this.keys       = Immutables.listOf(keys);
+		this.navigationProperties = Immutables.listOf(navigationProperties);
 		this.baseType   = baseType;
+		this.hasStream  = hasStream;
+		
+		doCheckValidKeys();
 	}
 	
-	public EdmEntityType(String name,Iterable<EdmProperty> properties,boolean isAbstract,EdmEntityType baseType,EdmDocumentation documentation){
-		this(name,properties,isAbstract,baseType);
+	public EdmEntityType(String name,
+						  String qualifiedName,
+						  Iterable<EdmProperty> properties,
+						  Iterable<EdmNavigationProperty> navigationProperties,
+						  Iterable<String> keys,
+						  boolean isAbstract,
+						  boolean hasStream,
+						  EdmEntityType baseType,
+						  EdmDocumentation documentation){
+		
+		this(name,qualifiedName,properties,navigationProperties,keys,isAbstract,hasStream,baseType);
+		
 		this.documentation = documentation;
 	}
 
 	public EdmEntityType getBaseType() {
     	return baseType;
     }
+
+	public Enumerable<EdmNavigationProperty> getDeclaredNavigationProperties(){
+		return Enumerables.of(navigationProperties);
+	}
+	
+	public Enumerable<String> getKeys() {
+    	return Enumerables.of(keys);
+    }
+	
+	public boolean hasStream() {
+    	return hasStream;
+    }
+	
+	protected void doCheckValidKeys(){
+		for(String key : keys){
+			if(null == findDeclaredProperty(key)){
+				throw new EdmException("key property '{0}' not found",key);
+			}
+		}
+	}
 }

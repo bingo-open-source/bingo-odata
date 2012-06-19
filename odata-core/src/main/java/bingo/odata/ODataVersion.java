@@ -15,7 +15,9 @@
  */
 package bingo.odata;
 
-public enum ODataVersion {
+import bingo.lang.Valued;
+
+public enum ODataVersion implements Valued<String> {
 
 	V1("1.0"),
 	V2("2.0"),
@@ -27,9 +29,12 @@ public enum ODataVersion {
 		this.value = value;
 	}
 
+	public String getValue() {
+	    return value;
+    }
+
 	@Override
     public String toString() {
 		return value;
     }
-
 }

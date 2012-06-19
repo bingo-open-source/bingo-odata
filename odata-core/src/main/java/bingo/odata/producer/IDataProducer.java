@@ -13,15 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.odata.edm;
+package bingo.odata.producer;
 
-public class EdmComplexType extends EdmNamedStructualType {
+public interface IDataProducer {
 
-	public EdmComplexType(String name, String qualifiedName, Iterable<EdmProperty> properties) {
-	    super(name, qualifiedName, properties);
-    }
-
-	public EdmComplexType(String name, String qualifiedName, Iterable<EdmProperty> properties, boolean isAbstract) {
-	    super(name, qualifiedName, properties, isAbstract);
-    }
+	
+	
 }

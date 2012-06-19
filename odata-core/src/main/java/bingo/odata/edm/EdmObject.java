@@ -20,7 +20,7 @@ import java.util.List;
 import bingo.lang.Enumerable;
 import bingo.lang.Enumerables;
 
-abstract class EdmObject {
+public abstract class EdmObject {
 
 	private List<Object> annotations;
 	

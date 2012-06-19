@@ -15,6 +15,8 @@
  */
 package bingo.odata.edm;
 
+import bingo.lang.Valued;
+
 /**
  * The following schema fragment specifies the expected content contained within this class.
  * 
@@ -28,7 +30,7 @@ package bingo.odata.edm;
  * &lt;/simpleType>
  * </pre>
  */
-public enum EdmMultiplicity {
+public enum EdmMultiplicity implements Valued<String> {
 	
 	ZeroOrOne("0..1"),
 	
@@ -40,6 +42,10 @@ public enum EdmMultiplicity {
 	
 	EdmMultiplicity(String value) {
 		this.value = value;
+    }
+	
+	public String getValue() {
+	    return value;
     }
 
 	@Override

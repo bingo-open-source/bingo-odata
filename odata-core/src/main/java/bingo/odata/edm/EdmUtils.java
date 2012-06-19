@@ -15,13 +15,21 @@
  */
 package bingo.odata.edm;
 
-public class EdmComplexType extends EdmNamedStructualType {
+import bingo.lang.Strings;
 
-	public EdmComplexType(String name, String qualifiedName, Iterable<EdmProperty> properties) {
-	    super(name, qualifiedName, properties);
-    }
+public class EdmUtils {
 
-	public EdmComplexType(String name, String qualifiedName, Iterable<EdmProperty> properties, boolean isAbstract) {
-	    super(name, qualifiedName, properties, isAbstract);
-    }
+	protected EdmUtils(){
+		
+	}
+	
+	public static String getQualifiedName(EdmSchema schema,EdmType type) {
+		if(type instanceof EdmNamedStructualType){
+			return Strings.join(new String[]{schema.getNamespaceName(),((EdmNamedStructualType) type).getName()},'.');
+		}else if(type instanceof EdmSimpleType){
+			return "Edm." + ((EdmSimpleType)type).getKind().toString();
+		}
+		return Strings.EMPTY;
+	}
+	
 }

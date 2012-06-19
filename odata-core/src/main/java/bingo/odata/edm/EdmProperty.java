@@ -36,9 +36,10 @@ public class EdmProperty extends EdmNamedObject {
 	public EdmProperty(EdmStructualType declaringType,String name,EdmType type,
 					   boolean nullable,String defaultValue,
 					   boolean fixedLength,int maxLength,int precision,int scale) {
+
+		super(name,name);
 		
 		this.declaringType = declaringType;
-		this.name = name;
 		this.type = type;
 		
 		this.nullable     = nullable;

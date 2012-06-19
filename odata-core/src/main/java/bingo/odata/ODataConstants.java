@@ -13,15 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.odata.edm;
+package bingo.odata;
 
-public class EdmComplexType extends EdmNamedStructualType {
+public final class ODataConstants {
 
-	public EdmComplexType(String name, String qualifiedName, Iterable<EdmProperty> properties) {
-	    super(name, qualifiedName, properties);
-    }
-
-	public EdmComplexType(String name, String qualifiedName, Iterable<EdmProperty> properties, boolean isAbstract) {
-	    super(name, qualifiedName, properties, isAbstract);
-    }
+	public static final String DEFAULT_DATA_SERVICES_NAME = "Default";
+	
+	private ODataConstants(){
+		
+	}
+	
 }

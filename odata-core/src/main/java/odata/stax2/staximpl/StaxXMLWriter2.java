@@ -13,7 +13,6 @@ import javax.xml.stream.events.XMLEvent;
 import odata.Throwables;
 import odata.stax2.QName2;
 import odata.stax2.XMLWriter2;
-
 import bingo.lang.enumerable.IteratedEnumerable;
 
 public class StaxXMLWriter2 implements XMLWriter2 {

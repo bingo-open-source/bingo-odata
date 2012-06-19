@@ -19,13 +19,22 @@ import java.util.List;
 
 import bingo.lang.Enumerable;
 import bingo.lang.Enumerables;
+import bingo.lang.Immutables;
+import bingo.lang.Predicates;
 
 public abstract class EdmStructualType extends EdmType {
 
-	protected List<EdmProperty> properties;
+	protected final List<EdmProperty> properties;
+	
+	protected EdmStructualType(Iterable<EdmProperty> properties){
+		this.properties = Immutables.listOf(properties);
+	}
 	
 	public Enumerable<EdmProperty> getDeclaredProperties() {
 		return Enumerables.of(properties);
 	}
 	
+	public EdmProperty findDeclaredProperty(String name){
+		return Enumerables.firstOrNull(properties,Predicates.<EdmProperty>nameEqualsIgnoreCase(name));
+	}
 }

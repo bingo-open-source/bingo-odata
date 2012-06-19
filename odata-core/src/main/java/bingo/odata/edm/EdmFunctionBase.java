@@ -27,8 +27,8 @@ public abstract class EdmFunctionBase extends EdmNamedObject {
 	
 	private final EdmType returnType;
 
-	protected EdmFunctionBase(String name,Iterable<EdmParameter> parameters,EdmType returnType){
-		this.name = name;
+	protected EdmFunctionBase(String name,String qualifiedName,Iterable<EdmParameter> parameters,EdmType returnType){
+		super(name,qualifiedName);
 		this.parameters = Immutables.listOf(parameters);
 		this.returnType = returnType;
 	}

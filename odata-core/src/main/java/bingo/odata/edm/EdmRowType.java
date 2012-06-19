@@ -15,12 +15,11 @@
  */
 package bingo.odata.edm;
 
-import bingo.lang.Immutables;
 
 public class EdmRowType extends EdmStructualType {
 
 	public EdmRowType(Iterable<EdmProperty> properties){
-		this.properties = Immutables.listOf(properties);
+		super(properties);
 	}
 	
 }

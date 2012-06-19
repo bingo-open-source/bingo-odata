@@ -23,15 +23,15 @@ public class EdmAssociationSet extends EdmNamedObject {
 	
 	private final EdmAssociationSetEnd end2;
 	
-	public EdmAssociationSet(String name,EdmAssociation association,EdmAssociationSetEnd end1,EdmAssociationSetEnd end2){
-		this.name        = name;
+	public EdmAssociationSet(String name,String qualifiedName,EdmAssociation association,EdmAssociationSetEnd end1,EdmAssociationSetEnd end2){
+		super(name,qualifiedName);
 		this.association = association;
 		this.end1        = end1;
 		this.end2        = end2;
 	}
 	
-	public EdmAssociationSet(String name,EdmAssociation association,EdmAssociationSetEnd end1,EdmAssociationSetEnd end2,EdmDocumentation documentation ){
-		this(name,association,end1,end2);
+	public EdmAssociationSet(String name,String qualifiedName,EdmAssociation association,EdmAssociationSetEnd end1,EdmAssociationSetEnd end2,EdmDocumentation documentation){
+		this(name,qualifiedName,association,end1,end2);
 		
 		this.documentation = documentation;
 	}
@@ -47,5 +47,4 @@ public class EdmAssociationSet extends EdmNamedObject {
 	public EdmAssociationSetEnd getEnd2() {
     	return end2;
     }
-
 }

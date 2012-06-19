@@ -15,24 +15,22 @@
  */
 package bingo.odata.edm;
 
-import odata.producer.edm.Edm.EntityType;
-
 public class EdmEntitySet extends EdmNamedObject {
 
-	private final EntityType entityType;
+	private final EdmEntityType entityType;
 
-	public EdmEntitySet(String name,EntityType entityType) {
-		this.name = name;
+	public EdmEntitySet(String name,String qualifiedName,EdmEntityType entityType) {
+		super(name,qualifiedName);
 		this.entityType = entityType;
 	}
 	
-	public EdmEntitySet(String name,EntityType entityType,EdmDocumentation documentation) {
-		this(name,entityType);
+	public EdmEntitySet(String name,String qualifiedName,EdmEntityType entityType,EdmDocumentation documentation) {
+		this(name,qualifiedName,entityType);
 		
 		this.documentation = documentation;
 	}
 
-	public EntityType getEntityType() {
+	public EdmEntityType getEntityType() {
     	return entityType;
     }
 }
