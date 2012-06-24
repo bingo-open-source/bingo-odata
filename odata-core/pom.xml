@@ -4,7 +4,7 @@
 	<parent>
 		<artifactId>bingo-odata-parent</artifactId>
 		<groupId>bingo.odata</groupId>
-		<version>0.7-SNAPSHOT</version>
+		<version>1.0.0-SNAPSHOT</version>
 		<relativePath>../</relativePath>
 	</parent>
 

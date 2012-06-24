@@ -17,20 +17,20 @@ package bingo.odata.edm;
 
 public class EdmEntitySet extends EdmNamedObject {
 
-	private final EdmEntityType entityType;
+	private final EdmEntityTypeRef entityType;
 
-	public EdmEntitySet(String name,String qualifiedName,EdmEntityType entityType) {
-		super(name,qualifiedName);
+	public EdmEntitySet(String name,EdmEntityTypeRef entityType) {
+		super(name);
 		this.entityType = entityType;
 	}
 	
-	public EdmEntitySet(String name,String qualifiedName,EdmEntityType entityType,EdmDocumentation documentation) {
-		this(name,qualifiedName,entityType);
+	public EdmEntitySet(String name,EdmEntityTypeRef entityType,EdmDocumentation documentation) {
+		this(name,entityType);
 		
 		this.documentation = documentation;
 	}
 
-	public EdmEntityType getEntityType() {
+	public EdmEntityTypeRef getEntityType() {
     	return entityType;
     }
 }

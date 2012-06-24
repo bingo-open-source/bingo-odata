@@ -22,18 +22,18 @@ import java.io.Writer;
 import bingo.lang.Strings;
 import bingo.lang.xml.XmlFactory;
 import bingo.lang.xml.XmlWriter;
+import bingo.odata.ODataRequest;
 import bingo.odata.ODataWriter;
-import bingo.odata.ODataContext;
 import bingo.odata.edm.EdmDocumentation;
 import bingo.odata.edm.EdmObjectWithDocumentation;
 
 public abstract class ODataXmlWriter<T> implements ODataWriter<T> {
 
-	public final void write(ODataContext context, Writer writer, T target) throws Throwable {
-		write(context,XmlFactory.createWriter(writer),target);
+	public final void write(ODataRequest request,Writer out, T target) throws Throwable {
+		write(request,XmlFactory.createWriter(out),target);
     }
 	
-	protected abstract void write(ODataContext context,XmlWriter writer,T target) throws Throwable;
+	protected abstract void write(ODataRequest request,XmlWriter writer,T target) throws Throwable;
 	
 	protected static void writeDocument(XmlWriter writer,EdmObjectWithDocumentation item){
 		EdmDocumentation doc = item.getDocumentation();
@@ -45,5 +45,4 @@ public abstract class ODataXmlWriter<T> implements ODataWriter<T> {
 			writer.endElement();
 		}
 	}
-
 }

@@ -21,26 +21,18 @@ public abstract class EdmNamedObject extends EdmObjectWithDocumentation implemen
 
 	protected final String name;
 	
-	protected final String qualifiedName;
-	
-	protected EdmNamedObject(String name,String qualifiedName)
+	protected EdmNamedObject(String name)
 	{
 		this.name          = name;
-		this.qualifiedName = qualifiedName;
 	}
 	
-	protected EdmNamedObject(String name,String qualifiedName,EdmDocumentation documentation)
+	protected EdmNamedObject(String name,EdmDocumentation documentation)
 	{
 		this.name          = name;
-		this.qualifiedName = qualifiedName;
 		this.documentation = documentation;
 	}
 
 	public String getName() {
 		return name;
     }
-
-	public String getQualifiedName(){
-		return qualifiedName;
-	}	
 }

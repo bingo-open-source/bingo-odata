@@ -21,21 +21,17 @@ public abstract class EdmNamedStructualType extends EdmStructualType implements 
 
 	protected final String name;
 	
-	protected final String qualifiedName;
-
 	protected final boolean isAbstract;
 	
-	protected EdmNamedStructualType(String name,String qualifiedName,Iterable<EdmProperty> properties) {
+	protected EdmNamedStructualType(String name,Iterable<EdmProperty> properties) {
 		super(properties);
 		this.name = name;
-		this.qualifiedName = qualifiedName;
 		this.isAbstract = false;
 	}
 
-	protected EdmNamedStructualType(String name,String qualifiedName,Iterable<EdmProperty> properties,boolean isAbstract) {
+	protected EdmNamedStructualType(String name,Iterable<EdmProperty> properties,boolean isAbstract) {
 		super(properties);
 		this.name = name;
-		this.qualifiedName = qualifiedName;
 		this.isAbstract = isAbstract;
 	}
 	
@@ -43,10 +39,6 @@ public abstract class EdmNamedStructualType extends EdmStructualType implements 
 	    return name;
     }
 	
-	public String getQualifiedName() {
-    	return qualifiedName;
-    }
-
 	public boolean isAbstract() {
     	return isAbstract;
     }

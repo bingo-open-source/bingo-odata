@@ -21,14 +21,14 @@ public class EdmParameter extends EdmNamedObject {
 	
 	private final EdmParameterMode mode;
 	
-	public EdmParameter(String name,String qualifiedName,EdmType type,EdmParameterMode mode) {
-		super(name,qualifiedName);
+	public EdmParameter(String name,EdmType type,EdmParameterMode mode) {
+		super(name);
 		this.type = type;
 		this.mode = mode;
 	}
 	
-	public EdmParameter(String name,String qualifiedName, EdmType type,EdmParameterMode mode,EdmDocumentation documentation) {
-		this(name,qualifiedName,type,mode);
+	public EdmParameter(String name,EdmType type,EdmParameterMode mode,EdmDocumentation documentation) {
+		this(name,type,mode);
 		this.documentation = documentation;
 	}
 

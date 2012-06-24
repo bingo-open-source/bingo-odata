@@ -19,17 +19,17 @@ public class EdmAssociationEnd extends EdmObjectWithDocumentation {
 	
 	private final String role;
 	
-	private final EdmEntityType type;
+	private final EdmEntityTypeRef type;
 	
 	private final EdmMultiplicity multiplicity;
 	
-	public EdmAssociationEnd(String role,EdmEntityType type,EdmMultiplicity multiplicity) {
+	public EdmAssociationEnd(String role,EdmEntityTypeRef type,EdmMultiplicity multiplicity) {
 	    this.role = role;
 	    this.type = type;
 	    this.multiplicity = multiplicity;
     }
 	
-	public EdmAssociationEnd(String role,EdmEntityType type,EdmMultiplicity multiplicity,EdmDocumentation documentation) {
+	public EdmAssociationEnd(String role,EdmEntityTypeRef type,EdmMultiplicity multiplicity,EdmDocumentation documentation) {
 		this(role,type,multiplicity);
 		this.documentation = documentation;
 	}
@@ -38,7 +38,7 @@ public class EdmAssociationEnd extends EdmObjectWithDocumentation {
     	return role;
     }
 
-	public EdmEntityType getType() {
+	public EdmEntityTypeRef getType() {
     	return type;
     }
 

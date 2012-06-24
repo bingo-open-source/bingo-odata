@@ -50,6 +50,16 @@ public class EdmSchema extends EdmObjectWithDocumentation {
 		this.complexTypes     = Immutables.listOf(complexTypes);
 		this.functions        = Immutables.listOf(functions);
 	}
+	
+	public EdmSchema(String namespaceName,String alias,
+					  Iterable<EdmEntityContainer> entityContainers,Iterable<EdmEntityType> entityTypes,
+					  Iterable<EdmAssociation> associations,Iterable<EdmComplexType> complexTypes,Iterable<EdmFunction> functions,
+					  EdmDocumentation documentation) {
+		
+		this(namespaceName,alias,entityContainers,entityTypes,associations,complexTypes,functions);
+		
+		this.documentation = documentation;
+	}
 
 	public String getNamespaceName() {
     	return namespaceName;

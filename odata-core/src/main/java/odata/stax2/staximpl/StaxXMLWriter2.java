@@ -13,7 +13,7 @@ import javax.xml.stream.events.XMLEvent;
 import odata.Throwables;
 import odata.stax2.QName2;
 import odata.stax2.XMLWriter2;
-import bingo.lang.enumerable.IteratedEnumerable;
+import bingo.lang.enumerable.IterableEnumerable;
 
 public class StaxXMLWriter2 implements XMLWriter2 {
 
@@ -65,7 +65,7 @@ public class StaxXMLWriter2 implements XMLWriter2 {
         try {
             Iterator<?> nsIterator = null;
             if (xmlns != null) {
-                nsIterator = IteratedEnumerable.of(eventFactory.createNamespace(xmlns)).iterator();
+                nsIterator = IterableEnumerable.of(eventFactory.createNamespace(xmlns)).iterator();
             }
 
             // writer.writeStartElement(prefix,localName,namespaceURI);

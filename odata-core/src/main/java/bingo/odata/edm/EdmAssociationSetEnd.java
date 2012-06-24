@@ -19,14 +19,14 @@ public class EdmAssociationSetEnd extends EdmObjectWithDocumentation {
 
 	private final String role;
 	
-	private final EdmEntitySet entitySet;
+	private final String entitySet;
 	
-	public EdmAssociationSetEnd(String role,EdmEntitySet entitySet){
+	public EdmAssociationSetEnd(String role,String entitySet){
 		this.role = role;
 		this.entitySet = entitySet;
 	}
 	
-	public EdmAssociationSetEnd(String role,EdmEntitySet entitySet,EdmDocumentation documentation){
+	public EdmAssociationSetEnd(String role,String entitySet,EdmDocumentation documentation){
 		this(role,entitySet);
 		this.documentation = documentation;
 	}
@@ -35,7 +35,7 @@ public class EdmAssociationSetEnd extends EdmObjectWithDocumentation {
     	return role;
     }
 
-	public EdmEntitySet getEntitySet() {
+	public String getEntitySet() {
     	return entitySet;
     }
 }

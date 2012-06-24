@@ -56,7 +56,7 @@ import odata.producer.ExpressionEvaluator.VariableResolver;
 import odata.producer.exceptions.NotFoundException;
 import odata.producer.exceptions.NotImplementedException;
 
-import bingo.lang.enumerable.IteratedEnumerable;
+import bingo.lang.enumerable.IterableEnumerable;
 
 /**
  * A producer for $metadata.
@@ -482,7 +482,7 @@ public class MetadataProducer implements ODataProducer {
         // --------------- SubTypes-------------------------------------
         if (c.pathHelper.isSelected(Edm.StructuralType.NavProps.SubTypes)) {
             if (c.pathHelper.isExpanded(Edm.StructuralType.NavProps.SubTypes)) {
-                List<EdmStructuralType> stypes = IteratedEnumerable.of(dataProducer.getMetadata().getSubTypes(st)).toList();
+                List<EdmStructuralType> stypes = IterableEnumerable.of(dataProducer.getMetadata().getSubTypes(st)).toList();
                 List<OEntity> subtypes = new ArrayList<OEntity>(stypes.size());
                 // these are not root types...
                 EdmEntitySet baseSet = c.entitySet;

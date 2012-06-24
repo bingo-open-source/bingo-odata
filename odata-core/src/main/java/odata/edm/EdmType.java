@@ -10,7 +10,7 @@ import odata.producer.exceptions.NotImplementedException;
 import odata.zinternal.lang.ImmutableList;
 
 import bingo.lang.Func1;
-import bingo.lang.enumerable.IteratedEnumerable;
+import bingo.lang.enumerable.IterableEnumerable;
 
 /**
  * A type in the EDM type system.
@@ -22,7 +22,7 @@ public abstract class EdmType extends EdmItem {
     private static class LazyInit {
 
         private static final Map<String, EdmSimpleType<?>> POOL = 
-        	IteratedEnumerable.of(EdmSimpleType.ALL).toMap(new Func1<EdmSimpleType<?>, String>() {
+        	IterableEnumerable.of(EdmSimpleType.ALL).toMap(new Func1<EdmSimpleType<?>, String>() {
                 public String apply(EdmSimpleType<?> t) {
                     return t.getFullyQualifiedTypeName();
                 }

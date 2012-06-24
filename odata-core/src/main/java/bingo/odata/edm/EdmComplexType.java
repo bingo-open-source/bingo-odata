@@ -17,11 +17,16 @@ package bingo.odata.edm;
 
 public class EdmComplexType extends EdmNamedStructualType {
 
-	public EdmComplexType(String name, String qualifiedName, Iterable<EdmProperty> properties) {
-	    super(name, qualifiedName, properties);
+	public EdmComplexType(String name, Iterable<EdmProperty> properties) {
+	    super(name,properties);
     }
 
-	public EdmComplexType(String name, String qualifiedName, Iterable<EdmProperty> properties, boolean isAbstract) {
-	    super(name, qualifiedName, properties, isAbstract);
+	public EdmComplexType(String name, Iterable<EdmProperty> properties, boolean isAbstract) {
+	    super(name, properties, isAbstract);
+    }
+
+	@Override
+    public final EdmTypeKind getTypeKind() {
+	    return EdmTypeKind.Complex;
     }
 }

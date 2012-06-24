@@ -17,10 +17,26 @@ package bingo.odata;
 
 public final class ODataConstants {
 
-	public static final String DEFAULT_DATA_SERVICES_NAME = "Default";
-	
-	private ODataConstants(){
-		
+	public static final String	DEFAULT_DATA_SERVICES_NAME	= "Default";
+
+	public static final class ContentType {
+
+		public static final String	TEXT_PLAIN		          = "text/plain";
+		public static final String	TEXT_PLAIN_UTF8		      = TEXT_PLAIN + ";charset=utf-8";
+
+		public static final String	APPLICATION_ATOM_XML	  = "application/atom+xml";
+		public static final String	APPLICATION_ATOM_XML_UTF8 = APPLICATION_ATOM_XML + ";charset=utf-8";
+
+		public static final String	APPLICATION_XML		      = "application/xml;charset=utf-8";
+		public static final String	APPLICATION_XML_UTF8	  = "application/xml;charset=utf-8";
+
+		public static final String	APPLICATION_JSON		  = "application/json";
+		public static final String	APPLICATION_JSON_UTF8	  = APPLICATION_JSON + ";charset=utf-8";
+
 	}
-	
+
+	private ODataConstants() {
+
+	}
+
 }

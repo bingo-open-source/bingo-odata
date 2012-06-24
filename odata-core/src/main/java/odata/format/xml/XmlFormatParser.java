@@ -4,7 +4,7 @@ import odata.stax2.Attribute2;
 import odata.stax2.QName2;
 import odata.stax2.StartElement2;
 import odata.stax2.XMLEvent2;
-import bingo.lang.enumerable.IteratedEnumerable;
+import bingo.lang.enumerable.IterableEnumerable;
 
 public class XmlFormatParser {
 
@@ -126,7 +126,7 @@ public class XmlFormatParser {
     public static final QName2 XML_BASE                     = new QName2(NS_XML, "base");
 
     protected static boolean isStartElement(XMLEvent2 event, QName2... names) {
-        return event.isStartElement() && IteratedEnumerable.of(names).contains(event.asStartElement().getName());
+        return event.isStartElement() && IterableEnumerable.of(names).contains(event.asStartElement().getName());
     }
 
     protected static boolean isEndElement(XMLEvent2 event, QName2 qname) {

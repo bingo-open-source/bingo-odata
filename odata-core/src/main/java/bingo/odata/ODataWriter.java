@@ -19,6 +19,6 @@ import java.io.Writer;
 
 public interface ODataWriter<T> {
 
-	void write(ODataContext context,Writer writer,T target) throws Throwable;
+	void write(ODataRequest request,Writer out,T target) throws Throwable;
 	
 }

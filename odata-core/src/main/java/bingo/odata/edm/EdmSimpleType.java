@@ -20,51 +20,69 @@ import java.util.Map;
 
 import bingo.lang.Enumerable;
 import bingo.lang.Enumerables;
+import bingo.lang.Named;
 
-public class EdmSimpleType extends EdmType {
+public class EdmSimpleType extends EdmType implements Named {
 	
-	private static final Map<EdmSimpleTypeKind, EdmSimpleType> map = new LinkedHashMap<EdmSimpleTypeKind, EdmSimpleType>();
+	private static final Map<EdmValueKind, EdmSimpleType> map = new LinkedHashMap<EdmValueKind, EdmSimpleType>();
 	
-	static {
-		add(new EdmSimpleType(EdmSimpleTypeKind.Binary));
-		add(new EdmSimpleType(EdmSimpleTypeKind.Boolean));
-		add(new EdmSimpleType(EdmSimpleTypeKind.Byte));
-		add(new EdmSimpleType(EdmSimpleTypeKind.DateTime));
-		add(new EdmSimpleType(EdmSimpleTypeKind.DateTimeOffset));
-		add(new EdmSimpleType(EdmSimpleTypeKind.Decimal));
-		add(new EdmSimpleType(EdmSimpleTypeKind.Double));
-		add(new EdmSimpleType(EdmSimpleTypeKind.Guid));
-		add(new EdmSimpleType(EdmSimpleTypeKind.Int16));
-		add(new EdmSimpleType(EdmSimpleTypeKind.Int32));
-		add(new EdmSimpleType(EdmSimpleTypeKind.Int64));
-		add(new EdmSimpleType(EdmSimpleTypeKind.SByte));
-		add(new EdmSimpleType(EdmSimpleTypeKind.Single));
-		add(new EdmSimpleType(EdmSimpleTypeKind.Stream));
-		add(new EdmSimpleType(EdmSimpleTypeKind.String));
-		add(new EdmSimpleType(EdmSimpleTypeKind.Time));
-	}
+	public static EdmSimpleType Binary = add(EdmValueKind.Binary);
+	public static EdmSimpleType Boolean = add(EdmValueKind.Boolean);
+	public static EdmSimpleType Byte = add(EdmValueKind.Byte);
+	public static EdmSimpleType DateTime = add(EdmValueKind.DateTime);
+	public static EdmSimpleType DateTimeOffset = add(EdmValueKind.DateTimeOffset);
+	public static EdmSimpleType Decimal = add(EdmValueKind.Decimal);
+	public static EdmSimpleType Double = add(EdmValueKind.Double);
+	public static EdmSimpleType Guid = add(EdmValueKind.Guid);
+	public static EdmSimpleType Int16 = add(EdmValueKind.Int16);
+	public static EdmSimpleType Int32 = add(EdmValueKind.Int32);
+	public static EdmSimpleType Int64 = add(EdmValueKind.Int64);
+	public static EdmSimpleType SByte = add(EdmValueKind.SByte);
+	public static EdmSimpleType Single = add(EdmValueKind.Single);
+	public static EdmSimpleType Stream = add(EdmValueKind.Stream);
+	public static EdmSimpleType String = add(EdmValueKind.String);
+	public static EdmSimpleType Time = add(EdmValueKind.Time);
 	
 	public static final Enumerable<EdmSimpleType> ALL = Enumerables.of(map.values());
 	
-	protected EdmSimpleType of(String kindName) {
-		return of(EdmSimpleTypeKind.valueOf(kindName));
+	public static EdmSimpleType of(String kindName) {
+		return of(EdmValueKind.valueOf(kindName));
 	}
 	
-	public EdmSimpleType of(EdmSimpleTypeKind kind) {
+	public static EdmSimpleType of(EdmValueKind kind) {
 		return map.get(kind);
 	}
 
-	private final EdmSimpleTypeKind kind;
+	private final String       name;
+	private final String       fullQualifiedName;
+	private final EdmValueKind valueKind;
 	
-	public EdmSimpleType(EdmSimpleTypeKind kind){
-		this.kind = kind;
+	public EdmSimpleType(EdmValueKind kind){
+		this.valueKind = kind;
+		this.name      = kind.toString();
+		this.fullQualifiedName = "Edm." + name;
 	}
+	
+	public String getName() {
+    	return name;
+    }
 
-	public EdmSimpleTypeKind getKind() {
-    	return kind;
+	public String getFullQualifiedName() {
+    	return fullQualifiedName;
+    }
+
+	@Override
+    public EdmTypeKind getTypeKind() {
+	    return EdmTypeKind.Simple;
+    }
+
+	public EdmValueKind getValueKind() {
+    	return valueKind;
     }
 	
-	private static void add(EdmSimpleType type){
-		map.put(type.getKind(), type);
+	private static EdmSimpleType add(EdmValueKind kind){
+		EdmSimpleType type = new EdmSimpleType(kind);
+		map.put(type.getValueKind(), type);
+		return type;
 	}
 }

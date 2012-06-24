@@ -15,7 +15,9 @@
  */
 package bingo.odata.edm;
 
+import bingo.lang.Named;
 import bingo.lang.Strings;
+import bingo.odata.edm.builder.EdmSchemaBuilder;
 
 public class EdmUtils {
 
@@ -23,13 +25,34 @@ public class EdmUtils {
 		
 	}
 	
-	public static String getQualifiedName(EdmSchema schema,EdmType type) {
+	public static String fullQualifiedName(EdmSchema schema,EdmType type) {
 		if(type instanceof EdmNamedStructualType){
-			return Strings.join(new String[]{schema.getNamespaceName(),((EdmNamedStructualType) type).getName()},'.');
+			return fullQualifiedName(schema, ((EdmNamedStructualType) type).getName());
 		}else if(type instanceof EdmSimpleType){
-			return "Edm." + ((EdmSimpleType)type).getKind().toString();
+			return ((EdmSimpleType)type).getFullQualifiedName();
+		}else if(type instanceof EdmTypeRef){
+			return ((EdmTypeRef)type).getFullQualifiedName();
+		}else if(type instanceof Named){
+			return fullQualifiedName(schema,((Named)type).getName());		
+		}else if(type instanceof EdmCollectionType){
+			return "Collection(" +  fullQualifiedName(schema, ((EdmCollectionType)type).getElementType()) + ")";
 		}
 		return Strings.EMPTY;
 	}
 	
+	public static String fullQualifiedName(EdmSchema schema,EdmNamedObject named){
+		return fullQualifiedName(schema,named.getName());
+	}
+	
+	public static String fullQualifiedName(EdmSchema schema,String name) {
+		return Strings.join(new String[]{schema.getNamespaceName(),name}, '.');
+	}
+	
+	public static String fullQualifiedName(EdmSchemaBuilder schema,EdmNamedObject named) {
+		return Strings.join(new String[]{schema.getNamespace(),named.getName()}, '.');
+	}
+	
+	public static String fullQualifiedName(EdmSchemaBuilder schema,String name) {
+		return Strings.join(new String[]{schema.getNamespace(),name}, '.');
+	}
 }

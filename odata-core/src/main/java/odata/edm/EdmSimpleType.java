@@ -18,7 +18,7 @@ import org.joda.time.Instant;
 import org.joda.time.LocalDateTime;
 import org.joda.time.LocalTime;
 
-import bingo.lang.enumerable.IteratedEnumerable;
+import bingo.lang.enumerable.IterableEnumerable;
 
 /**
  * Primitive types in the EDM type system.
@@ -64,7 +64,7 @@ public class EdmSimpleType<V> extends EdmType {
     private EdmSimpleType(String fullyQualifiedTypeName, Class<V> canonicalJavaType, Class<?>... alternateJavaTypes) {
         super(fullyQualifiedTypeName);
         this.canonicalJavaType = canonicalJavaType;
-        this.javaTypes = IteratedEnumerable.<Class<?>> of(canonicalJavaType).concat(alternateJavaTypes).toSet();
+        this.javaTypes = IterableEnumerable.<Class<?>> of(canonicalJavaType).concat(alternateJavaTypes).toSet();
     }
 
     @Override

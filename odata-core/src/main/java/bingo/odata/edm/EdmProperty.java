@@ -15,10 +15,11 @@
  */
 package bingo.odata.edm;
 
+import bingo.lang.Assert;
+import bingo.lang.Strings;
+
 public class EdmProperty extends EdmNamedObject {
 
-	private final EdmStructualType declaringType;
-	
 	private final EdmType type;
 	
 	private final boolean nullable;
@@ -33,13 +34,12 @@ public class EdmProperty extends EdmNamedObject {
 	
 	private final int scale;
 	
-	public EdmProperty(EdmStructualType declaringType,String name,EdmType type,
+	public EdmProperty(String name,EdmType type,
 					   boolean nullable,String defaultValue,
 					   boolean fixedLength,int maxLength,int precision,int scale) {
 
-		super(name,name);
+		super(name);
 		
-		this.declaringType = declaringType;
 		this.type = type;
 		
 		this.nullable     = nullable;
@@ -48,22 +48,21 @@ public class EdmProperty extends EdmNamedObject {
 		this.maxLength    = maxLength;
 		this.precision    = precision;
 		this.scale        = scale;
+		
+		Assert.notNull(name,"name is required in EdmProperty");
+		Assert.notNull(type,"type is required in EdmProperty");
 	}
 	
-	public EdmProperty(EdmStructualType declaringType,String name,EdmType type,
-			   boolean nullable,String defaultValue,
-			   boolean fixedLength,int maxLength,int precision,int scale,
-			   EdmDocumentation documentation) {
+	public EdmProperty(String name,EdmType type,
+					   boolean nullable,String defaultValue,
+					   boolean fixedLength,int maxLength,int precision,int scale,
+					   EdmDocumentation documentation) {
 		
-		this(declaringType,name,type,nullable,defaultValue,fixedLength,maxLength,precision,scale);
+		this(name,type,nullable,defaultValue,fixedLength,maxLength,precision,scale);
 		
 		this.documentation = documentation;
 	}
 	
-	public EdmStructualType getDeclaringType() {
-    	return declaringType;
-    }
-
 	public EdmType getType() {
     	return type;
     }
@@ -90,5 +89,10 @@ public class EdmProperty extends EdmNamedObject {
 
 	public int getScale() {
     	return scale;
+    }
+	
+	@Override
+    public String toString() {
+		return Strings.format("EdmProperty[name={0},type={1}]", name,type);
     }
 }

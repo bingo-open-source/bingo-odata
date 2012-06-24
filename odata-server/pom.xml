@@ -4,18 +4,19 @@
 	<parent>
 		<groupId>bingo.odata</groupId>
 		<artifactId>bingo-odata-parent</artifactId>
-		<version>0.7-SNAPSHOT</version>
+		<version>1.0.0-SNAPSHOT</version>
 		<relativePath>../</relativePath>
 	</parent>
-	
+
 	<groupId>bingo.odata</groupId>
 	<artifactId>bingo-odata-server</artifactId>
 	<packaging>jar</packaging>
+	
 	<dependencies>
 		<dependency>
 			<groupId>bingo.odata</groupId>
 			<artifactId>bingo-odata-core</artifactId>
-			<version>0.7-SNAPSHOT</version>
+			<version>${project.version}</version>
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>

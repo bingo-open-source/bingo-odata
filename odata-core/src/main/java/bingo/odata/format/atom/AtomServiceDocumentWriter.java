@@ -19,20 +19,22 @@ import static bingo.odata.format.ODataXmlConstants.APP_NS;
 import static bingo.odata.format.ODataXmlConstants.ATOM_NS;
 import static bingo.odata.format.ODataXmlConstants.ATOM_PREFIX;
 import bingo.lang.xml.XmlWriter;
+import bingo.odata.ODataRequest;
 import bingo.odata.ODataServices;
-import bingo.odata.ODataContext;
 import bingo.odata.edm.EdmEntitySet;
 import bingo.odata.format.ODataXmlWriter;
 
 public class AtomServiceDocumentWriter extends ODataXmlWriter<ODataServices>{
 	
 	@Override
-    protected void write(ODataContext context, XmlWriter writer, ODataServices services) throws Throwable {
+    protected void write(ODataRequest request, XmlWriter writer, ODataServices services) throws Throwable {
 		writer.startDocument();
 		
-		writer.startElement(APP_NS,"service")
+		writer.startElement("service")
 			  .namespace(ATOM_PREFIX,ATOM_NS)
 			  .namespace(APP_NS);
+
+		writer.attributeOptional("xml:base",request.getBaseUrl());
 		
 		writer.startElement("workspace");
 			  

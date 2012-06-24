@@ -33,13 +33,13 @@ public class EdmEntityContainer extends EdmNamedObject {
 	
 	private final List<EdmAssociationSet> associationSets;
 	
-	public EdmEntityContainer(String name,String qualifiedName,
+	public EdmEntityContainer(String name,
 							   boolean isDefault,boolean lazyLoadingEnabled,
 							   Iterable<EdmEntitySet> entitySets,
 							   Iterable<EdmFunctionImport> functionImports,
 							   Iterable<EdmAssociationSet> associationSets) {
 		
-		super(name,qualifiedName);
+		super(name);
 		this.isDefault = isDefault;
 		this.lazyLoadingEnabled = lazyLoadingEnabled;
 		this.entitySets = Immutables.listOf(entitySets);
@@ -47,14 +47,14 @@ public class EdmEntityContainer extends EdmNamedObject {
 		this.associationSets = Immutables.listOf(associationSets);
 	}
 	
-	public EdmEntityContainer(String name,String qualifiedName,
+	public EdmEntityContainer(String name,
 							   boolean isDefault,boolean lazyLoadingEnabled,
 							   Iterable<EdmEntitySet> entitySets,
 							   Iterable<EdmFunctionImport> functionImports,
 							   Iterable<EdmAssociationSet> associationSets,
 							   EdmDocumentation documentation) {
 
-		this(name,qualifiedName,isDefault,lazyLoadingEnabled,entitySets,functionImports,associationSets);
+		this(name,isDefault,lazyLoadingEnabled,entitySets,functionImports,associationSets);
 
 		this.documentation = documentation;
 	}

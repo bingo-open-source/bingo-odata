@@ -16,12 +16,29 @@
 package bingo.odata.edm;
 
 public class EdmCollectionType extends EdmType {
+	
+	public static EdmCollectionType of(EdmSimpleType elementType) {
+		return new EdmCollectionType(elementType);
+	}
+	
+	public static EdmCollectionType of(EdmEntityTypeRef elementType) {
+		return new EdmCollectionType(elementType);
+	}
+	
+	public static EdmCollectionType of(EdmComplexTypeRef elementType) {
+		return new EdmCollectionType(elementType);
+	}
 
 	private final EdmType elementType;
 	
 	public EdmCollectionType(EdmType elementType){
 		this.elementType = elementType;
 	}
+	
+	@Override
+    public final EdmTypeKind getTypeKind() {
+	    return EdmTypeKind.Collection;
+    }
 
 	public EdmType getElementType() {
     	return elementType;

@@ -27,7 +27,7 @@ import bingo.lang.NamedValue;
 import bingo.lang.Out;
 import bingo.lang.OutPredicate;
 import bingo.lang.Strings;
-import bingo.lang.enumerable.IteratedEnumerable;
+import bingo.lang.enumerable.IterableEnumerable;
 
 /**
  * An immutable entity-key, made up of either a single unnamed-value or multiple named-values.
@@ -375,7 +375,7 @@ public class OEntityKey {
         if (values.length == 1) {
             keyValue = keyString(values[0], false);
         } else {
-            keyValue = IteratedEnumerable.of(values).select(new Func1<Object, String>() {
+            keyValue = IterableEnumerable.of(values).select(new Func1<Object, String>() {
                 public String apply(Object input) {
                     return keyString(input, true);
                 }

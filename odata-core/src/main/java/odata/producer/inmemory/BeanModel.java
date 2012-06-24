@@ -15,7 +15,7 @@ import java.util.Map.Entry;
 
 import odata.Throwables;
 
-import bingo.lang.enumerable.IteratedEnumerable;
+import bingo.lang.enumerable.IterableEnumerable;
 
 /**
  * An abstract representation of the "bean" nature of a class.
@@ -164,7 +164,7 @@ public class BeanModel {
             if (obj == null)
                 return null;
             else
-                return obj.getClass().isArray() ? IteratedEnumerable.of((Object[]) obj) : (Iterable<?>) obj;
+                return obj.getClass().isArray() ? IterableEnumerable.of((Object[]) obj) : (Iterable<?>) obj;
         } catch (Exception e) {
             throw Throwables.propagate(e);
         }

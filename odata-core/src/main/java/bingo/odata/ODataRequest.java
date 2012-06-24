@@ -17,4 +17,17 @@ package bingo.odata;
 
 public interface ODataRequest {
 
+	String getContentType();
+	
+	ODataFormat getFormat();
+	
+	ODataVersion getDataServiceVersion();
+	
+	ODataVersion getMinDataServiceVersion();
+	
+	ODataVersion getMaxDataServiceVersion();
+	
+	String getUrl();
+	
+	String getBaseUrl();
 }

@@ -6,7 +6,7 @@ import java.util.Date;
 
 import org.joda.time.LocalDateTime;
 
-import bingo.lang.enumerable.IteratedEnumerable;
+import bingo.lang.enumerable.IterableEnumerable;
 
 /**
  * A consumer-side function-request builder.  Call {@link #execute()} or simply iterate to issue the request.
@@ -22,7 +22,7 @@ import bingo.lang.enumerable.IteratedEnumerable;
  * </pre>
  * <p>Note:
  * OData functions can return single instances or collections of instances.
- * To keep the interface simple, callFunction always returns an {@link IteratedEnumerable}.
+ * To keep the interface simple, callFunction always returns an {@link IterableEnumerable}.
  *
  * @param <T>  the entity representation as a java type
  */

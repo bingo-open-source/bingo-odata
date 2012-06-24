@@ -29,7 +29,6 @@ public class EdmEntityType extends EdmNamedStructualType {
 	private final List<EdmNavigationProperty> navigationProperties;
 	
 	public EdmEntityType(String name,
-						  String qualifiedName,
 						  Iterable<EdmProperty> properties,
 						  Iterable<EdmNavigationProperty> navigationProperties,
 						  Iterable<String> keys, 
@@ -37,7 +36,7 @@ public class EdmEntityType extends EdmNamedStructualType {
 						  boolean hasStream,
 						  EdmEntityType baseType){
 		
-		super(name,qualifiedName,properties,isAbstract);
+		super(name,properties,isAbstract);
 		this.keys       = Immutables.listOf(keys);
 		this.navigationProperties = Immutables.listOf(navigationProperties);
 		this.baseType   = baseType;
@@ -47,7 +46,6 @@ public class EdmEntityType extends EdmNamedStructualType {
 	}
 	
 	public EdmEntityType(String name,
-						  String qualifiedName,
 						  Iterable<EdmProperty> properties,
 						  Iterable<EdmNavigationProperty> navigationProperties,
 						  Iterable<String> keys,
@@ -56,7 +54,7 @@ public class EdmEntityType extends EdmNamedStructualType {
 						  EdmEntityType baseType,
 						  EdmDocumentation documentation){
 		
-		this(name,qualifiedName,properties,navigationProperties,keys,isAbstract,hasStream,baseType);
+		this(name,properties,navigationProperties,keys,isAbstract,hasStream,baseType);
 		
 		this.documentation = documentation;
 	}
@@ -77,6 +75,11 @@ public class EdmEntityType extends EdmNamedStructualType {
     	return hasStream;
     }
 	
+	@Override
+    public EdmTypeKind getTypeKind() {
+	    return EdmTypeKind.Entity;
+    }
+
 	protected void doCheckValidKeys(){
 		for(String key : keys){
 			if(null == findDeclaredProperty(key)){

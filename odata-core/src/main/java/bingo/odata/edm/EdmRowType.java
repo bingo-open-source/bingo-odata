@@ -21,5 +21,10 @@ public class EdmRowType extends EdmStructualType {
 	public EdmRowType(Iterable<EdmProperty> properties){
 		super(properties);
 	}
-	
+
+	@Override
+    public final EdmTypeKind getTypeKind() {
+	    return EdmTypeKind.Row;
+    }
+
 }

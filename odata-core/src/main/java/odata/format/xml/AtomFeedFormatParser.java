@@ -37,7 +37,7 @@ import odata.zinternal.FeedCustomizationMapping;
 import odata.zinternal.InternalUtil;
 
 import bingo.lang.Func1;
-import bingo.lang.enumerable.IteratedEnumerable;
+import bingo.lang.enumerable.IterableEnumerable;
 
 public class AtomFeedFormatParser extends XmlFormatParser implements FormatParser<Feed> {
 
@@ -159,7 +159,7 @@ public class AtomFeedFormatParser extends XmlFormatParser implements FormatParse
             }
 
         }
-        feed.entries = IteratedEnumerable.of(rt).cast(Entry.class);
+        feed.entries = IterableEnumerable.of(rt).cast(Entry.class);
 
         return feed;
 
@@ -196,7 +196,7 @@ public class AtomFeedFormatParser extends XmlFormatParser implements FormatParse
                 }
 
                 if (et != null && (!et.isSimple())) {
-                    op = OProperties.complex(name, (EdmComplexType) et, isNull ? null : IteratedEnumerable.of(parseProperties(reader, event.asStartElement(), metadata)).toList());
+                    op = OProperties.complex(name, (EdmComplexType) et, isNull ? null : IterableEnumerable.of(parseProperties(reader, event.asStartElement(), metadata)).toList());
                 } else {
                     op = OProperties.parseSimple(name, type, isNull ? null : reader.getElementText());
                 }
@@ -242,7 +242,7 @@ public class AtomFeedFormatParser extends XmlFormatParser implements FormatParse
     private DataServicesAtomEntry parseDSAtomEntry(String etag, XMLEventReader2 reader, XMLEvent2 event) {
         DataServicesAtomEntry dsae = new DataServicesAtomEntry();
         dsae.etag = etag;
-        dsae.properties = IteratedEnumerable.of(parseProperties(reader, event.asStartElement(), this.metadata)).toList();
+        dsae.properties = IterableEnumerable.of(parseProperties(reader, event.asStartElement(), this.metadata)).toList();
         return dsae;
     }
 
@@ -387,7 +387,7 @@ public class AtomFeedFormatParser extends XmlFormatParser implements FormatParse
 
         List<OProperty<?>> props = dsae.properties;
         if (mapping != null) {
-            IteratedEnumerable<OProperty<?>> properties = IteratedEnumerable.of(dsae.properties);
+            IterableEnumerable<OProperty<?>> properties = IterableEnumerable.of(dsae.properties);
             if (mapping.titlePropName != null)
                 properties = properties.concat(OProperties.string(mapping.titlePropName, dsae.title));
             if (mapping.summaryPropName != null)
@@ -435,7 +435,7 @@ public class AtomFeedFormatParser extends XmlFormatParser implements FormatParse
                             final EdmEntitySet toRoleEntitySet = metadata != null && navProperty != null ? metadata.getEdmEntitySet(navProperty.getToRole().getType()) : null;
 
                             // convert the atom feed entries to OEntitys
-                            relatedEntities = IteratedEnumerable.of(link.inlineFeed.entries).cast(DataServicesAtomEntry.class).select(new Func1<DataServicesAtomEntry, OEntity>() {
+                            relatedEntities = IterableEnumerable.of(link.inlineFeed.entries).cast(DataServicesAtomEntry.class).select(new Func1<DataServicesAtomEntry, OEntity>() {
                                 public OEntity apply(DataServicesAtomEntry input) {
                                     return entityFromAtomEntry(metadata, toRoleEntitySet, input, mapping);
                                 }
