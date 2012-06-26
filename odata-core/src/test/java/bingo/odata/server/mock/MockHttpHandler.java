@@ -13,40 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.odata;
+package bingo.odata.server.mock;
 
-import bingo.lang.Valued;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
-public enum ODataVersion implements Valued<String> {
+public interface MockHttpHandler {
 
-	V1(1,0),
-	V2(2,0),
-	V3(3,0);
+	void handle(HttpServletRequest request,HttpServletResponse response) throws Throwable;
 	
-	private final int    major;
-	private final int    minor;
-	private final String value;
-	
-	ODataVersion(int major,int minor){
-		this.major = major;
-		this.minor = minor;
-		this.value = major + "." + minor;
-	}
-	
-	public int getMajor() {
-    	return major;
-    }
-
-	public int getMinor() {
-    	return minor;
-    }
-
-	public String getValue() {
-	    return value;
-    }
-
-	@Override
-    public String toString() {
-		return value;
-    }
 }

@@ -24,6 +24,10 @@ public final class EdmBuilders {
 	public static EdmEntityTypeBuilder entityType(String name) {
 		return new EdmEntityTypeBuilder(name);
 	}
+	
+	public static EdmComplexTypeBuilder complexType(String name) {
+		return new EdmComplexTypeBuilder(name);
+	}
 
 	public static EdmPropertyBuilder property(String name) {
 		return new EdmPropertyBuilder(name);

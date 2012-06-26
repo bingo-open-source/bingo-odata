@@ -45,6 +45,13 @@
 				<End Role="Product_Supplier" Type="ODataDemo.Product" Multiplicity="*"></End>
 				<End Role="Supplier_Products" Type="ODataDemo.Supplier" Multiplicity="0..1"></End>
 			</Association>
+			<ComplexType Name="Address">
+				<Property Name="Street" Type="Edm.String" Nullable="true"></Property>
+				<Property Name="City" Type="Edm.String" Nullable="true"></Property>
+				<Property Name="State" Type="Edm.String" Nullable="true"></Property>
+				<Property Name="ZipCode" Type="Edm.String" Nullable="true"></Property>
+				<Property Name="Country" Type="Edm.String" Nullable="true"></Property>
+			</ComplexType>
 			<EntityContainer Name="DemoService" m:IsDefaultEntityContainer="true">
 				<EntitySet Name="Products" EntityType="ODataDemo.Product"></EntitySet>
 				<EntitySet Name="Categories" EntityType="ODataDemo.Category"></EntitySet>

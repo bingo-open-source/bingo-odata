@@ -20,6 +20,7 @@ import bingo.odata.ODataServices;
 import bingo.odata.ODataVersion;
 import bingo.odata.edm.EdmAssociation;
 import bingo.odata.edm.EdmCollectionType;
+import bingo.odata.edm.EdmComplexType;
 import bingo.odata.edm.EdmEntitySet;
 import bingo.odata.edm.EdmEntityTypeRef;
 import bingo.odata.edm.EdmMultiplicity;
@@ -69,6 +70,15 @@ public class DemoMetadataProducer implements MetadataProducer {
 		EdmEntityTypeRef productRef  = product.buildRef(schema);
 		EdmEntityTypeRef categoryRef = category.buildRef(schema);
 		EdmEntityTypeRef supplierRef = supplier.buildRef(schema);
+		
+		//complex types
+		EdmComplexType address = EdmBuilders.complexType("Address")
+										    .addProperty("Street", EdmSimpleType.String, true)
+										    .addProperty("City",EdmSimpleType.String,true)
+										    .addProperty("State",EdmSimpleType.String,true)
+										    .addProperty("ZipCode",EdmSimpleType.String,true)
+										    .addProperty("Country",EdmSimpleType.String,true)
+										    .build();
 		
 		//associations
 		EdmAssociation productCategories = 
@@ -120,9 +130,10 @@ public class DemoMetadataProducer implements MetadataProducer {
 												 .build());
 		
 		schema.addEntityTypes(product.build(),category.build(),supplier.build())
+		      .addComplexTypes(address)
 	      	  .addAssociations(productCategories,productSuppliers)
 	      	  .addEntityContainer(demoService.build());
 		
-		metadata = new ODataServices(ODataVersion.V3,Enumerables.of(schema.build()));
+		metadata = new ODataServices(ODataVersion.V1,Enumerables.of(schema.build()));
 	}
 }

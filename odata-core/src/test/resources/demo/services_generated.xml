@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<service xmlns:atom="http://www.w3.org/2005/Atom" xmlns="http://www.w3.org/2007/app">
+	<workspace>
+		<atom:title>Default</atom:title>
+		<collection href="Products">
+			<atom:title>Products</atom:title>
+		</collection>
+		<collection href="Categories">
+			<atom:title>Categories</atom:title>
+		</collection>
+		<collection href="Suppliers">
+			<atom:title>Suppliers</atom:title>
+		</collection>
+	</workspace>
+</service>

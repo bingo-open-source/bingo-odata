@@ -13,15 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.odata.requests;
+package bingo.odata.server.requests;
 
 import org.junit.Test;
 
 import bingo.lang.Assert;
-import bingo.odata.ODataFormat;
 import bingo.odata.producer.demo.DemoODataTestBase;
-import bingo.odata.requests.metadata.MetadataDocumentRequestHandler;
-import bingo.odata.requests.metadata.ServiceDocumentRequestHandler;
+import bingo.odata.server.requests.metadata.MetadataDocumentRequestHandler;
+import bingo.odata.server.requests.metadata.ServiceDocumentRequestHandler;
 
 public class TestDemoMetadataRequest extends DemoODataTestBase {
 	
@@ -30,9 +29,7 @@ public class TestDemoMetadataRequest extends DemoODataTestBase {
 	
 	@Test
 	public void testDemoServiceDocumentAtom() {
-		request.setFormat(ODataFormat.Atom);
-		
-		serviceDocumentHandler.handle(producer, request, response);
+		serviceDocumentHandler.handle(context(), request, response);
 		
 		String content = response.getContent();
 		
@@ -43,7 +40,7 @@ public class TestDemoMetadataRequest extends DemoODataTestBase {
 
 	@Test
 	public void testDemoMetadataDocument(){
-		metadataDocumentHandler.handle(producer, request, response);
+		metadataDocumentHandler.handle(context(), request, response);
 		
 		String content = response.getContent();
 		

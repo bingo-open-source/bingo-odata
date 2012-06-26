@@ -36,7 +36,7 @@ public class ODataServices implements Named {
 	private final List<EdmSchema> schemas;
 	
 	public ODataServices(ODataVersion version,Iterable<EdmSchema> schemas){
-		this(ODataConstants.DEFAULT_DATA_SERVICES_NAME,version,schemas);
+		this(ODataConstants.Defaults.DataServiceName,version,schemas);
 	}
 	
 	public ODataServices(String name, ODataVersion version,Iterable<EdmSchema> schemas){

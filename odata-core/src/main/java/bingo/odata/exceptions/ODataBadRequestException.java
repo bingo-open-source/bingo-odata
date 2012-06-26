@@ -13,40 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.odata;
+package bingo.odata.exceptions;
 
-import bingo.lang.Valued;
+import bingo.odata.ODataException;
 
-public enum ODataVersion implements Valued<String> {
+public class ODataBadRequestException extends ODataException {
 
-	V1(1,0),
-	V2(2,0),
-	V3(3,0);
-	
-	private final int    major;
-	private final int    minor;
-	private final String value;
-	
-	ODataVersion(int major,int minor){
-		this.major = major;
-		this.minor = minor;
-		this.value = major + "." + minor;
+	private static final long serialVersionUID = 5692872046113751725L;
+
+	public ODataBadRequestException() {
+		
 	}
-	
-	public int getMajor() {
-    	return major;
-    }
 
-	public int getMinor() {
-    	return minor;
-    }
+	public ODataBadRequestException(String message, Object... args) {
+		super(message, args);
+	}
 
-	public String getValue() {
-	    return value;
-    }
+	public ODataBadRequestException(String message, Throwable cause) {
+		super(message, cause);
+	}
 
-	@Override
-    public String toString() {
-		return value;
-    }
+	public ODataBadRequestException(String message) {
+		super(message);
+	}
+
+	public ODataBadRequestException(Throwable cause) {
+		super(cause);
+	}
 }

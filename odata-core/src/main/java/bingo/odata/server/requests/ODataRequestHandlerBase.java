@@ -13,22 +13,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.odata.requests;
+package bingo.odata.server.requests;
 
 import bingo.lang.logging.Log;
 import bingo.lang.logging.LogFactory;
 import bingo.odata.ODataException;
+import bingo.odata.ODataFormat;
 import bingo.odata.ODataRequest;
 import bingo.odata.ODataResponse;
-import bingo.odata.producer.ODataProducer;
+import bingo.utils.http.HttpContentTypes;
 
 public abstract class ODataRequestHandlerBase implements ODataRequestHandler {
 	
 	private static final Log log = LogFactory.get(ODataRequestHandlerBase.class);
 
-	public final boolean handle(ODataProducer producer, ODataRequest request, ODataResponse response) throws ODataException {
+	public final boolean handle(ODataRequestContext context, ODataRequest request, ODataResponse response) throws ODataException {
 	    try {
-	        return doHandle(producer,request,response);
+	        if(doHandle(context,request,response)){
+	        	
+	        	String contentType = getFormatContentType(context.getFormat());
+	        	
+	        	if(null != contentType){
+	        		response.setContentType(contentType);
+	        	}
+	        	
+	        	return true;
+	        }else{
+	        	return false;
+	        }
         } catch (Throwable e) {
         	log.error("Error executing handler '{}' on request '{}' : {}",new Object[]{this.getClass().getSimpleName(),request.getUrl(),e.getMessage(),e});
         	
@@ -39,6 +51,24 @@ public abstract class ODataRequestHandlerBase implements ODataRequestHandler {
         	}
         }
     }
+	
+	protected String getFormatContentType(ODataFormat format) {
+		if(null == format){
+			return getDefaultContentType();
+		}
+		
+		if(ODataFormat.Atom.equals(format)){
+			return HttpContentTypes.APPLICATION_ATOM_XML;
+		}
+		
+		if(ODataFormat.Json.equals(format)){
+			return HttpContentTypes.APPLICATION_JSON;
+		}
+		
+		return getDefaultContentType();
+	}
+	
+	protected abstract String getDefaultContentType();
 
-	protected abstract boolean doHandle(ODataProducer producer,ODataRequest request,ODataResponse response) throws Throwable;
+	protected abstract boolean doHandle(ODataRequestContext context,ODataRequest request,ODataResponse response) throws Throwable;
 }

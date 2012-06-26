@@ -34,7 +34,7 @@ public class AtomServiceDocumentWriter extends ODataXmlWriter<ODataServices>{
 			  .namespace(ATOM_PREFIX,ATOM_NS)
 			  .namespace(APP_NS);
 
-		writer.attributeOptional("xml:base",request.getBaseUrl());
+		writer.attributeOptional("xml:base",request.getServiceRootUrl());
 		
 		writer.startElement("workspace");
 			  

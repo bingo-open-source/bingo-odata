@@ -13,40 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.odata;
+package bingo.odata.server.requests;
 
-import bingo.lang.Valued;
+import bingo.odata.ODataVersion;
 
-public enum ODataVersion implements Valued<String> {
+public class ODataRequestVersion {
+	private final ODataVersion	version;
+	private final String	    userAgent;
 
-	V1(1,0),
-	V2(2,0),
-	V3(3,0);
-	
-	private final int    major;
-	private final int    minor;
-	private final String value;
-	
-	ODataVersion(int major,int minor){
-		this.major = major;
-		this.minor = minor;
-		this.value = major + "." + minor;
+	public ODataRequestVersion(ODataVersion version,String userAgent){
+		this.version = version;
+		this.userAgent = userAgent;
 	}
-	
-	public int getMajor() {
-    	return major;
-    }
 
-	public int getMinor() {
-    	return minor;
-    }
+	public ODataVersion getVersion() {
+		return version;
+	}
 
-	public String getValue() {
-	    return value;
-    }
-
-	@Override
-    public String toString() {
-		return value;
-    }
+	public String getUserAgent() {
+		return userAgent;
+	}
 }

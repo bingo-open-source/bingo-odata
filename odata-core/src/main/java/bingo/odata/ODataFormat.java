@@ -15,10 +15,53 @@
  */
 package bingo.odata;
 
-public enum ODataFormat {
+import bingo.lang.Valued;
+import bingo.odata.ODataConstants.ContentTypes;
+
+public enum ODataFormat implements Valued<String> {
 	
-	Atom,
+	Atom("atom",ContentTypes.APPLICATION_ATOM_XML),
 	
-	Json;
+	Json("json",ContentTypes.APPLICATION_JSON_LIGHT),
 	
+	VerboseJson("verbosejson",ContentTypes.APPLICATION_JSON_VERBOSE),
+	
+	Xml("xml",ContentTypes.APPLICATION_XML);
+	
+	private final String value;
+	private final String contentType;
+	
+	ODataFormat(String value,String contentType){
+		this.value       = value;
+		this.contentType = contentType;
+	}
+
+	public String getValue() {
+	    return value;
+    }
+
+	public String getContentType() {
+    	return contentType;
+    }
+
+	@Override
+    public String toString() {
+		return value;
+    }
+	
+	public boolean isAtom(){
+		return this.equals(Atom);
+	}
+	
+	public boolean isJson(){
+		return this.equals(Json);
+	}
+	
+	public boolean isVerboseJson(){
+		return this.equals(VerboseJson);
+	}
+	
+	public boolean isXml(){
+		return this.equals(Xml);
+	}
 }

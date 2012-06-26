@@ -13,15 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.odata.requests;
+package bingo.odata.server.requests;
 
 import bingo.odata.ODataException;
 import bingo.odata.ODataRequest;
 import bingo.odata.ODataResponse;
-import bingo.odata.producer.ODataProducer;
 
 public interface ODataRequestHandler {
 
-	boolean handle(ODataProducer producer,ODataRequest request,ODataResponse response) throws ODataException;
+	boolean handle(ODataRequestContext context,ODataRequest request,ODataResponse response) throws ODataException;
 	
 }

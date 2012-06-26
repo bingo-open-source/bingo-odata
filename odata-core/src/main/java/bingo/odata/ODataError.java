@@ -15,38 +15,37 @@
  */
 package bingo.odata;
 
-import bingo.lang.Valued;
+public class ODataError extends ODataException {
 
-public enum ODataVersion implements Valued<String> {
+	private static final long serialVersionUID = 2055517132583888032L;
+	
+	private final int     status;
+	private final String	code;
+	private final String	message;
+	
+	public ODataError(int status,String code, String message) {
+		this.status  = status;
+	    this.code    = code;
+	    this.message = message;
+    }
+	
+	public ODataError(int status,String code, String message,Throwable cause) {
+		super(cause);
+		this.status  = status;
+	    this.code    = code;
+	    this.message = message;
+    }
+	
+	public int getStatus() {
+    	return status;
+    }
 
-	V1(1,0),
-	V2(2,0),
-	V3(3,0);
-	
-	private final int    major;
-	private final int    minor;
-	private final String value;
-	
-	ODataVersion(int major,int minor){
-		this.major = major;
-		this.minor = minor;
-		this.value = major + "." + minor;
+	public String getCode() {
+		return code;
 	}
-	
-	public int getMajor() {
-    	return major;
-    }
-
-	public int getMinor() {
-    	return minor;
-    }
-
-	public String getValue() {
-	    return value;
-    }
 
 	@Override
-    public String toString() {
-		return value;
-    }
+	public String getMessage() {
+		return message;
+	}
 }

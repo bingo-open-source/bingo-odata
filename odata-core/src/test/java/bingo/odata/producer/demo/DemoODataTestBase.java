@@ -17,19 +17,36 @@ package bingo.odata.producer.demo;
 
 import org.junit.Before;
 
-import bingo.odata.producer.mock.MockODataRequest;
-import bingo.odata.producer.mock.MockODataResponse;
+import bingo.odata.ODataFormat;
+import bingo.odata.ODataVersion;
+import bingo.odata.server.mock.MockODataRequest;
+import bingo.odata.server.mock.MockODataResponse;
+import bingo.odata.server.requests.ODataRequestContext;
+import bingo.odata.server.requests.ODataRequestMessage;
+import bingo.odata.server.requests.ODataRequestMessageBuilder;
 
 public abstract class DemoODataTestBase {
 	
 	protected static final DemoODataProducer producer = new DemoODataProducer();
 	
-	protected MockODataRequest  request;
-	protected MockODataResponse response;
+	protected MockODataRequest    request;
+	protected MockODataResponse   response;
 	
 	@Before
 	public void setUp(){
 		request  = new MockODataRequest();
 		response = new MockODataResponse();
+		
+		request.setDataServiceVerion(ODataVersion.V3);
+		request.setFormat(ODataFormat.Atom);
+		request.setServiceRootPath("/demo");
+		request.setServiceRootUrl("http://localhost/demo");
+		request.setResourcePath("/");
+	}
+	
+	protected ODataRequestContext context(){
+		ODataRequestMessage message = new ODataRequestMessageBuilder(request,ODataVersion.V3,ODataFormat.Atom).build();
+		
+		return new ODataRequestContext(producer, message);
 	}
 }

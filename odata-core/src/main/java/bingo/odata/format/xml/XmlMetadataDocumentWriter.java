@@ -15,10 +15,10 @@
  */
 package bingo.odata.format.xml;
 
-import static bingo.odata.format.ODataXmlConstants.DATA_SERVICES_METADATA_NS;
-import static bingo.odata.format.ODataXmlConstants.DATA_SERVICES_METADATA_PREFIX;
-import static bingo.odata.format.ODataXmlConstants.DATA_SERVICES_NS;
-import static bingo.odata.format.ODataXmlConstants.DATA_SERVICES_PREFIX;
+import static bingo.odata.format.ODataXmlConstants.ODATA_METADATA_NS;
+import static bingo.odata.format.ODataXmlConstants.ODATA_METADATA_PREFIX;
+import static bingo.odata.format.ODataXmlConstants.ODATA_NS;
+import static bingo.odata.format.ODataXmlConstants.ODATA_PREFIX;
 import static bingo.odata.format.ODataXmlConstants.EDMX_NS;
 import static bingo.odata.format.ODataXmlConstants.EDMX_PREFIX;
 import bingo.lang.Strings;
@@ -27,6 +27,7 @@ import bingo.odata.ODataRequest;
 import bingo.odata.ODataServices;
 import bingo.odata.edm.EdmAssociation;
 import bingo.odata.edm.EdmAssociationSet;
+import bingo.odata.edm.EdmComplexType;
 import bingo.odata.edm.EdmEntityContainer;
 import bingo.odata.edm.EdmEntitySet;
 import bingo.odata.edm.EdmEntityType;
@@ -50,12 +51,12 @@ public class XmlMetadataDocumentWriter extends ODataXmlWriter<ODataServices> {
 		writer.startElement(EDMX_PREFIX, EDMX_NS, "Edmx")
 			  .attribute("Version", "1.0")
 			  .namespace(EDMX_PREFIX,EDMX_NS)
-			  .namespace(DATA_SERVICES_PREFIX,DATA_SERVICES_NS)
-			  .namespace(DATA_SERVICES_METADATA_PREFIX,DATA_SERVICES_METADATA_NS);
+			  .namespace(ODATA_PREFIX,ODATA_NS)
+			  .namespace(ODATA_METADATA_PREFIX,ODATA_METADATA_NS);
 
 		//DataServides
 		writer.startElement(EDMX_PREFIX,EDMX_NS,"DataServices")
-		      .attribute(DATA_SERVICES_METADATA_PREFIX,DATA_SERVICES_METADATA_NS,"DataServiceVersion",services.getVersion().getValue());
+		      .attribute(ODATA_METADATA_PREFIX,ODATA_METADATA_NS,"DataServiceVersion",services.getVersion().getValue());
 
 		//Schemas
 		for(EdmSchema schema : services.getSchemas()){
@@ -94,7 +95,7 @@ public class XmlMetadataDocumentWriter extends ODataXmlWriter<ODataServices> {
 			}
 			
 			if(entityType.hasStream()){
-				writer.attribute(DATA_SERVICES_METADATA_NS, "HasStream","true");
+				writer.attribute(ODATA_METADATA_NS, "HasStream","true");
 			}
 
 			//key
@@ -187,7 +188,7 @@ public class XmlMetadataDocumentWriter extends ODataXmlWriter<ODataServices> {
 				  .attribute("Name", ec.getName());
 			
 			if(ec.isDefault()){
-				writer.attribute(DATA_SERVICES_METADATA_NS,"IsDefaultEntityContainer","true");
+				writer.attribute(ODATA_METADATA_NS,"IsDefaultEntityContainer","true");
 			}
 			
 			writeDocument(writer, ec);
@@ -247,8 +248,14 @@ public class XmlMetadataDocumentWriter extends ODataXmlWriter<ODataServices> {
 	}
 	
 	private static void writeComplexTypes(XmlWriter writer,EdmSchema schema) {
-		//TODO : writeComplexTypes
-		
+		for(EdmComplexType complexType : schema.getComplexTypes()){
+			writer.startElement("ComplexType")
+			      .attribute("Name", complexType.getName());
+			
+			writeProperties(writer, schema, complexType.getDeclaredProperties());
+			
+			writer.endElement();
+		}
 	}
 
 	private static void writeFunctions(XmlWriter writer,EdmSchema schema) {

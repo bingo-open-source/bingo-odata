@@ -13,23 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.odata.requests.metadata;
+package bingo.odata.server.requests;
 
+import bingo.odata.ODataException;
 import bingo.odata.ODataRequest;
 import bingo.odata.ODataResponse;
-import bingo.odata.ODataServices;
-import bingo.odata.ODataWriters;
-import bingo.odata.producer.ODataProducer;
-import bingo.odata.requests.ODataRequestHandlerBase;
 
-public class MetadataDocumentRequestHandler extends ODataRequestHandlerBase {
-	
-	@Override
-    protected boolean doHandle(ODataProducer producer, ODataRequest request, ODataResponse response) throws Throwable {
-		ODataServices metadata = producer.getMetadataProducer().getMetadata();
-		
-		ODataWriters.EDM_METADATA_DOCUMENT_WRITER.write(request,response.getWriter(),metadata);
-		
-		return true;
-    }
+public class ODataResourceHandler implements ODataRequestHandler {
+
+	public boolean handle(ODataRequestContext context, ODataRequest request, ODataResponse response) throws ODataException {
+		return false;
+	}
+
 }

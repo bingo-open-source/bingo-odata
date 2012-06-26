@@ -13,20 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.odata.producer.mock;
+package bingo.odata.server.mock;
 
 import java.io.StringWriter;
 import java.io.Writer;
+import java.util.HashMap;
+import java.util.Map;
 
-import bingo.odata.ODataConstants;
 import bingo.odata.ODataResponse;
-import bingo.odata.ODataVersion;
 
 public class MockODataResponse implements ODataResponse {
 
-	private String	      contentType  = ODataConstants.ContentType.APPLICATION_ATOM_XML_UTF8;
-	private ODataVersion version	   = ODataVersion.V3;
+	private String	      contentType  = null;
 	private Writer	      writer	   = new StringWriter();
+	private int          status       = 200;
+	private Map<String, String> headers = new HashMap<String, String>();
 
 	public String getContentType() {
 		return contentType;
@@ -36,13 +37,21 @@ public class MockODataResponse implements ODataResponse {
 		this.contentType = contentType;
 	}
 
-	public ODataVersion getVersion() {
-		return version;
+	public void setHeader(String name, String value) {
+		headers.put(name, value);	    
+    }
+	
+	public String getHeader(String name){
+		return headers.get(name);
 	}
 
-	public void setVersion(ODataVersion version) {
-		this.version = version;
-	}
+	public int getStatus() {
+    	return status;
+    }
+
+	public void setStatus(int status) {
+    	this.status = status;
+    }
 
 	public Writer getWriter() {
 		return writer;

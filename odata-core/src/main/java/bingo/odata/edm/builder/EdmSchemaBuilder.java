@@ -82,6 +82,18 @@ public class EdmSchemaBuilder extends EdmBuilderWithDocumentation implements Bui
 		return this;
 	}
 	
+	public EdmSchemaBuilder addComplexType(EdmComplexType complexType) {
+		complexTypes.add(complexType);
+		return this;
+	}
+	
+	public EdmSchemaBuilder addComplexTypes(EdmComplexType... complexTypes) {
+		for(EdmComplexType type : complexTypes){
+			addComplexType(type);
+		}
+		return this;
+	}
+	
 	public EdmSchemaBuilder addAssociation(EdmAssociation association) {
 		associations.add(association);
 		return this;

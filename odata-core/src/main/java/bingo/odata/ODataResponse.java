@@ -17,12 +17,15 @@ package bingo.odata;
 
 import java.io.Writer;
 
-
 public interface ODataResponse {
 
-	ODataVersion getVersion();
-	
 	String getContentType();
+	
+	void setContentType(String contentType);
+	
+	void setStatus(int status);
+	
+	void setHeader(String name,String value);
 	
 	Writer getWriter();
 }

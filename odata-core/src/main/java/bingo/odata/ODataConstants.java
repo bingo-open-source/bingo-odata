@@ -15,28 +15,54 @@
  */
 package bingo.odata;
 
+import bingo.utils.http.HttpContentTypes;
+
 public final class ODataConstants {
 
-	public static final String	DEFAULT_DATA_SERVICES_NAME	= "Default";
-
-	public static final class ContentType {
-
-		public static final String	TEXT_PLAIN		          = "text/plain";
-		public static final String	TEXT_PLAIN_UTF8		      = TEXT_PLAIN + ";charset=utf-8";
-
-		public static final String	APPLICATION_ATOM_XML	  = "application/atom+xml";
-		public static final String	APPLICATION_ATOM_XML_UTF8 = APPLICATION_ATOM_XML + ";charset=utf-8";
-
-		public static final String	APPLICATION_XML		      = "application/xml;charset=utf-8";
-		public static final String	APPLICATION_XML_UTF8	  = "application/xml;charset=utf-8";
-
-		public static final String	APPLICATION_JSON		  = "application/json";
-		public static final String	APPLICATION_JSON_UTF8	  = APPLICATION_JSON + ";charset=utf-8";
+	public static final class Values {
 
 	}
+	
+	public static final class Defaults {
+		public static final String DataServiceName = "Default";
+		
+		public static final ODataVersion DataServiceVersion = ODataVersion.V2;
+		
+		public static final ODataFormat DataServiceFormat = ODataFormat.Atom;
+	}
 
+	public static final class Versions {
+		public static final ODataVersion MinDataServiceVersion = ODataVersion.V1;
+		
+		public static final ODataVersion MaxDataServiceVersion = ODataVersion.V3;
+	}
+	
+	public static final class ContentTypes extends HttpContentTypes {
+		
+		public static final String APPLICATION_JSON_VERBOSE = APPLICATION_JSON + ";odata=verbose";
+
+		public static final String APPLICATION_JSON_LIGHT   = APPLICATION_JSON + ";odata=light";
+		
+	}
+	
+	public static final class Headers {
+		
+		public static final String DataServiceVersion    = "DataServiceVersion";
+		
+		public static final String MinDataServiceVersion = "MinDataServiceVersion";
+		
+		public static final String MaxDataServiceVersion = "MaxDataServiceVersion";
+		
+		public static final String Accept = "Accept";
+	}
+	
+	public static final class QueryOptions {
+		
+		public static final String Format = "$format";
+		
+	}
+	
 	private ODataConstants() {
 
 	}
-
 }

@@ -17,20 +17,22 @@ package bingo.odata;
 
 import bingo.odata.format.atom.AtomServiceDocumentWriter;
 import bingo.odata.format.json.JsonServiceDocumentWriter;
+import bingo.odata.format.xml.XmlErrorWriter;
 import bingo.odata.format.xml.XmlMetadataDocumentWriter;
 
 public final class ODataWriters {
-	
+
 	//ATOM
-	public static final AtomServiceDocumentWriter ATOM_SERVICE_DOCUMENT_WRITER = new AtomServiceDocumentWriter();
-	
+	public static final AtomServiceDocumentWriter	ATOM_SERVICE_DOCUMENT_WRITER	= new AtomServiceDocumentWriter();
+
 	//JSON
-	public static final JsonServiceDocumentWriter JSON_SERVICE_DOCUMENT_WRITER = new JsonServiceDocumentWriter();
+	public static final JsonServiceDocumentWriter	JSON_SERVICE_DOCUMENT_WRITER	= new JsonServiceDocumentWriter();
 
 	//XML
-	public static final XmlMetadataDocumentWriter EDM_METADATA_DOCUMENT_WRITER = new XmlMetadataDocumentWriter();
-	
+	public static final XmlMetadataDocumentWriter	EDM_METADATA_DOCUMENT_WRITER	= new XmlMetadataDocumentWriter();
+	public static final XmlErrorWriter	        XML_ERROR_WRITER	            = new XmlErrorWriter();
+
 	private ODataWriters() {
-		
+
 	}
 }

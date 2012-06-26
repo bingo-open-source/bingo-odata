@@ -13,40 +13,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.odata;
+package bingo.odata.server.requests;
 
-import bingo.lang.Valued;
+import bingo.odata.ODataFormat;
+import bingo.odata.ODataUrl;
+import bingo.odata.ODataVersion;
 
-public enum ODataVersion implements Valued<String> {
+public class ODataRequestMessage {
 
-	V1(1,0),
-	V2(2,0),
-	V3(3,0);
+	private final ODataVersion	 version;
+	private final ODataFormat   format;
+	private final ODataUrl		 url;
 	
-	private final int    major;
-	private final int    minor;
-	private final String value;
-	
-	ODataVersion(int major,int minor){
-		this.major = major;
-		this.minor = minor;
-		this.value = major + "." + minor;
+	public ODataRequestMessage(ODataVersion version, ODataFormat format, ODataUrl url) {
+	    super();
+	    this.version = version;
+	    this.format  = format;
+	    this.url     = url;
+    }
+
+	public ODataVersion getVersion() {
+		return version;
 	}
-	
-	public int getMajor() {
-    	return major;
-    }
 
-	public int getMinor() {
-    	return minor;
-    }
+	public ODataFormat getFormat() {
+		return format;
+	}
 
-	public String getValue() {
-	    return value;
-    }
-
-	@Override
-    public String toString() {
-		return value;
+	public ODataUrl getUrl() {
+    	return url;
     }
 }

@@ -19,15 +19,22 @@ public interface ODataRequest {
 
 	String getContentType();
 	
-	ODataFormat getFormat();
+	String getHeader(String name);
 	
-	ODataVersion getDataServiceVersion();
+	String getParameter(String name);
 	
-	ODataVersion getMinDataServiceVersion();
+	String getMethod();
 	
-	ODataVersion getMaxDataServiceVersion();
+	String getServiceRootPath();
+	
+	String getServiceRootUrl();
+	
+	/**
+	 * get the request path without context path & service root path
+	 */
+	String getResourcePath();
 	
 	String getUrl();
 	
-	String getBaseUrl();
+	String getQueryString();
 }
