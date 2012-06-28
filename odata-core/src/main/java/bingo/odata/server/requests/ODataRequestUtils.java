@@ -17,6 +17,7 @@ package bingo.odata.server.requests;
 
 import bingo.lang.Enums;
 import bingo.lang.Strings;
+import bingo.lang.exceptions.InvalidValueException;
 import bingo.odata.ODataConstants;
 import bingo.odata.ODataError;
 import bingo.odata.ODataErrors;
@@ -25,11 +26,34 @@ import bingo.odata.ODataRequest;
 import bingo.odata.ODataVersion;
 import bingo.odata.ODataConstants.Headers;
 import bingo.odata.ODataConstants.QueryOptions;
+import bingo.odata.ODataConstants.Versions;
 import bingo.utils.http.HttpContentTypes;
 import bingo.utils.http.HttpHeader;
 import bingo.utils.http.HttpHeader.HeaderElement;
 
 public class ODataRequestUtils {
+	
+	public static ODataVersion getAndCheckVersion(ODataRequest request,ODataVersion defaultDataServiceVersion) throws ODataError {
+		ODataVersion dataServiceVersion    = dataServiceVersion(request);
+		ODataVersion minDataServiceVersion = minDataServiceVersion(request);
+		ODataVersion maxDataServiceVersion = maxDataServiceVersion(request);
+		
+		checkDataServiceVersion(dataServiceVersion);
+		checkDataServiceVersion(minDataServiceVersion);
+		checkDataServiceVersion(maxDataServiceVersion);
+		
+		ODataVersion version = defaultDataServiceVersion;
+		
+		if(null != dataServiceVersion){
+			version = dataServiceVersion;
+		}else if(null != maxDataServiceVersion && maxDataServiceVersion.isLessThan(version)){
+			version = maxDataServiceVersion;
+		}else if(null !=minDataServiceVersion && version.isLessThan(minDataServiceVersion)){
+			version = minDataServiceVersion;
+		}
+
+		return version;
+	}
 	
 	public static ODataVersion dataServiceVersion(ODataRequest request) throws ODataError {
 		return dataServiceVersion(request,ODataConstants.Headers.DataServiceVersion);
@@ -73,23 +97,19 @@ public class ODataRequestUtils {
 		String[] values        = Strings.split(headerValue,';');
 		String   versionString = values[0];
 		
-		ODataVersion version = Enums.valueOf(ODataVersion.class, versionString);
-		
-		if(null == version){
-			throw ODataErrors.unsupportedDataServiceVersion(versionString);
-		}
-		
-		return version;
+        try {
+	        return Enums.valueOf(ODataVersion.class, versionString);
+        } catch (InvalidValueException e) {
+        	throw ODataErrors.unsupportedDataServiceVersion(versionString);
+        }
 	}
 	
 	private static ODataFormat parseFormatFromQuery(String formatValue) throws ODataError {
-		ODataFormat format = Enums.valueOf(ODataFormat.class,formatValue);
-		
-		if(null == format){
-			throw ODataErrors.unsupportedDataServiceFormat(formatValue);
-		}
-		
-		return format;
+        try {
+	        return Enums.valueOf(ODataFormat.class,formatValue);
+        } catch (InvalidValueException e) {
+        	throw ODataErrors.unsupportedDataServiceFormat(formatValue);
+        }
 	}
 	
 	private static ODataFormat parseFormatFromHeader(ODataVersion version, String acceptValue) throws ODataError {
@@ -126,5 +146,11 @@ public class ODataRequestUtils {
 		}
 		
 		return format;
+	}
+	
+	private static void checkDataServiceVersion(ODataVersion v){
+		if(null != v && (v.isLessThan(Versions.MinDataServiceVersion) || v.isGreaterThan(Versions.MaxDataServiceVersion))){
+			throw ODataErrors.unsupportedDataServiceVersion(v.getValue());
+		}
 	}
 }

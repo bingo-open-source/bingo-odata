@@ -63,24 +63,22 @@ public class ODataRequestController {
 		ODataFormat  format  = null;
 		
 		try{
-			version = Objects.firstNotNull(ODataRequestUtils.dataServiceVersion(request),defaultDataServiceVersion);
+			version = ODataRequestUtils.getAndCheckVersion(request,defaultDataServiceVersion);
 			format  = Objects.firstNotNull(ODataRequestUtils.dataServiceFormat(request, version),defaultDataServiceFormat);
 			
 			ODataRequestMessage message = new ODataRequestMessageBuilder(request,version,format).build();
-			
-	        ODataRequestHandler handler = handler(message);
+	        ODataRequestHandler handler = getMessageHandler(message);
+	        ODataRequestContext context = new ODataRequestContext(producer, message);
 	        
         	StopWatch sw = StopWatch.startNew();
         	
-        	handler.handle(new ODataRequestContext(producer, message), request, response);
+        	handler.handle(context, request, response);
         	
         	if(log.isDebugEnabled()){
         		log.debug("Found handler '{}', execute used {}ms",handler.getClass().getSimpleName(),sw.stop().getElapsedMilliseconds());
         	}
         	
-	        response.setContentType(format.getContentType());
-	        response.setHeader(Headers.DataServiceVersion, version.getValue());
-	        response.getWriter().close();	
+        	writeCommonResponse(request,response,context);
 		}catch(ODataError error){
 			log.info(error.getMessage());
 			error(error,version,format,request,response);
@@ -90,7 +88,7 @@ public class ODataRequestController {
 		}
 	}
 	
-	private ODataRequestHandler handler(ODataRequestMessage message){
+	private ODataRequestHandler getMessageHandler(ODataRequestMessage message){
 		ODataResourcePath path = message.getUrl().getResourcePath();
 		
 		if(path.isServiceRoot()){
@@ -102,6 +100,12 @@ public class ODataRequestController {
 		}else{
 			throw ODataErrors.invalidResourcePath(path.getFullPath());
 		}
+	}
+	
+	private void writeCommonResponse(ODataRequest request, ODataResponse response, ODataRequestContext context) throws Throwable {
+        response.setContentType(context.getFormat().getContentType());
+        response.setHeader(Headers.DataServiceVersion, context.getVersion().getValue());
+        response.getWriter().close();	
 	}
 	
 	private void error(ODataError error,ODataVersion version,ODataFormat format,ODataRequest request, ODataResponse response){

@@ -40,7 +40,7 @@ public class ODataErrors {
 	}
 	
 	public static ODataError internalServerError(String errorMessage) {
-		return err(SC_BAD_REQUEST,ErrorCode_InternalServerError,errorMessage);
+		return err(SC_INTERNAL_SERVER_ERROR,ErrorCode_InternalServerError,errorMessage);
 	}
 	
 	public static ODataError invalidResourcePath(String path){

@@ -49,4 +49,12 @@ public enum ODataVersion implements Valued<String> {
     public String toString() {
 		return value;
     }
+	
+	public boolean isGreaterThan(ODataVersion v){
+		return value.compareTo(v.getValue()) > 0;
+	}
+	
+	public boolean isLessThan(ODataVersion v){
+		return value.compareTo(v.getValue()) < 0;
+	}
 }

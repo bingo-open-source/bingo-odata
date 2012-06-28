@@ -36,7 +36,7 @@ public class ODataRequestMessageBuilder implements Builder<ODataRequestMessage> 
 	
 	public ODataRequestMessage build() throws ODataError {
 		ODataUrl url = new ODataUrl(request.getServiceRootPath(), request.getServiceRootUrl(), request.getResourcePath(), request.getQueryString());
-		
-	    return new ODataRequestMessage(version, format, url);
+
+		return new ODataRequestMessage(version, format, url);	
     }
 }
