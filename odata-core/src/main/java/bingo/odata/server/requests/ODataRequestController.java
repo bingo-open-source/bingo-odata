@@ -26,14 +26,12 @@ import bingo.odata.ODataError;
 import bingo.odata.ODataErrors;
 import bingo.odata.ODataFormat;
 import bingo.odata.ODataRequest;
-import bingo.odata.ODataResourcePath;
 import bingo.odata.ODataResponse;
+import bingo.odata.ODataUrlInfo;
 import bingo.odata.ODataVersion;
 import bingo.odata.ODataWriters;
 import bingo.odata.ODataConstants.Headers;
 import bingo.odata.producer.ODataProducer;
-import bingo.odata.server.requests.metadata.MetadataDocumentRequestHandler;
-import bingo.odata.server.requests.metadata.ServiceDocumentRequestHandler;
 import bingo.utils.http.HttpStatus;
 
 public class ODataRequestController {
@@ -42,12 +40,18 @@ public class ODataRequestController {
 	
 	protected ODataProducer producer;
 	
+	protected ODataRequestRouter router = new ODataRequestRouter();
+	
 	protected ODataVersion  defaultDataServiceVersion = ODataConstants.Defaults.DataServiceVersion;
 	
-	protected ODataFormat   defaultDataServiceFormat = ODataConstants.Defaults.DataServiceFormat;
+	protected ODataFormat defaultDataServiceFormat = ODataConstants.Defaults.DataServiceFormat;
 	
 	public void setProducer(ODataProducer producer) {
     	this.producer = producer;
+    }
+
+	public void setRouter(ODataRequestRouter router) {
+    	this.router = router;
     }
 
 	public void setDefaultDataServiceVersion(ODataVersion defaultDataServiceVersion) {
@@ -61,24 +65,30 @@ public class ODataRequestController {
 	public void execute(ODataRequest request, ODataResponse response) {
 		ODataVersion version = null;
 		ODataFormat  format  = null;
+		ODataUrlInfo     urlInfo = null;
 		
 		try{
 			version = ODataRequestUtils.getAndCheckVersion(request,defaultDataServiceVersion);
 			format  = Objects.firstNotNull(ODataRequestUtils.dataServiceFormat(request, version),defaultDataServiceFormat);
+			urlInfo = ODataRequestUtils.createUrlInfo(request);
 			
-			ODataRequestMessage message = new ODataRequestMessageBuilder(request,version,format).build();
-	        ODataRequestHandler handler = getMessageHandler(message);
-	        ODataRequestContext context = new ODataRequestContext(producer, message);
+	        ODataRequestContext context = new ODataRequestContext(producer,version,format,urlInfo);
+
+	        ODataRequestHandler handler = router.route(context, request, response);
 	        
-        	StopWatch sw = StopWatch.startNew();
-        	
-        	handler.handle(context, request, response);
-        	
-        	if(log.isDebugEnabled()){
-        		log.debug("Found handler '{}', execute used {}ms",handler.getClass().getSimpleName(),sw.stop().getElapsedMilliseconds());
-        	}
-        	
-        	writeCommonResponse(request,response,context);
+	        if(null != handler){
+	        	StopWatch sw = StopWatch.startNew();
+	        	
+	        	handler.handle(context, request, response);
+	        	
+	        	if(log.isDebugEnabled()){
+	        		log.debug("Found handler '{}', execute used {}ms",handler.getClass().getSimpleName(),sw.stop().getElapsedMilliseconds());
+	        	}
+	        	
+	        	endResponse(request,response,context);
+	        }else{
+	        	throw ODataErrors.unsupportedResourcePath(request.getResourcePath());
+	        }
 		}catch(ODataError error){
 			log.info(error.getMessage());
 			error(error,version,format,request,response);
@@ -88,21 +98,7 @@ public class ODataRequestController {
 		}
 	}
 	
-	private ODataRequestHandler getMessageHandler(ODataRequestMessage message){
-		ODataResourcePath path = message.getUrl().getResourcePath();
-		
-		if(path.isServiceRoot()){
-			return new ServiceDocumentRequestHandler();
-		}else if(path.isServiceMetadata()){
-			return new MetadataDocumentRequestHandler();
-		}else if(path.isResource()){
-			return new ODataResourceHandler();
-		}else{
-			throw ODataErrors.invalidResourcePath(path.getFullPath());
-		}
-	}
-	
-	private void writeCommonResponse(ODataRequest request, ODataResponse response, ODataRequestContext context) throws Throwable {
+	private void endResponse(ODataRequest request, ODataResponse response, ODataRequestContext context) throws Throwable {
         response.setContentType(context.getFormat().getContentType());
         response.setHeader(Headers.DataServiceVersion, context.getVersion().getValue());
         response.getWriter().close();	

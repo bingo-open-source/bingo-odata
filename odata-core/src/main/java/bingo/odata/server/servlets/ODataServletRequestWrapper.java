@@ -17,11 +17,15 @@ package bingo.odata.server.servlets;
 
 import javax.servlet.http.HttpServletRequest;
 
+import bingo.lang.Strings;
 import bingo.odata.ODataRequest;
+import bingo.utils.http.HttpHeaders;
+import bingo.utils.http.HttpMethods;
 
 public class ODataServletRequestWrapper implements ODataRequest {
 	
 	private final HttpServletRequest request;
+	private final String             method;
 	private final String			   url;
 	private final String             serviceRootPath;
 	private final String             serviceRootUrl;
@@ -33,6 +37,7 @@ public class ODataServletRequestWrapper implements ODataRequest {
 	
 	public ODataServletRequestWrapper(HttpServletRequest request,String serviceRootPath){
 		this.request               = request;
+		this.method                = httpMethod();
 		this.url                   = request.getRequestURL().toString();
 		this.serviceRootPath       = serviceRootPath;
 		this.serviceRootUrl        = serviceRootUrl();
@@ -52,7 +57,7 @@ public class ODataServletRequestWrapper implements ODataRequest {
     }
 
 	public String getMethod() {
-	    return request.getMethod();
+	    return method;
     }
 
 	public String getServiceRootPath() {
@@ -74,6 +79,30 @@ public class ODataServletRequestWrapper implements ODataRequest {
 	public String getQueryString() {
 	    return request.getQueryString();
     }
+	
+	public boolean isDelete() {
+	    return HttpMethods.DELETE.equalsIgnoreCase(getMethod());
+    }
+
+	public boolean isGet() {
+		return HttpMethods.GET.equalsIgnoreCase(getMethod());
+    }
+
+	public boolean isPost() {
+		return HttpMethods.POST.equalsIgnoreCase(getMethod());
+    }
+
+	public boolean isPut() {
+		return HttpMethods.PUT.equalsIgnoreCase(getMethod());
+    }
+	
+	public boolean isMerge() {
+	    return HttpMethods.PATCH.equalsIgnoreCase(getMethod());
+    }
+
+	public boolean isPatch() {
+	    return HttpMethods.MERGE.equalsIgnoreCase(getMethod());
+    }
 
 	private String serviceRootUrl(){
 		String url  = request.getRequestURL().toString();
@@ -86,6 +115,16 @@ public class ODataServletRequestWrapper implements ODataRequest {
 		// /{contextPath}/{serviceRootPath}/{resourcePath}
 		String path = request.getRequestURI().substring((request.getContextPath() + serviceRootPath).length());
 		
-		return path.equals("") ? "/" : path;
+		return path.equals("") ? "/" : path.endsWith("/") ?  path.substring(0,path.length() - 1) : path;
+	}
+	
+	private String httpMethod(){
+		String method = request.getHeader(HttpHeaders.X_HTTP_METHOD);
+		
+		if(!Strings.isEmpty(method)){
+			return method;
+		}else{
+			return request.getMethod();
+		}
 	}
 }

@@ -18,12 +18,11 @@ package bingo.odata.producer.demo;
 import org.junit.Before;
 
 import bingo.odata.ODataFormat;
+import bingo.odata.ODataUrlInfo;
 import bingo.odata.ODataVersion;
 import bingo.odata.server.mock.MockODataRequest;
 import bingo.odata.server.mock.MockODataResponse;
 import bingo.odata.server.requests.ODataRequestContext;
-import bingo.odata.server.requests.ODataRequestMessage;
-import bingo.odata.server.requests.ODataRequestMessageBuilder;
 
 public abstract class DemoODataTestBase {
 	
@@ -45,8 +44,8 @@ public abstract class DemoODataTestBase {
 	}
 	
 	protected ODataRequestContext context(){
-		ODataRequestMessage message = new ODataRequestMessageBuilder(request,ODataVersion.V3,ODataFormat.Atom).build();
-		
-		return new ODataRequestContext(producer, message);
+		ODataUrlInfo url = new ODataUrlInfo(request.getServiceRootPath(), request.getServiceRootUrl(), request.getResourcePath(), request.getQueryString());
+
+		return new ODataRequestContext(producer,ODataVersion.V3,ODataFormat.Atom,url);
 	}
 }

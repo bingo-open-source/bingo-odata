@@ -28,7 +28,7 @@ import bingo.utils.http.HttpContentTypes;
 public class MetadataDocumentRequestHandler extends ODataRequestHandlerBase {
 	
 	@Override
-    protected boolean doHandle(ODataRequestContext context, ODataRequest request, ODataResponse response) throws Throwable {
+    protected void doHandle(ODataRequestContext context, ODataRequest request, ODataResponse response) throws Throwable {
 		ODataServices metadata = context.getProducer().getMetadataProducer().getMetadata();
 		
 		StringWriter out = new StringWriter();
@@ -37,12 +37,10 @@ public class MetadataDocumentRequestHandler extends ODataRequestHandlerBase {
 		
 		response.getWriter().write(out.toString());
 		response.getWriter().close();
-		
-		return true;
     }
-	
+
 	@Override
-    protected String getDefaultContentType() {
-		return HttpContentTypes.APPLICATION_XML;
+    protected String getContentType(ODataRequestContext context, ODataRequest request) {
+	    return context.getFormat().isXml() || context.getFormat().isAtom() ? HttpContentTypes.APPLICATION_XML : super.getContentType(context, request);
     }
 }

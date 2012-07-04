@@ -13,16 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.odata.server.requests;
+package bingo.odata.server.requests.batch;
 
+import java.util.Map;
+
+import bingo.odata.ODataErrors;
 import bingo.odata.ODataException;
 import bingo.odata.ODataRequest;
 import bingo.odata.ODataResponse;
+import bingo.odata.server.requests.ODataRequestContext;
+import bingo.odata.server.requests.ODataRequestHandler;
 
-public class ODataResourceHandler implements ODataRequestHandler {
+public class BatchRequestHandler implements ODataRequestHandler {
 
-	public boolean handle(ODataRequestContext context, ODataRequest request, ODataResponse response) throws ODataException {
-		return false;
-	}
+	public boolean matches(ODataRequestContext context, ODataRequest request, Map<String, String> params) throws ODataException {
+	    return true;
+    }
+
+	public void handle(ODataRequestContext context, ODataRequest request, ODataResponse response) throws ODataException {
+		throw ODataErrors.notImplemented();
+    }
 
 }

@@ -25,43 +25,31 @@ import bingo.lang.NamedValue;
 import bingo.lang.Predicates;
 import bingo.lang.Strings;
 import bingo.lang.tuple.ImmutableNamedValue;
+import bingo.odata.ODataConstants.ResourcePaths;
 
 public class ODataResourcePath {
-	private static final Enumerable<Resource> EMPTY_RESOURCES = Enumerables.empty();
-	private static final Enumerable<NamedValue<String>> EMPTY_PARAMS = Enumerables.empty();
-	private static final Resource NIL_RESOURCE = new Resource(null, null, EMPTY_PARAMS, EMPTY_RESOURCES);
+	private static final Enumerable<PathSegment>	        EMPTY_SEGMENTS	= Enumerables.empty();
+	private static final Enumerable<NamedValue<Value>>	EMPTY_PARAMS	= Enumerables.empty();
 	
 	private final String   fullPath;
 	private final boolean isServiceRoot;
 	private final boolean isServiceMetadata;
+	private final boolean isBatch;
 	
-	private Resource resource;
+	private Enumerable<PathSegment> segments;
 	
 	public ODataResourcePath(String fullPath){
 		Assert.notEmpty(fullPath,"resource path can not be empty");
 		Assert.isTrue(fullPath.startsWith("/"),"resource path should starts with '/'");
 		
 		this.fullPath          = fullPath;
-		this.isServiceRoot     = fullPath.equals("/");
-		this.isServiceMetadata = !isServiceRoot & fullPath.equals("/$metadata");
+		this.isServiceRoot     = fullPath.equals(ResourcePaths.ServiceRoot);
+		this.isServiceMetadata = !isServiceRoot & fullPath.equals(ResourcePaths.Metadata);
+		this.isBatch		   = fullPath.equals(ResourcePaths.Batch);
 	}
 	
 	public String getFullPath() {
 		return fullPath;
-	}
-	
-	public boolean isResource(){
-		if(null == resource){
-			parse();
-		}
-		return NIL_RESOURCE != resource;
-	}
-	
-	public Resource getResource(){
-		if(null == resource){
-			parse();
-		}
-		return resource;
 	}
 	
 	public boolean isServiceRoot(){
@@ -72,12 +60,31 @@ public class ODataResourcePath {
 		return isServiceMetadata;
 	}
 	
+	public boolean isBatch() {
+    	return isBatch;
+    }
+	
+	public boolean hasSegments(){
+		return !getSegments().isEmpty();
+	}
+	
+	public Enumerable<PathSegment> getSegments() {
+		if(null == segments){
+			parse();
+		}
+    	return segments;
+    }
+
+	public void setSegments(Enumerable<PathSegment> segments) {
+    	this.segments = segments;
+    }
+
 	private void parse(){
 		if(!isServiceRoot && !isServiceMetadata){
 			//ResourceName(....)/ResourceName(...)/ResourceName(...)
 			String[] parts = Strings.split(fullPath,"/");
 
-			List<Resource> resources = new ArrayList<Resource>();
+			List<PathSegment> list = new ArrayList<PathSegment>();
 			
 			for(int i=0;i<parts.length;i++){
 				String part = parts[i];
@@ -86,7 +93,7 @@ public class ODataResourcePath {
 				int index2 = part.indexOf(')');
 				
 				if(index1 < 0 && index2 < 0){
-					resources.add(new Resource(part, Strings.EMPTY, EMPTY_PARAMS, Enumerables.of(resources)));
+					list.add(new PathSegment(part, null, EMPTY_PARAMS));
 					continue;
 				}
 				
@@ -94,76 +101,105 @@ public class ODataResourcePath {
 					String   paramString = part.substring(index1 + 1,index2 - 1).trim();
 					String[] paramValues = Strings.split(paramString,",");
 					
-					String resourceName = part.substring(0,index1);
-					String resourceKey  = null;
-					List<NamedValue<String>> params = new ArrayList<NamedValue<String>>();
+					String name  = part.substring(0,index1);
+					Value  value = null;
+					List<NamedValue<Value>> params = new ArrayList<NamedValue<Value>>();
 					
 					if(paramValues.length == 1){
-						resourceKey = paramString;
+						value = Value.parse(paramString);
 					}else{
 						for(String param : paramValues){
 							int eqIndex = param.indexOf("=");
 							
 							if(eqIndex > 0){
-								params.add(ImmutableNamedValue.<String>of(param,null));
+								params.add(ImmutableNamedValue.<Value>of(param,null));
 							}else{
-								params.add(ImmutableNamedValue.of(param.substring(0,eqIndex),param.substring(eqIndex + 1)));
+								params.add(ImmutableNamedValue.of(param.substring(0,eqIndex),Value.parse(param.substring(eqIndex + 1))));
 							}
 						}
 					}
 					
-					resources.add(new Resource(resourceName, resourceKey, Enumerables.of(params), Enumerables.of(resources)));
+					list.add(new PathSegment(name, value, Enumerables.of(params)));
 					continue;
 				}
 				
 				return ;
 			}
 			
-			if(!resources.isEmpty()){
-				this.resource = resources.get(resources.size() - 1);	
-			}
+			this.segments = Enumerables.of(list);
 		}else{
-			resource = NIL_RESOURCE;
+			segments = EMPTY_SEGMENTS;
 		}
 	}
 	
-	public static final class Resource {
+	public static final class PathSegment {
 		private final String		                   name;
-		private final String		                   key;
-		private final Enumerable<NamedValue<String>> parameters;
-		private final Enumerable<Resource>           parents;
+		private final Value		                   value;
+		private final Enumerable<NamedValue<Value>>  parameters;
 		
-		Resource(String name,String key,Enumerable<NamedValue<String>> parameters,Enumerable<Resource> parents) {
+		PathSegment(String name,Value value,Enumerable<NamedValue<Value>> parameters) {
 			this.name       = name;
-			this.key        = key;
+			this.value      = value;
 			this.parameters = parameters;
-			this.parents    = parents;
         }
 
 		public String getName() {
 			return name;
 		}
 
-		public String getKey() {
-			return key;
+		public Value getValue() {
+			return value;
 		}
 		
-		public Enumerable<Resource> getParents() {
-        	return parents;
-        }
-
-		public boolean hasParent(){
-			return parents.isEmpty();
+		public boolean isSingleValue(){
+			return null != value;
 		}
 		
-		public Enumerable<NamedValue<String>> getParameters() {
+		public boolean hasParameters(){
+			return parameters.isEmpty();
+		}
+		
+		public Enumerable<NamedValue<Value>> getParameters() {
 			return parameters;
 		}
 		
-		public String getParameter(String name) {
-			NamedValue<String> p = parameters.firstOrNull(Predicates.<NamedValue<String>>nameEqualsIgnoreCase(name));
+		public Value getParameter(String name) {
+			NamedValue<Value> p = parameters.firstOrNull(Predicates.<NamedValue<Value>>nameEqualsIgnoreCase(name));
 			
 			return null == p ? null : p.getValue();
+		}
+	}
+	
+	public static final class Value {
+		private static final Value EMPTY = new Value("",false);
+		
+		private final String   string;
+		private final boolean isNumber;
+		
+		private Value(String string,boolean isNumber){
+			this.string   = string;
+			this.isNumber = isNumber;
+		}
+
+		public String getString() {
+        	return string;
+        }
+
+		public boolean isNumber() {
+        	return isNumber;
+        }
+		
+		private static Value parse(String string){
+			if(Strings.isEmpty(string)){
+				return EMPTY;
+			}else if(string.startsWith("'")){
+				if(string.endsWith("'")){
+					return new Value(string.substring(1,string.length() - 1),false);
+				}
+				throw ODataErrors.badRequest(Strings.format("invalid path value : {0}",string));
+			}else{
+				return new Value(string,true);
+			}
 		}
 	}
 }

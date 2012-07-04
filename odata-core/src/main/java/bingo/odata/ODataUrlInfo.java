@@ -16,7 +16,10 @@
 package bingo.odata;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import bingo.lang.Enumerable;
 import bingo.lang.Enumerables;
@@ -25,16 +28,17 @@ import bingo.lang.Predicates;
 import bingo.lang.Strings;
 import bingo.lang.tuple.ImmutableNamedValue;
 
-public class ODataUrl {
+public class ODataUrlInfo {
 
-	private final String	          serviceRootPath;
-	private final String	          serviceRootUrl;
-	private final String	          queryString;
-	private final ODataResourcePath  resourcePath;
+	private final String	               serviceRootPath;
+	private final String	               serviceRootUrl;
+	private final String	               queryString;
+	private final ODataResourcePath	   resourcePath;
+	private final Map<String, String>	   pathParameters = new HashMap<String, String>();
 	
 	private Enumerable<NamedValue<String>> queryOptions;
 
-	public ODataUrl(String serviceRootPath, String serviceRootUrl, String resourcePath, String queryString) {
+	public ODataUrlInfo(String serviceRootPath, String serviceRootUrl, String resourcePath, String queryString) {
 	    super();
 	    this.serviceRootPath = serviceRootPath;
 	    this.serviceRootUrl  = serviceRootUrl;
@@ -68,6 +72,23 @@ public class ODataUrl {
 	public String getQueryOption(String name){
 		NamedValue<String> v = getQueryOptions().firstOrNull(Predicates.<NamedValue<String>>nameEqualsIgnoreCase(name));
 		return v == null ? null : v.getValue();
+	}
+	
+	public Set<String> getPathParameterNames(){
+		return pathParameters.keySet();
+	}
+	
+	public String getPathParameter(String name){
+		return pathParameters.get(name);
+	}
+	
+	public void setPathParameter(String name,String value){
+		pathParameters.put(name, value);
+	}
+	
+	public void setPathParameters(Map<String, String> params){
+		pathParameters.clear();
+		pathParameters.putAll(params);
 	}
 	
 	private void parse(){

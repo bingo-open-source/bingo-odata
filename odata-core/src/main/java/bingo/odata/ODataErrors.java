@@ -28,8 +28,12 @@ public class ODataErrors {
 	public static final String ErrorCode_UnsupportedDataServiceVersion = "UnsupportedDataServiceVersion";
 	public static final String ErrorCode_UnsupportedDataServiceFormat  = "UnsupportedDataServiceFormat";
 	public static final String ErrorCode_InvalidResourcePath		     = "InvalidResourcePath";
+	public static final String ErrorCode_UnsupportedResourcePath		 = "UnsupportedResourcePath";
 	public static final String ErrorCode_InternalServerError		     = "InternalServerError";
 	public static final String ErrorCode_BadRequest				     = "BadRequest";
+	public static final String ErrorCode_NotImplemented				 = "NotImplemented";
+	public static final String ErrorCode_NotFound						 = "NotFound";
+	public static final String ErrorCode_UnsupportedHttpMethod		 = "UnsupportedHttpMethod";
 	
 	public static ODataError unsupportedDataServiceVersion(String versionString) {
 		return err(SC_BAD_REQUEST,ErrorCode_UnsupportedDataServiceVersion,versionString);
@@ -49,6 +53,22 @@ public class ODataErrors {
 	
 	public static ODataError badRequest(String errorMessage) {
 		return err(SC_BAD_REQUEST,ErrorCode_BadRequest,errorMessage);
+	}
+	
+	public static ODataError notImplemented() {
+		return err(SC_NOT_IMPLEMENTED,ErrorCode_NotImplemented);
+	}
+	
+	public static ODataError notFound(){
+		return new ODataError(SC_NOT_FOUND, ErrorCode_NotFound, "");
+	}
+	
+	public static ODataError unsupportedHttpMethod(String method){
+		return err(SC_BAD_REQUEST,ErrorCode_UnsupportedHttpMethod,method);
+	}
+	
+	public static ODataError unsupportedResourcePath(String path){
+		return err(SC_NOT_IMPLEMENTED,ErrorCode_UnsupportedResourcePath,path);
 	}
 	
 	private static final ODataError err(int status,String code,Object... args){

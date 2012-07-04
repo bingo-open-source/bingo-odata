@@ -16,18 +16,22 @@
 package bingo.odata.server.requests;
 
 import bingo.odata.ODataFormat;
-import bingo.odata.ODataUrl;
+import bingo.odata.ODataUrlInfo;
 import bingo.odata.ODataVersion;
 import bingo.odata.producer.ODataProducer;
 
 public class ODataRequestContext {
 
-	private final ODataProducer       producer;
-	private final ODataRequestMessage message;
+	private final ODataProducer	    producer;
+	private final ODataVersion	        version;
+	private final ODataFormat	        format;
+	private final ODataUrlInfo	        urlInfo;
 
-	public ODataRequestContext(ODataProducer producer, ODataRequestMessage message) {
+	public ODataRequestContext(ODataProducer producer,ODataVersion version,ODataFormat format,ODataUrlInfo urlInfo) {
 		this.producer = producer;
-		this.message  = message;
+		this.version  = version;
+		this.format   = format;
+		this.urlInfo  = urlInfo;
 	}
 
 	public ODataProducer getProducer() {
@@ -35,14 +39,14 @@ public class ODataRequestContext {
 	}
 
 	public ODataVersion getVersion() {
-		return message.getVersion();
-	}
+    	return version;
+    }
 
 	public ODataFormat getFormat() {
-		return message.getFormat();
-	}
+    	return format;
+    }
 
-	public ODataUrl getUrl() {
-    	return message.getUrl();
+	public ODataUrlInfo getUrlInfo() {
+    	return urlInfo;
     }
 }

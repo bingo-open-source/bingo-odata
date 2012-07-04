@@ -24,6 +24,7 @@ import bingo.odata.ODataVersion;
 import bingo.odata.ODataConstants.Headers;
 import bingo.odata.ODataConstants.QueryOptions;
 import bingo.utils.http.HttpContentTypes;
+import bingo.utils.http.HttpMethods;
 
 public class MockODataRequest implements ODataRequest {
 
@@ -130,4 +131,28 @@ public class MockODataRequest implements ODataRequest {
 	public void setMaxDataServiceVersion(ODataVersion version){
 		setHeader(Headers.MaxDataServiceVersion, version.getValue());
 	}
+
+	public boolean isDelete() {
+	    return HttpMethods.DELETE.equalsIgnoreCase(getMethod());
+    }
+
+	public boolean isGet() {
+		return HttpMethods.GET.equalsIgnoreCase(getMethod());
+    }
+
+	public boolean isPost() {
+		return HttpMethods.POST.equalsIgnoreCase(getMethod());
+    }
+
+	public boolean isPut() {
+		return HttpMethods.PUT.equalsIgnoreCase(getMethod());
+    }
+
+	public boolean isMerge() {
+	    return HttpMethods.PATCH.equalsIgnoreCase(getMethod());
+    }
+
+	public boolean isPatch() {
+	    return HttpMethods.MERGE.equalsIgnoreCase(getMethod());
+    }
 }

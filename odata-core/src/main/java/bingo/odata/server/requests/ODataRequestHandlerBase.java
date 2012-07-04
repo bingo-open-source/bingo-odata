@@ -15,60 +15,45 @@
  */
 package bingo.odata.server.requests;
 
+import java.util.Map;
+
 import bingo.lang.logging.Log;
 import bingo.lang.logging.LogFactory;
 import bingo.odata.ODataException;
-import bingo.odata.ODataFormat;
 import bingo.odata.ODataRequest;
 import bingo.odata.ODataResponse;
-import bingo.utils.http.HttpContentTypes;
 
 public abstract class ODataRequestHandlerBase implements ODataRequestHandler {
 	
 	private static final Log log = LogFactory.get(ODataRequestHandlerBase.class);
+	
+	public boolean matches(ODataRequestContext context, ODataRequest request, Map<String, String> params) throws ODataException {
+	    return true;
+    }
 
-	public final boolean handle(ODataRequestContext context, ODataRequest request, ODataResponse response) throws ODataException {
+	public final void handle(ODataRequestContext context, ODataRequest request, ODataResponse response) throws ODataException {
 	    try {
-	        if(doHandle(context,request,response)){
+	        doHandle(context,request,response);
 	        	
-	        	String contentType = getFormatContentType(context.getFormat());
-	        	
-	        	if(null != contentType){
-	        		response.setContentType(contentType);
-	        	}
-	        	
-	        	return true;
-	        }else{
-	        	return false;
-	        }
+        	String contentType = getContentType(context,request);
+        	
+        	if(null != contentType){
+        		response.setContentType(contentType);
+        	}
         } catch (Throwable e) {
         	log.error("Error executing handler '{}' on request '{}' : {}",new Object[]{this.getClass().getSimpleName(),request.getUrl(),e.getMessage(),e});
         	
         	if(e instanceof ODataException){
         		throw (ODataException)e;
         	}else{
-        		throw new ODataRequestException(e);	
+        		throw new ODataException(e);	
         	}
         }
     }
 	
-	protected String getFormatContentType(ODataFormat format) {
-		if(null == format){
-			return getDefaultContentType();
-		}
-		
-		if(ODataFormat.Atom.equals(format)){
-			return HttpContentTypes.APPLICATION_ATOM_XML;
-		}
-		
-		if(ODataFormat.Json.equals(format)){
-			return HttpContentTypes.APPLICATION_JSON;
-		}
-		
-		return getDefaultContentType();
+	protected String getContentType(ODataRequestContext context,ODataRequest request) {
+		return context.getFormat().getContentType();
 	}
 	
-	protected abstract String getDefaultContentType();
-
-	protected abstract boolean doHandle(ODataRequestContext context,ODataRequest request,ODataResponse response) throws Throwable;
+	protected abstract void doHandle(ODataRequestContext context,ODataRequest request,ODataResponse response) throws Throwable;
 }

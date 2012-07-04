@@ -62,6 +62,13 @@ public final class ODataConstants {
 		
 	}
 	
+	public static final class ResourcePaths {
+		
+		public static final String ServiceRoot = "/";
+		public static final String Metadata    = "/$metadata";
+		public static final String Batch       = "/$batch";
+	}
+	
 	private ODataConstants() {
 
 	}

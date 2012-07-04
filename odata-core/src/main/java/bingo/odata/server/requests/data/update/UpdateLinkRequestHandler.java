@@ -13,40 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.odata;
+package bingo.odata.server.requests.data.update;
 
-public interface ODataRequest {
+import bingo.odata.ODataRequest;
+import bingo.odata.ODataResponse;
+import bingo.odata.server.requests.ODataRequestContext;
+import bingo.odata.server.requests.ODataRequestHandlerBase;
 
-	String getContentType();
-	
-	String getHeader(String name);
-	
-	String getParameter(String name);
-	
-	String getMethod();
-	
-	String getServiceRootPath();
-	
-	String getServiceRootUrl();
-	
-	/**
-	 * get the request path without context path & service root path
-	 */
-	String getResourcePath();
-	
-	String getUrl();
-	
-	String getQueryString();
-	
-	boolean isPost();
-	
-	boolean isGet();
-	
-	boolean isPut();
-	
-	boolean isDelete();
-	
-	boolean isPatch();
-	
-	boolean isMerge();
+public class UpdateLinkRequestHandler extends ODataRequestHandlerBase {
+
+	@Override
+	protected void doHandle(ODataRequestContext context, ODataRequest request, ODataResponse response) throws Throwable {
+		// TODO implement UpdateLinkRequestHandler.doHandle
+
+	}
+
 }

@@ -25,12 +25,11 @@ import bingo.odata.ODataWriter;
 import bingo.odata.ODataWriters;
 import bingo.odata.server.requests.ODataRequestContext;
 import bingo.odata.server.requests.ODataRequestHandlerBase;
-import bingo.utils.http.HttpContentTypes;
 
 public class ServiceDocumentRequestHandler extends ODataRequestHandlerBase {
 	
 	@Override
-    protected boolean doHandle(ODataRequestContext context, ODataRequest request, ODataResponse response) throws Throwable {
+    protected void doHandle(ODataRequestContext context, ODataRequest request, ODataResponse response) throws Throwable {
 		ODataServices metadata = context.getProducer().getMetadataProducer().getMetadata();
 		
 		StringWriter out = new StringWriter();
@@ -38,16 +37,8 @@ public class ServiceDocumentRequestHandler extends ODataRequestHandlerBase {
 		getWriter(context).write(request, out, metadata);
 		
 		response.getWriter().write(out.toString());
-		response.getWriter().close();
-		
-		return true;
     }
 	
-	@Override
-    protected String getDefaultContentType() {
-	    return HttpContentTypes.APPLICATION_ATOM_XML;
-    }
-
 	protected ODataWriter<ODataServices> getWriter(ODataRequestContext context) {
 		return ODataFormat.Json.equals(context.getFormat()) ? ODataWriters.JSON_SERVICE_DOCUMENT_WRITER : ODataWriters.ATOM_SERVICE_DOCUMENT_WRITER;
 	}

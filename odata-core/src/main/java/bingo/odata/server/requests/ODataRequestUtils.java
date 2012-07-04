@@ -23,6 +23,7 @@ import bingo.odata.ODataError;
 import bingo.odata.ODataErrors;
 import bingo.odata.ODataFormat;
 import bingo.odata.ODataRequest;
+import bingo.odata.ODataUrlInfo;
 import bingo.odata.ODataVersion;
 import bingo.odata.ODataConstants.Headers;
 import bingo.odata.ODataConstants.QueryOptions;
@@ -32,6 +33,10 @@ import bingo.utils.http.HttpHeader;
 import bingo.utils.http.HttpHeader.HeaderElement;
 
 public class ODataRequestUtils {
+
+	public static ODataUrlInfo createUrlInfo(ODataRequest request){
+		return new ODataUrlInfo(request.getServiceRootPath(),request.getServiceRootUrl(), request.getResourcePath(), request.getQueryString());
+	}
 	
 	public static ODataVersion getAndCheckVersion(ODataRequest request,ODataVersion defaultDataServiceVersion) throws ODataError {
 		ODataVersion dataServiceVersion    = dataServiceVersion(request);

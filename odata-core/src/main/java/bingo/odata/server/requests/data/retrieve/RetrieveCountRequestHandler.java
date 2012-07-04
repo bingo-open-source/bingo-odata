@@ -13,24 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.odata.server.requests;
+package bingo.odata.server.requests.data.retrieve;
 
-import bingo.odata.ODataVersion;
+import bingo.odata.ODataRequest;
+import bingo.odata.ODataResponse;
+import bingo.odata.server.requests.ODataRequestContext;
+import bingo.odata.server.requests.ODataRequestHandlerBase;
 
-public class ODataRequestVersion {
-	private final ODataVersion	version;
-	private final String	    userAgent;
+public class RetrieveCountRequestHandler extends ODataRequestHandlerBase {
 
-	public ODataRequestVersion(ODataVersion version,String userAgent){
-		this.version = version;
-		this.userAgent = userAgent;
+	@Override
+	protected void doHandle(ODataRequestContext context, ODataRequest request, ODataResponse response) throws Throwable {
+		// TODO implement RetrieveEntityCountRequestHandler.doHandle
+
 	}
 
-	public ODataVersion getVersion() {
-		return version;
-	}
-
-	public String getUserAgent() {
-		return userAgent;
-	}
 }
