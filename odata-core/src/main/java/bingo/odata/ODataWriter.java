@@ -17,7 +17,9 @@ package bingo.odata;
 
 import java.io.Writer;
 
-public interface ODataWriter<T> {
+public interface ODataWriter<T extends ODataObject> {
+	
+	String getContentType();
 
 	void write(ODataRequest request,Writer out,T target) throws Throwable;
 	

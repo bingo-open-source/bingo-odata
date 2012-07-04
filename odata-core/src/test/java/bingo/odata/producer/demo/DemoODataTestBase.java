@@ -26,7 +26,7 @@ import bingo.odata.server.requests.ODataRequestContext;
 
 public abstract class DemoODataTestBase {
 	
-	protected static final DemoODataProducer producer = new DemoODataProducer();
+	protected static final DemoODataProvider producer = new DemoODataProvider();
 	
 	protected MockODataRequest    request;
 	protected MockODataResponse   response;
@@ -44,7 +44,7 @@ public abstract class DemoODataTestBase {
 	}
 	
 	protected ODataRequestContext context(){
-		ODataUrlInfo url = new ODataUrlInfo(request.getServiceRootPath(), request.getServiceRootUrl(), request.getResourcePath(), request.getQueryString());
+		ODataUrlInfo url = new ODataUrlInfo(request.getServiceRootPath(), request.getServiceRootUrl(), request.getResourcePath(), request.getParameters());
 
 		return new ODataRequestContext(producer,ODataVersion.V3,ODataFormat.Atom,url);
 	}

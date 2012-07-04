@@ -15,16 +15,12 @@
  */
 package bingo.odata.server.requests;
 
-import java.util.Map;
-
 import bingo.odata.ODataException;
 import bingo.odata.ODataRequest;
 import bingo.odata.ODataResponse;
 
 public interface ODataRequestHandler {
 	
-	boolean matches(ODataRequestContext context,ODataRequest request,Map<String,String> params) throws ODataException;
-
 	void handle(ODataRequestContext context,ODataRequest request,ODataResponse response) throws ODataException;
 	
 }

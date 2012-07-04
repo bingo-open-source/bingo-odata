@@ -18,24 +18,24 @@ package bingo.odata.server.requests;
 import bingo.odata.ODataFormat;
 import bingo.odata.ODataUrlInfo;
 import bingo.odata.ODataVersion;
-import bingo.odata.producer.ODataProducer;
+import bingo.odata.producer.ODataProvider;
 
 public class ODataRequestContext {
 
-	private final ODataProducer	    producer;
-	private final ODataVersion	        version;
-	private final ODataFormat	        format;
-	private final ODataUrlInfo	        urlInfo;
+	private final ODataProvider	provider;
+	private final ODataVersion	    version;
+	private final ODataFormat	    format;
+	private final ODataUrlInfo	    urlInfo;
 
-	public ODataRequestContext(ODataProducer producer,ODataVersion version,ODataFormat format,ODataUrlInfo urlInfo) {
-		this.producer = producer;
+	public ODataRequestContext(ODataProvider producer,ODataVersion version,ODataFormat format,ODataUrlInfo urlInfo) {
+		this.provider = producer;
 		this.version  = version;
 		this.format   = format;
 		this.urlInfo  = urlInfo;
 	}
 
-	public ODataProducer getProducer() {
-		return producer;
+	public ODataProvider getProvider() {
+		return provider;
 	}
 
 	public ODataVersion getVersion() {

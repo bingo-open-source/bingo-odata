@@ -108,6 +108,10 @@ public class MockODataRequest implements ODataRequest {
 	    return parameters.get(name);
     }
 	
+	public Map<String, String> getParameters() {
+	    return parameters;
+    }
+
 	public void setHeader(String name,String value){
 		headers.put(name, value);
 	}
@@ -117,19 +121,19 @@ public class MockODataRequest implements ODataRequest {
 	}
 	
 	public void setFormat(ODataFormat format){
-		setParameter(QueryOptions.Format, format.getValue());
+		setParameter(QueryOptions.FORMAT, format.getValue());
 	}
 	
 	public void setDataServiceVerion(ODataVersion version){
-		setHeader(Headers.DataServiceVersion, version.getValue());
+		setHeader(Headers.DATA_SERVICE_VERSION, version.getValue());
 	}
 	
 	public void setMinDataServiceVersion(ODataVersion version){
-		setHeader(Headers.MinDataServiceVersion, version.getValue());
+		setHeader(Headers.MIN_DATA_SERVICE_VERSION, version.getValue());
 	}
 	
 	public void setMaxDataServiceVersion(ODataVersion version){
-		setHeader(Headers.MaxDataServiceVersion, version.getValue());
+		setHeader(Headers.MAX_DATA_SERVICE_VERSION, version.getValue());
 	}
 
 	public boolean isDelete() {

@@ -15,31 +15,27 @@
  */
 package bingo.odata.server.requests;
 
-import java.util.Map;
+import java.io.StringWriter;
 
+import bingo.lang.Strings;
 import bingo.lang.logging.Log;
 import bingo.lang.logging.LogFactory;
+import bingo.odata.ODataErrors;
 import bingo.odata.ODataException;
+import bingo.odata.ODataObject;
 import bingo.odata.ODataRequest;
 import bingo.odata.ODataResponse;
+import bingo.odata.ODataWriter;
+import bingo.odata.ODataObjectKind;
+import bingo.odata.ODataWriters;
 
 public abstract class ODataRequestHandlerBase implements ODataRequestHandler {
 	
 	private static final Log log = LogFactory.get(ODataRequestHandlerBase.class);
 	
-	public boolean matches(ODataRequestContext context, ODataRequest request, Map<String, String> params) throws ODataException {
-	    return true;
-    }
-
 	public final void handle(ODataRequestContext context, ODataRequest request, ODataResponse response) throws ODataException {
 	    try {
 	        doHandle(context,request,response);
-	        	
-        	String contentType = getContentType(context,request);
-        	
-        	if(null != contentType){
-        		response.setContentType(contentType);
-        	}
         } catch (Throwable e) {
         	log.error("Error executing handler '{}' on request '{}' : {}",new Object[]{this.getClass().getSimpleName(),request.getUrl(),e.getMessage(),e});
         	
@@ -51,8 +47,25 @@ public abstract class ODataRequestHandlerBase implements ODataRequestHandler {
         }
     }
 	
-	protected String getContentType(ODataRequestContext context,ODataRequest request) {
-		return context.getFormat().getContentType();
+	protected static <T extends ODataObject> void write(ODataRequestContext context,ODataRequest request, ODataResponse response,ODataObjectKind kind,T target) throws Throwable {
+		ODataWriter<T> writer = getWriter(context, kind);
+		
+		StringWriter out = new StringWriter();
+		
+		writer.write(request, out, target);
+		
+		response.getWriter().write(out.toString());
+		response.setContentType(writer.getContentType());
+	}
+	
+	protected static <T extends ODataObject> ODataWriter<T> getWriter(ODataRequestContext context,ODataObjectKind kind) {
+		ODataWriter<T> writer = ODataWriters.of(context.getFormat(), kind);
+		
+		if(null == writer){
+			throw ODataErrors.badRequest(Strings.format("cannot found writer of '{0}'",kind));
+		}
+		
+		return writer;
 	}
 	
 	protected abstract void doHandle(ODataRequestContext context,ODataRequest request,ODataResponse response) throws Throwable;

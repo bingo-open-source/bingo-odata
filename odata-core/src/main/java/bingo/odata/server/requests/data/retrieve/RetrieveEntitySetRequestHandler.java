@@ -15,17 +15,26 @@
  */
 package bingo.odata.server.requests.data.retrieve;
 
+import bingo.odata.ODataObjectKind;
+import bingo.odata.ODataQueryInfo;
+import bingo.odata.ODataQueryInfoParser;
 import bingo.odata.ODataRequest;
 import bingo.odata.ODataResponse;
+import bingo.odata.data.ODataEntitySet;
+import bingo.odata.edm.EdmEntitySet;
 import bingo.odata.server.requests.ODataRequestContext;
-import bingo.odata.server.requests.ODataRequestHandlerBase;
+import bingo.odata.server.requests.data.EntitySetRequestHandlerBase;
 
-public class RetrieveEntitySetRequestHandler extends ODataRequestHandlerBase {
+public class RetrieveEntitySetRequestHandler extends EntitySetRequestHandlerBase {
 
 	@Override
-	protected void doHandle(ODataRequestContext context, ODataRequest request, ODataResponse response) throws Throwable {
-		// TODO implement RetrieveEntitySetRequestHandler.doHandle
+    protected void doHandleEntitySet(ODataRequestContext context, ODataRequest request, ODataResponse response, EdmEntitySet entitySet) throws Throwable {
 
-	}
-
+		ODataQueryInfo queryInfo = ODataQueryInfoParser.parse(context.getUrlInfo().getQueryOptions());
+		
+		ODataEntitySet data = context.getProvider().getDataProducer().queryEntitySet(entitySet, queryInfo);
+		
+		write(context,request,response,ODataObjectKind.EntitySet,data);
+		
+    }
 }

@@ -63,6 +63,14 @@ public class ODataErrors {
 		return new ODataError(SC_NOT_FOUND, ErrorCode_NotFound, "");
 	}
 	
+	public static ODataError notFound(String message){
+		return new ODataError(SC_NOT_FOUND, ErrorCode_NotFound, message);
+	}
+	
+	public static ODataError notFound(String template,Object... args){
+		return new ODataError(SC_NOT_FOUND, ErrorCode_NotFound, Strings.format(template, args));
+	}
+	
 	public static ODataError unsupportedHttpMethod(String method){
 		return err(SC_BAD_REQUEST,ErrorCode_UnsupportedHttpMethod,method);
 	}

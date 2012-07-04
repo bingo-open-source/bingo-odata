@@ -16,9 +16,15 @@
 package bingo.odata.producer;
 
 import bingo.odata.ODataServices;
+import bingo.odata.edm.EdmEntitySet;
+import bingo.odata.edm.EdmFunctionImport;
 
 public interface MetadataProducer {
 
-	ODataServices getMetadata();
+	ODataServices getServicesMetadata();
+	
+	EdmEntitySet findEntitySet(String entitySetName);
+	
+	EdmFunctionImport findFunctionImport(String functionName);
 	
 }

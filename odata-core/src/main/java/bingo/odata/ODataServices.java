@@ -21,22 +21,22 @@ import java.util.List;
 import bingo.lang.Assert;
 import bingo.lang.Enumerable;
 import bingo.lang.Enumerables;
-import bingo.lang.Immutables;
 import bingo.lang.Named;
 import bingo.odata.edm.EdmEntityContainer;
 import bingo.odata.edm.EdmEntitySet;
+import bingo.odata.edm.EdmFunctionImport;
 import bingo.odata.edm.EdmSchema;
 
-public class ODataServices implements Named {
+public class ODataServices implements Named,ODataObject {
 	
 	private final String name;
 
 	private final ODataVersion version;
 	
-	private final List<EdmSchema> schemas;
+	private final Enumerable<EdmSchema> schemas;
 	
 	public ODataServices(ODataVersion version,Iterable<EdmSchema> schemas){
-		this(ODataConstants.Defaults.DataServiceName,version,schemas);
+		this(ODataConstants.Defaults.DATA_SERVICE_NAME,version,schemas);
 	}
 	
 	public ODataServices(String name, ODataVersion version,Iterable<EdmSchema> schemas){
@@ -44,7 +44,7 @@ public class ODataServices implements Named {
 		
 		this.name    = name;
 		this.version = version;
-		this.schemas = Immutables.listOf(schemas);
+		this.schemas = Enumerables.of(schemas);
 	}
 
 	public String getName() {
@@ -56,7 +56,7 @@ public class ODataServices implements Named {
     }
 
 	public Enumerable<EdmSchema> getSchemas() {
-    	return Enumerables.of(schemas);
+    	return schemas;
     }
 	
 	public Enumerable<EdmEntitySet> getEntitySets(){
@@ -72,5 +72,30 @@ public class ODataServices implements Named {
 		
 		return Enumerables.of(entitySets);
 	}
-
+	
+	public EdmEntitySet findEntitySet(String entitySetName){
+		for(EdmSchema schema : schemas){
+			for(EdmEntityContainer container : schema.getEntityContainers()){
+				for(EdmEntitySet entitySet : container.getEntitySets()){
+					if(entitySet.getName().equalsIgnoreCase(entitySetName)){
+						return entitySet;
+					}
+				}
+			}
+		}
+		return null;
+	}
+	
+	public EdmFunctionImport findFunctionImport(String functionName){
+		for(EdmSchema schema : schemas){
+			for(EdmEntityContainer container : schema.getEntityContainers()){
+				for(EdmFunctionImport functionImport : container.getFunctionImports()){
+					if(functionImport.getName().equalsIgnoreCase(functionName)){
+						return functionImport;
+					}
+				}
+			}
+		}
+		return null;
+	}
 }

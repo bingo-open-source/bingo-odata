@@ -89,11 +89,8 @@ public class ODataRequestRouter {
 		for(ODataRequestRoute route : routes){
 			if(route.matches(request.getMethod(), path, params)){
 				handler = route.getHandler();
-				
-				if(handler.matches(context, request, params)){
-					context.getUrlInfo().setPathParameters(params);
-					break;
-				}
+				context.getUrlInfo().setPathParameters(params);
+				break;
 			}
 		}
 		

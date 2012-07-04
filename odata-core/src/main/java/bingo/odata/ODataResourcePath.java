@@ -43,9 +43,9 @@ public class ODataResourcePath {
 		Assert.isTrue(fullPath.startsWith("/"),"resource path should starts with '/'");
 		
 		this.fullPath          = fullPath;
-		this.isServiceRoot     = fullPath.equals(ResourcePaths.ServiceRoot);
-		this.isServiceMetadata = !isServiceRoot & fullPath.equals(ResourcePaths.Metadata);
-		this.isBatch		   = fullPath.equals(ResourcePaths.Batch);
+		this.isServiceRoot     = fullPath.equals(ResourcePaths.SERVICE_ROOT);
+		this.isServiceMetadata = !isServiceRoot & fullPath.equals(ResourcePaths.METADATA);
+		this.isBatch		   = fullPath.equals(ResourcePaths.BATCH);
 	}
 	
 	public String getFullPath() {

@@ -18,18 +18,36 @@ package bingo.odata.edm;
 public class EdmFunctionImport extends EdmFunctionBase {
 
 	private final String entitySet;
-
+	private final String httpMethod;
+	
 	public EdmFunctionImport(String name,String entitySet, EdmType returnType,Iterable<EdmParameter> parameters) {
 	    super(name,returnType,parameters);
 	    
-	    this.entitySet = entitySet;
+	    this.entitySet  = entitySet;
+	    this.httpMethod = null;
     }
 	
+	public EdmFunctionImport(String name,String entitySet, EdmType returnType,Iterable<EdmParameter> parameters,String httpMethod) {
+	    super(name,returnType,parameters);
+	    
+	    this.entitySet  = entitySet;
+	    this.httpMethod = httpMethod;
+    }
 	
 	public EdmFunctionImport(String name,String entitySet, EdmType returnType,Iterable<EdmParameter> parameters, EdmDocumentation documentation) {
 	    this(name, entitySet, returnType, parameters);
 
 	    this.documentation = documentation;
+    }
+	
+	public EdmFunctionImport(String name,String entitySet, EdmType returnType,Iterable<EdmParameter> parameters, String httpMethod, EdmDocumentation documentation) {
+	    this(name, entitySet, returnType, parameters, httpMethod);
+
+	    this.documentation = documentation;
+    }
+	
+	public String getHttpMethod() {
+    	return httpMethod;
     }
 
 	public String getEntitySet() {

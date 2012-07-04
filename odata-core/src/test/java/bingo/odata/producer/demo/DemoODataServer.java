@@ -34,7 +34,7 @@ public class DemoODataServer {
 	private static final ODataRequestController controller = new ODataRequestController();
 	
 	static {
-		controller.setProducer(new DemoODataProducer());
+		controller.setProducer(new DemoODataProvider());
 	}
 	
 	public static void main(String[] args) throws Throwable {

@@ -15,6 +15,8 @@
  */
 package bingo.odata.server.servlets;
 
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 
 import bingo.lang.Strings;
@@ -54,6 +56,11 @@ public class ODataServletRequestWrapper implements ODataRequest {
 
 	public String getParameter(String name) {
 	    return request.getParameter(name);
+    }
+	
+	@SuppressWarnings("unchecked")
+	public Map<String, String> getParameters() {
+	    return request.getParameterMap();
     }
 
 	public String getMethod() {

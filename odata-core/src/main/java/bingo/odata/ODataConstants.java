@@ -24,17 +24,17 @@ public final class ODataConstants {
 	}
 	
 	public static final class Defaults {
-		public static final String DataServiceName = "Default";
-		
-		public static final ODataVersion DataServiceVersion = ODataVersion.V2;
-		
-		public static final ODataFormat DataServiceFormat = ODataFormat.Atom;
+		public static final String		 DATA_SERVICE_NAME		= "Default";
+
+		public static final ODataVersion	DATA_SERVICE_VERSION	= ODataVersion.V2;
+
+		public static final ODataFormat   DATA_SERVICE_FORMAT		= ODataFormat.Atom;
 	}
 
 	public static final class Versions {
-		public static final ODataVersion MinDataServiceVersion = ODataVersion.V1;
+		public static final ODataVersion MIN_DATA_SERVICE_VERSION = ODataVersion.V1;
 		
-		public static final ODataVersion MaxDataServiceVersion = ODataVersion.V3;
+		public static final ODataVersion MAX_DATA_SERVICE_VERSION = ODataVersion.V3;
 	}
 	
 	public static final class ContentTypes extends HttpContentTypes {
@@ -47,26 +47,41 @@ public final class ODataConstants {
 	
 	public static final class Headers {
 		
-		public static final String DataServiceVersion    = "DataServiceVersion";
+		public static final String DATA_SERVICE_VERSION    = "DataServiceVersion";
 		
-		public static final String MinDataServiceVersion = "MinDataServiceVersion";
+		public static final String MIN_DATA_SERVICE_VERSION = "MinDataServiceVersion";
 		
-		public static final String MaxDataServiceVersion = "MaxDataServiceVersion";
-		
-		public static final String Accept = "Accept";
+		public static final String MAX_DATA_SERVICE_VERSION = "MaxDataServiceVersion";
 	}
 	
 	public static final class QueryOptions {
 		
-		public static final String Format = "$format";
-		
+		public static final String	EXPAND		    = "$expand";
+
+		public static final String	FILTER		    = "$filter";
+
+		public static final String	FORMAT		    = "$format";
+
+		public static final String	ORDER_BY		= "$orderby";
+
+		public static final String	SKIP		    = "$skip";
+
+		public static final String	TOP		        = "$top";
+
+		public static final String	SKIP_TOKEN		= "$skiptoken";
+
+		public static final String	INLINE_COUNT	= "$inlinecount";
+
+		public static final String	SELECT		    = "$select";
+
+		public static final String	CALLBACK		= "$callback";
 	}
 	
 	public static final class ResourcePaths {
 		
-		public static final String ServiceRoot = "/";
-		public static final String Metadata    = "/$metadata";
-		public static final String Batch       = "/$batch";
+		public static final String SERVICE_ROOT = "/";
+		public static final String METADATA    = "/$metadata";
+		public static final String BATCH       = "/$batch";
 	}
 	
 	private ODataConstants() {

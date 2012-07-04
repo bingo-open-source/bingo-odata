@@ -30,12 +30,13 @@ import bingo.odata.ODataConstants.QueryOptions;
 import bingo.odata.ODataConstants.Versions;
 import bingo.utils.http.HttpContentTypes;
 import bingo.utils.http.HttpHeader;
+import bingo.utils.http.HttpHeaders;
 import bingo.utils.http.HttpHeader.HeaderElement;
 
 public class ODataRequestUtils {
 
 	public static ODataUrlInfo createUrlInfo(ODataRequest request){
-		return new ODataUrlInfo(request.getServiceRootPath(),request.getServiceRootUrl(), request.getResourcePath(), request.getQueryString());
+		return new ODataUrlInfo(request.getServiceRootPath(),request.getServiceRootUrl(), request.getResourcePath(), request.getParameters());
 	}
 	
 	public static ODataVersion getAndCheckVersion(ODataRequest request,ODataVersion defaultDataServiceVersion) throws ODataError {
@@ -61,24 +62,24 @@ public class ODataRequestUtils {
 	}
 	
 	public static ODataVersion dataServiceVersion(ODataRequest request) throws ODataError {
-		return dataServiceVersion(request,ODataConstants.Headers.DataServiceVersion);
+		return dataServiceVersion(request,ODataConstants.Headers.DATA_SERVICE_VERSION);
 	}
 	
 	public static ODataVersion minDataServiceVersion(ODataRequest request) throws ODataError {
-		return dataServiceVersion(request,Headers.MinDataServiceVersion);
+		return dataServiceVersion(request,Headers.MIN_DATA_SERVICE_VERSION);
 	}
 	
 	public static ODataVersion maxDataServiceVersion(ODataRequest request) throws ODataError {
-		return dataServiceVersion(request,Headers.MaxDataServiceVersion);
+		return dataServiceVersion(request,Headers.MAX_DATA_SERVICE_VERSION);
 	}
 
 	public static ODataFormat dataServiceFormat(ODataRequest request,ODataVersion version) throws ODataError {
-		String format = request.getParameter(QueryOptions.Format);
+		String format = request.getParameter(QueryOptions.FORMAT);
 		
 		if(!Strings.isEmpty(format)){
 			return parseFormatFromQuery(format);
 		}else{
-			String accept = request.getHeader(Headers.Accept);
+			String accept = request.getHeader(HttpHeaders.ACCEPT);
 			
 			if(!Strings.isEmpty(accept)){
 				return parseFormatFromHeader(version,accept);
@@ -154,7 +155,7 @@ public class ODataRequestUtils {
 	}
 	
 	private static void checkDataServiceVersion(ODataVersion v){
-		if(null != v && (v.isLessThan(Versions.MinDataServiceVersion) || v.isGreaterThan(Versions.MaxDataServiceVersion))){
+		if(null != v && (v.isLessThan(Versions.MIN_DATA_SERVICE_VERSION) || v.isGreaterThan(Versions.MAX_DATA_SERVICE_VERSION))){
 			throw ODataErrors.unsupportedDataServiceVersion(v.getValue());
 		}
 	}

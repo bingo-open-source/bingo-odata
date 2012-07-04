@@ -15,32 +15,19 @@
  */
 package bingo.odata.server.requests.metadata;
 
-import java.io.StringWriter;
-
 import bingo.odata.ODataRequest;
 import bingo.odata.ODataResponse;
 import bingo.odata.ODataServices;
-import bingo.odata.ODataWriters;
+import bingo.odata.ODataObjectKind;
 import bingo.odata.server.requests.ODataRequestContext;
 import bingo.odata.server.requests.ODataRequestHandlerBase;
-import bingo.utils.http.HttpContentTypes;
 
 public class MetadataDocumentRequestHandler extends ODataRequestHandlerBase {
 	
 	@Override
     protected void doHandle(ODataRequestContext context, ODataRequest request, ODataResponse response) throws Throwable {
-		ODataServices metadata = context.getProducer().getMetadataProducer().getMetadata();
+		ODataServices metadata = context.getProvider().getMetadataProducer().getServicesMetadata();
 		
-		StringWriter out = new StringWriter();
-		
-		ODataWriters.EDM_METADATA_DOCUMENT_WRITER.write(request,out,metadata);
-		
-		response.getWriter().write(out.toString());
-		response.getWriter().close();
-    }
-
-	@Override
-    protected String getContentType(ODataRequestContext context, ODataRequest request) {
-	    return context.getFormat().isXml() || context.getFormat().isAtom() ? HttpContentTypes.APPLICATION_XML : super.getContentType(context, request);
+		write(context,request,response,ODataObjectKind.MetadataDocument,metadata);
     }
 }

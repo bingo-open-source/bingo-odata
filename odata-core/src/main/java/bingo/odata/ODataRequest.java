@@ -15,6 +15,8 @@
  */
 package bingo.odata;
 
+import java.util.Map;
+
 public interface ODataRequest {
 
 	String getContentType();
@@ -22,6 +24,8 @@ public interface ODataRequest {
 	String getHeader(String name);
 	
 	String getParameter(String name);
+	
+	Map<String, String> getParameters();
 	
 	String getMethod();
 	

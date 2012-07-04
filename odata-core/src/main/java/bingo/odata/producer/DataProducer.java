@@ -15,8 +15,12 @@
  */
 package bingo.odata.producer;
 
+import bingo.odata.ODataQueryInfo;
+import bingo.odata.data.ODataEntitySet;
+import bingo.odata.edm.EdmEntitySet;
+
 public interface DataProducer {
 
-	
-	
+	ODataEntitySet queryEntitySet(EdmEntitySet entitySet,ODataQueryInfo queryInfo);
+
 }

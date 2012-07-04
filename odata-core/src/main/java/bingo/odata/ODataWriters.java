@@ -15,23 +15,60 @@
  */
 package bingo.odata;
 
+import static bingo.odata.ODataFormat.*;
+import static bingo.odata.ODataObjectKind.*;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import bingo.odata.format.atom.AtomServiceDocumentWriter;
 import bingo.odata.format.json.JsonServiceDocumentWriter;
 import bingo.odata.format.xml.XmlErrorWriter;
 import bingo.odata.format.xml.XmlMetadataDocumentWriter;
 
 public final class ODataWriters {
-
-	//ATOM
-	public static final AtomServiceDocumentWriter	ATOM_SERVICE_DOCUMENT_WRITER	= new AtomServiceDocumentWriter();
-
-	//JSON
-	public static final JsonServiceDocumentWriter	JSON_SERVICE_DOCUMENT_WRITER	= new JsonServiceDocumentWriter();
-
-	//XML
-	public static final XmlMetadataDocumentWriter	EDM_METADATA_DOCUMENT_WRITER	= new XmlMetadataDocumentWriter();
-	public static final XmlErrorWriter	        XML_ERROR_WRITER	            = new XmlErrorWriter();
-
+	
+	private static final Map<ODataFormat, Map<ODataObjectKind, ODataWriter<?>>> registry = new HashMap<ODataFormat, Map<ODataObjectKind,ODataWriter<?>>>();
+	
+	static {
+		//Atom
+		add(Atom,ServiceDocument, new AtomServiceDocumentWriter());
+		add(Atom,MetadataDocument,new XmlMetadataDocumentWriter());
+		add(Atom,Error,			  new XmlErrorWriter());
+		
+		//Json
+		add(Json,ServiceDocument, new JsonServiceDocumentWriter());
+		add(Json,MetadataDocument,new XmlMetadataDocumentWriter());
+		add(Json,Error,			  new XmlErrorWriter());	
+		
+		//Verbose Json
+		add(VerboseJson,ServiceDocument, new JsonServiceDocumentWriter());
+		add(VerboseJson,MetadataDocument,new XmlMetadataDocumentWriter());
+		add(VerboseJson,Error,			 new XmlErrorWriter());		
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static <T extends ODataObject> ODataWriter<T> of(ODataFormat format,ODataObjectKind kind) {
+		Map<ODataObjectKind, ODataWriter<?>> formatWriters = registry.get(format) ;
+		
+		if(null != formatWriters){
+			return (ODataWriter<T>)formatWriters.get(kind);
+		}
+		
+		return null;
+	}
+	
+	private static void add(ODataFormat format,ODataObjectKind kind,ODataWriter<?> writer) {
+		Map<ODataObjectKind, ODataWriter<?>> writers = registry.get(format) ;
+		
+		if(null == writers){
+			writers = new HashMap<ODataObjectKind, ODataWriter<?>>();
+			registry.put(format, writers);
+		}
+		
+		writers.put(kind, writer);
+	}
+	
 	private ODataWriters() {
 
 	}

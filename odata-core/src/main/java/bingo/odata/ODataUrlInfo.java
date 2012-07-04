@@ -15,35 +15,32 @@
  */
 package bingo.odata;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import bingo.lang.Enumerable;
-import bingo.lang.Enumerables;
-import bingo.lang.NamedValue;
-import bingo.lang.Predicates;
-import bingo.lang.Strings;
-import bingo.lang.tuple.ImmutableNamedValue;
 
 public class ODataUrlInfo {
 
 	private final String	               serviceRootPath;
 	private final String	               serviceRootUrl;
-	private final String	               queryString;
 	private final ODataResourcePath	   resourcePath;
+	private final ODataQueryOptions	   queryOptions;
 	private final Map<String, String>	   pathParameters = new HashMap<String, String>();
-	
-	private Enumerable<NamedValue<String>> queryOptions;
 
 	public ODataUrlInfo(String serviceRootPath, String serviceRootUrl, String resourcePath, String queryString) {
 	    super();
 	    this.serviceRootPath = serviceRootPath;
 	    this.serviceRootUrl  = serviceRootUrl;
 	    this.resourcePath    = new ODataResourcePath(resourcePath);
-	    this.queryString     = queryString;
+	    this.queryOptions    = new ODataQueryOptions(queryString);
+    }
+	
+	public ODataUrlInfo(String serviceRootPath, String serviceRootUrl, String resourcePath, Map<String, String> queryOptions) {
+	    super();
+	    this.serviceRootPath = serviceRootPath;
+	    this.serviceRootUrl  = serviceRootUrl;
+	    this.resourcePath    = new ODataResourcePath(resourcePath);
+	    this.queryOptions    = new ODataQueryOptions(queryOptions);
     }
 
 	public String getServiceRootPath() {
@@ -58,20 +55,8 @@ public class ODataUrlInfo {
 		return resourcePath;
 	}
 
-	public String getQueryString() {
-    	return queryString;
-    }
-	
-	public Enumerable<NamedValue<String>> getQueryOptions(){
-		if(null == queryOptions){
-			parse();
-		}
+	public ODataQueryOptions getQueryOptions(){
 		return queryOptions;
-	}
-	
-	public String getQueryOption(String name){
-		NamedValue<String> v = getQueryOptions().firstOrNull(Predicates.<NamedValue<String>>nameEqualsIgnoreCase(name));
-		return v == null ? null : v.getValue();
 	}
 	
 	public Set<String> getPathParameterNames(){
@@ -89,28 +74,5 @@ public class ODataUrlInfo {
 	public void setPathParameters(Map<String, String> params){
 		pathParameters.clear();
 		pathParameters.putAll(params);
-	}
-	
-	private void parse(){
-		if(Strings.isEmpty(queryString)){
-			queryOptions = Enumerables.empty();
-		}else{
-			String[] parts = Strings.split(queryString,"&");
-			
-			List<NamedValue<String>> params = new ArrayList<NamedValue<String>>();
-			
-			for(String part : parts){
-				
-				int eqIndex = part.indexOf('=');
-				
-				if(eqIndex > 0){
-					params.add(ImmutableNamedValue.<String>of(part,null));
-				}else{
-					params.add(ImmutableNamedValue.of(part.substring(0,eqIndex),part.substring(eqIndex + 1)));
-				}
-			}
-			
-			queryOptions = Enumerables.of(params);
-		}
 	}
 }

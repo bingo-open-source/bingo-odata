@@ -15,7 +15,7 @@
  */
 package bingo.odata;
 
-public class ODataError extends ODataException {
+public class ODataError extends ODataException implements ODataObject {
 
 	private static final long serialVersionUID = 2055517132583888032L;
 	

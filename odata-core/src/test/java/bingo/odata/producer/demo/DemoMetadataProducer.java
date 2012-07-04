@@ -32,8 +32,9 @@ import bingo.odata.edm.builder.EdmEntityContainerBuilder;
 import bingo.odata.edm.builder.EdmEntityTypeBuilder;
 import bingo.odata.edm.builder.EdmSchemaBuilder;
 import bingo.odata.producer.MetadataProducer;
+import bingo.odata.producer.MetadataProducerBase;
 
-public class DemoMetadataProducer implements MetadataProducer {
+public class DemoMetadataProducer extends MetadataProducerBase implements MetadataProducer {
 	
 	private ODataServices metadata = null;
 	
@@ -41,7 +42,7 @@ public class DemoMetadataProducer implements MetadataProducer {
 		this.loadDemoMetadata();
 	}
 
-	public ODataServices getMetadata() {
+	public ODataServices getServicesMetadata() {
 	    return metadata;
     }
 	
@@ -50,21 +51,21 @@ public class DemoMetadataProducer implements MetadataProducer {
 		
 		//entity types
 		EdmEntityTypeBuilder product = EdmBuilders.entityType("Product")
-										  .addKeyProperty("ID", EdmSimpleType.Int32)
-										  .addProperty("Name",EdmSimpleType.String,true)
-										  .addProperty("Description",EdmSimpleType.String,true)
-										  .addProperty("ReleaseDate", EdmSimpleType.DateTime, false)
-										  .addProperty("DiscontinuedDate",EdmSimpleType.DateTime,false)
-										  .addProperty("Rating",EdmSimpleType.Int32,false)
-										  .addProperty("Price",EdmSimpleType.Decimal,false);		
+										  .addKeyProperty("ID", EdmSimpleType.INT32)
+										  .addProperty("Name",EdmSimpleType.STRING,true)
+										  .addProperty("Description",EdmSimpleType.STRING,true)
+										  .addProperty("ReleaseDate", EdmSimpleType.DATETIME, false)
+										  .addProperty("DiscontinuedDate",EdmSimpleType.DATETIME,false)
+										  .addProperty("Rating",EdmSimpleType.INT32,false)
+										  .addProperty("Price",EdmSimpleType.DECIMAL,false);		
 		
 		EdmEntityTypeBuilder category = EdmBuilders.entityType("Category")
-										    .addKeyProperty("ID", EdmSimpleType.Int32)
-											.addProperty("Name", EdmSimpleType.String, true);
+										    .addKeyProperty("ID", EdmSimpleType.INT32)
+											.addProperty("Name", EdmSimpleType.STRING, true);
 		
 		EdmEntityTypeBuilder supplier = EdmBuilders.entityType("Supplier")
-											.addKeyProperty("ID", EdmSimpleType.Int32)
-											.addProperty("Name", EdmSimpleType.String, true);
+											.addKeyProperty("ID", EdmSimpleType.INT32)
+											.addProperty("Name", EdmSimpleType.STRING, true);
 		
 		//entity type ref
 		EdmEntityTypeRef productRef  = product.buildRef(schema);
@@ -73,11 +74,11 @@ public class DemoMetadataProducer implements MetadataProducer {
 		
 		//complex types
 		EdmComplexType address = EdmBuilders.complexType("Address")
-										    .addProperty("Street", EdmSimpleType.String, true)
-										    .addProperty("City",EdmSimpleType.String,true)
-										    .addProperty("State",EdmSimpleType.String,true)
-										    .addProperty("ZipCode",EdmSimpleType.String,true)
-										    .addProperty("Country",EdmSimpleType.String,true)
+										    .addProperty("Street", EdmSimpleType.STRING, true)
+										    .addProperty("City",EdmSimpleType.STRING,true)
+										    .addProperty("State",EdmSimpleType.STRING,true)
+										    .addProperty("ZipCode",EdmSimpleType.STRING,true)
+										    .addProperty("Country",EdmSimpleType.STRING,true)
 										    .build();
 		
 		//associations
@@ -126,7 +127,7 @@ public class DemoMetadataProducer implements MetadataProducer {
 		demoService.addFunctionImport(EdmBuilders.functionImport("GetProductsByRating")
 												 .setEntitySet(products.getName())
 												 .setReturnType(EdmCollectionType.of(productRef))
-												 .addParameter("rating", EdmSimpleType.Int32, EdmParameterMode.In)
+												 .addParameter("rating", EdmSimpleType.INT32, EdmParameterMode.In)
 												 .build());
 		
 		schema.addEntityTypes(product.build(),category.build(),supplier.build())

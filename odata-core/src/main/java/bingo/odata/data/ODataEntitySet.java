@@ -13,13 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.odata.producer;
+package bingo.odata.data;
 
+import java.util.List;
 
-public interface ODataProducer {
+import bingo.odata.ODataObject;
+import bingo.odata.edm.EdmEntitySet;
 
-	MetadataProducer getMetadataProducer();
+public interface ODataEntitySet extends ODataObject {
+
+	EdmEntitySet getMetadata();
 	
-	DataProducer getDataProducer();
+	List<ODataEntity> getEntities();
+	
+	Long getInlineCount();
 
+	String getSkipToken();
 }

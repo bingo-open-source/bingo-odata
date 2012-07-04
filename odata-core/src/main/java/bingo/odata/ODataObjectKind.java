@@ -13,21 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.odata.producer.demo;
+package bingo.odata;
 
-import bingo.odata.producer.DataProducer;
-import bingo.odata.producer.MetadataProducer;
-import bingo.odata.producer.ODataProducer;
-
-public class DemoODataProducer implements ODataProducer {
+public enum ODataObjectKind {
+	ServiceDocument,
 	
-	private final DemoMetadataProducer metadataProducer = new DemoMetadataProducer();
-
-	public MetadataProducer getMetadataProducer() {
-	    return metadataProducer;
-    }
+	MetadataDocument,
 	
-	public DataProducer getDataProducer() {
-	    return null;
-    }
+	Error,
+	
+	EntitySet;
 }

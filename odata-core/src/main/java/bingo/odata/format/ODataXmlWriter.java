@@ -22,17 +22,23 @@ import java.io.Writer;
 import bingo.lang.Strings;
 import bingo.lang.xml.XmlFactory;
 import bingo.lang.xml.XmlWriter;
+import bingo.odata.ODataObject;
 import bingo.odata.ODataRequest;
 import bingo.odata.ODataWriter;
+import bingo.odata.ODataConstants.ContentTypes;
 import bingo.odata.edm.EdmDocumentation;
 import bingo.odata.edm.EdmObjectWithDocumentation;
 
-public abstract class ODataXmlWriter<T> implements ODataWriter<T> {
+public abstract class ODataXmlWriter<T extends ODataObject> implements ODataWriter<T> {
 
 	public final void write(ODataRequest request,Writer out, T target) throws Throwable {
 		write(request,XmlFactory.createWriter(out),target);
     }
 	
+	public String getContentType() {
+	    return ContentTypes.APPLICATION_XML;
+    }
+
 	protected abstract void write(ODataRequest request,XmlWriter writer,T target) throws Throwable;
 	
 	protected static void writeDocument(XmlWriter writer,EdmObjectWithDocumentation item){

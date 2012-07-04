@@ -29,24 +29,26 @@ import bingo.odata.ODataRequest;
 import bingo.odata.ODataResponse;
 import bingo.odata.ODataUrlInfo;
 import bingo.odata.ODataVersion;
+import bingo.odata.ODataWriter;
+import bingo.odata.ODataObjectKind;
 import bingo.odata.ODataWriters;
 import bingo.odata.ODataConstants.Headers;
-import bingo.odata.producer.ODataProducer;
+import bingo.odata.producer.ODataProvider;
 import bingo.utils.http.HttpStatus;
 
 public class ODataRequestController {
 	
 	private static final Log log = LogFactory.get(ODataRequestController.class);
 	
-	protected ODataProducer producer;
+	protected ODataProvider producer;
 	
 	protected ODataRequestRouter router = new ODataRequestRouter();
 	
-	protected ODataVersion  defaultDataServiceVersion = ODataConstants.Defaults.DataServiceVersion;
+	protected ODataVersion  defaultDataServiceVersion = ODataConstants.Defaults.DATA_SERVICE_VERSION;
 	
-	protected ODataFormat defaultDataServiceFormat = ODataConstants.Defaults.DataServiceFormat;
+	protected ODataFormat defaultDataServiceFormat = ODataConstants.Defaults.DATA_SERVICE_FORMAT;
 	
-	public void setProducer(ODataProducer producer) {
+	public void setProducer(ODataProvider producer) {
     	this.producer = producer;
     }
 
@@ -65,7 +67,7 @@ public class ODataRequestController {
 	public void execute(ODataRequest request, ODataResponse response) {
 		ODataVersion version = null;
 		ODataFormat  format  = null;
-		ODataUrlInfo     urlInfo = null;
+		ODataUrlInfo urlInfo = null;
 		
 		try{
 			version = ODataRequestUtils.getAndCheckVersion(request,defaultDataServiceVersion);
@@ -99,9 +101,12 @@ public class ODataRequestController {
 	}
 	
 	private void endResponse(ODataRequest request, ODataResponse response, ODataRequestContext context) throws Throwable {
-        response.setContentType(context.getFormat().getContentType());
-        response.setHeader(Headers.DataServiceVersion, context.getVersion().getValue());
-        response.getWriter().close();	
+        try {
+	        response.setHeader(Headers.DATA_SERVICE_VERSION, context.getVersion().getValue());
+	        response.getWriter().close();
+        } catch (Exception e) {
+        	log.warn("Error close response : {}",e.getMessage(),e);
+        }	
 	}
 	
 	private void error(ODataError error,ODataVersion version,ODataFormat format,ODataRequest request, ODataResponse response){
@@ -116,20 +121,26 @@ public class ODataRequestController {
 		StringWriter out = new StringWriter();
 		
 		try {
-	        if(format.isAtom() || format.isXml()){
-	        	ODataWriters.XML_ERROR_WRITER.write(request, out, error);
-	        }else{
-	        	//TODO : verbose json 
-	        }
-	        
+			ODataWriter<ODataError> writer = ODataWriters.of(format, ODataObjectKind.Error);
+			
+			if(null != writer){
+				response.setContentType(writer.getContentType());
+		        response.getWriter().write(out.toString());
+			}else{
+		        response.setContentType(format.getContentType());
+		        response.getWriter().write(error.getMessage());
+			}
+			
 	        response.setStatus(error.getStatus());
-	        response.setContentType(format.getContentType());
-	        response.setHeader(Headers.DataServiceVersion, version.getValue());
-	        response.getWriter().write(out.toString());
+	        response.setHeader(Headers.DATA_SERVICE_VERSION, version.getValue());
 	        response.getWriter().close();
         } catch (Throwable e) {
         	log.error("Error writing error response : {}",e.getMessage(),e);
-        	response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+        	try {
+	            response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+            } catch (Exception e1) {
+            	log.warn("Error setting status : {}",e.getMessage(),e);
+            }
         }
 	}
 }

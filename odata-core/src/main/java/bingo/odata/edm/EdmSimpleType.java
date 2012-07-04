@@ -26,22 +26,22 @@ public class EdmSimpleType extends EdmType implements Named {
 	
 	private static final Map<EdmValueKind, EdmSimpleType> map = new LinkedHashMap<EdmValueKind, EdmSimpleType>();
 	
-	public static EdmSimpleType Binary = add(EdmValueKind.Binary);
-	public static EdmSimpleType Boolean = add(EdmValueKind.Boolean);
-	public static EdmSimpleType Byte = add(EdmValueKind.Byte);
-	public static EdmSimpleType DateTime = add(EdmValueKind.DateTime);
-	public static EdmSimpleType DateTimeOffset = add(EdmValueKind.DateTimeOffset);
-	public static EdmSimpleType Decimal = add(EdmValueKind.Decimal);
-	public static EdmSimpleType Double = add(EdmValueKind.Double);
-	public static EdmSimpleType Guid = add(EdmValueKind.Guid);
-	public static EdmSimpleType Int16 = add(EdmValueKind.Int16);
-	public static EdmSimpleType Int32 = add(EdmValueKind.Int32);
-	public static EdmSimpleType Int64 = add(EdmValueKind.Int64);
-	public static EdmSimpleType SByte = add(EdmValueKind.SByte);
-	public static EdmSimpleType Single = add(EdmValueKind.Single);
-	public static EdmSimpleType Stream = add(EdmValueKind.Stream);
-	public static EdmSimpleType String = add(EdmValueKind.String);
-	public static EdmSimpleType Time = add(EdmValueKind.Time);
+	public static EdmSimpleType BINARY = add(EdmValueKind.Binary);
+	public static EdmSimpleType BOOLEAN = add(EdmValueKind.Boolean);
+	public static EdmSimpleType BYTE = add(EdmValueKind.Byte);
+	public static EdmSimpleType DATETIME = add(EdmValueKind.DateTime);
+	public static EdmSimpleType DATETIME_OFFSET = add(EdmValueKind.DateTimeOffset);
+	public static EdmSimpleType DECIMAL = add(EdmValueKind.Decimal);
+	public static EdmSimpleType DOUBLE = add(EdmValueKind.Double);
+	public static EdmSimpleType GUID = add(EdmValueKind.Guid);
+	public static EdmSimpleType INT16 = add(EdmValueKind.Int16);
+	public static EdmSimpleType INT32 = add(EdmValueKind.Int32);
+	public static EdmSimpleType INT64 = add(EdmValueKind.Int64);
+	public static EdmSimpleType SBYTE = add(EdmValueKind.SByte);
+	public static EdmSimpleType SINGLE = add(EdmValueKind.Single);
+	public static EdmSimpleType STREAM = add(EdmValueKind.Stream);
+	public static EdmSimpleType STRING = add(EdmValueKind.String);
+	public static EdmSimpleType TIME = add(EdmValueKind.Time);
 	
 	public static final Enumerable<EdmSimpleType> ALL = Enumerables.of(map.values());
 	

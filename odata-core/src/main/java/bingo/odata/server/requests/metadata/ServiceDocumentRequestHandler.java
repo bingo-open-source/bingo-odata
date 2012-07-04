@@ -15,14 +15,10 @@
  */
 package bingo.odata.server.requests.metadata;
 
-import java.io.StringWriter;
-
-import bingo.odata.ODataFormat;
 import bingo.odata.ODataRequest;
 import bingo.odata.ODataResponse;
 import bingo.odata.ODataServices;
-import bingo.odata.ODataWriter;
-import bingo.odata.ODataWriters;
+import bingo.odata.ODataObjectKind;
 import bingo.odata.server.requests.ODataRequestContext;
 import bingo.odata.server.requests.ODataRequestHandlerBase;
 
@@ -30,16 +26,8 @@ public class ServiceDocumentRequestHandler extends ODataRequestHandlerBase {
 	
 	@Override
     protected void doHandle(ODataRequestContext context, ODataRequest request, ODataResponse response) throws Throwable {
-		ODataServices metadata = context.getProducer().getMetadataProducer().getMetadata();
+		ODataServices metadata = context.getProvider().getMetadataProducer().getServicesMetadata();
 		
-		StringWriter out = new StringWriter();
-		
-		getWriter(context).write(request, out, metadata);
-		
-		response.getWriter().write(out.toString());
+		write(context,request,response,ODataObjectKind.ServiceDocument,metadata);
     }
-	
-	protected ODataWriter<ODataServices> getWriter(ODataRequestContext context) {
-		return ODataFormat.Json.equals(context.getFormat()) ? ODataWriters.JSON_SERVICE_DOCUMENT_WRITER : ODataWriters.ATOM_SERVICE_DOCUMENT_WRITER;
-	}
 }

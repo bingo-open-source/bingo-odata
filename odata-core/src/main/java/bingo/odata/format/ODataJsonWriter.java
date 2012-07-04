@@ -17,12 +17,18 @@ package bingo.odata.format;
 
 import java.io.Writer;
 
+import bingo.odata.ODataObject;
 import bingo.odata.ODataRequest;
 import bingo.odata.ODataWriter;
+import bingo.odata.ODataConstants.ContentTypes;
 import bingo.utils.json.JSON;
 import bingo.utils.json.JSONWriter;
 
-public abstract class ODataJsonWriter<T> implements ODataWriter<T> {
+public abstract class ODataJsonWriter<T extends ODataObject> implements ODataWriter<T> {
+	
+	public String getContentType() {
+	    return ContentTypes.APPLICATION_JSON;
+    }
 
 	public final void write(ODataRequest request,Writer out, T target) throws Throwable {
 		write(request,JSON.createWriter(out),target);
