@@ -18,9 +18,9 @@ package bingo.odata.format.atom;
 import bingo.lang.xml.XmlWriter;
 import bingo.odata.ODataRequest;
 import bingo.odata.data.ODataEntitySet;
-import bingo.odata.format.ODataXmlWriter;
+import bingo.odata.format.ODataAtomWriter;
 
-public class AtomEntitySetDataWriter extends ODataXmlWriter<ODataEntitySet> {
+public class AtomEntitySetDataWriter extends ODataAtomWriter<ODataEntitySet> {
 
 	@Override
     protected void write(ODataRequest request, XmlWriter writer, ODataEntitySet target) throws Throwable {

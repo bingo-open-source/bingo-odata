@@ -38,10 +38,16 @@ import bingo.odata.edm.EdmProperty;
 import bingo.odata.edm.EdmSchema;
 import bingo.odata.edm.EdmType;
 import bingo.odata.format.ODataXmlWriter;
+import bingo.utils.http.HttpContentTypes;
 
 import static bingo.odata.edm.EdmUtils.*;
 
 public class XmlMetadataDocumentWriter extends ODataXmlWriter<ODataServices> {
+	
+	@Override
+    public String getContentType() {
+	    return HttpContentTypes.APPLICATION_ATOM_XML;
+    }
 
 	@Override
     protected void write(ODataRequest request, XmlWriter writer, ODataServices services) throws Throwable {

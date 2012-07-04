@@ -36,7 +36,7 @@ public abstract class ODataXmlWriter<T extends ODataObject> implements ODataWrit
     }
 	
 	public String getContentType() {
-	    return ContentTypes.APPLICATION_XML;
+	    return ContentTypes.APPLICATION_XML_UTF8;
     }
 
 	protected abstract void write(ODataRequest request,XmlWriter writer,T target) throws Throwable;

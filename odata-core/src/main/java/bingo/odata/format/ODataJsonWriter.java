@@ -27,7 +27,7 @@ import bingo.utils.json.JSONWriter;
 public abstract class ODataJsonWriter<T extends ODataObject> implements ODataWriter<T> {
 	
 	public String getContentType() {
-	    return ContentTypes.APPLICATION_JSON;
+	    return ContentTypes.APPLICATION_JSON_UTF8;
     }
 
 	public final void write(ODataRequest request,Writer out, T target) throws Throwable {

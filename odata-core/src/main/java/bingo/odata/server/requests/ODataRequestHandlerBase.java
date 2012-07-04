@@ -54,7 +54,14 @@ public abstract class ODataRequestHandlerBase implements ODataRequestHandler {
 		
 		writer.write(request, out, target);
 		
-		response.getWriter().write(out.toString());
+		String content = out.toString();
+		
+		if(log.isDebugEnabled()){
+			log.debug("response content type : {}",	     writer.getContentType());
+			log.trace("response content text : \n\n{}\n",content);
+		}
+		
+		response.getWriter().write(content);
 		response.setContentType(writer.getContentType());
 	}
 	

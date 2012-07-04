@@ -22,7 +22,7 @@ public abstract class ODataAtomWriter<T extends ODataObject> extends ODataXmlWri
 
 	@Override
     public String getContentType() {
-	    return ContentTypes.APPLICATION_ATOM_XML;
+	    return ContentTypes.APPLICATION_ATOM_XML_UTF8;
     }
 	
 }
