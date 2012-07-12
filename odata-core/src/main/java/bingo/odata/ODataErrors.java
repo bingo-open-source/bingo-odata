@@ -19,64 +19,74 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 import bingo.lang.Strings;
-import static bingo.utils.http.HttpStatus.*;
+import bingo.utils.http.HttpStatus;
 
-public class ODataErrors {
+public class ODataErrors extends HttpStatus {
 	
 	private static final ResourceBundle SR = ResourceBundle.getBundle("bingo.odata.errors");
 	
-	public static final String ErrorCode_UnsupportedDataServiceVersion = "UnsupportedDataServiceVersion";
-	public static final String ErrorCode_UnsupportedDataServiceFormat  = "UnsupportedDataServiceFormat";
-	public static final String ErrorCode_InvalidResourcePath		     = "InvalidResourcePath";
-	public static final String ErrorCode_UnsupportedResourcePath		 = "UnsupportedResourcePath";
-	public static final String ErrorCode_InternalServerError		     = "InternalServerError";
-	public static final String ErrorCode_BadRequest				     = "BadRequest";
-	public static final String ErrorCode_NotImplemented				 = "NotImplemented";
-	public static final String ErrorCode_NotFound						 = "NotFound";
-	public static final String ErrorCode_UnsupportedHttpMethod		 = "UnsupportedHttpMethod";
+	public static final String	        EC_UNSUPPORTED_DATASERVICE_VERSION	= "UnsupportedDataServiceVersion";
+	public static final String	        EC_UNSUPPORTED_DATASERVICE_FORMAT	= "UnsupportedDataServiceFormat";
+	public static final String	        EC_INVALID_RESOURCE_PATH	       = "InvalidResourcePath";
+	public static final String	        EC_UNSUPPORTED_RESOURCE_PATH	   = "UnsupportedResourcePath";
+	public static final String	        EC_INTERNAL_SERVER_ERROR	       = "InternalServerError";
+	public static final String	        EC_BAD_REQUEST	                   = "BadRequest";
+	public static final String	        EC_NOT_IMPLEMENTED	               = "NotImplemented";
+	public static final String	        EC_NOT_FOUND	                   = "NotFound";
+	public static final String	        EC_FORBIDDEN	                   = "Forbidden";
+	public static final String	        EC_NOT_AUTHORIZED	               = "NotAuthorized";
+	public static final String	        EC_UNSUPPORTED_HTTP_METHOD	       = "UnsupportedHttpMethod";
 	
 	public static ODataError unsupportedDataServiceVersion(String versionString) {
-		return err(SC_BAD_REQUEST,ErrorCode_UnsupportedDataServiceVersion,versionString);
+		return err(SC_BAD_REQUEST,EC_UNSUPPORTED_DATASERVICE_VERSION,versionString);
 	}
 	
 	public static ODataError unsupportedDataServiceFormat(String formatString) {
-		return err(SC_BAD_REQUEST,ErrorCode_UnsupportedDataServiceFormat,formatString);
+		return err(SC_BAD_REQUEST,EC_UNSUPPORTED_DATASERVICE_FORMAT,formatString);
 	}
 	
 	public static ODataError internalServerError(String errorMessage) {
-		return err(SC_INTERNAL_SERVER_ERROR,ErrorCode_InternalServerError,errorMessage);
+		return err(SC_INTERNAL_SERVER_ERROR,EC_INTERNAL_SERVER_ERROR,errorMessage);
 	}
 	
 	public static ODataError invalidResourcePath(String path){
-		return err(SC_BAD_REQUEST,ErrorCode_InvalidResourcePath,path);
+		return err(SC_BAD_REQUEST,EC_INVALID_RESOURCE_PATH,path);
 	}
 	
 	public static ODataError badRequest(String errorMessage) {
-		return err(SC_BAD_REQUEST,ErrorCode_BadRequest,errorMessage);
+		return err(SC_BAD_REQUEST,EC_BAD_REQUEST,errorMessage);
+	}
+	
+	public static ODataError badRequest(String template,Object... args) {
+		return err(SC_BAD_REQUEST,EC_BAD_REQUEST,Strings.format(template, args));
 	}
 	
 	public static ODataError notImplemented() {
-		return err(SC_NOT_IMPLEMENTED,ErrorCode_NotImplemented);
+		return err(SC_NOT_IMPLEMENTED,EC_NOT_IMPLEMENTED);
+	}
+	
+	public static ODataError notImplemented(String message) {
+		return new ODataError(SC_NOT_IMPLEMENTED,EC_NOT_IMPLEMENTED,message);
 	}
 	
 	public static ODataError notFound(){
-		return new ODataError(SC_NOT_FOUND, ErrorCode_NotFound, "");
+		return new ODataError(SC_NOT_FOUND, EC_NOT_FOUND, "");
 	}
 	
 	public static ODataError notFound(String message){
-		return new ODataError(SC_NOT_FOUND, ErrorCode_NotFound, message);
+		return new ODataError(SC_NOT_FOUND, EC_NOT_FOUND, message);
 	}
 	
 	public static ODataError notFound(String template,Object... args){
-		return new ODataError(SC_NOT_FOUND, ErrorCode_NotFound, Strings.format(template, args));
+		return new ODataError(SC_NOT_FOUND, EC_NOT_FOUND, Strings.format(template, args));
 	}
 	
 	public static ODataError unsupportedHttpMethod(String method){
-		return err(SC_BAD_REQUEST,ErrorCode_UnsupportedHttpMethod,method);
+		return err(SC_BAD_REQUEST,EC_UNSUPPORTED_HTTP_METHOD,method);
 	}
 	
 	public static ODataError unsupportedResourcePath(String path){
-		return err(SC_NOT_IMPLEMENTED,ErrorCode_UnsupportedResourcePath,path);
+		return err(SC_NOT_IMPLEMENTED,EC_UNSUPPORTED_RESOURCE_PATH,path);
 	}
 	
 	private static final ODataError err(int status,String code,Object... args){

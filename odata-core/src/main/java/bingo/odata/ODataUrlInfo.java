@@ -21,39 +21,39 @@ import java.util.Set;
 
 public class ODataUrlInfo {
 
-	private final String	               serviceRootPath;
-	private final String	               serviceRootUrl;
+	private final String	               serviceRootUri;
 	private final ODataResourcePath	   resourcePath;
+	private final String				   resourceUri;
 	private final ODataQueryOptions	   queryOptions;
 	private final Map<String, String>	   pathParameters = new HashMap<String, String>();
 
-	public ODataUrlInfo(String serviceRootPath, String serviceRootUrl, String resourcePath, String queryString) {
+	public ODataUrlInfo(String serviceRootUri, String resourcePath, String queryString) {
 	    super();
-	    this.serviceRootPath = serviceRootPath;
-	    this.serviceRootUrl  = serviceRootUrl;
+	    this.serviceRootUri  = serviceRootUri;
 	    this.resourcePath    = new ODataResourcePath(resourcePath);
+	    this.resourceUri     = serviceRootUri + resourcePath.substring(1);
 	    this.queryOptions    = new ODataQueryOptions(queryString);
     }
 	
-	public ODataUrlInfo(String serviceRootPath, String serviceRootUrl, String resourcePath, Map<String, String> queryOptions) {
+	public ODataUrlInfo(String serviceRootUri, String resourcePath, Map<String, String> queryOptions) {
 	    super();
-	    this.serviceRootPath = serviceRootPath;
-	    this.serviceRootUrl  = serviceRootUrl;
+	    this.serviceRootUri  = serviceRootUri;
 	    this.resourcePath    = new ODataResourcePath(resourcePath);
+	    this.resourceUri     = serviceRootUri + resourcePath.substring(1);
 	    this.queryOptions    = new ODataQueryOptions(queryOptions);
     }
 
-	public String getServiceRootPath() {
-		return serviceRootPath;
-	}
-
-	public String getServiceRootUrl() {
-		return serviceRootUrl;
+	public String getServiceRootUri() {
+		return serviceRootUri;
 	}
 
 	public ODataResourcePath getResourcePath() {
 		return resourcePath;
 	}
+	
+	public String getResourceUri() {
+    	return resourceUri;
+    }
 
 	public ODataQueryOptions getQueryOptions(){
 		return queryOptions;

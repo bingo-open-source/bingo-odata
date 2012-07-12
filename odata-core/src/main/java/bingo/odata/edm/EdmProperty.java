@@ -33,10 +33,18 @@ public class EdmProperty extends EdmNamedObject {
 	private final int precision;
 	
 	private final int scale;
+
+	//---------------------------------------------------------------------------------------------------------------------------------------------
+	//Feed Customization Attributes,see <a href="http://msdn.microsoft.com/en-us/library/ee373839.aspx">Feed Customization (WCF Data Services)</a>.
+	//---------------------------------------------------------------------------------------------------------------------------------------------
+	private final String   fcTargetPath;	 //See EdmFeedCustomization.SyndicationItemProperty
+	private final String   fcContentKind;  //See EdmFeedCustomization.SyndicationTextContentKind
+	private final boolean fcKeepInContent;
 	
 	public EdmProperty(String name,EdmType type,
 					   boolean nullable,String defaultValue,
-					   boolean fixedLength,int maxLength,int precision,int scale) {
+					   boolean fixedLength,int maxLength,int precision,int scale,
+					   String fcTargetPath,String fcContentKind,boolean fcKeepInContent) {
 
 		super(name);
 		
@@ -49,6 +57,10 @@ public class EdmProperty extends EdmNamedObject {
 		this.precision    = precision;
 		this.scale        = scale;
 		
+		this.fcTargetPath    = fcTargetPath;
+		this.fcContentKind   = fcContentKind;
+		this.fcKeepInContent = fcKeepInContent;		
+		
 		Assert.notNull(name,"name is required in EdmProperty");
 		Assert.notNull(type,"type is required in EdmProperty");
 	}
@@ -56,11 +68,12 @@ public class EdmProperty extends EdmNamedObject {
 	public EdmProperty(String name,EdmType type,
 					   boolean nullable,String defaultValue,
 					   boolean fixedLength,int maxLength,int precision,int scale,
+					   String fcTargetPath,String fcContentKind,boolean fcKeepInContent,
 					   EdmDocumentation documentation) {
 		
-		this(name,type,nullable,defaultValue,fixedLength,maxLength,precision,scale);
-		
-		this.documentation = documentation;
+		this(name,type,nullable,defaultValue,fixedLength,maxLength,precision,scale,fcTargetPath,fcContentKind,fcKeepInContent);
+
+		this.documentation   = documentation;
 	}
 	
 	public EdmType getType() {
@@ -91,6 +104,18 @@ public class EdmProperty extends EdmNamedObject {
     	return scale;
     }
 	
+	public String getFcTargetPath() {
+    	return fcTargetPath;
+    }
+
+	public String getFcContentKind() {
+    	return fcContentKind;
+    }
+
+	public boolean isFcKeepInContent() {
+    	return fcKeepInContent;
+    }
+
 	@Override
     public String toString() {
 		return Strings.format("EdmProperty[name={0},type={1}]", name,type);

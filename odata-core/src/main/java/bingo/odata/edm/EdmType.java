@@ -19,4 +19,8 @@ public abstract class EdmType extends EdmObjectWithDocumentation {
 
 	public abstract EdmTypeKind getTypeKind();
 	
+	public final boolean isSimple(){
+		return getTypeKind().equals(EdmTypeKind.Simple);
+	}
+	
 }

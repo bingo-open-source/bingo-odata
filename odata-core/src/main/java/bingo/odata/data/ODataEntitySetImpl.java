@@ -20,7 +20,7 @@ import java.util.List;
 import bingo.lang.Immutables;
 import bingo.odata.edm.EdmEntitySet;
 
-public class ODataEntitySetImpl implements ODataEntitySet {
+class ODataEntitySetImpl implements ODataEntitySet {
 	
 	private final EdmEntitySet      metadata;
 	private final List<ODataEntity> entities;

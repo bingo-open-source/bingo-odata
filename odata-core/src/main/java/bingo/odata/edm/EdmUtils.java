@@ -17,7 +17,6 @@ package bingo.odata.edm;
 
 import bingo.lang.Named;
 import bingo.lang.Strings;
-import bingo.odata.edm.builder.EdmSchemaBuilder;
 
 public class EdmUtils {
 

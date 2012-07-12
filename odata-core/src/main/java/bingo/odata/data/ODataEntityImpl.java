@@ -17,25 +17,81 @@ package bingo.odata.data;
 
 import java.util.List;
 
+import bingo.lang.Assert;
+import bingo.lang.Enumerable;
+import bingo.lang.Enumerables;
 import bingo.lang.Immutables;
+import bingo.lang.Predicates;
+import bingo.odata.edm.EdmEntitySet;
 import bingo.odata.edm.EdmEntityType;
 
-public class ODataEntityImpl implements ODataEntity {
+class ODataEntityImpl implements ODataEntity {
 
-	private final EdmEntityType	    type;
+	private final EdmEntityType	    entityType;
+	private final EdmEntitySet	    	entitySet;
 	private final List<ODataProperty>	properties;
 	
-	public ODataEntityImpl(EdmEntityType type, List<ODataProperty> properties) {
+	private ODataKey key;
+	private String   keyString;
+	
+	public ODataEntityImpl(EdmEntitySet entitySet, EdmEntityType entityType, List<ODataProperty> properties) {
 	    super();
-	    this.type = type;
+	    Assert.notNull(entitySet,"entitySet cannot be null");
+	    Assert.notNull(entityType,"entityType cannot be null");
+	    this.entitySet  = entitySet;
+	    this.entityType = entityType;
 	    this.properties = Immutables.listOf(properties);
     }
 
-	public EdmEntityType getType() {
-		return type;
-	}
+	public EdmEntitySet getEntitySet() {
+	    return entitySet;
+    }
+
+	public EdmEntityType getEntityType() {
+	    return entityType;
+    }
 
 	public List<ODataProperty> getProperties() {
 		return properties;
 	}
+	
+	public Object getPropertyValue(String name) {
+		ODataProperty p = Enumerables.firstOrNull(properties,Predicates.<ODataProperty>nameEqualsIgnoreCase(name));
+		
+	    return null == p ? null : p.getValue();
+    }
+
+	public ODataKey getKey() {
+		if(null == key){
+			Enumerable<String> keys = entityType.getKeys();
+			
+			if(keys.size() == 1){
+				String keyName = entityType.getKeys().first();
+				for(ODataProperty p : properties){
+					if(p.getName().equalsIgnoreCase(keyName)){
+						key = new ODataKeyImpl(p.getValue());
+						break;
+					}
+				}
+			}else{
+				Object[] values = new Object[keys.size()];
+				
+				for(ODataProperty p : properties){
+					for(int i=0;i<values.length;i++){
+						if(keys.get(i).equalsIgnoreCase(p.getName())){
+							values[i] = p.getValue();
+						}
+					}
+				}
+			}
+		}
+	    return key;
+    }
+
+	public String getKeyString() {
+		if(null == keyString){
+			keyString = entitySet.getName() + getKey().toKeyString();
+		}
+	    return keyString;
+    }
 }

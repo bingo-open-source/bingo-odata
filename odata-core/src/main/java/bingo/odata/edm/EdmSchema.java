@@ -15,11 +15,8 @@
  */
 package bingo.odata.edm;
 
-import java.util.List;
-
 import bingo.lang.Enumerable;
 import bingo.lang.Enumerables;
-import bingo.lang.Immutables;
 
 public class EdmSchema extends EdmObjectWithDocumentation {
 	
@@ -27,15 +24,15 @@ public class EdmSchema extends EdmObjectWithDocumentation {
 
 	private final String alias;
 	
-	private final List<EdmEntityContainer> entityContainers;
+	private final Enumerable<EdmEntityContainer> entityContainers;
 	
-	private final List<EdmEntityType> entityTypes;
+	private final Enumerable<EdmEntityType> entityTypes;
 	
-	private final List<EdmAssociation> associations;
+	private final Enumerable<EdmAssociation> associations;
 	
-	private final List<EdmComplexType> complexTypes;
+	private final Enumerable<EdmComplexType> complexTypes;
 	
-	private final List<EdmFunction> functions;
+	private final Enumerable<EdmFunction> functions;
 	
 	public EdmSchema(String namespaceName,String alias,
 					  Iterable<EdmEntityContainer> entityContainers,Iterable<EdmEntityType> entityTypes,
@@ -44,11 +41,11 @@ public class EdmSchema extends EdmObjectWithDocumentation {
 		this.namespaceName = namespaceName;
 		this.alias         = alias;
 		
-		this.entityContainers = Immutables.listOf(entityContainers);
-		this.entityTypes      = Immutables.listOf(entityTypes);
-		this.associations     = Immutables.listOf(associations);
-		this.complexTypes     = Immutables.listOf(complexTypes);
-		this.functions        = Immutables.listOf(functions);
+		this.entityContainers = Enumerables.of(entityContainers);
+		this.entityTypes      = Enumerables.of(entityTypes);
+		this.associations     = Enumerables.of(associations);
+		this.complexTypes     = Enumerables.of(complexTypes);
+		this.functions        = Enumerables.of(functions);
 	}
 	
 	public EdmSchema(String namespaceName,String alias,
@@ -70,22 +67,22 @@ public class EdmSchema extends EdmObjectWithDocumentation {
     }
 
 	public Enumerable<EdmEntityContainer> getEntityContainers() {
-    	return Enumerables.of(entityContainers);
+    	return entityContainers;
     }
 
 	public Enumerable<EdmEntityType> getEntityTypes() {
-    	return Enumerables.of(entityTypes);
+    	return entityTypes;
     }
 
 	public Enumerable<EdmAssociation> getAssociations() {
-    	return Enumerables.of(associations);
+    	return associations;
     }
 
 	public Enumerable<EdmComplexType> getComplexTypes() {
-    	return Enumerables.of(complexTypes);
+    	return complexTypes;
     }
 
 	public Enumerable<EdmFunction> getFunctions() {
-    	return Enumerables.of(functions);
+    	return functions;
     }
 }

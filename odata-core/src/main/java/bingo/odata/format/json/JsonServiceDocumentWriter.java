@@ -15,17 +15,44 @@
  */
 package bingo.odata.format.json;
 
-import bingo.odata.ODataRequest;
+import bingo.odata.ODataContext;
 import bingo.odata.ODataServices;
+import bingo.odata.edm.EdmEntitySet;
 import bingo.odata.format.ODataJsonWriter;
 import bingo.utils.json.JSONWriter;
 
 public class JsonServiceDocumentWriter extends ODataJsonWriter<ODataServices>{
 
 	@Override
-    protected void write(ODataRequest request, JSONWriter writer, ODataServices target) throws Throwable {
-	    // TODO implement JsonServiceDocumentWriter.write
-	    
+    protected void write(ODataContext context, JSONWriter writer, ODataServices target) throws Throwable {
+		/*
+			 {
+				d: {
+					EntitySets: [
+						"Products",
+						"Categories",
+						"Suppliers"
+					]
+				}
+			 }
+		 */
+		
+		writer.startObject();
+		writer.startArray("EntitySets");
+		
+		int i=0;
+		
+		for(EdmEntitySet es : target.getEntitySets()){
+			if(i==0){
+				i=1;
+			}else{
+				writer.separator();
+			}
+			writer.value(es.getName());
+		}
+		
+		writer.endArray();
+		writer.endObject();
     }
 	
 }

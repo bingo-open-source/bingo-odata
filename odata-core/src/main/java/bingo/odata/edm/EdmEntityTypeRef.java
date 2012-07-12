@@ -15,8 +15,6 @@
  */
 package bingo.odata.edm;
 
-import bingo.odata.edm.builder.EdmEntityTypeBuilder;
-import bingo.odata.edm.builder.EdmSchemaBuilder;
 
 public class EdmEntityTypeRef extends EdmTypeRef {
 	

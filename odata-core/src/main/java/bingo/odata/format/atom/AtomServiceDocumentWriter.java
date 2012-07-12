@@ -15,11 +15,8 @@
  */
 package bingo.odata.format.atom;
 
-import static bingo.odata.format.ODataXmlConstants.APP_NS;
-import static bingo.odata.format.ODataXmlConstants.ATOM_NS;
-import static bingo.odata.format.ODataXmlConstants.ATOM_PREFIX;
 import bingo.lang.xml.XmlWriter;
-import bingo.odata.ODataRequest;
+import bingo.odata.ODataContext;
 import bingo.odata.ODataServices;
 import bingo.odata.edm.EdmEntitySet;
 import bingo.odata.format.ODataXmlWriter;
@@ -27,14 +24,15 @@ import bingo.odata.format.ODataXmlWriter;
 public class AtomServiceDocumentWriter extends ODataXmlWriter<ODataServices>{
 	
 	@Override
-    protected void write(ODataRequest request, XmlWriter writer, ODataServices services) throws Throwable {
+    protected void write(ODataContext context, XmlWriter writer, ODataServices services) throws Throwable {
 		writer.startDocument();
 		
 		writer.startElement("service")
-			  .namespace(ATOM_PREFIX,ATOM_NS)
-			  .namespace(APP_NS);
+				  .namespace(ATOM_PREFIX,ATOM_NS)
+				  .namespace(APP_PREFIX,APP_NS)
+				  .namespace(APP_NS);
 
-		writer.attributeOptional("xml:base",request.getServiceRootUrl());
+		writer.attributeOptional("xml:base",context.getUrlInfo().getServiceRootUri());
 		
 		writer.startElement("workspace");
 			  
@@ -51,7 +49,7 @@ public class AtomServiceDocumentWriter extends ODataXmlWriter<ODataServices>{
     }
 	
 	private static void writeAtomTitle(XmlWriter writer,String title) {
-		writer.startElement(ATOM_NS, "title").text(title).endElement();
+		writer.startElement(ATOM_QN_TITLE).text(title).endElement();
 	}
 	
 	private static void writeCollection(XmlWriter writer,EdmEntitySet entitySet){

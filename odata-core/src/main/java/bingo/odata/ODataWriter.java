@@ -21,6 +21,6 @@ public interface ODataWriter<T extends ODataObject> {
 	
 	String getContentType();
 
-	void write(ODataRequest request,Writer out,T target) throws Throwable;
+	void write(ODataContext context,Writer out,T target) throws Throwable;
 	
 }

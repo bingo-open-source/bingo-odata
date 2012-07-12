@@ -15,24 +15,22 @@
  */
 package bingo.odata.format.xml;
 
-import static bingo.odata.format.ODataXmlConstants.ODATA_METADATA_NS;
-import static bingo.odata.format.ODataXmlConstants.ODATA_METADATA_PREFIX;
 import bingo.lang.xml.XmlWriter;
+import bingo.odata.ODataContext;
 import bingo.odata.ODataError;
-import bingo.odata.ODataRequest;
 import bingo.odata.format.ODataXmlWriter;
 
 public class XmlErrorWriter extends ODataXmlWriter<ODataError> {
 
 	@Override
-    protected void write(ODataRequest request, XmlWriter writer, ODataError target) throws Throwable {
+    protected void write(ODataContext context, XmlWriter writer, ODataError target) throws Throwable {
 		writer.startDocument();
 		
-		writer.startElement(ODATA_METADATA_PREFIX,ODATA_METADATA_NS,"error").namespace(ODATA_METADATA_PREFIX, ODATA_METADATA_NS);
+		writer.startElement(METADATA_PREFIX,METADATA_NS,"error").namespace(METADATA_PREFIX, METADATA_NS);
 		
-		writer.startElement(ODATA_METADATA_NS,"code").text(target.getCode()).endElement();
+		writer.startElement(METADATA_NS,"code").text(target.getCode()).endElement();
 		
-		writer.startElement(ODATA_METADATA_NS,"message").text(target.getMessage()).endElement();
+		writer.startElement(METADATA_NS,"message").text(target.getMessage()).endElement();
 		
 		writer.endElement();
 		

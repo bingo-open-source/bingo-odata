@@ -15,9 +15,12 @@
  */
 package bingo.odata;
 
+import java.io.Reader;
 import java.util.Map;
 
 public interface ODataRequest {
+	
+	Reader getReader();
 
 	String getContentType();
 	
@@ -31,14 +34,17 @@ public interface ODataRequest {
 	
 	String getServiceRootPath();
 	
-	String getServiceRootUrl();
+	/**
+	 * must be ends with '/'
+	 */
+	String getServiceRootUri();
 	
 	/**
-	 * get the request path without context path & service root path
+	 * must be starts with '/' and not ends with '/'
 	 */
 	String getResourcePath();
 	
-	String getUrl();
+	String getUriString();
 	
 	String getQueryString();
 	

@@ -23,4 +23,5 @@ public interface ODataStructualObject extends ODataObject {
 
 	List<ODataProperty> getProperties();
 	
+	Object getPropertyValue(String name);
 }

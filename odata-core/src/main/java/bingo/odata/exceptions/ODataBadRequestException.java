@@ -15,29 +15,19 @@
  */
 package bingo.odata.exceptions;
 
-import bingo.odata.ODataException;
+import bingo.odata.ODataError;
 
-public class ODataBadRequestException extends ODataException {
+import static bingo.odata.ODataErrors.*;
 
-	private static final long serialVersionUID = 5692872046113751725L;
+public class ODataBadRequestException extends ODataError {
 
-	public ODataBadRequestException() {
-		
-	}
+	private static final long serialVersionUID = -8816614230856627697L;
 
-	public ODataBadRequestException(String message, Object... args) {
-		super(message, args);
+	public ODataBadRequestException(String message) {
+		super(SC_BAD_REQUEST, EC_BAD_REQUEST, message);
 	}
 
 	public ODataBadRequestException(String message, Throwable cause) {
-		super(message, cause);
-	}
-
-	public ODataBadRequestException(String message) {
-		super(message);
-	}
-
-	public ODataBadRequestException(Throwable cause) {
-		super(cause);
+		super(SC_BAD_REQUEST, EC_BAD_REQUEST, message, cause);
 	}
 }

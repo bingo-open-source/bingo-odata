@@ -15,10 +15,16 @@
  */
 package bingo.odata.data;
 
+import bingo.odata.edm.EdmEntitySet;
 import bingo.odata.edm.EdmEntityType;
 
 public interface ODataEntity extends ODataStructualObject {
 	
-	EdmEntityType getType();
+	EdmEntitySet getEntitySet();
 	
+	EdmEntityType getEntityType();
+	
+	ODataKey getKey();
+
+	String getKeyString();
 }

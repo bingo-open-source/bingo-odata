@@ -22,6 +22,6 @@
 	</dependencies>
 	<modules>
 		<module>odata-core</module>
-		<module>odata-server</module>
-  </modules>
+		<module>odata-producer</module>
+	</modules>
 </project>

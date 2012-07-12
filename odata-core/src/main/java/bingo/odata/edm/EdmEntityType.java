@@ -15,20 +15,19 @@
  */
 package bingo.odata.edm;
 
-import java.util.List;
-
 import bingo.lang.Enumerable;
 import bingo.lang.Enumerables;
-import bingo.lang.Immutables;
+import bingo.lang.Predicates;
 
 public class EdmEntityType extends EdmNamedStructualType {
 	
+	private final String        fullQualifiedName;
 	private final EdmEntityType baseType;
 	private final boolean hasStream;
-	private final List<String> keys;
-	private final List<EdmNavigationProperty> navigationProperties;
+	private final Enumerable<String> keys;
+	private final Enumerable<EdmNavigationProperty> navigationProperties;
 	
-	public EdmEntityType(String name,
+	public EdmEntityType(String name,String fullQualifiedName,
 						  Iterable<EdmProperty> properties,
 						  Iterable<EdmNavigationProperty> navigationProperties,
 						  Iterable<String> keys, 
@@ -37,15 +36,17 @@ public class EdmEntityType extends EdmNamedStructualType {
 						  EdmEntityType baseType){
 		
 		super(name,properties,isAbstract);
-		this.keys       = Immutables.listOf(keys);
-		this.navigationProperties = Immutables.listOf(navigationProperties);
+		
+		this.fullQualifiedName = fullQualifiedName;
+		this.keys       = Enumerables.of(keys);
+		this.navigationProperties = Enumerables.of(navigationProperties);
 		this.baseType   = baseType;
 		this.hasStream  = hasStream;
 		
 		doCheckValidKeys();
 	}
 	
-	public EdmEntityType(String name,
+	public EdmEntityType(String name,String fullQualifiedName,
 						  Iterable<EdmProperty> properties,
 						  Iterable<EdmNavigationProperty> navigationProperties,
 						  Iterable<String> keys,
@@ -54,21 +55,29 @@ public class EdmEntityType extends EdmNamedStructualType {
 						  EdmEntityType baseType,
 						  EdmDocumentation documentation){
 		
-		this(name,properties,navigationProperties,keys,isAbstract,hasStream,baseType);
+		this(name,fullQualifiedName,properties,navigationProperties,keys,isAbstract,hasStream,baseType);
 		
 		this.documentation = documentation;
 	}
+	
+	public String getFullQualifiedName() {
+    	return fullQualifiedName;
+    }
 
 	public EdmEntityType getBaseType() {
     	return baseType;
     }
 
 	public Enumerable<EdmNavigationProperty> getDeclaredNavigationProperties(){
-		return Enumerables.of(navigationProperties);
+		return navigationProperties;
+	}
+	
+	public EdmNavigationProperty findDeclaredNavigationProperty(String name){
+		return Enumerables.firstOrNull(navigationProperties,Predicates.<EdmNavigationProperty>nameEqualsIgnoreCase(name));
 	}
 	
 	public Enumerable<String> getKeys() {
-    	return Enumerables.of(keys);
+    	return keys;
     }
 	
 	public boolean hasStream() {

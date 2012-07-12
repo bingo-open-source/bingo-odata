@@ -18,12 +18,12 @@ package bingo.odata;
 import java.util.ArrayList;
 import java.util.List;
 
-import bingo.lang.Assert;
 import bingo.lang.Enumerable;
 import bingo.lang.Enumerables;
 import bingo.lang.Named;
 import bingo.odata.edm.EdmEntityContainer;
 import bingo.odata.edm.EdmEntitySet;
+import bingo.odata.edm.EdmEntityType;
 import bingo.odata.edm.EdmFunctionImport;
 import bingo.odata.edm.EdmSchema;
 
@@ -31,28 +31,19 @@ public class ODataServices implements Named,ODataObject {
 	
 	private final String name;
 
-	private final ODataVersion version;
-	
 	private final Enumerable<EdmSchema> schemas;
 	
-	public ODataServices(ODataVersion version,Iterable<EdmSchema> schemas){
-		this(ODataConstants.Defaults.DATA_SERVICE_NAME,version,schemas);
+	public ODataServices(Iterable<EdmSchema> schemas){
+		this(ODataConstants.Defaults.DATA_SERVICE_NAME,schemas);
 	}
 	
-	public ODataServices(String name, ODataVersion version,Iterable<EdmSchema> schemas){
-		Assert.notNull(version,"version cannot be null");
-		
+	public ODataServices(String name,Iterable<EdmSchema> schemas){
 		this.name    = name;
-		this.version = version;
 		this.schemas = Enumerables.of(schemas);
 	}
 
 	public String getName() {
 	    return name;
-    }
-
-	public ODataVersion getVersion() {
-    	return version;
     }
 
 	public Enumerable<EdmSchema> getSchemas() {
@@ -80,6 +71,17 @@ public class ODataServices implements Named,ODataObject {
 					if(entitySet.getName().equalsIgnoreCase(entitySetName)){
 						return entitySet;
 					}
+				}
+			}
+		}
+		return null;
+	}
+	
+	public EdmEntityType findEntityType(String entityTypeName) {
+		for(EdmSchema schema : schemas){
+			for(EdmEntityType entityType : schema.getEntityTypes()){
+				if(entityType.getName().equalsIgnoreCase(entityTypeName)){
+					return entityType;
 				}
 			}
 		}

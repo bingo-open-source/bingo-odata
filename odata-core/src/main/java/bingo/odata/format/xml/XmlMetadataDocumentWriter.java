@@ -15,15 +15,10 @@
  */
 package bingo.odata.format.xml;
 
-import static bingo.odata.format.ODataXmlConstants.ODATA_METADATA_NS;
-import static bingo.odata.format.ODataXmlConstants.ODATA_METADATA_PREFIX;
-import static bingo.odata.format.ODataXmlConstants.ODATA_NS;
-import static bingo.odata.format.ODataXmlConstants.ODATA_PREFIX;
-import static bingo.odata.format.ODataXmlConstants.EDMX_NS;
-import static bingo.odata.format.ODataXmlConstants.EDMX_PREFIX;
+import static bingo.odata.edm.EdmUtils.fullQualifiedName;
 import bingo.lang.Strings;
 import bingo.lang.xml.XmlWriter;
-import bingo.odata.ODataRequest;
+import bingo.odata.ODataContext;
 import bingo.odata.ODataServices;
 import bingo.odata.edm.EdmAssociation;
 import bingo.odata.edm.EdmAssociationSet;
@@ -37,36 +32,36 @@ import bingo.odata.edm.EdmParameter;
 import bingo.odata.edm.EdmProperty;
 import bingo.odata.edm.EdmSchema;
 import bingo.odata.edm.EdmType;
+import bingo.odata.edm.EdmFeedCustomization.SyndicationTextContentKind;
 import bingo.odata.format.ODataXmlWriter;
 import bingo.utils.http.HttpContentTypes;
-
-import static bingo.odata.edm.EdmUtils.*;
 
 public class XmlMetadataDocumentWriter extends ODataXmlWriter<ODataServices> {
 	
 	@Override
     public String getContentType() {
-	    return HttpContentTypes.APPLICATION_ATOM_XML;
+	    return HttpContentTypes.APPLICATION_XML;
     }
 
 	@Override
-    protected void write(ODataRequest request, XmlWriter writer, ODataServices services) throws Throwable {
+    protected void write(ODataContext context, XmlWriter writer, ODataServices services) throws Throwable {
 		writer.startDocument();
 		
 		//Edmx
 		writer.startElement(EDMX_PREFIX, EDMX_NS, "Edmx")
-			  .attribute("Version", "1.0")
 			  .namespace(EDMX_PREFIX,EDMX_NS)
-			  .namespace(ODATA_PREFIX,ODATA_NS)
-			  .namespace(ODATA_METADATA_PREFIX,ODATA_METADATA_NS);
+			  .attribute("Version", "1.0");
 
 		//DataServides
-		writer.startElement(EDMX_PREFIX,EDMX_NS,"DataServices")
-		      .attribute(ODATA_METADATA_PREFIX,ODATA_METADATA_NS,"DataServiceVersion",services.getVersion().getValue());
+		writer.startElement(EDMX_NS,"DataServices")
+		      .attribute(METADATA_PREFIX,METADATA_NS,"DataServiceVersion",context.getVersion().getValue())
+		      .namespace(DATASERVICES_PREFIX,DATASERVICES_NS)
+		      .namespace(METADATA_PREFIX,METADATA_NS);
 
 		//Schemas
 		for(EdmSchema schema : services.getSchemas()){
-			writer.startElement(EDMX_NS, "Schema")
+			writer.startElement("Schema")
+				  .namespace(EDM2007_NS)
 				  .attributeOptional("Namespace", schema.getNamespaceName());
 
 			writeDocument(writer, schema);
@@ -101,7 +96,7 @@ public class XmlMetadataDocumentWriter extends ODataXmlWriter<ODataServices> {
 			}
 			
 			if(entityType.hasStream()){
-				writer.attribute(ODATA_METADATA_NS, "HasStream","true");
+				writer.attribute(METADATA_NS, "HasStream","true");
 			}
 
 			//key
@@ -183,6 +178,13 @@ public class XmlMetadataDocumentWriter extends ODataXmlWriter<ODataServices> {
 				writer.attribute("Scale", Integer.toString(prop.getPrecision()));
 			}
 			
+			//feed customerization attributes
+			if(!Strings.isEmpty(prop.getFcTargetPath())){
+				writer.attribute(METADATA_NS, "FC_TargetPath",prop.getFcTargetPath())
+				      .attribute(METADATA_NS, "FC_CcontentKind",Strings.isEmpty(prop.getFcContentKind())? SyndicationTextContentKind.Text.getValue() : prop.getFcContentKind())
+				      .attribute(METADATA_NS, "FC_KeepInContent",prop.isFcKeepInContent() ? "true" : "false");
+			}
+			
 			writer.endElement();
 		}
 	}
@@ -194,7 +196,7 @@ public class XmlMetadataDocumentWriter extends ODataXmlWriter<ODataServices> {
 				  .attribute("Name", ec.getName());
 			
 			if(ec.isDefault()){
-				writer.attribute(ODATA_METADATA_NS,"IsDefaultEntityContainer","true");
+				writer.attribute(METADATA_NS,"IsDefaultEntityContainer","true");
 			}
 			
 			writeDocument(writer, ec);
@@ -233,20 +235,7 @@ public class XmlMetadataDocumentWriter extends ODataXmlWriter<ODataServices> {
 			
 			//FunctionImports
 			for(EdmFunctionImport func : ec.getFunctionImports()){
-				writer.startElement("FunctionImport")
-					  .attribute("Name", func.getName())
-					  .attributeOptional("EntitySet", func.getEntitySet())
-					  .attribute("ReturnType",fullQualifiedName(schema, func.getReturnType()));
-					  
-				for(EdmParameter param : func.getParameters()){
-					writer.startElement("Parameter")
-					      .attribute("Name", param.getName())
-					      .attribute("Type", fullQualifiedName(schema, param.getType()))
-					      .attribute("Mode", param.getMode().toString())
-					      .endElement();
-				}
-				
-				writer.endElement();
+				writeFunctionImport(writer,schema,func);
 			}
 			
 			writer.endElement();
@@ -262,6 +251,24 @@ public class XmlMetadataDocumentWriter extends ODataXmlWriter<ODataServices> {
 			
 			writer.endElement();
 		}
+	}
+	
+	private static void writeFunctionImport(XmlWriter writer,EdmSchema schema,EdmFunctionImport func) {
+		writer.startElement("FunctionImport")
+		  .attribute("Name", func.getName())
+		  .attributeOptional("EntitySet", func.getEntitySet())
+		  .attributeOptional(METADATA_NS, "HttpMethod", func.getHttpMethod())
+		  .attribute("ReturnType",fullQualifiedName(schema, func.getReturnType()));
+		  
+		for(EdmParameter param : func.getParameters()){
+			writer.startElement("Parameter")
+			      .attribute("Name", param.getName())
+			      .attribute("Type", fullQualifiedName(schema, param.getType()))
+			      .attribute("Mode", param.getMode().toString())
+			      .endElement();
+		}
+		
+		writer.endElement();
 	}
 
 	private static void writeFunctions(XmlWriter writer,EdmSchema schema) {

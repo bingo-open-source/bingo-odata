@@ -40,9 +40,9 @@ import java.text.ParseException;
 import java.util.Date;
 import java.util.Locale;
 
-import odata.producer.exceptions.NotImplementedException;
-
 import bingo.lang.Dates;
+import bingo.lang.exceptions.NotImplementedException;
+import bingo.odata.ODataErrors;
 import bingo.odata.ODataException;
 import bingo.odata.edm.EdmSimpleType;
 import bingo.odata.values.DateTimeOffset;
@@ -89,15 +89,15 @@ public class InternalTypeUtils {
 	}
 	
 	public static String formatDateTime(Date dt){
-		throw new NotImplementedException();
+		return Dates.format(dt,dateTimeFormats[1]);
 	}
 	
 	public static String formatDateTimeOffset(DateTimeOffset dt){
-		throw new NotImplementedException();
+		throw ODataErrors.notImplemented();
 	}
 	
 	public static String formatTime(Time t){
-		throw new NotImplementedException();
+		throw ODataErrors.notImplemented();
 	}
     
     /**
@@ -573,5 +573,9 @@ public class InternalTypeUtils {
         }
 
         return result;
+    }
+    
+    public static void main(String[] args) {
+	    System.out.println(Dates.format(new Date(),"yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ"));
     }
 }

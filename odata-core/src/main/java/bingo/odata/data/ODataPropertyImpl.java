@@ -15,27 +15,30 @@
  */
 package bingo.odata.data;
 
+import bingo.odata.edm.EdmProperty;
 import bingo.odata.edm.EdmType;
 
-public class ODataPropertyImpl implements ODataProperty {
+class ODataPropertyImpl implements ODataProperty {
 	
-	private final EdmType type;
-	private final String  name;
-	private final Object  value;
+	private final EdmProperty metadata;
+	private final Object     value;
 	
-	public ODataPropertyImpl(EdmType type, String name, Object value) {
+	public ODataPropertyImpl(EdmProperty metadata,Object value) {
 	    super();
-	    this.type = type;
-	    this.name = name;
-	    this.value = value;
+	    this.metadata = metadata;
+	    this.value    = value;
+    }
+	
+	public EdmProperty getMetadata() {
+	    return metadata;
     }
 
 	public EdmType getType() {
-    	return type;
+    	return metadata.getType();
     }
 	
 	public String getName() {
-    	return name;
+    	return metadata.getName();
     }
 	
 	public Object getValue() {

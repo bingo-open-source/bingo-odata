@@ -15,11 +15,8 @@
  */
 package bingo.odata.edm;
 
-import java.util.List;
-
 import bingo.lang.Enumerable;
 import bingo.lang.Enumerables;
-import bingo.lang.Immutables;
 
 public class EdmEntityContainer extends EdmNamedObject {
 
@@ -27,11 +24,11 @@ public class EdmEntityContainer extends EdmNamedObject {
 	
 	private final boolean lazyLoadingEnabled;
 	
-	private final List<EdmEntitySet> entitySets;
+	private final Enumerable<EdmEntitySet> entitySets;
 	
-	private final List<EdmFunctionImport> functionImports;
+	private final Enumerable<EdmFunctionImport> functionImports;
 	
-	private final List<EdmAssociationSet> associationSets;
+	private final Enumerable<EdmAssociationSet> associationSets;
 	
 	public EdmEntityContainer(String name,
 							   boolean isDefault,boolean lazyLoadingEnabled,
@@ -42,9 +39,9 @@ public class EdmEntityContainer extends EdmNamedObject {
 		super(name);
 		this.isDefault = isDefault;
 		this.lazyLoadingEnabled = lazyLoadingEnabled;
-		this.entitySets = Immutables.listOf(entitySets);
-		this.functionImports = Immutables.listOf(functionImports);
-		this.associationSets = Immutables.listOf(associationSets);
+		this.entitySets 	  = Enumerables.of(entitySets);
+		this.functionImports = Enumerables.of(functionImports);
+		this.associationSets = Enumerables.of(associationSets);
 	}
 	
 	public EdmEntityContainer(String name,
@@ -68,14 +65,14 @@ public class EdmEntityContainer extends EdmNamedObject {
     }
 
 	public Enumerable<EdmEntitySet> getEntitySets() {
-    	return Enumerables.of(entitySets);
+    	return entitySets;
     }
 
 	public Enumerable<EdmFunctionImport> getFunctionImports() {
-    	return Enumerables.of(functionImports);
+    	return functionImports;
     }
 
 	public Enumerable<EdmAssociationSet> getAssociationSets() {
-    	return Enumerables.of(associationSets);
+    	return associationSets;
     }
 }

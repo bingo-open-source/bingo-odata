@@ -22,5 +22,7 @@ public enum ODataObjectKind {
 	
 	Error,
 	
-	EntitySet;
+	EntitySet,
+	
+	Entity;
 }

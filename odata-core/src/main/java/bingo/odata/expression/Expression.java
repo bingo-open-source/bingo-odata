@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.sql.Time;
 import java.util.Date;
 
+import bingo.odata.edm.EdmSimpleType;
 import bingo.odata.expression.ExpressionParser.AggregateFunction;
 import bingo.odata.expression.OrderByExpression.Direction;
 import bingo.odata.values.DateTimeOffset;
@@ -271,54 +272,54 @@ public class Expression {
         return new OrderByExpressionImpl(expression, direction);
     }
 
-//    public static LiteralExpression literal(Object value) {
-//        return literal(null, value);
-//    }
-//
-//    public static LiteralExpression literal(EdmSimpleType edmType, Object value) {
-////        if (edmType == null) {
-////            if (value == null)
-////                throw new IllegalArgumentException("Cannot infer literal expression type for a null value");
-////
-////            edmType = EdmSimpleType.forJavaType(value.getClass());
-////            if (edmType == null)
-////                throw new IllegalArgumentException("Cannot infer literal expression type for java type: " + value.getClass().getName());
-////        }
-//
-//        // use OSimpleObject for java type normalization
-//        OSimpleObject<?> prop = OSimpleObjects.create(edmType, value);
-//
-//        if (edmType.equals(EdmSimpleType.BINARY))
-//            return binary((byte[]) prop.getValue());
-//        if (edmType.equals(EdmSimpleType.BOOLEAN))
-//            return boolean_((Boolean) prop.getValue());
-//        if (edmType.equals(EdmSimpleType.DATETIME))
-//            return dateTime((Date) prop.getValue());
-//        if (edmType.equals(EdmSimpleType.DATETIME_OFFSET))
-//            return dateTimeOffset((DateTimeOffset) prop.getValue());
-//        if (edmType.equals(EdmSimpleType.DECIMAL))
-//            return decimal((BigDecimal) prop.getValue());
-//        if (edmType.equals(EdmSimpleType.DOUBLE))
-//            return double_((Double) prop.getValue());
-//        if (edmType.equals(EdmSimpleType.STRING))
-//            return string((String) prop.getValue());
-//        if (edmType.equals(EdmSimpleType.GUID))
-//            return guid((Guid) prop.getValue());
-//        if (edmType.equals(EdmSimpleType.INT64))
-//            return int64((Long) prop.getValue());
-//        if (edmType.equals(EdmSimpleType.INT32) || edmType.equals(EdmSimpleType.INT16))
-//            return integral(Integer.parseInt(prop.getValue().toString()));
-//        if (edmType.equals(EdmSimpleType.SINGLE))
-//            return single((Float) prop.getValue());
-//        if (edmType.equals(EdmSimpleType.TIME))
-//            return time((Time) prop.getValue());
-//        if (edmType.equals(EdmSimpleType.BYTE))
-//            return byte_((UnsignedByte) prop.getValue());
-//        if (edmType.equals(EdmSimpleType.SBYTE))
-//            return sbyte_((Byte) prop.getValue());
-//        
-//        throw new UnsupportedOperationException("Cannot infer literal expression type for edm type: " + edmType);
-//    }
+    public static LiteralExpression literal(Object value) {
+        return literal(null, value);
+    }
+
+    public static LiteralExpression literal(EdmSimpleType edmType, Object value) {
+        if (edmType == null) {
+            if (value == null){
+            	throw new IllegalArgumentException("Cannot infer literal expression type for a null value");
+            }
+
+            edmType = EdmSimpleType.of(value.getClass());
+            
+            if (edmType == null){
+            	throw new IllegalArgumentException("Cannot infer literal expression type for java type: " + value.getClass().getName());
+            }
+        }
+
+        if (edmType.equals(EdmSimpleType.BINARY))
+            return binary((byte[]) value);
+        if (edmType.equals(EdmSimpleType.BOOLEAN))
+            return boolean_((Boolean) value);
+        if (edmType.equals(EdmSimpleType.DATETIME))
+            return dateTime((Date) value);
+        if (edmType.equals(EdmSimpleType.DATETIME_OFFSET))
+            return dateTimeOffset((DateTimeOffset) value);
+        if (edmType.equals(EdmSimpleType.DECIMAL))
+            return decimal((BigDecimal) value);
+        if (edmType.equals(EdmSimpleType.DOUBLE))
+            return double_((Double) value);
+        if (edmType.equals(EdmSimpleType.STRING))
+            return string((String) value);
+        if (edmType.equals(EdmSimpleType.GUID))
+            return guid((Guid) value);
+        if (edmType.equals(EdmSimpleType.INT64))
+            return int64((Long) value);
+        if (edmType.equals(EdmSimpleType.INT32) || edmType.equals(EdmSimpleType.INT16))
+            return integral(Integer.parseInt(value.toString()));
+        if (edmType.equals(EdmSimpleType.SINGLE))
+            return single((Float) value);
+        if (edmType.equals(EdmSimpleType.TIME))
+            return time((Time) value);
+        if (edmType.equals(EdmSimpleType.BYTE))
+            return byte_((UnsignedByte) value);
+        if (edmType.equals(EdmSimpleType.SBYTE))
+            return sbyte_((Byte) value);
+        
+        throw new UnsupportedOperationException("Cannot infer literal expression type for edm type: " + edmType);
+    }
 
     public static Object literalValue(LiteralExpression expression) {
         if (expression instanceof BinaryLiteral)

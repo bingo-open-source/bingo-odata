@@ -40,6 +40,18 @@ public class ODataQueryInfoParser {
 								   options.getOptions());
 	}
 	
+	public static ODataQueryInfo parseForSingleEntity(ODataQueryOptions options){
+		return new ODataQueryInfo(parseExpand(options.getExpand()), 
+								   null, 
+								   null,
+								   null,
+								   null,
+								   null,
+								   null,
+								   parseSelect(options.getSelect()),
+								   options.getOptions());
+	}
+	
 	public static ODataInlineCount parseInlineCount(String value) {
 		return Strings.isEmpty(value) ? null : Enums.valueOf(ODataInlineCount.class, value);
 	}

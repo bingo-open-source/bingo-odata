@@ -19,29 +19,19 @@ import bingo.utils.http.HttpContentTypes;
 
 public final class ODataConstants {
 
-	public static final class Values {
-
-	}
-	
 	public static final class Defaults {
-		public static final String		 DATA_SERVICE_NAME		= "Default";
-
-		public static final ODataVersion	DATA_SERVICE_VERSION	= ODataVersion.V2;
-
-		public static final ODataFormat   DATA_SERVICE_FORMAT		= ODataFormat.Atom;
+		public static final String DATA_SERVICE_NAME = "Default";
 	}
 
-	public static final class Versions {
-		public static final ODataVersion MIN_DATA_SERVICE_VERSION = ODataVersion.V1;
-		
-		public static final ODataVersion MAX_DATA_SERVICE_VERSION = ODataVersion.V3;
-	}
-	
 	public static final class ContentTypes extends HttpContentTypes {
 		
-		public static final String APPLICATION_JSON_VERBOSE = APPLICATION_JSON + ";odata=verbose";
+		public static final String	APPLICATION_JSON_VERBOSE	= APPLICATION_JSON + ";odata=verbose";
 
-		public static final String APPLICATION_JSON_LIGHT   = APPLICATION_JSON + ";odata=light";
+		public static final String	APPLICATION_JSON_LIGHT		= APPLICATION_JSON + ";odata=light";
+
+		public static final String	APPLICATION_ATOM_FEED		= "application/atom+xml;type=feed";
+
+		public static final String	APPLICATION_ATOM_ENTRY		= "application/atom+xml;type=entry";	
 		
 	}
 	
@@ -75,6 +65,8 @@ public final class ODataConstants {
 		public static final String	SELECT		    = "$select";
 
 		public static final String	CALLBACK		= "$callback";
+		
+		public static final String    X_HTTP_METHOD   = "$x_http_method";
 	}
 	
 	public static final class ResourcePaths {

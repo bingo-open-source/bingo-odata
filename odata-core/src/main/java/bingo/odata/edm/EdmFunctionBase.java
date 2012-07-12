@@ -15,27 +15,29 @@
  */
 package bingo.odata.edm;
 
-import java.util.List;
-
 import bingo.lang.Enumerable;
 import bingo.lang.Enumerables;
-import bingo.lang.Immutables;
+import bingo.lang.Predicates;
 
 public abstract class EdmFunctionBase extends EdmNamedObject {
 
-	private final List<EdmParameter> parameters;
+	private final Enumerable<EdmParameter> parameters;
 	
 	private final EdmType returnType;
 
 	protected EdmFunctionBase(String name,EdmType returnType,Iterable<EdmParameter> parameters){
 		super(name);
-		this.parameters = Immutables.listOf(parameters);
+		this.parameters = Enumerables.of(parameters);
 		this.returnType = returnType;
 	}
 	
 	public Enumerable<EdmParameter> getParameters() {
     	return Enumerables.of(parameters);
     }
+	
+	public EdmParameter getParameter(String name){
+		return parameters.firstOrNull(Predicates.<EdmParameter>nameEquals(name));
+	}
 
 	public EdmType getReturnType() {
     	return returnType;

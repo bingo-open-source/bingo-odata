@@ -15,40 +15,42 @@
  */
 package bingo.odata.format;
 
-import static bingo.odata.format.ODataXmlConstants.EDM_NS;
-
 import java.io.Writer;
 
 import bingo.lang.Strings;
 import bingo.lang.xml.XmlFactory;
 import bingo.lang.xml.XmlWriter;
+import bingo.odata.ODataContext;
 import bingo.odata.ODataObject;
-import bingo.odata.ODataRequest;
 import bingo.odata.ODataWriter;
 import bingo.odata.ODataConstants.ContentTypes;
 import bingo.odata.edm.EdmDocumentation;
 import bingo.odata.edm.EdmObjectWithDocumentation;
 
-public abstract class ODataXmlWriter<T extends ODataObject> implements ODataWriter<T> {
+public abstract class ODataXmlWriter<T extends ODataObject> extends ODataXmlConstants implements ODataWriter<T> {
 
-	public final void write(ODataRequest request,Writer out, T target) throws Throwable {
-		write(request,XmlFactory.createWriter(out),target);
+	public final void write(ODataContext context,Writer out, T target) throws Throwable {
+		write(context,XmlFactory.createWriter(out),target);
     }
 	
 	public String getContentType() {
 	    return ContentTypes.APPLICATION_XML_UTF8;
     }
 
-	protected abstract void write(ODataRequest request,XmlWriter writer,T target) throws Throwable;
+	protected abstract void write(ODataContext context,XmlWriter writer,T target) throws Throwable;
 	
 	protected static void writeDocument(XmlWriter writer,EdmObjectWithDocumentation item){
 		EdmDocumentation doc = item.getDocumentation();
 		
 		if(null != doc && !Strings.isEmpty(doc.getSummary()) && !Strings.isEmpty(item.getDocumentation())){
-			writer.startElement(EDM_NS,"Documentation");
-			writer.elementOptional(EDM_NS, "Summary");
-			writer.elementOptional(EDM_NS, "LongDescription");
+			writer.startElement(EDM2006_NS,"Documentation");
+			writer.elementOptional(EDM2006_NS, "Summary");
+			writer.elementOptional(EDM2006_NS, "LongDescription");
 			writer.endElement();
 		}
+	}
+	
+	protected static void writeElement(XmlWriter writer, String name,String text) {
+		writer.startElement(name).text(text).endElement();
 	}
 }
