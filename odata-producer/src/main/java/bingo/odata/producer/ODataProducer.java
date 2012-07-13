@@ -13,15 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.odata.provider;
+package bingo.odata.producer;
 
-import bingo.odata.ODataObject;
 import bingo.odata.ODataQueryInfo;
 import bingo.odata.ODataServices;
 import bingo.odata.data.ODataEntity;
 import bingo.odata.data.ODataEntitySet;
 import bingo.odata.data.ODataKey;
 import bingo.odata.data.ODataParameters;
+import bingo.odata.data.ODataReturnValue;
 import bingo.odata.edm.EdmEntityType;
 import bingo.odata.edm.EdmFunctionImport;
 
@@ -43,5 +43,5 @@ public interface ODataProducer {
 	
 	void deleteEntity(ODataProducerContext context,EdmEntityType entityType,ODataKey key);
 	
-	ODataObject callFunction(ODataProducerContext context,EdmFunctionImport func,ODataParameters parameters);
+	ODataReturnValue callFunction(ODataProducerContext context,EdmFunctionImport func,ODataParameters parameters);
 }

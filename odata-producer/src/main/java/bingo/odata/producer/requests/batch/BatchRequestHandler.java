@@ -22,8 +22,8 @@ import bingo.odata.ODataErrors;
 import bingo.odata.ODataException;
 import bingo.odata.ODataRequest;
 import bingo.odata.ODataResponse;
+import bingo.odata.producer.ODataProducerContext;
 import bingo.odata.producer.requests.ODataRequestHandler;
-import bingo.odata.provider.ODataProducerContext;
 
 public class BatchRequestHandler implements ODataRequestHandler {
 

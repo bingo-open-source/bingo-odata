@@ -27,7 +27,7 @@ import bingo.odata.ODataReader;
 import bingo.odata.ODataRequest;
 import bingo.odata.ODataResponse;
 import bingo.odata.ODataWriter;
-import bingo.odata.provider.ODataProducerContext;
+import bingo.odata.producer.ODataProducerContext;
 
 public abstract class ODataRequestHandlerBase implements ODataRequestHandler {
 	

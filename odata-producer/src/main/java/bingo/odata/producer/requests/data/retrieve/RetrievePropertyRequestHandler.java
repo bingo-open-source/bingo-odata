@@ -21,8 +21,8 @@ import bingo.odata.data.ODataKey;
 import bingo.odata.edm.EdmEntitySet;
 import bingo.odata.edm.EdmEntityType;
 import bingo.odata.edm.EdmProperty;
+import bingo.odata.producer.ODataProducerContext;
 import bingo.odata.producer.requests.data.PropertyRequestHandlerBase;
-import bingo.odata.provider.ODataProducerContext;
 
 public class RetrievePropertyRequestHandler extends PropertyRequestHandlerBase {
 

@@ -17,8 +17,8 @@ package bingo.odata.producer.requests.data.delete;
 
 import bingo.odata.ODataRequest;
 import bingo.odata.ODataResponse;
+import bingo.odata.producer.ODataProducerContext;
 import bingo.odata.producer.requests.ODataRequestHandlerBase;
-import bingo.odata.provider.ODataProducerContext;
 
 public class DeleteLinkRequestHandler extends ODataRequestHandlerBase {
 

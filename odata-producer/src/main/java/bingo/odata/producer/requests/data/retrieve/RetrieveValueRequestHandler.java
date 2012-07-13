@@ -17,8 +17,8 @@ package bingo.odata.producer.requests.data.retrieve;
 
 import bingo.odata.ODataRequest;
 import bingo.odata.ODataResponse;
+import bingo.odata.producer.ODataProducerContext;
 import bingo.odata.producer.requests.ODataRequestHandlerBase;
-import bingo.odata.provider.ODataProducerContext;
 
 public class RetrieveValueRequestHandler extends ODataRequestHandlerBase {
 

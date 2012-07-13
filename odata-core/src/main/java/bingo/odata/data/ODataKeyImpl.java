@@ -17,8 +17,7 @@ package bingo.odata.data;
 
 import java.util.List;
 
-import bingo.lang.Enumerables;
-import bingo.lang.ForEach;
+import bingo.lang.For;
 import bingo.lang.NamedValue;
 import bingo.lang.NamedValues;
 import bingo.lang.tuple.ImmutableNamedValues;
@@ -81,15 +80,15 @@ class ODataKeyImpl implements ODataKey {
 
 		final StringBuilder key = new StringBuilder();
 		
-		Enumerables.foreach(namedValues,
-							new ForEach.Action<NamedValue<Object>>() {
-								public void exec(boolean isFirstItem, NamedValue<Object> item) {
-									if(!isFirstItem){
-										key.append(',');
-									}
-									key.append(keyString(item.getValue()));
-					            }
-							});
+		For.each(namedValues,
+				new For.Action1<NamedValue<Object>>() {
+					public void item(boolean isFirstItem, NamedValue<Object> item) {
+						if(!isFirstItem){
+							key.append(',');
+						}
+						key.append(keyString(item.getValue()));
+		            }
+				});
 		
 		return "(" + key.toString() + ")";
 	}

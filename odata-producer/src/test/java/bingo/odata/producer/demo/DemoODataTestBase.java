@@ -21,7 +21,7 @@ import bingo.odata.ODataFormat;
 import bingo.odata.ODataProtocols;
 import bingo.odata.ODataUrlInfo;
 import bingo.odata.ODataVersion;
-import bingo.odata.provider.ODataProducerContext;
+import bingo.odata.producer.ODataProducerContext;
 import bingo.odata.server.mock.MockODataRequest;
 import bingo.odata.server.mock.MockODataResponse;
 

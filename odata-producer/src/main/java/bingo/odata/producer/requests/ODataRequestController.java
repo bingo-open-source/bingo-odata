@@ -34,8 +34,8 @@ import bingo.odata.ODataUrlInfo;
 import bingo.odata.ODataVersion;
 import bingo.odata.ODataWriter;
 import bingo.odata.ODataConstants.Headers;
-import bingo.odata.provider.ODataProducer;
-import bingo.odata.provider.ODataProducerContext;
+import bingo.odata.producer.ODataProducer;
+import bingo.odata.producer.ODataProducerContext;
 import bingo.utils.http.HttpStatus;
 
 public class ODataRequestController {

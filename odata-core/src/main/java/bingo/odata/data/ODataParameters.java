@@ -15,86 +15,19 @@
  */
 package bingo.odata.data;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
 
-import bingo.lang.Enumerables;
-import bingo.lang.Predicates;
-import bingo.lang.Strings;
-import bingo.odata.ODataConverts;
-import bingo.odata.ODataQueryOptions;
-import bingo.odata.edm.EdmFunctionImport;
-import bingo.odata.edm.EdmParameter;
-import bingo.odata.edm.EdmSimpleType;
-import bingo.odata.expression.Expression;
-import bingo.odata.expression.ExpressionParser;
-import bingo.odata.expression.LiteralExpression;
+import bingo.lang.Enumerable;
 
-public class ODataParameters {
+public interface ODataParameters extends Iterable<ODataParameter> {
 	
-	public static List<ODataParameter> parse(EdmFunctionImport func, String paramsString, ODataQueryOptions options){
-		
-		paramsString = Strings.trim(paramsString);
-		
-		if(paramsString.startsWith("(") && paramsString.endsWith("")){
-			paramsString = paramsString.substring(1,paramsString.length() - 1);
-		}
+	int size();
+	
+	boolean isEmpty();
 
-		List<ODataParameter> params = new ArrayList<ODataParameter>();
-		
-		if(!Strings.isEmpty(paramsString)){
-			String[] tokens = Strings.split(paramsString,',');
-			
-			for (String token : tokens) {
-				String[] nv = Strings.split(token, '=');
-				
-				if (nv.length != 2){
-					throw new IllegalArgumentException("bad paramsString: " + paramsString);
-				}
-					
-				String name   = nv[0].trim();
-				String string = nv[1].trim();
-				
-				EdmParameter mp = func.getParameter(name);
-				
-				if(null == mp){
-					throw new IllegalArgumentException("param '" + name + "' not found");
-				}
-				
-				if(string.startsWith("@")){
-					string = options.getOption(string.substring(1));
-				}
-				
-				Object value = Expression.literalValue((LiteralExpression)ExpressionParser.parse(string));
-				
-				params.add(of(mp,value));
-			}
-		}
-		
-		for(EdmParameter p : func.getParameters()){
-			if(!Enumerables.any(params, Predicates.<ODataParameter>nameEquals(p.getName()))){
-				String string = options.getOption(p.getName());
-				
-				if(!Strings.isEmpty(string)){
-					Object value = Expression.literalValue((LiteralExpression)ExpressionParser.parse(string));
-					
-					params.add(of(p,value));
-				}
-			}
-		}
-		
-		return params;
-	}
+	ODataParameter getParameter(String name);
 	
-	public static ODataParameter of(EdmParameter parameter, Object value) {
-		return new ODataParameterImpl(parameter,value);
-	}
-	
-	public static ODataParameter nullOf(EdmParameter parameter) {
-		return new ODataParameterImpl(parameter,null);
-	}
-	
-	public static ODataParameter of(EdmParameter parameter, String value) {
-		return new ODataParameterImpl(parameter,ODataConverts.fromString((EdmSimpleType)parameter.getType(), value));
-	}
+	Map<String, Object> getParametersMap();
+
+	Enumerable<ODataParameter> asEnumerable();
 }

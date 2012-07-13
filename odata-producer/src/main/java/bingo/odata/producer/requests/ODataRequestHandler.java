@@ -18,7 +18,7 @@ package bingo.odata.producer.requests;
 import bingo.odata.ODataException;
 import bingo.odata.ODataRequest;
 import bingo.odata.ODataResponse;
-import bingo.odata.provider.ODataProducerContext;
+import bingo.odata.producer.ODataProducerContext;
 
 public interface ODataRequestHandler {
 	

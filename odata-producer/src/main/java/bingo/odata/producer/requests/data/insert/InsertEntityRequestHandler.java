@@ -22,8 +22,8 @@ import bingo.odata.data.ODataEntity;
 import bingo.odata.edm.EdmEntitySet;
 import bingo.odata.edm.EdmEntityType;
 import bingo.odata.format.ODataAtomUtils;
+import bingo.odata.producer.ODataProducerContext;
 import bingo.odata.producer.requests.data.EntitySetRequestHandlerBase;
-import bingo.odata.provider.ODataProducerContext;
 import bingo.utils.http.HttpHeaders;
 import bingo.utils.http.HttpStatus;
 

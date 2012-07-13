@@ -18,8 +18,8 @@ package bingo.odata.producer.requests.metadata;
 import bingo.odata.ODataObjectKind;
 import bingo.odata.ODataRequest;
 import bingo.odata.ODataResponse;
+import bingo.odata.producer.ODataProducerContext;
 import bingo.odata.producer.requests.ODataRequestHandlerBase;
-import bingo.odata.provider.ODataProducerContext;
 
 public class MetadataDocumentRequestHandler extends ODataRequestHandlerBase {
 	

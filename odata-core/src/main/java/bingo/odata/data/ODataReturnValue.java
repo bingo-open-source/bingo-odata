@@ -13,11 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.odata.producer.requests;
+package bingo.odata.data;
 
+import bingo.odata.ODataObject;
+import bingo.odata.ODataObjectKind;
 
-public interface ODataRequestFunctionInvoker {
-
+public interface ODataReturnValue extends ODataObject {
 	
+	ODataObjectKind getKind();
 	
+	ODataObject getValue();
 }

@@ -15,22 +15,21 @@
  */
 package bingo.odata.producer.requests.data;
 
-import java.util.List;
-
 import bingo.lang.Strings;
-import bingo.odata.ODataContext;
 import bingo.odata.ODataErrors;
 import bingo.odata.ODataRequest;
 import bingo.odata.ODataResponse;
 import bingo.odata.ODataServices;
-import bingo.odata.data.ODataParameter;
+import bingo.odata.data.ODataParameterUtils;
 import bingo.odata.data.ODataParameters;
+import bingo.odata.data.ODataReturnValue;
 import bingo.odata.edm.EdmEntitySet;
 import bingo.odata.edm.EdmEntityType;
 import bingo.odata.edm.EdmFunctionImport;
+import bingo.odata.producer.ODataProducerContext;
 import bingo.odata.producer.requests.ODataRequestHandlerBase;
 import bingo.odata.producer.requests.ODataRequestRouter;
-import bingo.odata.provider.ODataProducerContext;
+import bingo.utils.http.HttpStatus;
 
 public abstract class EntitySetRequestHandlerBase extends ODataRequestHandlerBase {
 
@@ -76,14 +75,21 @@ public abstract class EntitySetRequestHandlerBase extends ODataRequestHandlerBas
 		doHandleEntitySet(context, request, response, entitySet, entityType);
     } 
 	
-	protected void doHandleFunctionImport(ODataContext context,ODataRequest request,ODataResponse response,EdmFunctionImport functionImport) throws Throwable {
+	protected void doHandleFunctionImport(ODataProducerContext context,ODataRequest request,ODataResponse response,EdmFunctionImport functionImport) throws Throwable {
 		
 		if(Strings.isEmpty(functionImport.getHttpMethod()) || functionImport.getHttpMethod().equalsIgnoreCase(request.getMethod())){
 
 			String paramsString = context.getUrlInfo().getPathParameter(ODataRequestRouter.ENTITY_KEY_STRING);
 			
-			List<ODataParameter> params = ODataParameters.parse(functionImport, paramsString, context.getUrlInfo().getQueryOptions());
+			ODataParameters params = ODataParameterUtils.parse(functionImport, paramsString, context.getUrlInfo().getQueryOptions());
 			
+			ODataReturnValue returnValue = context.getProducer().callFunction(context, functionImport, params);
+			
+			if(functionImport.getReturnType() == null || returnValue == null){
+				response.setStatus(HttpStatus.SC_NO_CONTENT);
+			}else {
+				write(context, request, response, returnValue.getKind(), returnValue.getValue());
+			}
 		}else{
 			throw ODataErrors.badRequest("unsupported http method '{0}' on current resource '{1}'",request.getMethod(),request.getResourcePath());
 		}

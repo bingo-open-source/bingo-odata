@@ -23,9 +23,9 @@ import org.junit.Test;
 import bingo.odata.ODataException;
 import bingo.odata.ODataRequest;
 import bingo.odata.ODataResponse;
+import bingo.odata.producer.ODataProducerContext;
 import bingo.odata.producer.requests.ODataRequestHandler;
 import bingo.odata.producer.requests.ODataRequestRoute;
-import bingo.odata.provider.ODataProducerContext;
 
 import static org.junit.Assert.*;
 
