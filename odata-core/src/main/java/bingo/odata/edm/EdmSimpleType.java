@@ -32,32 +32,32 @@ import bingo.odata.values.UnsignedByte;
 
 public class EdmSimpleType extends EdmType implements Named {
 	
-	private static final Map<EdmValueKind, EdmSimpleType> map = new LinkedHashMap<EdmValueKind, EdmSimpleType>();
+	private static final Map<EdmSimpleTypeKind, EdmSimpleType> map = new LinkedHashMap<EdmSimpleTypeKind, EdmSimpleType>();
 	
-	public static EdmSimpleType BINARY 			= add(EdmValueKind.Binary,			byte[].class,Byte[].class);
-	public static EdmSimpleType BOOLEAN 			= add(EdmValueKind.Boolean,			Boolean.class,boolean.class);
-	public static EdmSimpleType BYTE 				= add(EdmValueKind.Byte,			UnsignedByte.class);
-	public static EdmSimpleType DATETIME 			= add(EdmValueKind.DateTime,		Date.class,Timestamp.class);
-	public static EdmSimpleType DATETIME_OFFSET 	= add(EdmValueKind.DateTimeOffset,	DateTimeOffset.class);
-	public static EdmSimpleType DECIMAL 			= add(EdmValueKind.Decimal,			BigDecimal.class);
-	public static EdmSimpleType DOUBLE 			= add(EdmValueKind.Double,			Double.class,double.class);
-	public static EdmSimpleType GUID 				= add(EdmValueKind.Guid,			Guid.class,UUID.class);
-	public static EdmSimpleType INT16				= add(EdmValueKind.Int16,			Short.class,short.class);
-	public static EdmSimpleType INT32 				= add(EdmValueKind.Int32,			Integer.class,int.class);
-	public static EdmSimpleType INT64 				= add(EdmValueKind.Int64,			Long.class,long.class);
-	public static EdmSimpleType SBYTE 				= add(EdmValueKind.SByte,			Byte.class,byte.class);
-	public static EdmSimpleType SINGLE 			= add(EdmValueKind.Single,			Float.class,float.class);
-	public static EdmSimpleType STREAM 			= add(EdmValueKind.Stream);
-	public static EdmSimpleType STRING			 	= add(EdmValueKind.String,			String.class,char.class,Character.class);
-	public static EdmSimpleType TIME 				= add(EdmValueKind.Time,			Time.class,Date.class);
+	public static EdmSimpleType BINARY 			= add(EdmSimpleTypeKind.Binary,			byte[].class,Byte[].class);
+	public static EdmSimpleType BOOLEAN 			= add(EdmSimpleTypeKind.Boolean,			Boolean.class,boolean.class);
+	public static EdmSimpleType BYTE 				= add(EdmSimpleTypeKind.Byte,			UnsignedByte.class);
+	public static EdmSimpleType DATETIME 			= add(EdmSimpleTypeKind.DateTime,		Date.class,Timestamp.class);
+	public static EdmSimpleType DATETIME_OFFSET 	= add(EdmSimpleTypeKind.DateTimeOffset,	DateTimeOffset.class);
+	public static EdmSimpleType DECIMAL 			= add(EdmSimpleTypeKind.Decimal,			BigDecimal.class);
+	public static EdmSimpleType DOUBLE 			= add(EdmSimpleTypeKind.Double,			Double.class,double.class);
+	public static EdmSimpleType GUID 				= add(EdmSimpleTypeKind.Guid,			Guid.class,UUID.class);
+	public static EdmSimpleType INT16				= add(EdmSimpleTypeKind.Int16,			Short.class,short.class);
+	public static EdmSimpleType INT32 				= add(EdmSimpleTypeKind.Int32,			Integer.class,int.class);
+	public static EdmSimpleType INT64 				= add(EdmSimpleTypeKind.Int64,			Long.class,long.class);
+	public static EdmSimpleType SBYTE 				= add(EdmSimpleTypeKind.SByte,			Byte.class,byte.class);
+	public static EdmSimpleType SINGLE 			= add(EdmSimpleTypeKind.Single,			Float.class,float.class);
+	public static EdmSimpleType STREAM 			= add(EdmSimpleTypeKind.Stream);
+	public static EdmSimpleType STRING			 	= add(EdmSimpleTypeKind.String,			String.class,char.class,Character.class);
+	public static EdmSimpleType TIME 				= add(EdmSimpleTypeKind.Time,			Time.class,Date.class);
 	
 	public static final Enumerable<EdmSimpleType> ALL = Enumerables.of(map.values());
 	
 	public static EdmSimpleType of(String kindName) {
-		return of(EdmValueKind.valueOf(kindName));
+		return of(EdmSimpleTypeKind.valueOf(kindName));
 	}
 	
-	public static EdmSimpleType of(EdmValueKind kind) {
+	public static EdmSimpleType of(EdmSimpleTypeKind kind) {
 		return map.get(kind);
 	}
 	
@@ -81,11 +81,11 @@ public class EdmSimpleType extends EdmType implements Named {
 
 	private final String	            name;
 	private final String	            fullQualifiedName;
-	private final EdmValueKind	        valueKind;
+	private final EdmSimpleTypeKind	        valueKind;
 	private final Class<?>	            defaultJavaType;
 	private final Enumerable<Class<?>>	mappingJavaTypes;
 	
-	private EdmSimpleType(EdmValueKind kind,Class<?>... javaTypes){
+	private EdmSimpleType(EdmSimpleTypeKind kind,Class<?>... javaTypes){
 		this.valueKind         = kind;
 		this.name              = kind.toString();
 		this.fullQualifiedName = "Edm." + name;
@@ -112,7 +112,7 @@ public class EdmSimpleType extends EdmType implements Named {
 	    return EdmTypeKind.Simple;
     }
 
-	public EdmValueKind getValueKind() {
+	public EdmSimpleTypeKind getValueKind() {
     	return valueKind;
     }
 	
@@ -124,7 +124,7 @@ public class EdmSimpleType extends EdmType implements Named {
     	return mappingJavaTypes;
     }
 
-	private static EdmSimpleType add(EdmValueKind kind,Class<?>... javaTypes){
+	private static EdmSimpleType add(EdmSimpleTypeKind kind,Class<?>... javaTypes){
 		EdmSimpleType type = new EdmSimpleType(kind,javaTypes);
 		map.put(type.getValueKind(), type);
 		return type;

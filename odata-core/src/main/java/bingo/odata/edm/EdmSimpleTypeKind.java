@@ -15,7 +15,7 @@
  */
 package bingo.odata.edm;
 
-public enum EdmValueKind {
+public enum EdmSimpleTypeKind {
 
 	Binary,
 	Boolean,
