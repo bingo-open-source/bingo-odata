@@ -24,8 +24,8 @@ import bingo.odata.edm.EdmEntityType;
 import bingo.odata.format.ODataAtomUtils;
 import bingo.odata.producer.ODataProducerContext;
 import bingo.odata.producer.requests.data.EntitySetRequestHandlerBase;
-import bingo.utils.http.HttpHeaders;
-import bingo.utils.http.HttpStatus;
+import bingo.lang.http.HttpHeaders;
+import bingo.lang.http.HttpStatus;
 
 public class InsertEntityRequestHandler extends EntitySetRequestHandlerBase {
 

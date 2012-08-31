@@ -26,7 +26,7 @@ import bingo.odata.edm.EdmEntityType;
 import bingo.odata.edm.EdmNavigationProperty;
 import bingo.odata.edm.EdmProperty;
 import bingo.odata.format.ODataJsonReader;
-import bingo.utils.json.JSONObject;
+import bingo.lang.json.JSONObject;
 
 public class JsonEntityReader extends ODataJsonReader<ODataEntity> {
 

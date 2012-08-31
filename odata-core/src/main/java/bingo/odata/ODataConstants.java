@@ -15,7 +15,7 @@
  */
 package bingo.odata;
 
-import bingo.utils.http.HttpContentTypes;
+import bingo.lang.http.HttpContentTypes;
 
 public final class ODataConstants {
 

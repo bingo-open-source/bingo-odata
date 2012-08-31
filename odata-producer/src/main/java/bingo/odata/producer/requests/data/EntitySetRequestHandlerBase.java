@@ -29,7 +29,7 @@ import bingo.odata.edm.EdmFunctionImport;
 import bingo.odata.producer.ODataProducerContext;
 import bingo.odata.producer.requests.ODataRequestHandlerBase;
 import bingo.odata.producer.requests.ODataRequestRouter;
-import bingo.utils.http.HttpStatus;
+import bingo.lang.http.HttpStatus;
 
 public abstract class EntitySetRequestHandlerBase extends ODataRequestHandlerBase {
 

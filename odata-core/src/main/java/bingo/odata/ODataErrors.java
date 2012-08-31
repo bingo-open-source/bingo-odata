@@ -19,7 +19,7 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 import bingo.lang.Strings;
-import bingo.utils.http.HttpStatus;
+import bingo.lang.http.HttpStatus;
 
 public class ODataErrors extends HttpStatus {
 	

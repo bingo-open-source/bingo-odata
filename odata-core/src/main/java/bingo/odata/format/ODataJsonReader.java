@@ -20,8 +20,8 @@ import java.io.Reader;
 import bingo.odata.ODataContext;
 import bingo.odata.ODataObject;
 import bingo.odata.ODataReader;
-import bingo.utils.json.JSON;
-import bingo.utils.json.JSONObject;
+import bingo.lang.json.JSON;
+import bingo.lang.json.JSONObject;
 
 public abstract class ODataJsonReader<T extends ODataObject> implements ODataReader<T> {
 

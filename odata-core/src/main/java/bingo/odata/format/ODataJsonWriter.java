@@ -20,20 +20,20 @@ import java.sql.Time;
 import java.util.Date;
 
 import bingo.lang.Strings;
+import bingo.lang.codec.Base64;
+import bingo.lang.json.JSON;
+import bingo.lang.json.JSONWriter;
+import bingo.odata.ODataConstants.ContentTypes;
 import bingo.odata.ODataContext;
 import bingo.odata.ODataErrors;
 import bingo.odata.ODataObject;
 import bingo.odata.ODataWriter;
-import bingo.odata.ODataConstants.ContentTypes;
 import bingo.odata.data.ODataEntity;
 import bingo.odata.data.ODataProperty;
 import bingo.odata.edm.EdmNavigationProperty;
 import bingo.odata.edm.EdmSimpleType;
 import bingo.odata.values.DateTimeOffset;
 import bingo.odata.values.UnsignedByte;
-import bingo.utils.codec.binary.Base64;
-import bingo.utils.json.JSON;
-import bingo.utils.json.JSONWriter;
 
 public abstract class ODataJsonWriter<T extends ODataObject> implements ODataWriter<T> {
 	

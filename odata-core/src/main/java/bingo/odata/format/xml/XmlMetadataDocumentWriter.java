@@ -34,7 +34,7 @@ import bingo.odata.edm.EdmSchema;
 import bingo.odata.edm.EdmType;
 import bingo.odata.edm.EdmFeedCustomization.SyndicationTextContentKind;
 import bingo.odata.format.ODataXmlWriter;
-import bingo.utils.http.HttpContentTypes;
+import bingo.lang.http.HttpContentTypes;
 
 public class XmlMetadataDocumentWriter extends ODataXmlWriter<ODataServices> {
 	

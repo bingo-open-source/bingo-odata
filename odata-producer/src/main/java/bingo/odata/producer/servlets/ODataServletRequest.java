@@ -25,9 +25,9 @@ import bingo.lang.Exceptions;
 import bingo.lang.Strings;
 import bingo.odata.ODataRequest;
 import bingo.odata.ODataConstants.QueryOptions;
-import bingo.utils.http.HttpHeaders;
-import bingo.utils.http.HttpMethods;
-import bingo.utils.servlet.Requests;
+import bingo.lang.http.HttpHeaders;
+import bingo.lang.http.HttpMethods;
+import bingo.lang.servlet.Requests;
 
 public class ODataServletRequest implements ODataRequest {
 	

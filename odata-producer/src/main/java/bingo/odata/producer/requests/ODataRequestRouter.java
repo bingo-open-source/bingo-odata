@@ -15,7 +15,7 @@
  */
 package bingo.odata.producer.requests;
 
-import static bingo.utils.http.HttpMethods.*;
+import static bingo.lang.http.HttpMethods.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;

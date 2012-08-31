@@ -19,8 +19,10 @@ import java.io.StringWriter;
 
 import bingo.lang.Objects;
 import bingo.lang.StopWatch;
+import bingo.lang.http.HttpStatus;
 import bingo.lang.logging.Log;
 import bingo.lang.logging.LogFactory;
+import bingo.odata.ODataConstants.Headers;
 import bingo.odata.ODataContext;
 import bingo.odata.ODataError;
 import bingo.odata.ODataErrors;
@@ -33,10 +35,8 @@ import bingo.odata.ODataResponse;
 import bingo.odata.ODataUrlInfo;
 import bingo.odata.ODataVersion;
 import bingo.odata.ODataWriter;
-import bingo.odata.ODataConstants.Headers;
 import bingo.odata.producer.ODataProducer;
 import bingo.odata.producer.ODataProducerContext;
-import bingo.utils.http.HttpStatus;
 
 public class ODataRequestController {
 	

@@ -19,7 +19,7 @@ import bingo.odata.ODataContext;
 import bingo.odata.data.ODataEntity;
 import bingo.odata.data.ODataEntitySet;
 import bingo.odata.format.ODataJsonWriter;
-import bingo.utils.json.JSONWriter;
+import bingo.lang.json.JSONWriter;
 
 public class JsonEntitySetWriter extends ODataJsonWriter<ODataEntitySet> {
 

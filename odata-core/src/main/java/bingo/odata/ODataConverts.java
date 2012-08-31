@@ -25,7 +25,7 @@ import bingo.odata.utils.InternalTypeUtils;
 import bingo.odata.values.DateTimeOffset;
 import bingo.odata.values.Guid;
 import bingo.odata.values.UnsignedByte;
-import bingo.utils.codec.binary.Base64;
+import bingo.lang.codec.Base64;
 
 public class ODataConverts {
 	

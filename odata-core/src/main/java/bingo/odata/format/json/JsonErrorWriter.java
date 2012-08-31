@@ -21,8 +21,8 @@ import bingo.odata.ODataContext;
 import bingo.odata.ODataError;
 import bingo.odata.ODataWriter;
 import bingo.odata.ODataConstants.ContentTypes;
-import bingo.utils.json.JSON;
-import bingo.utils.json.JSONWriter;
+import bingo.lang.json.JSON;
+import bingo.lang.json.JSONWriter;
 
 public class JsonErrorWriter implements ODataWriter<ODataError> {
 

@@ -1,8 +1,8 @@
 package bingo.odata.expression;
 
+import bingo.lang.codec.Hex;
 import bingo.odata.expression.OrderByExpression.Direction;
 import bingo.odata.utils.InternalTypeUtils;
-import bingo.utils.codec.binary.Hex;
 
 public class FilterExpressionVisitor implements ExpressionVisitor {
 

@@ -28,10 +28,10 @@ import bingo.odata.ODataUrlInfo;
 import bingo.odata.ODataVersion;
 import bingo.odata.ODataConstants.Headers;
 import bingo.odata.ODataConstants.QueryOptions;
-import bingo.utils.http.HttpContentTypes;
-import bingo.utils.http.HttpHeader;
-import bingo.utils.http.HttpHeaders;
-import bingo.utils.http.HttpHeader.HeaderElement;
+import bingo.lang.http.HttpContentTypes;
+import bingo.lang.http.HttpHeader;
+import bingo.lang.http.HttpHeaders;
+import bingo.lang.http.HttpHeader.HeaderElement;
 
 public class ODataRequestUtils {
 

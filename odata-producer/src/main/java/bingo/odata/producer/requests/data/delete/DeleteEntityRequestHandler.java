@@ -22,7 +22,7 @@ import bingo.odata.edm.EdmEntitySet;
 import bingo.odata.edm.EdmEntityType;
 import bingo.odata.producer.ODataProducerContext;
 import bingo.odata.producer.requests.data.EntityRequestHandlerBase;
-import bingo.utils.http.HttpStatus;
+import bingo.lang.http.HttpStatus;
 
 public class DeleteEntityRequestHandler extends EntityRequestHandlerBase {
 

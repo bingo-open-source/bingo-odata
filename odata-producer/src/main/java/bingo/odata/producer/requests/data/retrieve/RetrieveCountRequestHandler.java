@@ -23,7 +23,7 @@ import bingo.odata.edm.EdmEntitySet;
 import bingo.odata.edm.EdmEntityType;
 import bingo.odata.producer.ODataProducerContext;
 import bingo.odata.producer.requests.data.EntitySetRequestHandlerBase;
-import bingo.utils.http.HttpStatus;
+import bingo.lang.http.HttpStatus;
 
 public class RetrieveCountRequestHandler extends EntitySetRequestHandlerBase {
 

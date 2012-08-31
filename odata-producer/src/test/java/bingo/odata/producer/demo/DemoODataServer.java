@@ -25,7 +25,7 @@ import bingo.odata.producer.servlets.ODataServletRequest;
 import bingo.odata.producer.servlets.ODataServletResponse;
 import bingo.odata.server.mock.MockHttpHandler;
 import bingo.odata.server.mock.MockHttpServer;
-import bingo.utils.http.HttpContentTypes;
+import bingo.lang.http.HttpContentTypes;
 
 public class DemoODataServer {
 	

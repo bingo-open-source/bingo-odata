@@ -26,8 +26,8 @@ import bingo.odata.ODataRequest;
 import bingo.odata.ODataVersion;
 import bingo.odata.ODataConstants.Headers;
 import bingo.odata.ODataConstants.QueryOptions;
-import bingo.utils.http.HttpContentTypes;
-import bingo.utils.http.HttpMethods;
+import bingo.lang.http.HttpContentTypes;
+import bingo.lang.http.HttpMethods;
 
 public class MockODataRequest implements ODataRequest {
 
