@@ -69,7 +69,7 @@ public class ExpressionParser {
                                                    Methods.CEILING).toSet();
 
     public enum AggregateFunction {
-        none, any, all
+        none, any, all;
     };
 
 	public static final DateFormat	TIME_FORMATTER	     = DateFormats.getFormat("HH:mm:ss");

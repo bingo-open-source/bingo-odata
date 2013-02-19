@@ -17,19 +17,6 @@ package bingo.odata.edm;
 
 import bingo.lang.Valued;
 
-/**
- * The following schema fragment specifies the expected content contained within this class.
- * 
- * <pre>
- * &lt;simpleType name="TMultiplicity">
- *   &lt;restriction base="{http://www.w3.org/2001/XMLSchema}token">
- *     &lt;enumeration value="0..1"/>
- *     &lt;enumeration value="1"/>
- *     &lt;enumeration value="*"/>     
- *   &lt;/restriction>
- * &lt;/simpleType>
- * </pre>
- */
 public enum EdmMultiplicity implements Valued<String> {
 	
 	ZeroOrOne("0..1"),

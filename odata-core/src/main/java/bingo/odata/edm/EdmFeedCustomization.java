@@ -18,7 +18,7 @@ package bingo.odata.edm;
 import bingo.lang.Valued;
 
 /**
- * see <a href="http://msdn.microsoft.com/en-us/library/ee373839.aspx">Feed Customization (WCF Data Services)</a>.
+ * @see <a href="http://msdn.microsoft.com/en-us/library/ee373839.aspx">Feed Customization (WCF Data Services)</a>.
  */
 public class EdmFeedCustomization {
 

@@ -37,8 +37,8 @@ public class EdmProperty extends EdmNamedObject {
 	//---------------------------------------------------------------------------------------------------------------------------------------------
 	//Feed Customization Attributes,see <a href="http://msdn.microsoft.com/en-us/library/ee373839.aspx">Feed Customization (WCF Data Services)</a>.
 	//---------------------------------------------------------------------------------------------------------------------------------------------
-	private final String   fcTargetPath;	 //See EdmFeedCustomization.SyndicationItemProperty
-	private final String   fcContentKind;  //See EdmFeedCustomization.SyndicationTextContentKind
+	private final String  fcTargetPath;	  //See EdmFeedCustomization.SyndicationItemProperty
+	private final String  fcContentKind;  //See EdmFeedCustomization.SyndicationTextContentKind
 	private final boolean fcKeepInContent;
 	
 	public EdmProperty(String name,EdmType type,

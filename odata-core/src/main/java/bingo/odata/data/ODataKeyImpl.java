@@ -68,7 +68,7 @@ class ODataKeyImpl implements ODataKey {
 	public String toKeyString() {
 		if(null == keyString){
 			if(isPrimitive){
-				keyString = keyString(primitiveValue);
+				keyString = "(" + keyString(primitiveValue) + ")";
 			}else{
 				keyString = keyString(namedValues);
 			}
@@ -93,7 +93,7 @@ class ODataKeyImpl implements ODataKey {
 		return "(" + key.toString() + ")";
 	}
 	
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({"rawtypes" })
 	private static String keyString(Object keyValue) {
 		if(keyValue instanceof NamedValue){
 			NamedValue nv = (NamedValue)keyValue;

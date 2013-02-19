@@ -47,7 +47,6 @@ import bingo.odata.ODataErrors;
 import bingo.odata.ODataException;
 import bingo.odata.edm.EdmSimpleType;
 import bingo.odata.values.DateTimeOffset;
-import bingo.utils.DateUtils;
 
 /**
  * Handle type operations.
@@ -124,7 +123,7 @@ public class InternalTypeUtils {
             } else if (adoNetType.endsWith("DateTime")) {
                 result = Dates.parse(value, dateTimeFormats);
             } else if (adoNetType.endsWith("DateTimeOffset")) {
-                result = DateUtils.parse(value, dateTimeFormats);
+                result = Dates.parse(value, dateTimeFormats);
             } else if (adoNetType.endsWith("Time")) {
                 result = timeFormat.parseObject(value);
             } else if (adoNetType.endsWith("Decimal")) {
@@ -313,7 +312,7 @@ public class InternalTypeUtils {
      * @return The value converted as String object.
      */
     public static String toEdmDateTime(Date value) {
-        return DateUtils.format(value, dateTimeFormats[0]);
+        return Dates.format(value, dateTimeFormats[0]);
     }
 
     /**

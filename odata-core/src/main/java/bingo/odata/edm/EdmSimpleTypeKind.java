@@ -16,7 +16,6 @@
 package bingo.odata.edm;
 
 public enum EdmSimpleTypeKind {
-
 	Binary,
 	Boolean,
 	Byte,
@@ -32,6 +31,5 @@ public enum EdmSimpleTypeKind {
 	Single,
 	String,
 	Stream,
-	Time
-	
+	Time;
 }
