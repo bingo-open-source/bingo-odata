@@ -15,17 +15,9 @@
  */
 package bingo.odata.producer.demo;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import bingo.odata.ODataRequest;
-import bingo.odata.ODataResponse;
 import bingo.odata.producer.requests.ODataRequestController;
-import bingo.odata.producer.servlets.ODataServletRequest;
-import bingo.odata.producer.servlets.ODataServletResponse;
-import bingo.odata.server.mock.MockHttpHandler;
-import bingo.odata.server.mock.MockHttpServer;
-import bingo.lang.http.HttpContentTypes;
+import bingo.odata.producer.server.ODataHttpHandlerBase;
+import bingo.odata.producer.server.ODataHttpServer;
 
 public class DemoODataServer {
 	
@@ -38,59 +30,20 @@ public class DemoODataServer {
 	}
 	
 	public static void main(String[] args) throws Throwable {
-		new MockHttpServer(new Handler()).start().join();
+		new ODataHttpServer(new Handler()).start().join();
 	}
 
-	private static final class Handler implements MockHttpHandler {
-		public void handle(HttpServletRequest request, HttpServletResponse response) throws Throwable {
-			String path = request.getRequestURI();
-			
-			if(path.equals("/clientaccesspolicy.xml")){
-				
-				response.setContentType(HttpContentTypes.TEXT_XML);
-				response.getWriter().write(getClientAccessPolicyXml());
-				response.getWriter().close();
-				
-			}else if(path.equals("/crossdomain.xml")){
-				
-				response.setContentType(HttpContentTypes.TEXT_XML);
-				response.getWriter().write(getCrossDomainXml());
-				response.getWriter().close();
-				
-			}else if(path.startsWith(SERVICE_ROOT_PATH)){
-				
-				ODataRequest  orequest  = new ODataServletRequest(request,SERVICE_ROOT_PATH);
-				ODataResponse oresponse = new ODataServletResponse(response);
-				
-				controller.execute(orequest, oresponse);
-				
-			}else{
-				response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-			}
+	private static final class Handler extends ODataHttpHandlerBase {
+		
+		@Override
+        protected String getServiceRootPath() {
+			return SERVICE_ROOT_PATH;
         }
-	}
-	
-	private static String getClientAccessPolicyXml() {
-		return "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" + 
-			    "<access-policy>\n" + 
-				"  <cross-domain-access>\n" + 
-				"    <policy>\n" + 
-				"      <allow-from http-request-headers=\"*\">\n" + 
-				"        <domain uri=\"*\"/>\n" + 
-				"      </allow-from>\n" + 
-				"      <grant-to>\n" + 
-				"        <resource path=\"/\" include-subpaths=\"true\"/>\n" + 
-				"      </grant-to>\n" + 
-				"    </policy>\n" + 
-				"  </cross-domain-access>\n" + 
-				"</access-policy>";
-	}	
-	
-	private static String getCrossDomainXml() {
-		return "<?xml version=\"1.0\"?>\n" + 
-				"<!DOCTYPE cross-domain-policy SYSTEM \"http://www.adobe.com/xml/dtds/cross-domain-policy.dtd\">\n"  + 
-				"<cross-domain-policy>\n" + 
-		        "  <allow-access-from domain=\"*\"/>\n" + 
-		        "</cross-domain-policy>";
+
+		@Override
+        protected ODataRequestController getController() {
+	        return controller;
+        }
+
 	}
 }

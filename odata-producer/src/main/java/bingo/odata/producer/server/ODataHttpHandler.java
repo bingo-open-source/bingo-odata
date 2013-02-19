@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.odata.server.mock;
+package bingo.odata.producer.server;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public interface MockHttpHandler {
-
+public interface ODataHttpHandler {
+	
 	void handle(HttpServletRequest request,HttpServletResponse response) throws Throwable;
 	
 }

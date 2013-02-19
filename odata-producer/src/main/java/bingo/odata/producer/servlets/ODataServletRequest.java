@@ -33,7 +33,7 @@ public class ODataServletRequest implements ODataRequest {
 	
 	private final HttpServletRequest request;
 	private final String             method;
-	private final String			   uriString;
+	private final String			 uriString;
 	private final String             serviceRootPath;
 	private final String             serviceRootUrl;
 	private final String             resourcePath;
@@ -131,7 +131,9 @@ public class ODataServletRequest implements ODataRequest {
 	private String serviceRootUri(){
 		String path = request.getContextPath() + serviceRootPath;
 		
-		String serviceRootUri =  uriString.substring(0,uriString.indexOf(path) + path.length());
+		int protocolIndex = uriString.indexOf("://");
+		
+		String serviceRootUri =  uriString.substring(0,uriString.indexOf(path, protocolIndex+3) + path.length());
 		
 		return serviceRootUri.endsWith("/") ? serviceRootUri : serviceRootUri + "/";
 	}
@@ -139,6 +141,10 @@ public class ODataServletRequest implements ODataRequest {
 	private String resourcePath() {
 		// /{contextPath}/{serviceRootPath}/{resourcePath}
 		String path = request.getRequestURI().substring((request.getContextPath() + serviceRootPath).length());
+		
+		if(!path.startsWith("/")){
+			path = "/" + path;
+		}
 		
 		return path.equals("") ? "/" : path.length() > 1 && path.endsWith("/") ?  path.substring(0,path.length() - 1) : path;
 	}

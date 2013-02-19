@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.odata.server.mock;
+package bingo.odata.producer.server;
 
 import java.io.IOException;
 
@@ -29,37 +29,50 @@ import org.eclipse.jetty.server.handler.ContextHandler;
 import bingo.lang.logging.Log;
 import bingo.lang.logging.LogFactory;
 
-public class MockHttpServer {
+public class ODataHttpServer {
 	
-	private static final Log log = LogFactory.get(MockHttpServer.class);
+	private static final Log log = LogFactory.get(ODataHttpServer.class);
 
 	private final int    port;
 	private final String contextPath;
 	private final Server server;
-	private final MockHttpHandler handler;
+	private final ODataHttpHandler handler;
 	
-	public MockHttpServer(MockHttpHandler handler) {
-		this.port = 8080;
+	public ODataHttpServer(ODataHttpHandler handler) {
+		this.port 		 = 8080;
 		this.contextPath = "";
-		this.server = new Server(port);
-		this.handler = handler;
+		this.server 	 = new Server(port);
+		this.handler 	 = handler;
 		
 		this.createHandler();
 	}
 	
-	public MockHttpServer(int port,String contextPath,MockHttpHandler handler) {
-		this.port = port;
+	public ODataHttpServer(String contextPath,ODataHttpHandler handler) {
+		this.port 	     = 8080;
 		this.contextPath = contextPath;
-		this.handler = handler;
-		this.server = new Server(port);
+		this.handler 	 = handler;
+		this.server 	 = new Server(port);
 		
 		this.createHandler();
+	}
+	
+	public ODataHttpServer(int port,String contextPath,ODataHttpHandler handler) {
+		this.port 	     = port;
+		this.contextPath = contextPath;
+		this.handler 	 = handler;
+		this.server 	 = new Server(port);
+		
+		this.createHandler();
+	}
+	
+	public String getContextPath() {
+		return contextPath;
 	}
 
-	public synchronized MockHttpServer start() throws Throwable {
+	public synchronized ODataHttpServer start() throws Throwable {
 		server.start();
 		
-		log.info("mock http server running at port {}",port);
+		log.info("odata http server running at port {}, path '{}'",port,contextPath);
 		
 		return this;
 	}
@@ -68,7 +81,7 @@ public class MockHttpServer {
 		server.join();
 	}
 	
-	public synchronized MockHttpServer shutdown() throws Throwable {
+	public synchronized ODataHttpServer shutdown() throws Throwable {
 		server.stop();
 		return this;
 	}
