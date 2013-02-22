@@ -48,6 +48,19 @@ public class ODataRequestController {
 	
 	protected ODataRequestRouter router = new ODataRequestRouter();
 	
+	public ODataRequestController(){
+		
+	}
+	
+	public ODataRequestController(ODataProducer producer){
+		this.producer = producer;
+	}
+	
+	public ODataRequestController(ODataProducer producer,ODataProtocol protocol){
+		this.producer = producer;
+		this.protocol = protocol;
+	}
+	
 	public void setProducer(ODataProducer producer) {
     	this.producer = producer;
     }

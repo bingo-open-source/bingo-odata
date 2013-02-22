@@ -37,8 +37,7 @@ public class ODataServletRequest implements ODataRequest {
 	private final String             serviceRootPath;
 	private final String             serviceRootUrl;
 	private final String             resourcePath;
-	
-	private Map<String, String> requestParameters;
+	private Map<String, String> 	 requestParameters;
 	
 	public ODataServletRequest(HttpServletRequest request){
 		this(request,request.getServletPath());

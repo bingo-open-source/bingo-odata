@@ -79,9 +79,31 @@ public class EdmEntityContainerBuilder extends EdmNamedBuilder implements Builde
 		return this;
 	}
 	
+	public EdmEntityContainerBuilder addEntitySets(Iterable<EdmEntitySet> entitySets) {
+		for(EdmEntitySet entitySet : entitySets){
+			addEntitySet(entitySet);
+		}
+		return this;
+	}
+	
 	public EdmEntityContainerBuilder addEntitySets(EdmEntitySet... entitySets) {
 		for(EdmEntitySet entitySet : entitySets){
 			addEntitySet(entitySet);
+		}
+		return this;
+	}
+	
+	public EdmEntityContainerBuilder addAssociationSets(Iterable<EdmAssociationSet> associationSets) {
+		for(EdmAssociationSet associationSet : associationSets){
+			addAssociationSet(associationSet);
+		}
+		return this;
+	}
+	
+	
+	public EdmEntityContainerBuilder addAssociationSets(EdmAssociationSet... associationSets) {
+		for(EdmAssociationSet associationSet : associationSets){
+			addAssociationSet(associationSet);
 		}
 		return this;
 	}
@@ -95,6 +117,18 @@ public class EdmEntityContainerBuilder extends EdmNamedBuilder implements Builde
 		functionImports.add(functionImport);
 		return this;
 	}
+	
+	@Override
+    public EdmEntityContainerBuilder setDocumentation(EdmDocumentation documentation) {
+	    super.setDocumentation(documentation);
+	    return this;
+    }
+
+	@Override
+    public EdmEntityContainerBuilder setDocumentation(String summary, String longDescription) {
+	    super.setDocumentation(summary, longDescription);
+	    return this;
+    }
 
 	public EdmEntityContainer build() {
 	    return new EdmEntityContainer(name, isDefault, lazyLoadingEnabled, entitySets, functionImports, associationSets,documentation);

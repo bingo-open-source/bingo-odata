@@ -17,6 +17,8 @@ package bingo.odata.producer.server;
 
 import java.io.IOException;
 
+import javax.servlet.Filter;
+import javax.servlet.Servlet;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -28,39 +30,45 @@ import org.eclipse.jetty.server.handler.ContextHandler;
 
 import bingo.lang.logging.Log;
 import bingo.lang.logging.LogFactory;
+import bingo.lang.servlet.Filters;
+import bingo.lang.servlet.Servlets;
 
 public class ODataHttpServer {
 	
 	private static final Log log = LogFactory.get(ODataHttpServer.class);
 
-	private final int    port;
-	private final String contextPath;
-	private final Server server;
-	private final ODataHttpHandler handler;
+	private final int     port;
+	private final String  contextPath;
+	private final Server  server;
+	private final Servlet servlet;
+	private final Filter  filter;
 	
-	public ODataHttpServer(ODataHttpHandler handler) {
-		this.port 		 = 8080;
-		this.contextPath = "";
-		this.server 	 = new Server(port);
-		this.handler 	 = handler;
-		
-		this.createHandler();
+	public ODataHttpServer(Object handler) {
+		this(8080,"",handler);
 	}
 	
-	public ODataHttpServer(String contextPath,ODataHttpHandler handler) {
-		this.port 	     = 8080;
-		this.contextPath = contextPath;
-		this.handler 	 = handler;
-		this.server 	 = new Server(port);
-		
-		this.createHandler();
+	public ODataHttpServer(String contextPath,Object handler) {
+		this(8080,contextPath,handler);
 	}
 	
-	public ODataHttpServer(int port,String contextPath,ODataHttpHandler handler) {
-		this.port 	     = port;
+	public ODataHttpServer(int port,String contextPath,Object handler) {
+		this(contextPath,handler,new Server(port));
+	}
+	
+	protected ODataHttpServer(String contextPath,Object handler,Server server){
+		this.port        = server.getConnectors()[0].getPort();
 		this.contextPath = contextPath;
-		this.handler 	 = handler;
-		this.server 	 = new Server(port);
+		this.server      = server;
+		
+		if(handler instanceof Servlet){
+			this.servlet = (Servlet)handler;
+			this.filter  = null;
+		}else if(handler instanceof Filter){
+			this.filter  = (Filter)handler;
+			this.servlet = null;
+		}else{
+			throw new IllegalArgumentException("handler must be servlet or filter");
+		}
 		
 		this.createHandler();
 	}
@@ -91,14 +99,24 @@ public class ODataHttpServer {
 		
 		context.setHandler(new AbstractHandler() {
 			public void handle(String target, Request req, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-				try {
-	                handler.handle(request, response);
-                } catch (Throwable e) {
-                	throw new ServletException(e.getMessage(),e);
-                }
+				if(null == filter){
+					servlet.service(request, response);
+				}else{
+					filter.doFilter(request, response, Filters.NOT_FOUND_CHAIN);
+				}
 			}
 		});
 		
 		server.setHandler(context);
+		
+		try {
+	        if(null == filter){
+	        	servlet.init(new Servlets.EmptyServletConfig(context.getServletContext()));
+	        }else{
+	        	filter.init(new Filters.EmptyFilterConfig(context.getServletContext()));
+	        }
+        } catch (ServletException e) {
+        	throw new RuntimeException("error init handler",e);
+        }
 	}
 }

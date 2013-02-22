@@ -15,8 +15,10 @@
  */
 package bingo.odata.producer.demo;
 
+import javax.servlet.http.HttpServletRequest;
+
 import bingo.odata.producer.requests.ODataRequestController;
-import bingo.odata.producer.server.ODataHttpHandlerBase;
+import bingo.odata.producer.server.ODataHttpHandler;
 import bingo.odata.producer.server.ODataHttpServer;
 
 public class DemoODataServer {
@@ -33,10 +35,11 @@ public class DemoODataServer {
 		new ODataHttpServer(new Handler()).start().join();
 	}
 
-	private static final class Handler extends ODataHttpHandlerBase {
-		
+	private static final class Handler extends ODataHttpHandler {
+		private static final long serialVersionUID = -2264118275203202029L;
+
 		@Override
-        protected String getServiceRootPath() {
+        protected String getServiceRootPath(HttpServletRequest request) {
 			return SERVICE_ROOT_PATH;
         }
 
@@ -44,6 +47,5 @@ public class DemoODataServer {
         protected ODataRequestController getController() {
 	        return controller;
         }
-
 	}
 }

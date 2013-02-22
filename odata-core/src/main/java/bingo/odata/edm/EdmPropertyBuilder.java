@@ -164,6 +164,18 @@ public class EdmPropertyBuilder extends EdmNamedBuilder implements Builder<EdmPr
     	return this;
     }
 
+	@Override
+	public EdmPropertyBuilder setDocumentation(EdmDocumentation documentation) {
+		super.setDocumentation(documentation);
+		return this;		
+	}
+
+	@Override
+	public EdmPropertyBuilder setDocumentation(String summary, String longDescription) {
+		super.setDocumentation(summary, longDescription);
+		return this;
+	}
+	
 	public EdmProperty build() {
 		return new EdmProperty(name, type , nullable, defaultValue, fixedLength, maxLength, precision, scale,fcTargetPath,fcContentKind,fcKeepInContent, documentation);
 	}

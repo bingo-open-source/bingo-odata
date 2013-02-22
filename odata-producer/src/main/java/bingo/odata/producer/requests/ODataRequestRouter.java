@@ -46,8 +46,8 @@ public class ODataRequestRouter {
 	private static final List<ODataRequestRoute> routes = new ArrayList<ODataRequestRoute>(); 
 	
 	public static final String ENTITY_SET_NAME 		= "entitySetName";
-	public static final String ENTITY_KEY_STRING 		= "entityKeyString";
-	public static final String ENTITY_NAV_PROP_NAME   = "entityNavProperyName";
+	public static final String ENTITY_KEY_STRING 	= "entityKeyString";
+	public static final String ENTITY_NAV_PROP_NAME = "entityNavProperyName";
 	public static final String ENTITY_PROP_NAME   	= "entityProperyName";
 
 	static {

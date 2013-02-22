@@ -56,6 +56,18 @@ public class EdmAssociationBuilder extends EdmNamedBuilder implements Builder<Ed
 	public EdmAssociationBuilder setEnd2(String role,EdmEntityTypeRef type,EdmMultiplicity multiplicity) {
 		return setEnd2(new EdmAssociationEnd(role, type, multiplicity));
 	}	
+	
+	@Override
+    public EdmAssociationBuilder setDocumentation(EdmDocumentation documentation) {
+	    super.setDocumentation(documentation);
+	    return this;
+    }
+
+	@Override
+    public EdmAssociationBuilder setDocumentation(String summary, String longDescription) {
+	    super.setDocumentation(summary, longDescription);
+	    return this;
+    }
 
 	public EdmAssociation build() {
 	    return new EdmAssociation(name, end1, end2);

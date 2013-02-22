@@ -15,7 +15,9 @@
  */
 package bingo.odata.edm;
 
-public abstract class EdmNamedBuilder extends EdmBuilderWithDocumentation {
+import bingo.lang.Named;
+
+public abstract class EdmNamedBuilder extends EdmBuilderWithDocumentation implements Named {
 
 	protected String name;
 	

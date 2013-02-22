@@ -33,6 +33,10 @@ public final class EdmBuilders {
 		return new EdmPropertyBuilder(name);
 	}
 	
+	public static EdmNavigationPropertyBuilder navigationProperty(String name){
+		return new EdmNavigationPropertyBuilder(name);
+	}
+	
 	public static EdmAssociationBuilder association(String name) {
 		return new EdmAssociationBuilder(name);
 	}
@@ -43,6 +47,10 @@ public final class EdmBuilders {
 	
 	public static EdmEntityContainerBuilder entityContainer(String name,boolean isDefault){
 		return new EdmEntityContainerBuilder(name).setDefault(isDefault);
+	}
+	
+	public static EdmEntitySetBuilder entitySet(String name){
+		return new EdmEntitySetBuilder(name);
 	}
 	
 	public static EdmAssociationSetBuilder associationSet(String name) {

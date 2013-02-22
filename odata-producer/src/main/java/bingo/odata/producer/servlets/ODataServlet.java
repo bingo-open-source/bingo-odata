@@ -34,7 +34,7 @@ public class ODataServlet extends HttpServlet {
 	
 	@Override
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		ODataRequest  orequest  = new ODataServletRequest(request);
+		ODataRequest  orequest  = new ODataServletRequest(request,getServiceRootPath(request));
 		ODataResponse oresponse = new ODataServletResponse(response);
 		
 		controller.execute(orequest,oresponse);
@@ -43,4 +43,8 @@ public class ODataServlet extends HttpServlet {
 	public void setController(ODataRequestController controller) {
     	this.controller = controller;
     }
+	
+	protected String getServiceRootPath(HttpServletRequest request) throws ServletException, IOException {
+		return request.getServletPath();
+	}
 }

@@ -28,7 +28,7 @@ public class EdmEntityTypeBuilder extends EdmNamedStructualTypeBuilder implement
 	
 	private String fullQualifiedName;
 
-	private EdmEntityType baseType;
+	private EdmEntityTypeRef baseType;
 
 	private boolean hasStream;
 
@@ -53,7 +53,7 @@ public class EdmEntityTypeBuilder extends EdmNamedStructualTypeBuilder implement
 		return this;
 	}
 	
-	public EdmEntityTypeBuilder setBaseType(EdmEntityType baseType){
+	public EdmEntityTypeBuilder setBaseType(EdmEntityTypeRef baseType){
 		this.baseType = baseType;
 		return this;
 	}

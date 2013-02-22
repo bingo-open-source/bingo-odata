@@ -71,6 +71,18 @@ public class EdmAssociationSetBuilder extends EdmNamedBuilder implements Builder
     	return this;
     }
 	
+	@Override
+    public EdmAssociationSetBuilder setDocumentation(EdmDocumentation documentation) {
+	    super.setDocumentation(documentation);
+	    return this;
+    }
+
+	@Override
+    public EdmAssociationSetBuilder setDocumentation(String summary, String longDescription) {
+	    super.setDocumentation(summary, longDescription);
+	    return this;
+    }
+
 	public EdmAssociationSet build() {
 	    return  new EdmAssociationSet(name, association, end1, end2, documentation);
     }

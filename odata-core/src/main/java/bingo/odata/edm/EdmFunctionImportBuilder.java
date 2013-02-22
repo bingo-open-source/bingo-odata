@@ -80,6 +80,18 @@ public class EdmFunctionImportBuilder extends EdmNamedBuilder implements Builder
 		return this;
 	}
 	
+	@Override
+    public EdmFunctionImportBuilder setDocumentation(EdmDocumentation documentation) {
+	    super.setDocumentation(documentation);
+	    return this;
+    }
+
+	@Override
+    public EdmFunctionImportBuilder setDocumentation(String summary, String longDescription) {
+	    super.setDocumentation(summary, longDescription);
+	    return this;
+    }
+
 	public EdmFunctionImport build() {
 	    return new EdmFunctionImport(name, entitySet, returnType, parameters, documentation);
     }

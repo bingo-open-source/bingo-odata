@@ -21,9 +21,9 @@ import bingo.lang.Predicates;
 
 public class EdmEntityType extends EdmNamedStructualType {
 	
-	private final String        fullQualifiedName;
-	private final EdmEntityType baseType;
-	private final boolean hasStream;
+	private final String             fullQualifiedName;
+	private final EdmEntityTypeRef   baseType;
+	private final boolean 		     hasStream;
 	private final Enumerable<String> keys;
 	private final Enumerable<EdmNavigationProperty> navigationProperties;
 	
@@ -33,7 +33,7 @@ public class EdmEntityType extends EdmNamedStructualType {
 						  Iterable<String> keys, 
 						  boolean isAbstract,
 						  boolean hasStream,
-						  EdmEntityType baseType){
+						  EdmEntityTypeRef baseType){
 		
 		super(name,properties,isAbstract);
 		
@@ -52,7 +52,7 @@ public class EdmEntityType extends EdmNamedStructualType {
 						  Iterable<String> keys,
 						  boolean isAbstract,
 						  boolean hasStream,
-						  EdmEntityType baseType,
+						  EdmEntityTypeRef baseType,
 						  EdmDocumentation documentation){
 		
 		this(name,fullQualifiedName,properties,navigationProperties,keys,isAbstract,hasStream,baseType);
@@ -64,7 +64,7 @@ public class EdmEntityType extends EdmNamedStructualType {
     	return fullQualifiedName;
     }
 
-	public EdmEntityType getBaseType() {
+	public EdmEntityTypeRef getBaseType() {
     	return baseType;
     }
 
