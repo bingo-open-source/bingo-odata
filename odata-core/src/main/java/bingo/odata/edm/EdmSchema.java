@@ -17,6 +17,7 @@ package bingo.odata.edm;
 
 import bingo.lang.Enumerable;
 import bingo.lang.Enumerables;
+import bingo.lang.Predicates;
 
 public class EdmSchema extends EdmObjectWithDocumentation {
 	
@@ -65,6 +66,14 @@ public class EdmSchema extends EdmObjectWithDocumentation {
 	public String getAlias() {
     	return alias;
     }
+	
+	public EdmEntityType findEntityType(String name){
+		return Enumerables.firstOrNull(entityTypes,Predicates.<EdmEntityType>nameEqualsIgnoreCase(name));
+	}
+	
+	public EdmComplexType findComplexType(String name){
+		return Enumerables.firstOrNull(complexTypes,Predicates.<EdmComplexType>nameEqualsIgnoreCase(name));
+	}
 
 	public Enumerable<EdmEntityContainer> getEntityContainers() {
     	return entityContainers;

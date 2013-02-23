@@ -122,6 +122,12 @@ public class EdmSchemaBuilder extends EdmBuilderWithDocumentation implements Bui
 	    super.setDocumentation(summary, longDescription);
 	    return this;
     }
+	
+	@Override
+    public EdmSchemaBuilder setDocumentation(String title, String summary, String longDescription) {
+	    super.setDocumentation(title, summary, longDescription);
+	    return this;
+    }
 
 	public EdmSchema build() {
 	    return new EdmSchema(namespace, alias, entityContainers, entityTypes, associations, complexTypes, functions,documentation);

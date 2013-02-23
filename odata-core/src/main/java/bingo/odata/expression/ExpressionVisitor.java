@@ -18,7 +18,7 @@ public interface ExpressionVisitor {
 
     void visit(AndExpression expr);
 
-    void visit(BooleanLiteral expr);
+    void visit(BoolLiteral expr);
 
     void visit(CastExpression expr);
 
@@ -56,7 +56,7 @@ public interface ExpressionVisitor {
 
     void visit(DoubleLiteral expr);
 
-    void visit(IntegralLiteral expr);
+    void visit(IntegerLiteral expr);
 
     void visit(Int64Literal expr);
 

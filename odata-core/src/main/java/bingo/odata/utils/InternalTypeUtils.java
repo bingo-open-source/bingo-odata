@@ -573,8 +573,4 @@ public class InternalTypeUtils {
 
         return result;
     }
-    
-    public static void main(String[] args) {
-	    System.out.println(Dates.format(new Date(),"yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ"));
-    }
 }

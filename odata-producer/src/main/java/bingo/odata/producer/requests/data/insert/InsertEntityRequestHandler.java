@@ -35,7 +35,7 @@ public class InsertEntityRequestHandler extends EntitySetRequestHandlerBase {
 
 		ODataEntity oentity = read(context,request,ODataObjectKind.Entity);
 	    
-		ODataEntity created = context.getProducer().createEntity(context, entityType, oentity);
+		ODataEntity created = context.getProducer().insertEntity(context, entityType, oentity);
 		
 		response.setStatus(HttpStatus.SC_CREATED);
 		response.setHeader(HttpHeaders.LOCATION, ODataAtomUtils.getEntryId(context.getUrlInfo(), created));

@@ -1,5 +1,5 @@
 package bingo.odata.expression;
 
-public interface ModExpression extends CommonExpression, BinaryCommonExpression {
+public interface ModExpression extends Expression, BinaryExpression {
 
 }

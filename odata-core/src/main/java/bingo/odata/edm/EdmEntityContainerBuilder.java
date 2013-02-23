@@ -129,6 +129,12 @@ public class EdmEntityContainerBuilder extends EdmNamedBuilder implements Builde
 	    super.setDocumentation(summary, longDescription);
 	    return this;
     }
+	
+	@Override
+    public EdmEntityContainerBuilder setDocumentation(String title, String summary, String longDescription) {
+	    super.setDocumentation(title, summary, longDescription);
+	    return this;
+    }
 
 	public EdmEntityContainer build() {
 	    return new EdmEntityContainer(name, isDefault, lazyLoadingEnabled, entitySets, functionImports, associationSets,documentation);

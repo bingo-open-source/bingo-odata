@@ -83,7 +83,7 @@ public abstract class EntitySetRequestHandlerBase extends ODataRequestHandlerBas
 			
 			ODataParameters params = ODataParameterUtils.parse(functionImport, paramsString, context.getUrlInfo().getQueryOptions());
 			
-			ODataReturnValue returnValue = context.getProducer().callFunction(context, functionImport, params);
+			ODataReturnValue returnValue = context.getProducer().invokeFunction(context, functionImport, params);
 			
 			if(functionImport.getReturnType() == null || returnValue == null){
 				response.setStatus(HttpStatus.SC_NO_CONTENT);

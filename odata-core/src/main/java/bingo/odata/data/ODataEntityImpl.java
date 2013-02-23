@@ -15,7 +15,9 @@
  */
 package bingo.odata.data;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import bingo.lang.Assert;
 import bingo.lang.Enumerable;
@@ -93,5 +95,15 @@ class ODataEntityImpl implements ODataEntity {
 			keyString = entitySet.getName() + getKey().toKeyString();
 		}
 	    return keyString;
+    }
+
+	public Map<String, Object> toMap() {
+		Map<String,Object> map = new LinkedHashMap<String, Object>();
+		
+		for(ODataProperty p : properties){
+			map.put(p.getName(),p.getValue());
+		}
+		
+	    return map;
     }
 }

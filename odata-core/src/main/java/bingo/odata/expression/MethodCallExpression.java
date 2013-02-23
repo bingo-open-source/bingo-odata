@@ -1,5 +1,5 @@
 package bingo.odata.expression;
 
-public interface MethodCallExpression extends CommonExpression {
+public interface MethodCallExpression extends Expression {
 
 }

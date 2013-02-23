@@ -18,6 +18,7 @@ package bingo.odata.producer;
 import bingo.odata.ODataContext;
 import bingo.odata.ODataFormat;
 import bingo.odata.ODataProtocol;
+import bingo.odata.ODataQueryOptions;
 import bingo.odata.ODataServices;
 import bingo.odata.ODataUrlInfo;
 import bingo.odata.ODataVersion;
@@ -43,7 +44,7 @@ public class ODataProducerContext implements ODataContext {
 	public ODataProducerContext(ODataProducer producer,ODataProtocol protocol,ODataVersion version,ODataFormat format,ODataUrlInfo urlInfo) {
 		this.producer = producer;
 		this.protocol = protocol;
-		this.services = producer.getServicesMetadata();
+		this.services = producer.retrieveServiceMetadata();
 		this.version  = version;
 		this.format   = format;
 		this.urlInfo  = urlInfo;
@@ -68,6 +69,10 @@ public class ODataProducerContext implements ODataContext {
 	public ODataUrlInfo getUrlInfo() {
     	return urlInfo;
     }
+	
+	public ODataQueryOptions getQueryOptions(){
+		return urlInfo.getQueryOptions();
+	}
 
 	public boolean isConsumer() {
 	    return false;

@@ -57,11 +57,11 @@ public class DemoODataProducer implements ODataProducer {
 		this.metadata = this.loadDemoMetadata();
 	}
 	
-	public ODataServices getServicesMetadata() {
+	public ODataServices retrieveServiceMetadata() {
 	    return metadata;
     }
 	
-	public ODataEntitySet queryEntities(ODataProducerContext context,EdmEntityType entityType, ODataQueryInfo queryInfo) {
+	public ODataEntitySet retrieveEntitySet(ODataProducerContext context,EdmEntityType entityType, ODataQueryInfo queryInfo) {
 		
 		ODataEntitySetBuilder builder = new ODataEntitySetBuilder(context.getEntitySet(),entityType);
 		
@@ -114,11 +114,11 @@ public class DemoODataProducer implements ODataProducer {
 		return builder.build();
 	}
 
-	public long queryEntitiesCount(ODataProducerContext context, EdmEntityType entityType, ODataQueryInfo queryInfo) {
+	public long retrieveCount(ODataProducerContext context, EdmEntityType entityType, ODataQueryInfo queryInfo) {
 	    return 0;
     }
 
-	public ODataEntity findEntity(ODataProducerContext context,EdmEntityType entityType, ODataKey key, ODataQueryInfo queryInfo) {
+	public ODataEntity retrieveEntity(ODataProducerContext context,EdmEntityType entityType, ODataKey key, ODataQueryInfo queryInfo) {
 	    ODataEntityBuilder builder = new ODataEntityBuilder(context.getEntitySet(), entityType);
 	    
 		if(entityType.getName().equalsIgnoreCase("Category")){
@@ -147,7 +147,7 @@ public class DemoODataProducer implements ODataProducer {
 		Assert.notNull(key);
 	}
 	
-	public ODataEntity createEntity(ODataProducerContext context, EdmEntityType entityType, ODataEntity entity) {
+	public ODataEntity insertEntity(ODataProducerContext context, EdmEntityType entityType, ODataEntity entity) {
 		Assert.notNull(context.getEntitySet());
 		Assert.notNull(entityType);
 		Assert.notNull(entity);
@@ -176,7 +176,7 @@ public class DemoODataProducer implements ODataProducer {
 	    return entity;
     }
 	
-	public ODataReturnValue callFunction(ODataProducerContext context, EdmFunctionImport func, ODataParameters parameters) {
+	public ODataReturnValue invokeFunction(ODataProducerContext context, EdmFunctionImport func, ODataParameters parameters) {
 		for(EdmParameter param : func.getParameters()){
 			if(null == parameters.getParameter(param.getName())){
 				throw new ODataBadRequestException(Strings.format("parameter '{0}' required",param.getName()));

@@ -1,5 +1,5 @@
 package bingo.odata.expression;
 
-public interface GeExpression extends BoolCommonExpression, BinaryCommonExpression {
+public interface GeExpression extends BoolExpression, BinaryExpression {
 
 }

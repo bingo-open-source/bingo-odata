@@ -21,7 +21,7 @@ import bingo.lang.For;
 import bingo.lang.NamedValue;
 import bingo.lang.NamedValues;
 import bingo.lang.tuple.ImmutableNamedValues;
-import bingo.odata.expression.Expression;
+import bingo.odata.expression.Expressions;
 
 class ODataKeyImpl implements ODataKey {
 	
@@ -98,9 +98,9 @@ class ODataKeyImpl implements ODataKey {
 		if(keyValue instanceof NamedValue){
 			NamedValue nv = (NamedValue)keyValue;
 			
-			return nv.getName() + "=" + Expression.asFilterString(Expression.literal(nv.getValue()));
+			return nv.getName() + "=" + Expressions.asFilterString(Expressions.literal(nv.getValue()));
 		}else{
-			return Expression.asFilterString(Expression.literal(keyValue));	
+			return Expressions.asFilterString(Expressions.literal(keyValue));	
 		}
 	}
 }

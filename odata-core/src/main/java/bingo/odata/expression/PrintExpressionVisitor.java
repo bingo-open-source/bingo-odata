@@ -8,7 +8,7 @@ public class PrintExpressionVisitor implements ExpressionVisitor {
 
     private final StringBuilder sb = new StringBuilder();
 
-    public static String asString(CommonExpression expr) {
+    public static String asString(Expression expr) {
         PrintExpressionVisitor v = new PrintExpressionVisitor();
         expr.visit(v);
         return v.toString();
@@ -61,7 +61,7 @@ public class PrintExpressionVisitor implements ExpressionVisitor {
     }
 
     
-    public void visit(BooleanLiteral expr) {
+    public void visit(BoolLiteral expr) {
         append("boolean(%s)", expr.getValue());
     }
 
@@ -102,7 +102,7 @@ public class PrintExpressionVisitor implements ExpressionVisitor {
 
     
     public void visit(EntitySimpleProperty expr) {
-        append("simpleProperty(%s)", expr.getPropertyName());
+        append("simpleProperty(%s)", expr.getName());
     }
 
     
@@ -131,7 +131,7 @@ public class PrintExpressionVisitor implements ExpressionVisitor {
     }
 
     
-    public void visit(IntegralLiteral expr) {
+    public void visit(IntegerLiteral expr) {
         append("integral(%s)", expr.getValue());
     }
 

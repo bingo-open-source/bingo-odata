@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 import bingo.lang.Immutables;
-import bingo.odata.expression.BoolCommonExpression;
+import bingo.odata.expression.BoolExpression;
 import bingo.odata.expression.EntitySimpleProperty;
 import bingo.odata.expression.OrderByExpression;
 
@@ -33,7 +33,7 @@ public class ODataQueryInfo {
 	
 	private final String skipToken;
 	
-	private final BoolCommonExpression filter;
+	private final BoolExpression filter;
 	
 	private final List<OrderByExpression> orderBy;
 	
@@ -43,7 +43,7 @@ public class ODataQueryInfo {
 	
 	private final Map<String, String> params;
 	
-	public ODataQueryInfo(List<EntitySimpleProperty> expand,BoolCommonExpression filter,List<OrderByExpression> orderBy,Integer skip, Integer top,String skipToken,ODataInlineCount inlineCount,List<EntitySimpleProperty> select,Map<String, String> params){
+	public ODataQueryInfo(List<EntitySimpleProperty> expand,BoolExpression filter,List<OrderByExpression> orderBy,Integer skip, Integer top,String skipToken,ODataInlineCount inlineCount,List<EntitySimpleProperty> select,Map<String, String> params){
 		this.expand      = expand;
 		this.filter      = filter;
 		this.orderBy     = orderBy;
@@ -55,7 +55,7 @@ public class ODataQueryInfo {
 		this.params      = Immutables.mapOf(params);
 	}
 	
-	public BoolCommonExpression getFilter() {
+	public BoolExpression getFilter() {
     	return filter;
     }
 
@@ -74,6 +74,10 @@ public class ODataQueryInfo {
 	public ODataInlineCount getInlineCount() {
     	return inlineCount;
     }
+	
+	public boolean isAllPagesInlineCount(){
+		return null != inlineCount && inlineCount.equals(ODataInlineCount.AllPages);
+	}
 
 	public Integer getTop() {
     	return top;

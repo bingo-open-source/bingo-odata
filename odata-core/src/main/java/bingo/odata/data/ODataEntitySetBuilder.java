@@ -25,15 +25,14 @@ import bingo.odata.edm.EdmEntityType;
 public class ODataEntitySetBuilder implements Builder<ODataEntitySet>{
 
 	private final EdmEntitySet      entitySet;
-	private final EdmEntityType	 entityType;
+	private final EdmEntityType	 	entityType;
 	private final List<ODataEntity> entities = new ArrayList<ODataEntity>();
 	
 	private Long   inlineCount;
 	private String skipToken;
 	
-	public ODataEntitySetBuilder(EdmEntitySet metadata,EdmEntityType entityType) {
-	    super();
-	    this.entitySet   = metadata;
+	public ODataEntitySetBuilder(EdmEntitySet entitySet,EdmEntityType entityType) {
+	    this.entitySet  = entitySet;
 	    this.entityType = entityType;
     }
 	

@@ -1,9 +1,9 @@
 package bingo.odata.expression;
 
-public interface BoolMethodExpression extends MethodCallExpression, BoolCommonExpression {
+public interface BoolMethodExpression extends MethodCallExpression, BoolExpression {
 
-    CommonExpression getTarget();
+    Expression getTarget();
 
-    CommonExpression getValue();
+    Expression getValue();
 
 }

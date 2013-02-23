@@ -30,7 +30,6 @@ import org.eclipse.jetty.server.handler.ContextHandler;
 
 import bingo.lang.logging.Log;
 import bingo.lang.logging.LogFactory;
-import bingo.lang.servlet.Filters;
 import bingo.lang.servlet.Servlets;
 
 public class ODataHttpServer {
@@ -102,7 +101,7 @@ public class ODataHttpServer {
 				if(null == filter){
 					servlet.service(request, response);
 				}else{
-					filter.doFilter(request, response, Filters.NOT_FOUND_CHAIN);
+					filter.doFilter(request, response, Servlets.NOT_FOUND_FILTER_CHAIN);
 				}
 			}
 		});
@@ -113,7 +112,7 @@ public class ODataHttpServer {
 	        if(null == filter){
 	        	servlet.init(new Servlets.EmptyServletConfig(context.getServletContext()));
 	        }else{
-	        	filter.init(new Filters.EmptyFilterConfig(context.getServletContext()));
+	        	filter.init(new Servlets.EmptyFilterConfig(context.getServletContext()));
 	        }
         } catch (ServletException e) {
         	throw new RuntimeException("error init handler",e);

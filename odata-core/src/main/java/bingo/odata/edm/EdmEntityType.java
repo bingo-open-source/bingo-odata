@@ -22,7 +22,7 @@ import bingo.lang.Predicates;
 public class EdmEntityType extends EdmNamedStructualType {
 	
 	private final String             fullQualifiedName;
-	private final EdmEntityTypeRef   baseType;
+	private final EdmEntityType   	 baseType;
 	private final boolean 		     hasStream;
 	private final Enumerable<String> keys;
 	private final Enumerable<EdmNavigationProperty> navigationProperties;
@@ -33,7 +33,7 @@ public class EdmEntityType extends EdmNamedStructualType {
 						  Iterable<String> keys, 
 						  boolean isAbstract,
 						  boolean hasStream,
-						  EdmEntityTypeRef baseType){
+						  EdmEntityType baseType){
 		
 		super(name,properties,isAbstract);
 		
@@ -52,7 +52,7 @@ public class EdmEntityType extends EdmNamedStructualType {
 						  Iterable<String> keys,
 						  boolean isAbstract,
 						  boolean hasStream,
-						  EdmEntityTypeRef baseType,
+						  EdmEntityType baseType,
 						  EdmDocumentation documentation){
 		
 		this(name,fullQualifiedName,properties,navigationProperties,keys,isAbstract,hasStream,baseType);
@@ -64,9 +64,23 @@ public class EdmEntityType extends EdmNamedStructualType {
     	return fullQualifiedName;
     }
 
-	public EdmEntityTypeRef getBaseType() {
+	public EdmEntityType getBaseType() {
     	return baseType;
     }
+	
+	public EdmProperty findProperty(String name){
+		EdmProperty property = findDeclaredProperty(name);
+		
+		if(null == property && null != baseType){
+			return baseType.findProperty(name);
+		}
+		
+		return property;
+	}
+	
+	public EdmProperty findDeclaredProperty(String name){
+		return Enumerables.firstOrNull(properties,Predicates.<EdmProperty>nameEqualsIgnoreCase(name));
+	}
 
 	public Enumerable<EdmNavigationProperty> getDeclaredNavigationProperties(){
 		return navigationProperties;
@@ -77,7 +91,7 @@ public class EdmEntityType extends EdmNamedStructualType {
 	}
 	
 	public Enumerable<String> getKeys() {
-    	return keys;
+    	return null == baseType ? keys : baseType.getKeys();
     }
 	
 	public boolean hasStream() {
@@ -90,8 +104,8 @@ public class EdmEntityType extends EdmNamedStructualType {
     }
 
 	protected void doCheckValidKeys(){
-		for(String key : keys){
-			if(null == findDeclaredProperty(key)){
+		for(String key : getKeys()){
+			if(null == findProperty(key)){
 				throw new EdmException("key property '{0}' not found",key);
 			}
 		}

@@ -1,6 +1,6 @@
 package bingo.odata.expression;
 
-public interface IntegralLiteral extends LiteralExpression {
+public interface IntegerLiteral extends LiteralExpression {
 
     int getValue();
 

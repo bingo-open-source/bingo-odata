@@ -26,7 +26,7 @@ import bingo.odata.ODataQueryOptions;
 import bingo.odata.edm.EdmFunctionImport;
 import bingo.odata.edm.EdmParameter;
 import bingo.odata.edm.EdmSimpleType;
-import bingo.odata.expression.Expression;
+import bingo.odata.expression.Expressions;
 import bingo.odata.expression.ExpressionParser;
 import bingo.odata.expression.LiteralExpression;
 
@@ -65,7 +65,7 @@ public class ODataParameterUtils {
 					string = options.getOption(string.substring(1));
 				}
 				
-				Object value = Expression.literalValue((LiteralExpression)ExpressionParser.parse(string));
+				Object value = Expressions.literalValue((LiteralExpression)ExpressionParser.parse(string));
 				
 				params.add(createParameter(mp,value));
 			}
@@ -76,7 +76,7 @@ public class ODataParameterUtils {
 				String string = options.getOption(p.getName());
 				
 				if(!Strings.isEmpty(string)){
-					Object value = Expression.literalValue((LiteralExpression)ExpressionParser.parse(string));
+					Object value = Expressions.literalValue((LiteralExpression)ExpressionParser.parse(string));
 					
 					params.add(createParameter(p,value));
 				}

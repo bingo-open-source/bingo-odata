@@ -2,10 +2,10 @@ package bingo.odata.expression;
 
 public interface ReplaceMethodCallExpression extends MethodCallExpression {
 
-    CommonExpression getTarget();
+    Expression getTarget();
 
-    CommonExpression getFind();
+    Expression getFind();
 
-    CommonExpression getReplace();
+    Expression getReplace();
 
 }

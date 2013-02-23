@@ -20,8 +20,8 @@ import java.util.List;
 
 import bingo.lang.Enums;
 import bingo.lang.Strings;
-import bingo.odata.expression.BoolCommonExpression;
-import bingo.odata.expression.CommonExpression;
+import bingo.odata.expression.BoolExpression;
+import bingo.odata.expression.Expression;
 import bingo.odata.expression.EntitySimpleProperty;
 import bingo.odata.expression.ExpressionParser;
 import bingo.odata.expression.OrderByExpression;
@@ -56,14 +56,14 @@ public class ODataQueryInfoParser {
 		return Strings.isEmpty(value) ? null : Enums.valueOf(ODataInlineCount.class, value);
 	}
 	
-	public static BoolCommonExpression parseFilter(String value){
-		CommonExpression expr = Strings.isEmpty(value) ? null : ExpressionParser.parse(value);
+	public static BoolExpression parseFilter(String value){
+		Expression expr = Strings.isEmpty(value) ? null : ExpressionParser.parse(value);
 		
-		if(null != expr && !(expr instanceof BoolCommonExpression)){
+		if(null != expr && !(expr instanceof BoolExpression)){
 			throw ODataErrors.badRequest("invalid filter,should be boolean expression");
 		}
 		
-		return (BoolCommonExpression)expr;
+		return (BoolExpression)expr;
 	}
 	
 	public static List<OrderByExpression> parseOrderBy(String value){

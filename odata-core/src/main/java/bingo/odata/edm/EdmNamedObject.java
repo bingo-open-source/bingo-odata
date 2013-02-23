@@ -16,6 +16,7 @@
 package bingo.odata.edm;
 
 import bingo.lang.Named;
+import bingo.lang.Strings;
 
 public abstract class EdmNamedObject extends EdmObjectWithDocumentation implements Named {
 
@@ -23,7 +24,7 @@ public abstract class EdmNamedObject extends EdmObjectWithDocumentation implemen
 	
 	protected EdmNamedObject(String name)
 	{
-		this.name          = name;
+		this.name = name;
 	}
 	
 	protected EdmNamedObject(String name,EdmDocumentation documentation)
@@ -35,4 +36,8 @@ public abstract class EdmNamedObject extends EdmObjectWithDocumentation implemen
 	public String getName() {
 		return name;
     }
+	
+	public String getDisplayName(){
+		return Strings.firstNotEmpty(getTitle(),getName());
+	}
 }

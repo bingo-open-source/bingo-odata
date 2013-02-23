@@ -62,6 +62,12 @@ public class EdmComplexTypeBuilder extends EdmNamedStructualTypeBuilder implemen
 	    super.setDocumentation(summary, longDescription);
 	    return this;
     }
+	
+	@Override
+    public EdmComplexTypeBuilder setDocumentation(String title, String summary, String longDescription) {
+	    super.setDocumentation(title, summary, longDescription);
+	    return this;
+    }
 
 	public EdmComplexType build() {
 	    return new EdmComplexType(name, properties, isAbstract);

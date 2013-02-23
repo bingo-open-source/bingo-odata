@@ -54,6 +54,12 @@ public class EdmEntitySetBuilder extends EdmNamedBuilder implements Builder<EdmE
 	    super.setDocumentation(summary, longDescription);
 	    return this;
     }
+	
+	@Override
+    public EdmEntitySetBuilder setDocumentation(String title, String summary, String longDescription) {
+	    super.setDocumentation(title, summary, longDescription);
+	    return this;
+    }
 
 	public EdmEntitySet build() {
 	    return new EdmEntitySet(name, entityType, documentation);

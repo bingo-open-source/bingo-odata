@@ -2,10 +2,10 @@ package bingo.odata.expression;
 
 public interface SubstringMethodCallExpression extends MethodCallExpression {
 
-    CommonExpression getTarget();
+    Expression getTarget();
 
-    CommonExpression getStart(); // optional
+    Expression getStart(); // optional
 
-    CommonExpression getLength(); // optional
+    Expression getLength(); // optional
 
 }

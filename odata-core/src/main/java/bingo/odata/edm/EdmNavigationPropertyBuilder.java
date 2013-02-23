@@ -69,6 +69,12 @@ public class EdmNavigationPropertyBuilder extends EdmNamedBuilder implements Bui
 	    super.setDocumentation(summary, longDescription);
 	    return this;
     }
+	
+	@Override
+    public EdmNavigationPropertyBuilder setDocumentation(String title, String summary, String longDescription) {
+	    super.setDocumentation(title, summary, longDescription);
+	    return this;
+    }
 
 	public EdmNavigationProperty build() {
 	    return new EdmNavigationProperty(name, relationship, fromRole, toRole,documentation);

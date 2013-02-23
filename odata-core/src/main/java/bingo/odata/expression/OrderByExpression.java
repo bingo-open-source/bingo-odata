@@ -1,12 +1,12 @@
 package bingo.odata.expression;
 
-public interface OrderByExpression extends CommonExpression {
+public interface OrderByExpression extends Expression {
 
     public enum Direction {
         ASCENDING, DESCENDING;
     }
 
-    CommonExpression getExpression();
+    Expression getExpression();
 
     Direction getDirection();
 

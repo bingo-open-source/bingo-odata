@@ -24,7 +24,7 @@ public class FilterExpressionVisitor implements ExpressionVisitor {
 		push("null");
 	}
 
-	public void visit(BooleanLiteral expr) {
+	public void visit(BoolLiteral expr) {
 		push(Boolean.toString(expr.getValue()));
 	}
 
@@ -40,7 +40,7 @@ public class FilterExpressionVisitor implements ExpressionVisitor {
 		push(expr.getValue() + "L");
 	}
 
-	public void visit(IntegralLiteral expr) {
+	public void visit(IntegerLiteral expr) {
 		push(Integer.toString(expr.getValue()));
 	}
 

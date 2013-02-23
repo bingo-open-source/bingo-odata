@@ -22,7 +22,7 @@ import bingo.lang.Assert;
 import bingo.lang.NamedValue;
 import bingo.lang.Strings;
 import bingo.lang.tuple.ImmutableNamedValue;
-import bingo.odata.expression.Expression;
+import bingo.odata.expression.Expressions;
 import bingo.odata.expression.ExpressionParser;
 import bingo.odata.expression.LiteralExpression;
 
@@ -64,7 +64,7 @@ public class ODataKeyUtils {
 	}
 	
 	private static Object toValue(String valueString){
-		return Expression.literalValue((LiteralExpression)ExpressionParser.parse(valueString));
+		return Expressions.literalValue((LiteralExpression)ExpressionParser.parse(valueString));
 	}
 	
 	protected ODataKeyUtils(){

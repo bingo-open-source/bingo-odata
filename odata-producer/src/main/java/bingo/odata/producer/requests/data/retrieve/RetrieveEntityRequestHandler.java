@@ -36,7 +36,7 @@ public class RetrieveEntityRequestHandler extends EntityRequestHandlerBase {
 		
 		ODataQueryInfo queryInfo = ODataQueryInfoParser.parseForSingleEntity(context.getUrlInfo().getQueryOptions());
 		
-		ODataEntity data = context.getProducer().findEntity(context, entityType, key, queryInfo);
+		ODataEntity data = context.getProducer().retrieveEntity(context, entityType, key, queryInfo);
 		
 		if(null == data){
 			throw ODataErrors.notFound("Resource '{0}' not found",context.getUrlInfo().getResourcePath().getFullPath());

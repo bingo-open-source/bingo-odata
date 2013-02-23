@@ -33,4 +33,9 @@ public abstract class EdmBuilderWithDocumentation extends EdmBuilder {
     	this.documentation = new EdmDocumentation(summary, longDescription);
     	return this;
     }
+	
+	public EdmBuilderWithDocumentation setDocumentation(String title,String summary,String longDescription) {
+    	this.documentation = new EdmDocumentation(title, summary, longDescription);
+    	return this;
+    }
 }

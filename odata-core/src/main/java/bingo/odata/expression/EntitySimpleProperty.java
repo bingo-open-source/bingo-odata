@@ -1,7 +1,7 @@
 package bingo.odata.expression;
 
-public interface EntitySimpleProperty extends MemberExpression {
+import bingo.lang.Named;
 
-    String getPropertyName();
+public interface EntitySimpleProperty extends MemberExpression,Named {
 
 }

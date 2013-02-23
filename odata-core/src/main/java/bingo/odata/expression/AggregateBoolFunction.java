@@ -1,12 +1,12 @@
 package bingo.odata.expression;
 
-public interface AggregateBoolFunction extends BoolCommonExpression {
+public interface AggregateBoolFunction extends BoolExpression {
 
-    CommonExpression getSource(); // .NET docs use this terminology
+    Expression getSource(); // .NET docs use this terminology
 
     String getVariable();
 
-    BoolCommonExpression getPredicate();
+    BoolExpression getPredicate();
 
     ExpressionParser.AggregateFunction getFunctionType();
 

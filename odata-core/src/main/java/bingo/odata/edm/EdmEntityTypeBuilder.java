@@ -28,7 +28,7 @@ public class EdmEntityTypeBuilder extends EdmNamedStructualTypeBuilder implement
 	
 	private String fullQualifiedName;
 
-	private EdmEntityTypeRef baseType;
+	private EdmEntityType baseType;
 
 	private boolean hasStream;
 
@@ -53,7 +53,7 @@ public class EdmEntityTypeBuilder extends EdmNamedStructualTypeBuilder implement
 		return this;
 	}
 	
-	public EdmEntityTypeBuilder setBaseType(EdmEntityTypeRef baseType){
+	public EdmEntityTypeBuilder setBaseType(EdmEntityType baseType){
 		this.baseType = baseType;
 		return this;
 	}
@@ -167,6 +167,12 @@ public class EdmEntityTypeBuilder extends EdmNamedStructualTypeBuilder implement
 		super.setDocumentation(summary, longDescription);
 		return this;
 	}
+	
+	@Override
+    public EdmEntityTypeBuilder setDocumentation(String title, String summary, String longDescription) {
+	    super.setDocumentation(title, summary, longDescription);
+	    return this;
+    }
 
 	public EdmEntityType build() {
 		return new EdmEntityType(name, fullQualifiedName, properties, navigationProperties, keys, isAbstract, hasStream, baseType,documentation);

@@ -15,6 +15,8 @@
  */
 package bingo.odata.edm;
 
+import bingo.lang.Strings;
+
 public abstract class EdmObjectWithDocumentation extends EdmObject {
 
 	protected EdmDocumentation documentation;
@@ -22,5 +24,25 @@ public abstract class EdmObjectWithDocumentation extends EdmObject {
 	public EdmDocumentation getDocumentation() {
     	return documentation;
     }
-
+	
+	/**
+	 * may be empty
+	 */
+	public String getTitle(){
+		return null == documentation ? Strings.EMPTY : documentation.getTitle();
+	}
+	
+	/**
+	 * may be empty
+	 */
+	public String getSummary(){
+		return null == documentation ? Strings.EMPTY : documentation.getSummary();
+	}
+	
+	/**
+	 * may be empty
+	 */
+	public String getLongDescription(){
+		return null == documentation ? Strings.EMPTY : documentation.getLongDescription();
+	}
 }

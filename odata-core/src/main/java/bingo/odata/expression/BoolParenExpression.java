@@ -1,7 +1,7 @@
 package bingo.odata.expression;
 
-public interface BoolParenExpression extends BoolCommonExpression {
+public interface BoolParenExpression extends BoolExpression {
 
-    CommonExpression getExpression();
+    Expression getExpression();
 
 }

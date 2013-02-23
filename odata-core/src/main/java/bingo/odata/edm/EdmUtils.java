@@ -44,14 +44,14 @@ public class EdmUtils {
 	}
 	
 	public static String fullQualifiedName(EdmSchema schema,String name) {
-		return Strings.join(new String[]{schema.getNamespaceName(),name}, '.');
+		return Strings.join(new String[]{schema.getNamespaceName(),name}, ".",true);
 	}
 	
 	public static String fullQualifiedName(EdmSchemaBuilder schema,EdmNamedObject named) {
-		return Strings.join(new String[]{schema.getNamespace(),named.getName()}, '.');
+		return Strings.join(new String[]{schema.getNamespace(),named.getName()}, ".",true);
 	}
 	
 	public static String fullQualifiedName(EdmSchemaBuilder schema,String name) {
-		return Strings.join(new String[]{schema.getNamespace(),name}, '.');
+		return Strings.join(new String[]{schema.getNamespace(),name}, ".", true);
 	}
 }

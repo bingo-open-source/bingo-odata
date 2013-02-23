@@ -1,8 +1,8 @@
 package bingo.odata.expression;
 
-public interface CastExpression extends CommonExpression {
+public interface CastExpression extends Expression {
 
-    CommonExpression getExpression(); // optional
+    Expression getExpression(); // optional
 
     String getType();
 

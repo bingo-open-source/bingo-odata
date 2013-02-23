@@ -1,6 +1,6 @@
 package bingo.odata.expression;
 
-public interface ConcatMethodCallExpression extends MethodCallExpression {
+public interface BinaryExpression extends Expression {
 
     Expression getLHS();
 

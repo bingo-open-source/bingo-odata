@@ -1,8 +1,8 @@
 package bingo.odata.expression;
 
-public interface IsofExpression extends BoolCommonExpression {
+public interface IsofExpression extends BoolExpression {
 
-    CommonExpression getExpression(); // optional
+    Expression getExpression(); // optional
 
     String getType();
 

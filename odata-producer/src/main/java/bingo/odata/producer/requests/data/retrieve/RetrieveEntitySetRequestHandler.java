@@ -34,7 +34,7 @@ public class RetrieveEntitySetRequestHandler extends EntitySetRequestHandlerBase
 
 		ODataQueryInfo queryInfo = ODataQueryInfoParser.parse(context.getUrlInfo().getQueryOptions());
 		
-		ODataEntitySet data = context.getProducer().queryEntities(context,entityType, queryInfo);
+		ODataEntitySet data = context.getProducer().retrieveEntitySet(context,entityType, queryInfo);
 		
 		write(context,request,response,ODataObjectKind.EntitySet,data);
 		

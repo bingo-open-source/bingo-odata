@@ -27,15 +27,18 @@ import bingo.odata.edm.EdmFunctionImport;
 
 public interface ODataProducer {
 
-	ODataServices getServicesMetadata();
+	ODataServices retrieveServiceMetadata();
 	
-	ODataEntitySet queryEntities(ODataProducerContext context,EdmEntityType entityType,ODataQueryInfo queryInfo);
+	ODataEntitySet retrieveEntitySet(ODataProducerContext context,EdmEntityType entityType,ODataQueryInfo queryInfo);
 	
-	long queryEntitiesCount(ODataProducerContext context,EdmEntityType entityType,ODataQueryInfo queryInfo);
+	long retrieveCount(ODataProducerContext context,EdmEntityType entityType,ODataQueryInfo queryInfo);
 	
-	ODataEntity findEntity(ODataProducerContext context,EdmEntityType entityType,ODataKey key,ODataQueryInfo queryInfo);
+	/**
+	 * @return null if not exists
+	 */
+	ODataEntity retrieveEntity(ODataProducerContext context,EdmEntityType entityType,ODataKey key,ODataQueryInfo queryInfo);
 
-	ODataEntity createEntity(ODataProducerContext context,EdmEntityType entityType,ODataEntity entity);
+	ODataEntity insertEntity(ODataProducerContext context,EdmEntityType entityType,ODataEntity entity);
 	
 	ODataEntity updateEntity(ODataProducerContext context,EdmEntityType entityType,ODataKey key,ODataEntity entity);
 	
@@ -43,5 +46,5 @@ public interface ODataProducer {
 	
 	void deleteEntity(ODataProducerContext context,EdmEntityType entityType,ODataKey key);
 	
-	ODataReturnValue callFunction(ODataProducerContext context,EdmFunctionImport func,ODataParameters parameters);
+	ODataReturnValue invokeFunction(ODataProducerContext context,EdmFunctionImport func,ODataParameters parameters);
 }

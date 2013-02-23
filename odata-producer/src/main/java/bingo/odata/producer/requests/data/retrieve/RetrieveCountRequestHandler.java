@@ -33,7 +33,7 @@ public class RetrieveCountRequestHandler extends EntitySetRequestHandlerBase {
 		
 		ODataQueryInfo queryInfo = ODataQueryInfoParser.parse(context.getUrlInfo().getQueryOptions());
 		
-		long count = context.getProducer().queryEntitiesCount(context, entityType, queryInfo);
+		long count = context.getProducer().retrieveCount(context, entityType, queryInfo);
 		
 		response.setStatus(HttpStatus.SC_OK);
 		response.getWriter().write(String.valueOf(count));

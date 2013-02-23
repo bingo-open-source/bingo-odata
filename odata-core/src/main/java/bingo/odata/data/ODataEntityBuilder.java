@@ -17,35 +17,52 @@ package bingo.odata.data;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
-import bingo.lang.Assert;
 import bingo.lang.Builder;
+import bingo.lang.exceptions.ObjectNotFoundException;
 import bingo.odata.edm.EdmEntitySet;
 import bingo.odata.edm.EdmEntityType;
-import bingo.odata.edm.EdmProperty;
 import bingo.odata.edm.EdmFeedCustomization.SyndicationItemProperty;
+import bingo.odata.edm.EdmProperty;
 
 public class ODataEntityBuilder implements Builder<ODataEntity>{
 	
-	private final EdmEntitySet  entitySet;
-	private final EdmEntityType entityType;
-	
+	private final EdmEntitySet  	  entitySet;
+	private final EdmEntityType 	  entityType;
 	private final List<ODataProperty> properties = new ArrayList<ODataProperty>();
 	
 	public ODataEntityBuilder(EdmEntitySet entitySet,EdmEntityType entityType){
-		this.entitySet  = entitySet;
-		this.entityType = entityType;
+		this.entitySet        = entitySet;
+		this.entityType       = entityType;
 	}
-	
+
 	public ODataEntityBuilder addProperty(ODataProperty property){
 		properties.add(property);
 		return this;
 	}
 	
-	public ODataEntityBuilder addProperty(String name,Object value){
-		EdmProperty p = entityType.findDeclaredProperty(name);
+	public ODataEntityBuilder addProperty(EdmProperty metadata,Object value){
+		return addProperty(new ODataPropertyImpl(metadata, value));
+	}
+	
+	public ODataEntityBuilder addProperties(Map<String,Object> properties){
+		for(Entry<String,Object> entry : properties.entrySet()){
+			addProperty(entry.getKey(),entry.getValue());
+		}
+		return this;
+	}
+	
+	/**
+	 * @exception ObjectNotFoundException throws when property not exists 
+	 */
+	public ODataEntityBuilder addProperty(String name,Object value) throws ObjectNotFoundException {
+		EdmProperty p = entityType.findProperty(name);
 
-		Assert.notNull(p,"property '{0}' not exists in entity type '{1}'",name,entityType.getName());
+		if(null == p){
+			throw new ObjectNotFoundException("property '{0}' not exists in entity type '{1}'",name,entityType.getName());
+		}
 		
 		return addProperty(new ODataPropertyImpl(p,value));
 	}
