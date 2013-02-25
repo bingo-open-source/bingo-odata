@@ -37,7 +37,7 @@ public class ODataQueryInfoParser {
 								   options.getSkipToken(),
 								   parseInlineCount(options.getInlineCount()),
 								   parseSelect(options.getSelect()),
-								   options.getOptions());
+								   options.getOptionsMap());
 	}
 	
 	public static ODataQueryInfo parseForSingleEntity(ODataQueryOptions options){
@@ -49,7 +49,7 @@ public class ODataQueryInfoParser {
 								   null,
 								   null,
 								   parseSelect(options.getSelect()),
-								   options.getOptions());
+								   options.getOptionsMap());
 	}
 	
 	public static ODataInlineCount parseInlineCount(String value) {

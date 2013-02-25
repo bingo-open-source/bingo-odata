@@ -19,61 +19,82 @@ public class FilterExpressionVisitor implements ExpressionVisitor {
 	}
 
 	// literals
-
-	public void visit(NullLiteral expr) {
+	public boolean visit(NullLiteral expr) {
 		push("null");
+		return true;
 	}
 
-	public void visit(BoolLiteral expr) {
+	public void openParen() {
+	    
+    }
+
+	public void closeParen() {
+	    
+    }
+
+	public boolean visit(BoolLiteral expr) {
 		push(Boolean.toString(expr.getValue()));
+		return true;
 	}
 
-	public void visit(GuidLiteral expr) {
+	public boolean visit(GuidLiteral expr) {
 		push("guid'" + expr.getValue() + "'");
+		return true;
 	}
 
-	public void visit(StringLiteral expr) {
+	public boolean visit(StringLiteral expr) {
 		push("'" + expr.getValue().replace("'", "''") + "'");
+		return true;
 	}
 
-	public void visit(Int64Literal expr) {
+	public boolean visit(Int64Literal expr) {
 		push(expr.getValue() + "L");
+		return true;
 	}
 
-	public void visit(IntegerLiteral expr) {
+	public boolean visit(IntegerLiteral expr) {
 		push(Integer.toString(expr.getValue()));
+		return true;
 	}
 
-	public void visit(DoubleLiteral expr) {
+	public boolean visit(DoubleLiteral expr) {
 		push(Double.toString(expr.getValue()));
+		return true;
 	}
 
-	public void visit(SingleLiteral expr) {
+	public boolean visit(SingleLiteral expr) {
 		push(expr.getValue() + "f");
+		return true;
 	}
 
-	public void visit(DecimalLiteral expr) {
+	public boolean visit(DecimalLiteral expr) {
 		push(expr.getValue() + "M");
+		return true;
 	}
 
-	public void visit(BinaryLiteral expr) {
+	public boolean visit(BinaryLiteral expr) {
 		push("binary'" + Hex.encode(expr.getValue()) + "'");
+		return true;
 	}
 
-	public void visit(DateTimeLiteral expr) {
+	public boolean visit(DateTimeLiteral expr) {
 		push("datetime'" + InternalTypeUtils.formatDateTime(expr.getValue()) + "'");
+		return true;
 	}
 
-	public void visit(DateTimeOffsetLiteral expr) {
+	public boolean visit(DateTimeOffsetLiteral expr) {
 		push("datetimeoffset'" + InternalTypeUtils.formatDateTimeOffset(expr.getValue()) + "'");
+		return true;
 	}
 
-	public void visit(TimeLiteral expr) {
+	public boolean visit(TimeLiteral expr) {
 		push("time'" + InternalTypeUtils.formatTime(expr.getValue()) + "'");
+		return true;
 	}
 
-	public void visit(ByteLiteral expr) {
+	public boolean visit(ByteLiteral expr) {
 		push(Integer.toString(expr.getValue().intValue()));
+		return true;
 	}
 
 	// non-literals, not supported at the moment
@@ -94,183 +115,184 @@ public class FilterExpressionVisitor implements ExpressionVisitor {
 		throw new UnsupportedOperationException();
 	}
 
-	public void visit(Direction direction) {
+	public boolean visit(Direction direction) {
 		throw new UnsupportedOperationException();
 	}
 
-	public void visit(OrderByExpression expr) {
+	public boolean visit(OrderByExpression expr) {
 		throw new UnsupportedOperationException();
 	}
 
-	public void visit(SByteLiteral expr) {
+	public boolean visit(SByteLiteral expr) {
 		push(Byte.toString(expr.getValue()));
+		return true;
 	}
 
-	public void visit(AddExpression expr) {
+	public boolean visit(AddExpression expr) {
 		throw new UnsupportedOperationException();
 	}
 
-	public void visit(AndExpression expr) {
+	public boolean visit(AndExpression expr) {
 		throw new UnsupportedOperationException();
 	}
 
-	public void visit(CastExpression expr) {
+	public boolean visit(CastExpression expr) {
 		throw new UnsupportedOperationException();
 	}
 
-	public void visit(ConcatMethodCallExpression expr) {
+	public boolean visit(ConcatMethodCallExpression expr) {
 		throw new UnsupportedOperationException();
 	}
 
-	public void visit(DivExpression expr) {
+	public boolean visit(DivExpression expr) {
 		throw new UnsupportedOperationException();
 	}
 
-	public void visit(EndsWithMethodCallExpression expr) {
+	public boolean visit(EndsWithMethodCallExpression expr) {
 		throw new UnsupportedOperationException();
 	}
 
-	public void visit(EntitySimpleProperty expr) {
+	public boolean visit(EntitySimpleProperty expr) {
 		throw new UnsupportedOperationException();
 	}
 
-	public void visit(EqExpression expr) {
+	public boolean visit(EqExpression expr) {
 		throw new UnsupportedOperationException();
 	}
 
-	public void visit(GeExpression expr) {
+	public boolean visit(GeExpression expr) {
 		throw new UnsupportedOperationException();
 	}
 
-	public void visit(GtExpression expr) {
+	public boolean visit(GtExpression expr) {
 		throw new UnsupportedOperationException();
 	}
 
-	public void visit(IndexOfMethodCallExpression expr) {
+	public boolean visit(IndexOfMethodCallExpression expr) {
 		throw new UnsupportedOperationException();
 	}
 
-	public void visit(IsofExpression expr) {
+	public boolean visit(IsofExpression expr) {
 		throw new UnsupportedOperationException();
 	}
 
-	public void visit(LeExpression expr) {
+	public boolean visit(LeExpression expr) {
 		throw new UnsupportedOperationException();
 	}
 
-	public void visit(LengthMethodCallExpression expr) {
+	public boolean visit(LengthMethodCallExpression expr) {
 		throw new UnsupportedOperationException();
 	}
 
-	public void visit(LtExpression expr) {
+	public boolean visit(LtExpression expr) {
 		throw new UnsupportedOperationException();
 	}
 
-	public void visit(ModExpression expr) {
+	public boolean visit(ModExpression expr) {
 		throw new UnsupportedOperationException();
 	}
 
-	public void visit(MulExpression expr) {
+	public boolean visit(MulExpression expr) {
 		throw new UnsupportedOperationException();
 	}
 
-	public void visit(NeExpression expr) {
+	public boolean visit(NeExpression expr) {
 		throw new UnsupportedOperationException();
 	}
 
-	public void visit(NegateExpression expr) {
+	public boolean visit(NegateExpression expr) {
 		throw new UnsupportedOperationException();
 	}
 
-	public void visit(NotExpression expr) {
+	public boolean visit(NotExpression expr) {
 		throw new UnsupportedOperationException();
 	}
 
-	public void visit(OrExpression expr) {
+	public boolean visit(OrExpression expr) {
 		throw new UnsupportedOperationException();
 	}
 
-	public void visit(ParenExpression expr) {
+	public boolean visit(ParenExpression expr) {
 		throw new UnsupportedOperationException();
 	}
 
-	public void visit(BoolParenExpression expr) {
+	public boolean visit(BoolParenExpression expr) {
 		throw new UnsupportedOperationException();
 	}
 
-	public void visit(ReplaceMethodCallExpression expr) {
+	public boolean visit(ReplaceMethodCallExpression expr) {
 		throw new UnsupportedOperationException();
 	}
 
-	public void visit(StartsWithMethodCallExpression expr) {
+	public boolean visit(StartsWithMethodCallExpression expr) {
 		throw new UnsupportedOperationException();
 	}
 
-	public void visit(SubExpression expr) {
+	public boolean visit(SubExpression expr) {
 		throw new UnsupportedOperationException();
 	}
 
-	public void visit(SubstringMethodCallExpression expr) {
+	public boolean visit(SubstringMethodCallExpression expr) {
 		throw new UnsupportedOperationException();
 	}
 
-	public void visit(SubstringOfMethodCallExpression expr) {
+	public boolean visit(SubstringOfMethodCallExpression expr) {
 		throw new UnsupportedOperationException();
 	}
 
-	public void visit(ToLowerMethodCallExpression expr) {
+	public boolean visit(ToLowerMethodCallExpression expr) {
 		throw new UnsupportedOperationException();
 	}
 
-	public void visit(ToUpperMethodCallExpression expr) {
+	public boolean visit(ToUpperMethodCallExpression expr) {
 		throw new UnsupportedOperationException();
 	}
 
-	public void visit(TrimMethodCallExpression expr) {
+	public boolean visit(TrimMethodCallExpression expr) {
 		throw new UnsupportedOperationException();
 	}
 
-	public void visit(YearMethodCallExpression expr) {
+	public boolean visit(YearMethodCallExpression expr) {
 		throw new UnsupportedOperationException();
 	}
 
-	public void visit(MonthMethodCallExpression expr) {
+	public boolean visit(MonthMethodCallExpression expr) {
 		throw new UnsupportedOperationException();
 	}
 
-	public void visit(DayMethodCallExpression expr) {
+	public boolean visit(DayMethodCallExpression expr) {
 		throw new UnsupportedOperationException();
 	}
 
-	public void visit(HourMethodCallExpression expr) {
+	public boolean visit(HourMethodCallExpression expr) {
 		throw new UnsupportedOperationException();
 	}
 
-	public void visit(MinuteMethodCallExpression expr) {
+	public boolean visit(MinuteMethodCallExpression expr) {
 		throw new UnsupportedOperationException();
 	}
 
-	public void visit(SecondMethodCallExpression expr) {
+	public boolean visit(SecondMethodCallExpression expr) {
 		throw new UnsupportedOperationException();
 	}
 
-	public void visit(RoundMethodCallExpression expr) {
+	public boolean visit(RoundMethodCallExpression expr) {
 		throw new UnsupportedOperationException();
 	}
 
-	public void visit(FloorMethodCallExpression expr) {
+	public boolean visit(FloorMethodCallExpression expr) {
 		throw new UnsupportedOperationException();
 	}
 
-	public void visit(CeilingMethodCallExpression expr) {
+	public boolean visit(CeilingMethodCallExpression expr) {
 		throw new UnsupportedOperationException();
 	}
 
-	public void visit(AggregateAnyFunction expr) {
+	public boolean visit(AggregateAnyFunction expr) {
 		throw new UnsupportedOperationException();
 	}
 
-	public void visit(AggregateAllFunction expr) {
+	public boolean visit(AggregateAllFunction expr) {
 		throw new UnsupportedOperationException();
 	}
 

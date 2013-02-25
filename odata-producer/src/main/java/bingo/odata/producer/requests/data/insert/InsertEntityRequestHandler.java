@@ -15,17 +15,17 @@
  */
 package bingo.odata.producer.requests.data.insert;
 
+import bingo.lang.http.HttpHeaders;
+import bingo.lang.http.HttpStatus;
 import bingo.odata.ODataObjectKind;
 import bingo.odata.ODataRequest;
 import bingo.odata.ODataResponse;
+import bingo.odata.ODataUtils;
 import bingo.odata.data.ODataEntity;
 import bingo.odata.edm.EdmEntitySet;
 import bingo.odata.edm.EdmEntityType;
-import bingo.odata.format.ODataAtomUtils;
 import bingo.odata.producer.ODataProducerContext;
 import bingo.odata.producer.requests.data.EntitySetRequestHandlerBase;
-import bingo.lang.http.HttpHeaders;
-import bingo.lang.http.HttpStatus;
 
 public class InsertEntityRequestHandler extends EntitySetRequestHandlerBase {
 
@@ -38,7 +38,7 @@ public class InsertEntityRequestHandler extends EntitySetRequestHandlerBase {
 		ODataEntity created = context.getProducer().insertEntity(context, entityType, oentity);
 		
 		response.setStatus(HttpStatus.SC_CREATED);
-		response.setHeader(HttpHeaders.LOCATION, ODataAtomUtils.getEntryId(context.getUrlInfo(), created));
+		response.setHeader(HttpHeaders.LOCATION, ODataUtils.getEntryId(context.getUrlInfo(), created));
 		
 		write(context, request, response, ODataObjectKind.Entity, created);
     }

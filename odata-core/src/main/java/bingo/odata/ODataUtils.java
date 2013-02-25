@@ -15,11 +15,23 @@
  */
 package bingo.odata;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
+import bingo.lang.Dates;
+import bingo.lang.Strings;
+import bingo.lang.uri.QueryStringBuilder;
+import bingo.odata.ODataConstants.QueryOptions;
+import bingo.odata.data.ODataEntity;
+import bingo.odata.data.ODataEntitySet;
 import bingo.odata.expression.EntitySimpleProperty;
 
 public class ODataUtils {
+	
+	private static final String DATETIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
 	
 	protected ODataUtils(){
 		
@@ -33,6 +45,46 @@ public class ODataUtils {
 		}
 		
 		return names;
+	}
+	
+	public static String lastUpdated(){
+		return formatDateTime(utcTime());
+	}
+
+	public static String formatDateTime(Date dt) {
+		return Dates.format(dt, DATETIME_FORMAT);
+	}
+	
+	public static String getEntryId(ODataUrlInfo urlInfo,ODataEntity entity){
+		return urlInfo.getServiceRootUri() + entity.getKeyString();
+	}
+	
+	public static String nextHref(ODataContext context,ODataEntitySet entitySet){
+		if(!Strings.isEmpty(entitySet.getSkipToken())){
+			QueryStringBuilder qs = new QueryStringBuilder();
+			
+			Map<String,String> params = context.getUrlInfo().getQueryOptions().getOptionsMap();
+			for(Entry<String,String> param : params.entrySet()){
+				if(!param.getKey().equals(QueryOptions.TOP) && 
+				   !param.getKey().equals(QueryOptions.SKIP) && 
+				   !param.getKey().equals(QueryOptions.SKIP_TOKEN)){
+					
+					qs.add(param.getKey(),param.getValue());
+				}
+			}
+			qs.add(QueryOptions.SKIP_TOKEN,entitySet.getSkipToken());
+			
+			return context.getUrlInfo().getResourceUri() + "?" + qs.build();
+		}
+		return Strings.EMPTY;
+	}
+	
+	private static Date utcTime(){
+		Calendar c = Calendar.getInstance();
+		
+		c.add(Calendar.MILLISECOND, -1 * c.get(Calendar.ZONE_OFFSET));
+		
+		return c.getTime();
 	}
 
 }

@@ -21,11 +21,11 @@ import java.util.Set;
 
 public class ODataUrlInfo {
 
-	private final String	               serviceRootUri;
+	private final String	           serviceRootUri;
 	private final ODataResourcePath	   resourcePath;
-	private final String				   resourceUri;
+	private final String			   resourceUri;
 	private final ODataQueryOptions	   queryOptions;
-	private final Map<String, String>	   pathParameters = new HashMap<String, String>();
+	private final Map<String, String>  pathParameters = new HashMap<String, String>();
 
 	public ODataUrlInfo(String serviceRootUri, String resourcePath, String queryString) {
 	    super();

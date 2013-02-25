@@ -79,7 +79,7 @@ public class ODataQueryOptions {
 		return options.get(name);
 	}
 	
-	public Map<String, String> getOptions() {
+	public Map<String, String> getOptionsMap() {
     	return options;
     }
 	

@@ -5,127 +5,131 @@ public interface ExpressionVisitor {
     void beforeDescend();
 
     void afterDescend();
+    
+    void openParen();
+    
+    void closeParen();
 
     void betweenDescend();
 
     void visit(String type);
 
-    void visit(OrderByExpression expr);
+    boolean visit(OrderByExpression expr);
 
-    void visit(OrderByExpression.Direction direction);
+    boolean visit(OrderByExpression.Direction direction);
 
-    void visit(AddExpression expr);
+    boolean visit(AddExpression expr);
 
-    void visit(AndExpression expr);
+    boolean visit(AndExpression expr);
 
-    void visit(BoolLiteral expr);
+    boolean visit(BoolLiteral expr);
 
-    void visit(CastExpression expr);
+    boolean visit(CastExpression expr);
 
-    void visit(ConcatMethodCallExpression expr);
+    boolean visit(ConcatMethodCallExpression expr);
 
-    void visit(DateTimeLiteral expr);
+    boolean visit(DateTimeLiteral expr);
 
-    void visit(DateTimeOffsetLiteral expr);
+    boolean visit(DateTimeOffsetLiteral expr);
 
-    void visit(DecimalLiteral expr);
+    boolean visit(DecimalLiteral expr);
 
-    void visit(DivExpression expr);
+    boolean visit(DivExpression expr);
 
-    void visit(EndsWithMethodCallExpression expr);
+    boolean visit(EndsWithMethodCallExpression expr);
 
-    void visit(EntitySimpleProperty expr);
+    boolean visit(EntitySimpleProperty expr);
 
-    void visit(EqExpression expr);
+    boolean visit(EqExpression expr);
 
-    void visit(GeExpression expr);
+    boolean visit(GeExpression expr);
 
-    void visit(GtExpression expr);
+    boolean visit(GtExpression expr);
 
-    void visit(GuidLiteral expr);
+    boolean visit(GuidLiteral expr);
 
-    void visit(BinaryLiteral expr);
+    boolean visit(BinaryLiteral expr);
 
-    void visit(ByteLiteral expr);
+    boolean visit(ByteLiteral expr);
 
-    void visit(SByteLiteral expr);
+    boolean visit(SByteLiteral expr);
 
-    void visit(IndexOfMethodCallExpression expr);
+    boolean visit(IndexOfMethodCallExpression expr);
 
-    void visit(SingleLiteral expr);
+    boolean visit(SingleLiteral expr);
 
-    void visit(DoubleLiteral expr);
+    boolean visit(DoubleLiteral expr);
 
-    void visit(IntegerLiteral expr);
+    boolean visit(IntegerLiteral expr);
 
-    void visit(Int64Literal expr);
+    boolean visit(Int64Literal expr);
 
-    void visit(IsofExpression expr);
+    boolean visit(IsofExpression expr);
 
-    void visit(LeExpression expr);
+    boolean visit(LeExpression expr);
 
-    void visit(LengthMethodCallExpression expr);
+    boolean visit(LengthMethodCallExpression expr);
 
-    void visit(LtExpression expr);
+    boolean visit(LtExpression expr);
 
-    void visit(ModExpression expr);
+    boolean visit(ModExpression expr);
 
-    void visit(MulExpression expr);
+    boolean visit(MulExpression expr);
 
-    void visit(NeExpression expr);
+    boolean visit(NeExpression expr);
 
-    void visit(NegateExpression expr);
+    boolean visit(NegateExpression expr);
 
-    void visit(NotExpression expr);
+    boolean visit(NotExpression expr);
 
-    void visit(NullLiteral expr);
+    boolean visit(NullLiteral expr);
 
-    void visit(OrExpression expr);
+    boolean visit(OrExpression expr);
 
-    void visit(ParenExpression expr);
+    boolean visit(ParenExpression expr);
 
-    void visit(BoolParenExpression expr);
+    boolean visit(BoolParenExpression expr);
 
-    void visit(ReplaceMethodCallExpression expr);
+    boolean visit(ReplaceMethodCallExpression expr);
 
-    void visit(StartsWithMethodCallExpression expr);
+    boolean visit(StartsWithMethodCallExpression expr);
 
-    void visit(StringLiteral expr);
+    boolean visit(StringLiteral expr);
 
-    void visit(SubExpression expr);
+    boolean visit(SubExpression expr);
 
-    void visit(SubstringMethodCallExpression expr);
+    boolean visit(SubstringMethodCallExpression expr);
 
-    void visit(SubstringOfMethodCallExpression expr);
+    boolean visit(SubstringOfMethodCallExpression expr);
 
-    void visit(TimeLiteral expr);
+    boolean visit(TimeLiteral expr);
 
-    void visit(ToLowerMethodCallExpression expr);
+    boolean visit(ToLowerMethodCallExpression expr);
 
-    void visit(ToUpperMethodCallExpression expr);
+    boolean visit(ToUpperMethodCallExpression expr);
 
-    void visit(TrimMethodCallExpression expr);
+    boolean visit(TrimMethodCallExpression expr);
 
-    void visit(YearMethodCallExpression expr);
+    boolean visit(YearMethodCallExpression expr);
 
-    void visit(MonthMethodCallExpression expr);
+    boolean visit(MonthMethodCallExpression expr);
 
-    void visit(DayMethodCallExpression expr);
+    boolean visit(DayMethodCallExpression expr);
 
-    void visit(HourMethodCallExpression expr);
+    boolean visit(HourMethodCallExpression expr);
 
-    void visit(MinuteMethodCallExpression expr);
+    boolean visit(MinuteMethodCallExpression expr);
 
-    void visit(SecondMethodCallExpression expr);
+    boolean visit(SecondMethodCallExpression expr);
 
-    void visit(RoundMethodCallExpression expr);
+    boolean visit(RoundMethodCallExpression expr);
 
-    void visit(FloorMethodCallExpression expr);
+    boolean visit(FloorMethodCallExpression expr);
 
-    void visit(CeilingMethodCallExpression expr);
+    boolean visit(CeilingMethodCallExpression expr);
 
-    void visit(AggregateAnyFunction expr);
+    boolean visit(AggregateAnyFunction expr);
 
-    void visit(AggregateAllFunction expr);
+    boolean visit(AggregateAllFunction expr);
 
 }

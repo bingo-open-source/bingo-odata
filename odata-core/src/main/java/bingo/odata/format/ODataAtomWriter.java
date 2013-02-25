@@ -20,18 +20,19 @@ import java.util.List;
 import bingo.lang.Converts;
 import bingo.lang.Strings;
 import bingo.lang.xml.XmlWriter;
+import bingo.odata.ODataConstants.ContentTypes;
 import bingo.odata.ODataContext;
 import bingo.odata.ODataConverts;
 import bingo.odata.ODataObject;
-import bingo.odata.ODataConstants.ContentTypes;
+import bingo.odata.ODataUtils;
 import bingo.odata.data.ODataEntity;
 import bingo.odata.data.ODataProperty;
+import bingo.odata.edm.EdmFeedCustomization.SyndicationItemProperty;
+import bingo.odata.edm.EdmFeedCustomization.SyndicationTextContentKind;
 import bingo.odata.edm.EdmNavigationProperty;
 import bingo.odata.edm.EdmProperty;
 import bingo.odata.edm.EdmSimpleType;
 import bingo.odata.edm.EdmType;
-import bingo.odata.edm.EdmFeedCustomization.SyndicationItemProperty;
-import bingo.odata.edm.EdmFeedCustomization.SyndicationTextContentKind;
 
 public abstract class ODataAtomWriter<T extends ODataObject> extends ODataXmlWriter<T> {
 
@@ -64,6 +65,13 @@ public abstract class ODataAtomWriter<T extends ODataObject> extends ODataXmlWri
 		writer.startElement("updated").text(updated).endElement();
 	}
 	
+	protected static void writeLink(XmlWriter writer,String href,String rel){
+		writer.startElement("link")
+			   .attribute("href", href)
+			   .attribute("rel",rel)
+			   .endElement();		
+	}
+	
 	protected static void writeLink(XmlWriter writer,String title,String href,String rel){
 		writer.startElement("link")
 			   .attribute("title",title)
@@ -84,7 +92,7 @@ public abstract class ODataAtomWriter<T extends ODataObject> extends ODataXmlWri
 	protected static void writeEntryBody(ODataContext context, XmlWriter writer,ODataEntity entity,String updated,boolean isFeed) {
 		
 		if(context.isProducer()){
-			writer.startElement("id").text(ODataAtomUtils.getEntryId(context.getUrlInfo(), entity)).endElement();
+			writer.startElement("id").text(ODataUtils.getEntryId(context.getUrlInfo(), entity)).endElement();
 		}
 		
 		writeEntryFeedCustomizationAttributes(context,writer,entity,updated);

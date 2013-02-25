@@ -26,327 +26,329 @@ public class PrintExpressionVisitor implements ExpressionVisitor {
     private void append(String format, Object... args) {
         sb.append(String.format(format, args));
     }
-
     
-    public void visit(String type) {
-        append(type);
+    
+    public void openParen() {
+	    
     }
 
+	public void closeParen() {
+	    
+    }
+
+	public void visit(String type) {
+        append(type);
+    }
     
     public void afterDescend() {
         append(")");
-
     }
 
-    
     public void beforeDescend() {
         append("(");
-
     }
-
     
     public void betweenDescend() {
         append(",");
-
     }
-
     
-    public void visit(AddExpression expr) {
+    public boolean visit(AddExpression expr) {
         append("add");
+        return true;
     }
-
     
-    public void visit(AndExpression expr) {
+    public boolean visit(AndExpression expr) {
         append("and");
+        return true;
     }
 
     
-    public void visit(BoolLiteral expr) {
+    public boolean visit(BoolLiteral expr) {
         append("boolean(%s)", expr.getValue());
+        return true;
     }
 
-    
-    public void visit(CastExpression expr) {
+    public boolean visit(CastExpression expr) {
         append("cast");
+        return true;
     }
 
-    
-    public void visit(ConcatMethodCallExpression expr) {
+    public boolean visit(ConcatMethodCallExpression expr) {
         append("concat");
+        return true;
     }
-
     
-    public void visit(DateTimeLiteral expr) {
+    public boolean visit(DateTimeLiteral expr) {
         append("datetime(%s)", InternalTypeUtils.formatDateTime(expr.getValue()));
+        return true;
     }
-
     
-    public void visit(DateTimeOffsetLiteral expr) {
+    public boolean visit(DateTimeOffsetLiteral expr) {
         append("datetime(%s)", InternalTypeUtils.formatDateTimeOffset(expr.getValue()));
+        return true;
     }
-
     
-    public void visit(DecimalLiteral expr) {
+    public boolean visit(DecimalLiteral expr) {
         append("decimal(%s)", expr.getValue());
+        return true;
     }
 
-    
-    public void visit(DivExpression expr) {
+    public boolean visit(DivExpression expr) {
         append("div");
+        return true;
     }
 
-    
-    public void visit(EndsWithMethodCallExpression expr) {
+    public boolean visit(EndsWithMethodCallExpression expr) {
         append("endswith");
+        return true;
     }
-
     
-    public void visit(EntitySimpleProperty expr) {
+    public boolean visit(EntitySimpleProperty expr) {
         append("simpleProperty(%s)", expr.getName());
+        return true;
     }
-
     
-    public void visit(EqExpression expr) {
+    public boolean visit(EqExpression expr) {
         append("eq");
+        return true;
     }
-
     
-    public void visit(GeExpression expr) {
+    public boolean visit(GeExpression expr) {
         append("ge");
+        return true;
     }
-
     
-    public void visit(GtExpression expr) {
+    public boolean visit(GtExpression expr) {
         append("gt");
+        return true;
     }
 
-    
-    public void visit(GuidLiteral expr) {
+    public boolean visit(GuidLiteral expr) {
         append("guid(%s)", expr.getValue());
+        return true;
     }
-
     
-    public void visit(IndexOfMethodCallExpression expr) {
+    public boolean visit(IndexOfMethodCallExpression expr) {
         append("indexof");
+        return true;
     }
-
     
-    public void visit(IntegerLiteral expr) {
+    public boolean visit(IntegerLiteral expr) {
         append("integral(%s)", expr.getValue());
+        return true;
     }
-
     
-    public void visit(IsofExpression expr) {
+    public boolean visit(IsofExpression expr) {
         append("isof");
+        return true;
     }
-
     
-    public void visit(LeExpression expr) {
+    public boolean visit(LeExpression expr) {
         append("le");
+        return true;
     }
-
     
-    public void visit(LengthMethodCallExpression expr) {
+    public boolean visit(LengthMethodCallExpression expr) {
         append("length");
+        return true;
     }
-
     
-    public void visit(LtExpression expr) {
+    public boolean visit(LtExpression expr) {
         append("lt");
+        return true;
     }
-
     
-    public void visit(ModExpression expr) {
+    public boolean visit(ModExpression expr) {
         append("mod");
+        return true;
     }
-
     
-    public void visit(MulExpression expr) {
+    public boolean visit(MulExpression expr) {
         append("mul");
+        return true;
     }
-
     
-    public void visit(NeExpression expr) {
+    public boolean visit(NeExpression expr) {
         append("ne");
+        return true;
     }
-
     
-    public void visit(NegateExpression expr) {
+    public boolean visit(NegateExpression expr) {
         append("negate");
+        return true;
     }
-
     
-    public void visit(NotExpression expr) {
+    public boolean visit(NotExpression expr) {
         append("not");
+        return true;
     }
-
     
-    public void visit(NullLiteral expr) {
+    public boolean visit(NullLiteral expr) {
         append("null");
+        return true;
     }
 
-    
-    public void visit(OrExpression expr) {
+    public boolean visit(OrExpression expr) {
         append("or");
+        return true;
     }
 
-    
-    public void visit(ParenExpression expr) {
+    public boolean visit(ParenExpression expr) {
         append("paren");
+        return true;
     }
-
     
-    public void visit(BoolParenExpression expr) {
+    public boolean visit(BoolParenExpression expr) {
         append("boolParen");
+        return true;
     }
 
-    
-    public void visit(ReplaceMethodCallExpression expr) {
+    public boolean visit(ReplaceMethodCallExpression expr) {
         append("replace");
+        return true;
     }
 
-    
-    public void visit(StartsWithMethodCallExpression expr) {
+    public boolean visit(StartsWithMethodCallExpression expr) {
         append("startswith");
+        return true;
     }
-
     
-    public void visit(StringLiteral expr) {
+    public boolean visit(StringLiteral expr) {
         append("string(%s)", expr.getValue());
+        return true;
     }
-
     
-    public void visit(SubExpression expr) {
+    public boolean visit(SubExpression expr) {
         append("sub");
+        return true;
     }
-
     
-    public void visit(SubstringMethodCallExpression expr) {
+    public boolean visit(SubstringMethodCallExpression expr) {
         append("substring");
+        return true;
     }
 
-    
-    public void visit(SubstringOfMethodCallExpression expr) {
+    public boolean visit(SubstringOfMethodCallExpression expr) {
         append("substringof");
+        return true;
     }
 
-    
-    public void visit(TimeLiteral expr) {
+    public boolean visit(TimeLiteral expr) {
         append("time(%s)", InternalTypeUtils.formatTime(expr.getValue()));
+        return true;
     }
 
-    
-    public void visit(ToLowerMethodCallExpression expr) {
+    public boolean visit(ToLowerMethodCallExpression expr) {
         append("tolower");
+        return true;
     }
-
     
-    public void visit(ToUpperMethodCallExpression expr) {
+    public boolean visit(ToUpperMethodCallExpression expr) {
         append("toupper");
+        return true;
     }
-
     
-    public void visit(TrimMethodCallExpression expr) {
+    public boolean visit(TrimMethodCallExpression expr) {
         append("trim");
+        return true;
     }
 
-    
-    public void visit(YearMethodCallExpression expr) {
+    public boolean visit(YearMethodCallExpression expr) {
         append("year");
+        return true;
     }
-
     
-    public void visit(MonthMethodCallExpression expr) {
+    public boolean visit(MonthMethodCallExpression expr) {
         append("month");
+        return true;
     }
-
     
-    public void visit(DayMethodCallExpression expr) {
+    public boolean visit(DayMethodCallExpression expr) {
         append("day");
+        return true;
     }
 
-    
-    public void visit(HourMethodCallExpression expr) {
+    public boolean visit(HourMethodCallExpression expr) {
         append("hour");
+        return true;
     }
-
     
-    public void visit(MinuteMethodCallExpression expr) {
+    public boolean visit(MinuteMethodCallExpression expr) {
         append("minute");
+        return true;
     }
-
     
-    public void visit(SecondMethodCallExpression expr) {
+    public boolean visit(SecondMethodCallExpression expr) {
         append("second");
+        return true;
     }
-
     
-    public void visit(RoundMethodCallExpression expr) {
+    public boolean visit(RoundMethodCallExpression expr) {
         append("round");
+        return true;
     }
-
     
-    public void visit(FloorMethodCallExpression expr) {
+    public boolean visit(FloorMethodCallExpression expr) {
         append("floor");
+        return true;
     }
-
     
-    public void visit(CeilingMethodCallExpression expr) {
+    public boolean visit(CeilingMethodCallExpression expr) {
         append("ceiling");
+        return true;
     }
-
     
-    public void visit(OrderByExpression expr) {
+    public boolean visit(OrderByExpression expr) {
         append("orderBy");
+        return true;
     }
-
     
-    public void visit(Direction direction) {
+    public boolean visit(Direction direction) {
         append(direction == Direction.ASCENDING ? "asc" : "desc");
+        return true;
     }
-
     
-    public void visit(Int64Literal expr) {
+    public boolean visit(Int64Literal expr) {
         append("int64(%s)", expr.getValue());
+        return true;
     }
 
-    
-    public void visit(SingleLiteral expr) {
+    public boolean visit(SingleLiteral expr) {
         append("single(%s)", expr.getValue());
+        return true;
     }
 
-    
-    public void visit(DoubleLiteral expr) {
+    public boolean visit(DoubleLiteral expr) {
         append("double(%s)", expr.getValue());
+        return true;
     }
 
-    
-    public void visit(BinaryLiteral expr) {
+    public boolean visit(BinaryLiteral expr) {
         append("binary(%s)", Hex.encode(expr.getValue()));
+        return true;
     }
-
     
-    public void visit(ByteLiteral expr) {
+    public boolean visit(ByteLiteral expr) {
         append("byte(%s)", expr.getValue());
+        return true;
     }
-
     
-    public void visit(SByteLiteral expr) {
+    public boolean visit(SByteLiteral expr) {
         append("sbyte(%s)", expr.getValue());
+        return true;
     }
-
     
-    public void visit(AggregateAnyFunction expr) {
+    public boolean visit(AggregateAnyFunction expr) {
         if (expr.getVariable() != null) {
             append("any:(%s =>)", expr.getVariable());
         } else {
             append("any()");
         }
+        return true;
     }
 
-    
-    public void visit(AggregateAllFunction expr) {
+    public boolean visit(AggregateAllFunction expr) {
         append("all:%s =>", expr.getVariable());
+        return true;
     }
-
 }

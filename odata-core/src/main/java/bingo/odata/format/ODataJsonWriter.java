@@ -27,6 +27,7 @@ import bingo.odata.ODataConstants.ContentTypes;
 import bingo.odata.ODataContext;
 import bingo.odata.ODataErrors;
 import bingo.odata.ODataObject;
+import bingo.odata.ODataUtils;
 import bingo.odata.ODataWriter;
 import bingo.odata.data.ODataEntity;
 import bingo.odata.data.ODataProperty;
@@ -57,7 +58,7 @@ public abstract class ODataJsonWriter<T extends ODataObject> implements ODataWri
 		writer.endObject();
 		
 		if(!Strings.isEmpty(callback)){
-			writer.raw(")");
+			writer.raw(")"); 
 		}
     }
 	
@@ -85,7 +86,7 @@ public abstract class ODataJsonWriter<T extends ODataObject> implements ODataWri
 		
 		writer.startObject("__metadata");
 
-		writer.property("uri",  ODataAtomUtils.getEntryId(context.getUrlInfo(), entity)).separator()
+		writer.property("uri",  ODataUtils.getEntryId(context.getUrlInfo(), entity)).separator()
 		      .property("type", entity.getEntitySet().getName());
 		
 		writer.endObject();
@@ -112,7 +113,7 @@ public abstract class ODataJsonWriter<T extends ODataObject> implements ODataWri
 	}
 	
 	protected static void writeEntityLinks(ODataContext context,JSONWriter writer,ODataEntity entity){
-		String uri = ODataAtomUtils.getEntryId(context.getUrlInfo(), entity);
+		String uri = ODataUtils.getEntryId(context.getUrlInfo(), entity);
 		
 		int i=0;
 		for(EdmNavigationProperty np : entity.getEntityType().getDeclaredNavigationProperties()){

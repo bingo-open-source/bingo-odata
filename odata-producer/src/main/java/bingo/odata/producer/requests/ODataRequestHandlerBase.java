@@ -47,7 +47,7 @@ public abstract class ODataRequestHandlerBase implements ODataRequestHandler {
 	
 	protected static <T extends ODataObject> void write(ODataProducerContext context,ODataRequest request, ODataResponse response,ODataObjectKind kind,T target) throws Throwable {
 		ODataWriter<T> writer = getWriter(context, kind);
-		
+
 		StringWriter out = new StringWriter();
 		
 		writer.write(context, out, target);
@@ -59,8 +59,9 @@ public abstract class ODataRequestHandlerBase implements ODataRequestHandler {
 			log.trace("response content text : \n\n{}\n",content);
 		}
 		
-		response.getWriter().write(content);
+		//The response's character encoding is only set from the given content type if this method is called before getWriter is called
 		response.setContentType(writer.getContentType());
+		response.getWriter().write(content);
 	}
 	
 	protected static <T extends ODataObject> T read(ODataProducerContext context,ODataRequest request,ODataObjectKind kind) throws Throwable {

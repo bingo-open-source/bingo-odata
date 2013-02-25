@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+import bingo.lang.Enumerables;
 import bingo.lang.Func1;
 import bingo.lang.Func2;
 import bingo.lang.codec.Hex;
@@ -44,7 +45,7 @@ public class ExpressionParser {
         public static final String CEILING     = "ceiling";
     }
 
-    private static Set<String> METHODS = IterableEnumerable.of(
+    private static Set<String> METHODS = Enumerables.of(
                                                	   Methods.CAST,
                                                    Methods.ISOF,
                                                    Methods.ENDSWITH,

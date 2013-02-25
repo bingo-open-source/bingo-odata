@@ -35,239 +35,239 @@ public abstract class ExpressionVisitorBase implements ExpressionVisitor {
 		throw new UnsupportedOperationException("visit String type");
 	}
 
-	public void visit(OrderByExpression expr) {
+	public boolean visit(OrderByExpression expr) {
 		throw new UnsupportedOperationException("visit OrderByExpression");
     }
 
-	public void visit(Direction direction) {
+	public boolean visit(Direction direction) {
 		throw new UnsupportedOperationException("visit Direction");	    
     }
 
-	public void visit(AddExpression expr) {
+	public boolean visit(AddExpression expr) {
 		throw new UnsupportedOperationException("visit AddExpression");	    
     }
 
-	public void visit(AndExpression expr) {
+	public boolean visit(AndExpression expr) {
 		throw new UnsupportedOperationException("visit AndExpression");
     }
 
-	public void visit(BoolLiteral expr) {
+	public boolean visit(BoolLiteral expr) {
 		throw new UnsupportedOperationException("visit BoolLiteral");	    
     }
 
-	public void visit(CastExpression expr) {
+	public boolean visit(CastExpression expr) {
 		throw new UnsupportedOperationException("visit CastExpression");	    
     }
 
-	public void visit(ConcatMethodCallExpression expr) {
+	public boolean visit(ConcatMethodCallExpression expr) {
 		throw new UnsupportedOperationException("visit ConcatMethodCallExpression");	    
     }
 
-	public void visit(DateTimeLiteral expr) {
+	public boolean visit(DateTimeLiteral expr) {
 		throw new UnsupportedOperationException("visit DateTimeLiteral");	    
     }
 
-	public void visit(DateTimeOffsetLiteral expr) {
+	public boolean visit(DateTimeOffsetLiteral expr) {
 		throw new UnsupportedOperationException("visit DateTimeOffsetLiteral");	    
     }
 
-	public void visit(DecimalLiteral expr) {
+	public boolean visit(DecimalLiteral expr) {
 		throw new UnsupportedOperationException("visit DecimalLiteral");	    
     }
 
-	public void visit(DivExpression expr) {
+	public boolean visit(DivExpression expr) {
 		throw new UnsupportedOperationException("visit DivExpression");	    
     }
 
-	public void visit(EndsWithMethodCallExpression expr) {
+	public boolean visit(EndsWithMethodCallExpression expr) {
 		throw new UnsupportedOperationException("visit EndsWithMethodCallExpression");	    
     }
 
-	public void visit(EntitySimpleProperty expr) {
+	public boolean visit(EntitySimpleProperty expr) {
 		throw new UnsupportedOperationException("visit EntitySimpleProperty");	    
     }
 
-	public void visit(EqExpression expr) {
+	public boolean visit(EqExpression expr) {
 		throw new UnsupportedOperationException("visit EqExpression");	    
     }
 
-	public void visit(GeExpression expr) {
+	public boolean visit(GeExpression expr) {
 		throw new UnsupportedOperationException("visit GeExpression");	    
     }
 
-	public void visit(GtExpression expr) {
+	public boolean visit(GtExpression expr) {
 		throw new UnsupportedOperationException("visit GtExpression");	    
     }
 
-	public void visit(GuidLiteral expr) {
+	public boolean visit(GuidLiteral expr) {
 		throw new UnsupportedOperationException("visit GuidLiteral");	    
     }
 
-	public void visit(BinaryLiteral expr) {
+	public boolean visit(BinaryLiteral expr) {
 		throw new UnsupportedOperationException("visit BinaryLiteral");	    
     }
 
-	public void visit(ByteLiteral expr) {
+	public boolean visit(ByteLiteral expr) {
 		throw new UnsupportedOperationException("visit ByteLiteral");	    
     }
 
-	public void visit(SByteLiteral expr) {
+	public boolean visit(SByteLiteral expr) {
 		throw new UnsupportedOperationException("visit SByteLiteral");	    
     }
 
-	public void visit(IndexOfMethodCallExpression expr) {
+	public boolean visit(IndexOfMethodCallExpression expr) {
 		throw new UnsupportedOperationException("visit IndexOfMethodCallExpression");	    
     }
 
-	public void visit(SingleLiteral expr) {
+	public boolean visit(SingleLiteral expr) {
 		throw new UnsupportedOperationException("visit SingleLiteral");	    
     }
 
-	public void visit(DoubleLiteral expr) {
+	public boolean visit(DoubleLiteral expr) {
 		throw new UnsupportedOperationException("visit DoubleLiteral");	    
     }
 
-	public void visit(IntegerLiteral expr) {
+	public boolean visit(IntegerLiteral expr) {
 		throw new UnsupportedOperationException("visit IntegerLiteral");	    
     }
 
-	public void visit(Int64Literal expr) {
+	public boolean visit(Int64Literal expr) {
 		throw new UnsupportedOperationException("visit Int64Literal");	    
     }
 
-	public void visit(IsofExpression expr) {
+	public boolean visit(IsofExpression expr) {
 		throw new UnsupportedOperationException("visit IsofExpression");	    
     }
 
-	public void visit(LeExpression expr) {
+	public boolean visit(LeExpression expr) {
 		throw new UnsupportedOperationException("visit LeExpression");	    
     }
 
-	public void visit(LengthMethodCallExpression expr) {
+	public boolean visit(LengthMethodCallExpression expr) {
 		throw new UnsupportedOperationException("visit LengthMethodCallExpression");	    
     }
 
-	public void visit(LtExpression expr) {
+	public boolean visit(LtExpression expr) {
 		throw new UnsupportedOperationException("visit LtExpression");	    
     }
 
-	public void visit(ModExpression expr) {
+	public boolean visit(ModExpression expr) {
 		throw new UnsupportedOperationException("visit ModExpression");	    
     }
 
-	public void visit(MulExpression expr) {
+	public boolean visit(MulExpression expr) {
 		throw new UnsupportedOperationException("visit MulExpression");	    
     }
 
-	public void visit(NeExpression expr) {
+	public boolean visit(NeExpression expr) {
 		throw new UnsupportedOperationException("visit NeExpression");	    
     }
 
-	public void visit(NegateExpression expr) {
+	public boolean visit(NegateExpression expr) {
 		throw new UnsupportedOperationException("visit NegateExpression");	    
     }
 
-	public void visit(NotExpression expr) {
+	public boolean visit(NotExpression expr) {
 		throw new UnsupportedOperationException("visit NotExpression");	    
     }
 
-	public void visit(NullLiteral expr) {
+	public boolean visit(NullLiteral expr) {
 		throw new UnsupportedOperationException("visit NullLiteral");	    
     }
 
-	public void visit(OrExpression expr) {
+	public boolean visit(OrExpression expr) {
 		throw new UnsupportedOperationException("visit OrExpression");
     }
 
-	public void visit(ParenExpression expr) {
-		throw new UnsupportedOperationException("visit ParenExpression");
-    }
+	public boolean visit(ParenExpression expr) {
+		return true;
+	}
 
-	public void visit(BoolParenExpression expr) {
-		throw new UnsupportedOperationException("visit BoolParenExpression");
-    }
+	public boolean visit(BoolParenExpression expr) {
+		return true;
+	}
 
-	public void visit(ReplaceMethodCallExpression expr) {
+	public boolean visit(ReplaceMethodCallExpression expr) {
 		throw new UnsupportedOperationException("visit ReplaceMethodCallExpression");
     }
 
-	public void visit(StartsWithMethodCallExpression expr) {
+	public boolean visit(StartsWithMethodCallExpression expr) {
 		throw new UnsupportedOperationException("visit StartsWithMethodCallExpression");
     }
 
-	public void visit(StringLiteral expr) {
+	public boolean visit(StringLiteral expr) {
 		throw new UnsupportedOperationException("visit StringLiteral");
     }
 
-	public void visit(SubExpression expr) {
+	public boolean visit(SubExpression expr) {
 		throw new UnsupportedOperationException("visit SubExpression");
     }
 
-	public void visit(SubstringMethodCallExpression expr) {
+	public boolean visit(SubstringMethodCallExpression expr) {
 		throw new UnsupportedOperationException("visit SubstringMethodCallExpression");
     }
 
-	public void visit(SubstringOfMethodCallExpression expr) {
+	public boolean visit(SubstringOfMethodCallExpression expr) {
 		throw new UnsupportedOperationException("visit SubstringOfMethodCallExpression");
     }
 
-	public void visit(TimeLiteral expr) {
+	public boolean visit(TimeLiteral expr) {
 		throw new UnsupportedOperationException("visit TimeLiteral");
     }
 
-	public void visit(ToLowerMethodCallExpression expr) {
+	public boolean visit(ToLowerMethodCallExpression expr) {
 		throw new UnsupportedOperationException("visit ToLowerMethodCallExpression");
     }
 
-	public void visit(ToUpperMethodCallExpression expr) {
+	public boolean visit(ToUpperMethodCallExpression expr) {
 		throw new UnsupportedOperationException("visit ToUpperMethodCallExpression");
     }
 
-	public void visit(TrimMethodCallExpression expr) {
+	public boolean visit(TrimMethodCallExpression expr) {
 		throw new UnsupportedOperationException("visit TrimMethodCallExpression");
     }
 
-	public void visit(YearMethodCallExpression expr) {
+	public boolean visit(YearMethodCallExpression expr) {
 		throw new UnsupportedOperationException("visit YearMethodCallExpression");
     }
 
-	public void visit(MonthMethodCallExpression expr) {
+	public boolean visit(MonthMethodCallExpression expr) {
 		throw new UnsupportedOperationException("visit MonthMethodCallExpression");
     }
 
-	public void visit(DayMethodCallExpression expr) {
+	public boolean visit(DayMethodCallExpression expr) {
 		throw new UnsupportedOperationException("visit DayMethodCallExpression");
     }
 
-	public void visit(HourMethodCallExpression expr) {
+	public boolean visit(HourMethodCallExpression expr) {
 		throw new UnsupportedOperationException("visit HourMethodCallExpression");
     }
 
-	public void visit(MinuteMethodCallExpression expr) {
+	public boolean visit(MinuteMethodCallExpression expr) {
 		throw new UnsupportedOperationException("visit MinuteMethodCallExpression");
     }
 
-	public void visit(SecondMethodCallExpression expr) {
+	public boolean visit(SecondMethodCallExpression expr) {
 		throw new UnsupportedOperationException("visit SecondMethodCallExpression");
     }
 
-	public void visit(RoundMethodCallExpression expr) {
+	public boolean visit(RoundMethodCallExpression expr) {
 		throw new UnsupportedOperationException("visit RoundMethodCallExpression");
     }
 
-	public void visit(FloorMethodCallExpression expr) {
+	public boolean visit(FloorMethodCallExpression expr) {
 		throw new UnsupportedOperationException("visit FloorMethodCallExpression");
     }
 
-	public void visit(CeilingMethodCallExpression expr) {
+	public boolean visit(CeilingMethodCallExpression expr) {
 		throw new UnsupportedOperationException("visit CeilingMethodCallExpression");
     }
 
-	public void visit(AggregateAnyFunction expr) {
+	public boolean visit(AggregateAnyFunction expr) {
 		throw new UnsupportedOperationException("visit AggregateAnyFunction");
     }
 
-	public void visit(AggregateAllFunction expr) {
+	public boolean visit(AggregateAllFunction expr) {
 		throw new UnsupportedOperationException("visit AggregateAllFunction");
     }
 }

@@ -152,8 +152,8 @@ public class ODataRequestController {
 			ODataWriter<ODataError> writer = protocol.getWriter(version,format,ODataObjectKind.Error);
 			
 			if(null != writer){
-				writer.write(context, out, error);
 				response.setContentType(writer.getContentType());
+				writer.write(context, out, error);
 		        response.getWriter().write(out.toString());
 			}else{
 		        response.setContentType(format.getContentType());

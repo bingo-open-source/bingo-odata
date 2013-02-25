@@ -15,18 +15,19 @@
  */
 package bingo.odata.format.atom;
 
+import bingo.lang.Strings;
 import bingo.lang.xml.XmlWriter;
 import bingo.odata.ODataContext;
+import bingo.odata.ODataUtils;
 import bingo.odata.data.ODataEntity;
 import bingo.odata.data.ODataEntitySet;
-import bingo.odata.format.ODataAtomUtils;
 import bingo.odata.format.ODataAtomWriter;
 
 public class AtomEntitySetWriter extends ODataAtomWriter<ODataEntitySet> {
 
 	@Override
     protected void write(ODataContext context, XmlWriter writer, ODataEntitySet entitySet) throws Throwable {
-		String updated = ODataAtomUtils.lastUpdated();
+		String updated = ODataUtils.lastUpdated();
 		
 		writer.startDocument();
 		
@@ -77,8 +78,9 @@ public class AtomEntitySetWriter extends ODataAtomWriter<ODataEntitySet> {
 	}
 	
 	protected void writeNext(ODataContext context, XmlWriter writer, ODataEntitySet entitySet) {
-		if(null != entitySet.getSkipToken()){
-			//TODO : SKIP TOKEN
+		String nextHref = ODataUtils.nextHref(context, entitySet);
+		if(!Strings.isEmpty(nextHref)){
+			writer.startElement("link").attribute("rel","next").attribute("href",nextHref).endElement();
 		}
 	}
 }

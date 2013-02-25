@@ -397,7 +397,7 @@ public class Expressions {
             visitThis(visitor);
         }
 
-        abstract void visitThis(ExpressionVisitor visitor);
+        abstract boolean visitThis(ExpressionVisitor visitor);
     }
 
     private static class NullLiteralImpl extends ExpressionImpl implements NullLiteral {
@@ -408,8 +408,8 @@ public class Expressions {
         }
 
         @Override
-        void visitThis(ExpressionVisitor visitor) {
-            visitor.visit(this);
+        boolean visitThis(ExpressionVisitor visitor) {
+            return visitor.visit(this);
         }
     }
 
@@ -428,8 +428,8 @@ public class Expressions {
         }
 
         @Override
-        void visitThis(ExpressionVisitor visitor) {
-            visitor.visit(this);
+        boolean visitThis(ExpressionVisitor visitor) {
+            return visitor.visit(this);
         }
     }
 
@@ -446,8 +446,8 @@ public class Expressions {
         }
 
         @Override
-        void visitThis(ExpressionVisitor visitor) {
-            visitor.visit(this);
+        boolean visitThis(ExpressionVisitor visitor) {
+            return visitor.visit(this);
         }
     }
 
@@ -464,8 +464,8 @@ public class Expressions {
         }
 
         @Override
-        void visitThis(ExpressionVisitor visitor) {
-            visitor.visit(this);
+        boolean visitThis(ExpressionVisitor visitor) {
+            return visitor.visit(this);
         }
     }
 
@@ -482,8 +482,8 @@ public class Expressions {
         }
 
         @Override
-        void visitThis(ExpressionVisitor visitor) {
-            visitor.visit(this);
+        boolean visitThis(ExpressionVisitor visitor) {
+            return visitor.visit(this);
         }
     }
 
@@ -500,8 +500,8 @@ public class Expressions {
         }
 
         @Override
-        void visitThis(ExpressionVisitor visitor) {
-            visitor.visit(this);
+        boolean visitThis(ExpressionVisitor visitor) {
+            return visitor.visit(this);
         }
     }
 
@@ -518,8 +518,8 @@ public class Expressions {
         }
 
         @Override
-        void visitThis(ExpressionVisitor visitor) {
-            visitor.visit(this);
+        boolean visitThis(ExpressionVisitor visitor) {
+            return visitor.visit(this);
         }
     }
 
@@ -536,8 +536,8 @@ public class Expressions {
         }
 
         @Override
-        void visitThis(ExpressionVisitor visitor) {
-            visitor.visit(this);
+        boolean visitThis(ExpressionVisitor visitor) {
+            return visitor.visit(this);
         }
     }
 
@@ -560,8 +560,8 @@ public class Expressions {
         }
 
         @Override
-        void visitThis(ExpressionVisitor visitor) {
-            visitor.visit(this);
+        boolean visitThis(ExpressionVisitor visitor) {
+            return visitor.visit(this);
         }
     }
 
@@ -571,8 +571,8 @@ public class Expressions {
         }
 
         @Override
-        void visitThis(ExpressionVisitor visitor) {
-            visitor.visit(this);
+        boolean visitThis(ExpressionVisitor visitor) {
+            return visitor.visit(this);
         }
     }
 
@@ -582,8 +582,8 @@ public class Expressions {
         }
 
         @Override
-        void visitThis(ExpressionVisitor visitor) {
-            visitor.visit(this);
+        boolean visitThis(ExpressionVisitor visitor) {
+            return visitor.visit(this);
         }
     }
 
@@ -593,8 +593,8 @@ public class Expressions {
         }
 
         @Override
-        void visitThis(ExpressionVisitor visitor) {
-            visitor.visit(this);
+        boolean visitThis(ExpressionVisitor visitor) {
+            return visitor.visit(this);
         }
     }
 
@@ -604,8 +604,8 @@ public class Expressions {
         }
 
         @Override
-        void visitThis(ExpressionVisitor visitor) {
-            visitor.visit(this);
+        boolean visitThis(ExpressionVisitor visitor) {
+            return visitor.visit(this);
         }
     }
 
@@ -615,8 +615,8 @@ public class Expressions {
         }
 
         @Override
-        void visitThis(ExpressionVisitor visitor) {
-            visitor.visit(this);
+        boolean visitThis(ExpressionVisitor visitor) {
+            return visitor.visit(this);
         }
     }
 
@@ -626,8 +626,8 @@ public class Expressions {
         }
 
         @Override
-        void visitThis(ExpressionVisitor visitor) {
-            visitor.visit(this);
+        boolean visitThis(ExpressionVisitor visitor) {
+            return visitor.visit(this);
         }
     }
 
@@ -644,8 +644,8 @@ public class Expressions {
         }
 
         @Override
-        void visitThis(ExpressionVisitor visitor) {
-            visitor.visit(this);
+        boolean visitThis(ExpressionVisitor visitor) {
+            return visitor.visit(this);
         }
     }
 
@@ -669,12 +669,13 @@ public class Expressions {
 
         @Override
         public void visit(ExpressionVisitor visitor) {
-            visitThis(visitor);
-            visitor.beforeDescend();
-            getLHS().visit(visitor);
-            visitor.betweenDescend();
-            getRHS().visit(visitor);
-            visitor.afterDescend();
+            if(visitThis(visitor)){
+                visitor.beforeDescend();
+                getLHS().visit(visitor);
+                visitor.betweenDescend();
+                getRHS().visit(visitor);
+                visitor.afterDescend();
+            }
         }
     }
 
@@ -684,8 +685,8 @@ public class Expressions {
         }
 
         @Override
-        void visitThis(ExpressionVisitor visitor) {
-            visitor.visit(this);
+        boolean visitThis(ExpressionVisitor visitor) {
+            return visitor.visit(this);
         }
     }
 
@@ -695,8 +696,8 @@ public class Expressions {
         }
 
         @Override
-        void visitThis(ExpressionVisitor visitor) {
-            visitor.visit(this);
+        boolean visitThis(ExpressionVisitor visitor) {
+            return visitor.visit(this);
         }
     }
 
@@ -727,8 +728,8 @@ public class Expressions {
         }
 
         @Override
-        void visitThis(ExpressionVisitor visitor) {
-            visitor.visit(this);
+        boolean visitThis(ExpressionVisitor visitor) {
+            return visitor.visit(this);
         }
     }
 
@@ -738,8 +739,8 @@ public class Expressions {
         }
 
         @Override
-        void visitThis(ExpressionVisitor visitor) {
-            visitor.visit(this);
+        boolean visitThis(ExpressionVisitor visitor) {
+            return visitor.visit(this);
         }
     }
 
@@ -749,8 +750,8 @@ public class Expressions {
         }
 
         @Override
-        void visitThis(ExpressionVisitor visitor) {
-            visitor.visit(this);
+        boolean visitThis(ExpressionVisitor visitor) {
+            return visitor.visit(this);
         }
     }
 
@@ -760,8 +761,8 @@ public class Expressions {
         }
 
         @Override
-        void visitThis(ExpressionVisitor visitor) {
-            visitor.visit(this);
+        boolean visitThis(ExpressionVisitor visitor) {
+            return visitor.visit(this);
         }
     }
 
@@ -771,8 +772,8 @@ public class Expressions {
         }
 
         @Override
-        void visitThis(ExpressionVisitor visitor) {
-            visitor.visit(this);
+        boolean visitThis(ExpressionVisitor visitor) {
+            return visitor.visit(this);
         }
     }
 
@@ -782,8 +783,8 @@ public class Expressions {
         }
 
         @Override
-        void visitThis(ExpressionVisitor visitor) {
-            visitor.visit(this);
+        boolean visitThis(ExpressionVisitor visitor) {
+            return visitor.visit(this);
         }
     }
 
@@ -793,8 +794,8 @@ public class Expressions {
         }
 
         @Override
-        void visitThis(ExpressionVisitor visitor) {
-            visitor.visit(this);
+        boolean visitThis(ExpressionVisitor visitor) {
+            return visitor.visit(this);
         }
     }
 
@@ -804,8 +805,8 @@ public class Expressions {
         }
 
         @Override
-        void visitThis(ExpressionVisitor visitor) {
-            visitor.visit(this);
+        boolean visitThis(ExpressionVisitor visitor) {
+            return visitor.visit(this);
         }
     }
 
@@ -815,8 +816,8 @@ public class Expressions {
         }
 
         @Override
-        void visitThis(ExpressionVisitor visitor) {
-            visitor.visit(this);
+        boolean visitThis(ExpressionVisitor visitor) {
+            return visitor.visit(this);
         }
     }
 
@@ -826,8 +827,8 @@ public class Expressions {
         }
 
         @Override
-        void visitThis(ExpressionVisitor visitor) {
-            visitor.visit(this);
+        boolean visitThis(ExpressionVisitor visitor) {
+            return visitor.visit(this);
         }
     }
 
@@ -837,8 +838,8 @@ public class Expressions {
         }
 
         @Override
-        void visitThis(ExpressionVisitor visitor) {
-            visitor.visit(this);
+        boolean visitThis(ExpressionVisitor visitor) {
+            return visitor.visit(this);
         }
     }
 
@@ -848,8 +849,8 @@ public class Expressions {
         }
 
         @Override
-        void visitThis(ExpressionVisitor visitor) {
-            visitor.visit(this);
+        boolean visitThis(ExpressionVisitor visitor) {
+            return visitor.visit(this);
         }
     }
 
@@ -873,10 +874,13 @@ public class Expressions {
 
         @Override
         public void visit(ExpressionVisitor visitor) {
-            visitThis(visitor);
-            visitor.beforeDescend();
-            getExpression().visit(visitor);
-            visitor.afterDescend();
+        	if(visitThis(visitor)){
+                visitor.beforeDescend();
+                visitor.openParen();
+                getExpression().visit(visitor);
+                visitor.closeParen();
+                visitor.afterDescend();
+        	}
         }
     }
 
@@ -886,8 +890,8 @@ public class Expressions {
         }
 
         @Override
-        void visitThis(ExpressionVisitor visitor) {
-            visitor.visit(this);
+        boolean visitThis(ExpressionVisitor visitor) {
+            return visitor.visit(this);
         }
     }
 
@@ -897,8 +901,8 @@ public class Expressions {
         }
 
         @Override
-        void visitThis(ExpressionVisitor visitor) {
-            visitor.visit(this);
+        boolean visitThis(ExpressionVisitor visitor) {
+            return visitor.visit(this);
         }
     }
 
@@ -908,8 +912,8 @@ public class Expressions {
         }
 
         @Override
-        void visitThis(ExpressionVisitor visitor) {
-            visitor.visit(this);
+        boolean visitThis(ExpressionVisitor visitor) {
+            return visitor.visit(this);
         }
     }
 
@@ -919,8 +923,8 @@ public class Expressions {
         }
 
         @Override
-        void visitThis(ExpressionVisitor visitor) {
-            visitor.visit(this);
+        boolean visitThis(ExpressionVisitor visitor) {
+            return visitor.visit(this);
         }
     }
 
@@ -938,14 +942,15 @@ public class Expressions {
 
         @Override
         public void visit(ExpressionVisitor visitor) {
-            visitThis(visitor);
-            visitor.beforeDescend();
-            if (getExpression() != null) {
-                getExpression().visit(visitor);
-                visitor.betweenDescend();
-            }
-            visitor.visit(getType());
-            visitor.afterDescend();
+        	if(visitThis(visitor)){
+                visitor.beforeDescend();
+                if (getExpression() != null) {
+                    getExpression().visit(visitor);
+                    visitor.betweenDescend();
+                }
+                visitor.visit(getType());
+                visitor.afterDescend();
+        	}
         }
     }
 
@@ -955,8 +960,8 @@ public class Expressions {
         }
 
         @Override
-        void visitThis(ExpressionVisitor visitor) {
-            visitor.visit(this);
+        boolean visitThis(ExpressionVisitor visitor) {
+            return visitor.visit(this);
         }
     }
 
@@ -966,8 +971,8 @@ public class Expressions {
         }
 
         @Override
-        void visitThis(ExpressionVisitor visitor) {
-            visitor.visit(this);
+        boolean visitThis(ExpressionVisitor visitor) {
+            return visitor.visit(this);
         }
     }
 
@@ -977,8 +982,8 @@ public class Expressions {
         }
 
         @Override
-        void visitThis(ExpressionVisitor visitor) {
-            visitor.visit(this);
+        boolean visitThis(ExpressionVisitor visitor) {
+            return visitor.visit(this);
         }
     }
 
@@ -988,8 +993,8 @@ public class Expressions {
         }
 
         @Override
-        void visitThis(ExpressionVisitor visitor) {
-            visitor.visit(this);
+        boolean visitThis(ExpressionVisitor visitor) {
+            return visitor.visit(this);
         }
     }
 
@@ -1000,19 +1005,20 @@ public class Expressions {
 
         @Override
         public void visit(ExpressionVisitor visitor) {
-            visitThis(visitor);
-            visitor.beforeDescend();
-            getValue().visit(visitor);
-            if (getTarget() != null) {
-                visitor.betweenDescend();
-                getTarget().visit(visitor);
+            if(visitThis(visitor)){
+                visitor.beforeDescend();
+                getValue().visit(visitor);
+                if (getTarget() != null) {
+                    visitor.betweenDescend();
+                    getTarget().visit(visitor);
+                }
+                visitor.afterDescend();
             }
-            visitor.afterDescend();
         }
 
         @Override
-        void visitThis(ExpressionVisitor visitor) {
-            visitor.visit(this);
+        boolean visitThis(ExpressionVisitor visitor) {
+            return visitor.visit(this);
         }
     }
 
@@ -1036,19 +1042,20 @@ public class Expressions {
 
         @Override
         public void visit(ExpressionVisitor visitor) {
-            visitThis(visitor);
-            visitor.beforeDescend();
-            getTarget().visit(visitor);
-            visitor.betweenDescend();
-            getFind().visit(visitor);
-            visitor.betweenDescend();
-            getReplace().visit(visitor);
-            visitor.afterDescend();
+            if(visitThis(visitor)){
+                visitor.beforeDescend();
+                getTarget().visit(visitor);
+                visitor.betweenDescend();
+                getFind().visit(visitor);
+                visitor.betweenDescend();
+                getReplace().visit(visitor);
+                visitor.afterDescend();
+            }
         }
 
         @Override
-        void visitThis(ExpressionVisitor visitor) {
-            visitor.visit(this);
+        boolean visitThis(ExpressionVisitor visitor) {
+            return visitor.visit(this);
         }
     }
 
@@ -1066,12 +1073,13 @@ public class Expressions {
 
         @Override
         public void visit(ExpressionVisitor visitor) {
-            visitThis(visitor);
-            visitor.beforeDescend();
-            getTarget().visit(visitor);
-            visitor.betweenDescend();
-            getValue().visit(visitor);
-            visitor.afterDescend();
+            if(visitThis(visitor)){
+                visitor.beforeDescend();
+                getTarget().visit(visitor);
+                visitor.betweenDescend();
+                getValue().visit(visitor);
+                visitor.afterDescend();
+            }
         }
     }
 
@@ -1081,8 +1089,8 @@ public class Expressions {
         }
 
         @Override
-        void visitThis(ExpressionVisitor visitor) {
-            visitor.visit(this);
+        boolean visitThis(ExpressionVisitor visitor) {
+            return visitor.visit(this);
         }
     }
 
@@ -1119,21 +1127,22 @@ public class Expressions {
 
         @Override
         public void visit(ExpressionVisitor visitor) {
-            visitThis(visitor);
-            visitor.beforeDescend();
-            getTarget().visit(visitor);
-            visitor.betweenDescend();
-            getStart().visit(visitor);
-            if (getLength() != null) {
+            if(visitThis(visitor)){
+                visitor.beforeDescend();
+                getTarget().visit(visitor);
                 visitor.betweenDescend();
-                getLength().visit(visitor);
+                getStart().visit(visitor);
+                if (getLength() != null) {
+                    visitor.betweenDescend();
+                    getLength().visit(visitor);
+                }
+                visitor.afterDescend();
             }
-            visitor.afterDescend();
         }
 
         @Override
-        void visitThis(ExpressionVisitor visitor) {
-            visitor.visit(this);
+        boolean visitThis(ExpressionVisitor visitor) {
+            return visitor.visit(this);
         }
     }
 
@@ -1148,10 +1157,11 @@ public class Expressions {
 
         @Override
         public void visit(ExpressionVisitor visitor) {
-            visitThis(visitor);
-            visitor.beforeDescend();
-            getTarget().visit(visitor);
-            visitor.afterDescend();
+            if(visitThis(visitor)){
+                visitor.beforeDescend();
+                getTarget().visit(visitor);
+                visitor.afterDescend();            	
+            }
         }
     }
 
@@ -1161,8 +1171,8 @@ public class Expressions {
         }
 
         @Override
-        void visitThis(ExpressionVisitor visitor) {
-            visitor.visit(this);
+        boolean visitThis(ExpressionVisitor visitor) {
+            return visitor.visit(this);
         }
     }
 
@@ -1172,8 +1182,8 @@ public class Expressions {
         }
 
         @Override
-        void visitThis(ExpressionVisitor visitor) {
-            visitor.visit(this);
+        boolean visitThis(ExpressionVisitor visitor) {
+            return visitor.visit(this);
         }
     }
 
@@ -1183,8 +1193,8 @@ public class Expressions {
         }
 
         @Override
-        void visitThis(ExpressionVisitor visitor) {
-            visitor.visit(this);
+        boolean visitThis(ExpressionVisitor visitor) {
+            return visitor.visit(this);
         }
     }
 
@@ -1194,8 +1204,8 @@ public class Expressions {
         }
 
         @Override
-        void visitThis(ExpressionVisitor visitor) {
-            visitor.visit(this);
+        boolean visitThis(ExpressionVisitor visitor) {
+            return visitor.visit(this);
         }
     }
 
@@ -1205,8 +1215,8 @@ public class Expressions {
         }
 
         @Override
-        void visitThis(ExpressionVisitor visitor) {
-            visitor.visit(this);
+        boolean visitThis(ExpressionVisitor visitor) {
+            return visitor.visit(this);
         }
     }
 
@@ -1216,8 +1226,8 @@ public class Expressions {
         }
 
         @Override
-        void visitThis(ExpressionVisitor visitor) {
-            visitor.visit(this);
+        boolean visitThis(ExpressionVisitor visitor) {
+            return visitor.visit(this);
         }
     }
 
@@ -1227,8 +1237,8 @@ public class Expressions {
         }
 
         @Override
-        void visitThis(ExpressionVisitor visitor) {
-            visitor.visit(this);
+        boolean visitThis(ExpressionVisitor visitor) {
+            return visitor.visit(this);
         }
     }
 
@@ -1238,8 +1248,8 @@ public class Expressions {
         }
 
         @Override
-        void visitThis(ExpressionVisitor visitor) {
-            visitor.visit(this);
+        boolean visitThis(ExpressionVisitor visitor) {
+            return visitor.visit(this);
         }
     }
 
@@ -1249,8 +1259,8 @@ public class Expressions {
         }
 
         @Override
-        void visitThis(ExpressionVisitor visitor) {
-            visitor.visit(this);
+        boolean visitThis(ExpressionVisitor visitor) {
+            return visitor.visit(this);
         }
     }
 
@@ -1260,8 +1270,8 @@ public class Expressions {
         }
 
         @Override
-        void visitThis(ExpressionVisitor visitor) {
-            visitor.visit(this);
+        boolean visitThis(ExpressionVisitor visitor) {
+            return visitor.visit(this);
         }
     }
 
@@ -1271,8 +1281,8 @@ public class Expressions {
         }
 
         @Override
-        void visitThis(ExpressionVisitor visitor) {
-            visitor.visit(this);
+        boolean visitThis(ExpressionVisitor visitor) {
+            return visitor.visit(this);
         }
     }
 
@@ -1282,8 +1292,8 @@ public class Expressions {
         }
 
         @Override
-        void visitThis(ExpressionVisitor visitor) {
-            visitor.visit(this);
+        boolean visitThis(ExpressionVisitor visitor) {
+            return visitor.visit(this);
         }
     }
 
@@ -1293,8 +1303,8 @@ public class Expressions {
         }
 
         @Override
-        void visitThis(ExpressionVisitor visitor) {
-            visitor.visit(this);
+        boolean visitThis(ExpressionVisitor visitor) {
+            return visitor.visit(this);
         }
     }
 
@@ -1312,17 +1322,18 @@ public class Expressions {
 
         @Override
         public void visit(ExpressionVisitor visitor) {
-            visitThis(visitor);
-            visitor.beforeDescend();
-            getExpression().visit(visitor);
-            visitor.betweenDescend();
-            visitor.visit(getDirection());
-            visitor.afterDescend();
+            if(visitThis(visitor)){
+                visitor.beforeDescend();
+                getExpression().visit(visitor);
+                visitor.betweenDescend();
+                visitor.visit(getDirection());
+                visitor.afterDescend();
+            }
         }
 
         @Override
-        void visitThis(ExpressionVisitor visitor) {
-            visitor.visit(this);
+        boolean visitThis(ExpressionVisitor visitor) {
+            return visitor.visit(this);
         }
     }
 
@@ -1348,14 +1359,15 @@ public class Expressions {
 
         @Override
         public void visit(ExpressionVisitor visitor) {
-            visitThis(visitor);
-            visitor.beforeDescend();
-            getSource().visit(visitor);
-            visitor.betweenDescend();
-            if (getPredicate() != null) {
-                getPredicate().visit(visitor);
+            if(visitThis(visitor)){
+                visitor.beforeDescend();
+                getSource().visit(visitor);
+                visitor.betweenDescend();
+                if (getPredicate() != null) {
+                    getPredicate().visit(visitor);
+                }
+                visitor.afterDescend();
             }
-            visitor.afterDescend();
         }
 
         public String getVariable() {
@@ -1369,8 +1381,8 @@ public class Expressions {
         }
 
         @Override
-        void visitThis(ExpressionVisitor visitor) {
-            visitor.visit(this);
+        boolean visitThis(ExpressionVisitor visitor) {
+            return visitor.visit(this);
         }
 
         public ExpressionParser.AggregateFunction getFunctionType() {
@@ -1384,8 +1396,8 @@ public class Expressions {
         }
 
         @Override
-        void visitThis(ExpressionVisitor visitor) {
-            visitor.visit(this);
+        boolean visitThis(ExpressionVisitor visitor) {
+            return visitor.visit(this);
         }
 
         public ExpressionParser.AggregateFunction getFunctionType() {
