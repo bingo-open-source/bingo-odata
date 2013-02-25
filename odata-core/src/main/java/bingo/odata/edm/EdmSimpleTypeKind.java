@@ -15,13 +15,15 @@
  */
 package bingo.odata.edm;
 
+import static bingo.odata.edm.EdmSimpleTypeFacet.*;
+
 public enum EdmSimpleTypeKind {
-	Binary,
+	Binary(MaxLength,FixedLength),
 	Boolean,
 	Byte,
-	DateTime,
-	DateTimeOffset,
-	Decimal,
+	DateTime(Precision),
+	DateTimeOffset(Precision),
+	Decimal(Precision,Scale),
 	Double,
 	Guid,
 	Int16,
@@ -29,7 +31,42 @@ public enum EdmSimpleTypeKind {
 	Int64,
 	SByte,
 	Single,
-	String,
-	Stream,
-	Time;
+	String(MaxLength,FixedLength),
+	Stream(MaxLength,FixedLength),
+	Time(Precision);
+	
+	private final EdmSimpleTypeFacet[] facets;
+	
+	private EdmSimpleTypeKind(EdmSimpleTypeFacet... facets){
+		this.facets = facets;
+	}
+
+	public EdmSimpleTypeFacet[] getFacets() {
+		return facets;
+	}
+	
+	public boolean hasFacet(EdmSimpleTypeFacet facet){
+		for(EdmSimpleTypeFacet f : this.facets){
+			if(f.equals(facet)){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public boolean hasMaxLengthFacet(){
+		return hasFacet(EdmSimpleTypeFacet.MaxLength);
+	}
+	
+	public boolean hasFixedLengthFacet(){
+		return hasFacet(EdmSimpleTypeFacet.FixedLength);
+	}
+	
+	public boolean hasPrecisionFacet(){
+		return hasFacet(EdmSimpleTypeFacet.Precision);
+	}
+	
+	public boolean hasScaleFacet(){
+		return hasFacet(EdmSimpleTypeFacet.Scale);
+	}
 }

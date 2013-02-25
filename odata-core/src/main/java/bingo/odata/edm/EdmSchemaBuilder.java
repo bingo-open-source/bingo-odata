@@ -34,6 +34,8 @@ public class EdmSchemaBuilder extends EdmBuilderWithDocumentation implements Bui
 	
 	protected List<EdmComplexType> complexTypes = new ArrayList<EdmComplexType>();
 	
+	protected List<EdmEnumType> enumTypes = new ArrayList<EdmEnumType>();
+	
 	protected List<EdmFunction> functions = new ArrayList<EdmFunction>();
 	
 	public EdmSchemaBuilder(){
@@ -87,6 +89,18 @@ public class EdmSchemaBuilder extends EdmBuilderWithDocumentation implements Bui
 		return this;
 	}
 	
+	public EdmSchemaBuilder addEnumType(EdmEnumType enumType){
+		enumTypes.add(enumType);
+		return this;
+	}
+	
+	public EdmSchemaBuilder addEnumTypes(EdmEnumType... enumTypes){
+		for(EdmEnumType enumType : enumTypes){
+			addEnumType(enumType);
+		}
+		return this;
+	}
+	
 	public EdmSchemaBuilder addAssociation(EdmAssociation association) {
 		associations.add(association);
 		return this;
@@ -130,6 +144,6 @@ public class EdmSchemaBuilder extends EdmBuilderWithDocumentation implements Bui
     }
 
 	public EdmSchema build() {
-	    return new EdmSchema(namespace, alias, entityContainers, entityTypes, associations, complexTypes, functions,documentation);
+	    return new EdmSchema(namespace, alias, entityContainers, entityTypes, associations, complexTypes, enumTypes, functions,documentation);
     }
 }

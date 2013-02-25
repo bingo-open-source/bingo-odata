@@ -36,64 +36,35 @@ import static bingo.odata.ODataObjectKind.*;
 
 public class ODataProtocols {
 	
-	public static final ODataProtocol V2      = v2();
 	public static final ODataProtocol V3      = v3();
 	public static final ODataProtocol DEFAULT = V3;
 	
-	private static ODataProtocol v2(){
-		ODataProtocolBuilder v2builder = new ODataProtocolBuilder(ODataVersion.V1, ODataVersion.V2, ODataVersion.V2, ODataFormat.Atom);
-		
-		//supported format
-		v2builder.addSupportedFormats(ODataFormat.Atom,ODataFormat.Json);
-		
-		//atom readers
-		v2builder.addReader(Atom, Entity, new AtomEntityReader());
-		
-		//json readers
-		v2builder.addReader(Json, Entity, new JsonEntityReader());
-		
-		//Atom writers
-		v2builder.addWriter(Atom,ServiceDocument, new AtomServiceDocumentWriter());
-		v2builder.addWriter(Atom,MetadataDocument,new XmlMetadataDocumentWriter());
-		v2builder.addWriter(Atom,Error,			  new XmlErrorWriter());
-		v2builder.addWriter(Atom,EntitySet,		  new AtomEntitySetWriter());
-		v2builder.addWriter(Atom,Entity,		  new AtomEntityWriter());
-		
-		//Json writers
-		v2builder.addWriter(Json,ServiceDocument, new JsonServiceDocumentWriter());
-		v2builder.addWriter(Json,Error,			  new JsonErrorWriter());	
-		v2builder.addWriter(Json,EntitySet,		  new JsonEntitySetWriter());
-		v2builder.addWriter(Json,Entity,		  new JsonEntityWriter());
-		
-		return v2builder.build();
-	}
-	
 	private static ODataProtocol v3(){
-		ODataProtocolBuilder v2builder = new ODataProtocolBuilder(ODataVersion.V3, ODataVersion.V3, ODataVersion.V3, ODataFormat.Atom);
+		ODataProtocolBuilder v3builder = new ODataProtocolBuilder(ODataVersion.V2, ODataVersion.V3, ODataVersion.V3, ODataFormat.Json);
 		
 		//supported format
-		v2builder.addSupportedFormats(ODataFormat.Atom,ODataFormat.Json);
+		v3builder.addSupportedFormats(ODataFormat.Atom,ODataFormat.Json);
 		
 		//atom readers
-		v2builder.addReader(Atom, Entity, new AtomEntityReader());
+		v3builder.addReader(Atom, Entity, new AtomEntityReader());
 		
 		//json readers
-		v2builder.addReader(Json, Entity, new JsonEntityReader());
+		v3builder.addReader(Json, Entity, new JsonEntityReader());
 		
 		//Atom writers
-		v2builder.addWriter(Atom,ServiceDocument, new AtomServiceDocumentWriter());
-		v2builder.addWriter(Atom,MetadataDocument,new XmlMetadataDocumentWriter());
-		v2builder.addWriter(Atom,Error,			  new XmlErrorWriter());
-		v2builder.addWriter(Atom,EntitySet,		  new AtomEntitySetWriter());
-		v2builder.addWriter(Atom,Entity,		  new AtomEntityWriter());
+		v3builder.addWriter(Atom,ServiceDocument, new AtomServiceDocumentWriter());
+		v3builder.addWriter(Atom,MetadataDocument,new XmlMetadataDocumentWriter());
+		v3builder.addWriter(Atom,Error,			  new XmlErrorWriter());
+		v3builder.addWriter(Atom,EntitySet,		  new AtomEntitySetWriter());
+		v3builder.addWriter(Atom,Entity,		  new AtomEntityWriter());
 		
 		//Json writers
-		v2builder.addWriter(Json,ServiceDocument, new JsonServiceDocumentWriter());
-		v2builder.addWriter(Json,Error,			  new JsonErrorWriter());	
-		v2builder.addWriter(Json,EntitySet,		  new JsonEntitySetWriter());
-		v2builder.addWriter(Json,Entity,		  new JsonEntityWriter());
+		v3builder.addWriter(Json,ServiceDocument, new JsonServiceDocumentWriter());
+		v3builder.addWriter(Json,Error,			  new JsonErrorWriter());	
+		v3builder.addWriter(Json,EntitySet,		  new JsonEntitySetWriter());
+		v3builder.addWriter(Json,Entity,		  new JsonEntityWriter());
 		
-		return v2builder.build();
+		return v3builder.build();
 	}
 
 	public static final class ODataProtocolBuilder implements bingo.lang.Builder<ODataProtocol> {

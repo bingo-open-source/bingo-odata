@@ -34,12 +34,13 @@ public class MockODataRequest implements ODataRequest {
 	private String	contentType	= HttpContentTypes.APPLICATION_ATOM_XML_UTF8;
 
 	private String	method;
+	private String  methodOverride;
 	private String	serviceRootPath;
 	private String	resourcePath;
 	private String	serviceRootUri;
 	private String	uriString;
-	private String queryString;
-	private String content;
+	private String  queryString;
+	private String  content;
 	
 	private final Map<String, String> headers    = new HashMap<String, String>();
 	private final Map<String, String> parameters = new HashMap<String, String>();
@@ -79,6 +80,18 @@ public class MockODataRequest implements ODataRequest {
 	public void setMethod(String method) {
 		this.method = method;
 	}
+	
+	public String getMethodOverride() {
+		return methodOverride;
+	}
+
+	public void setMethodOverride(String methodOverride) {
+		this.methodOverride = methodOverride;
+	}
+
+	public String getMethodOverrideOrOriginal() {
+	    return Strings.firstNotEmpty(methodOverride,method);
+    }
 
 	public String getServiceRootPath() {
 		return serviceRootPath;
@@ -153,26 +166,26 @@ public class MockODataRequest implements ODataRequest {
 	}
 
 	public boolean isDelete() {
-	    return HttpMethods.DELETE.equalsIgnoreCase(getMethod());
+	    return HttpMethods.DELETE.equalsIgnoreCase(getMethodOverrideOrOriginal());
     }
 
 	public boolean isGet() {
-		return HttpMethods.GET.equalsIgnoreCase(getMethod());
+		return HttpMethods.GET.equalsIgnoreCase(getMethodOverrideOrOriginal());
     }
 
 	public boolean isPost() {
-		return HttpMethods.POST.equalsIgnoreCase(getMethod());
+		return HttpMethods.POST.equalsIgnoreCase(getMethodOverrideOrOriginal());
     }
 
 	public boolean isPut() {
-		return HttpMethods.PUT.equalsIgnoreCase(getMethod());
+		return HttpMethods.PUT.equalsIgnoreCase(getMethodOverrideOrOriginal());
     }
 
 	public boolean isMerge() {
-	    return HttpMethods.PATCH.equalsIgnoreCase(getMethod());
+	    return HttpMethods.PATCH.equalsIgnoreCase(getMethodOverrideOrOriginal());
     }
 
 	public boolean isPatch() {
-	    return HttpMethods.MERGE.equalsIgnoreCase(getMethod());
+	    return HttpMethods.MERGE.equalsIgnoreCase(getMethodOverrideOrOriginal());
     }
 }

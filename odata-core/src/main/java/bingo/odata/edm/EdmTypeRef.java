@@ -48,6 +48,6 @@ public abstract class EdmTypeRef extends EdmType {
     public final EdmTypeKind getTypeKind() {
 	    return EdmTypeKind.Reference;
     }
-
+	
 	public abstract EdmTypeKind getRefTypeKind();
 }

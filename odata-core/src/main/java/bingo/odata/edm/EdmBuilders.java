@@ -21,8 +21,16 @@ public final class EdmBuilders {
 		return new EdmSchemaBuilder(namespace, alias);
 	}
 	
+	public static EdmEnumTypeBuilder enumType(String name){
+		return new EdmEnumTypeBuilder(name);
+	}
+	
 	public static EdmEntityTypeBuilder entityType(String name,String fullQualifiedName) {
 		return new EdmEntityTypeBuilder(name,fullQualifiedName);
+	}
+	
+	public static EdmEntityTypeBuilder entityType(EdmSchema schema,String name) {
+		return new EdmEntityTypeBuilder(name,EdmUtils.fullQualifiedName(schema, name));
 	}
 	
 	public static EdmComplexTypeBuilder complexType(String name) {

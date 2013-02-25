@@ -66,7 +66,8 @@ public final class ODataConstants {
 
 		public static final String	CALLBACK		= "$callback";
 		
-		public static final String    X_HTTP_METHOD   = "$x_http_method";
+		//custom option
+		public static final String  X_HTTP_METHOD   = "x_http_method";
 	}
 	
 	public static final class ResourcePaths {

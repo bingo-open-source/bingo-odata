@@ -26,5 +26,7 @@ public enum EdmTypeKind {
 	
 	Row,
 	
-	Reference;
+	Reference,
+	
+	Enum;
 }

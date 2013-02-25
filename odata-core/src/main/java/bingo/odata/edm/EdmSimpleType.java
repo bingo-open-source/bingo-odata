@@ -34,20 +34,20 @@ public class EdmSimpleType extends EdmType implements Named {
 	
 	private static final Map<EdmSimpleTypeKind, EdmSimpleType> map = new LinkedHashMap<EdmSimpleTypeKind, EdmSimpleType>();
 	
-	public static EdmSimpleType BINARY 			= add(EdmSimpleTypeKind.Binary,			byte[].class,Byte[].class);
-	public static EdmSimpleType BOOLEAN 			= add(EdmSimpleTypeKind.Boolean,			Boolean.class,boolean.class);
+	public static EdmSimpleType BINARY 				= add(EdmSimpleTypeKind.Binary,			byte[].class,Byte[].class);
+	public static EdmSimpleType BOOLEAN 			= add(EdmSimpleTypeKind.Boolean,		Boolean.class,boolean.class);
 	public static EdmSimpleType BYTE 				= add(EdmSimpleTypeKind.Byte,			UnsignedByte.class);
 	public static EdmSimpleType DATETIME 			= add(EdmSimpleTypeKind.DateTime,		Date.class,Timestamp.class);
 	public static EdmSimpleType DATETIME_OFFSET 	= add(EdmSimpleTypeKind.DateTimeOffset,	DateTimeOffset.class);
-	public static EdmSimpleType DECIMAL 			= add(EdmSimpleTypeKind.Decimal,			BigDecimal.class);
-	public static EdmSimpleType DOUBLE 			= add(EdmSimpleTypeKind.Double,			Double.class,double.class);
+	public static EdmSimpleType DECIMAL 			= add(EdmSimpleTypeKind.Decimal,		BigDecimal.class);
+	public static EdmSimpleType DOUBLE 				= add(EdmSimpleTypeKind.Double,			Double.class,double.class);
 	public static EdmSimpleType GUID 				= add(EdmSimpleTypeKind.Guid,			Guid.class,UUID.class);
 	public static EdmSimpleType INT16				= add(EdmSimpleTypeKind.Int16,			Short.class,short.class);
 	public static EdmSimpleType INT32 				= add(EdmSimpleTypeKind.Int32,			Integer.class,int.class);
 	public static EdmSimpleType INT64 				= add(EdmSimpleTypeKind.Int64,			Long.class,long.class);
 	public static EdmSimpleType SBYTE 				= add(EdmSimpleTypeKind.SByte,			Byte.class,byte.class);
-	public static EdmSimpleType SINGLE 			= add(EdmSimpleTypeKind.Single,			Float.class,float.class);
-	public static EdmSimpleType STREAM 			= add(EdmSimpleTypeKind.Stream);
+	public static EdmSimpleType SINGLE 				= add(EdmSimpleTypeKind.Single,			Float.class,float.class);
+	public static EdmSimpleType STREAM 				= add(EdmSimpleTypeKind.Stream);
 	public static EdmSimpleType STRING			 	= add(EdmSimpleTypeKind.String,			String.class,char.class,Character.class);
 	public static EdmSimpleType TIME 				= add(EdmSimpleTypeKind.Time,			Time.class,Date.class);
 	
@@ -79,9 +79,32 @@ public class EdmSimpleType extends EdmType implements Named {
 		return null;
 	}
 
+	public static boolean hasMaxLengthFacet(EdmType type){
+		return hasFacet(type, EdmSimpleTypeFacet.MaxLength);
+	}
+	
+	public static boolean hasFixedLengthFacet(EdmType type){
+		return hasFacet(type, EdmSimpleTypeFacet.FixedLength);
+	}
+	
+	public static boolean hasPrecisionFacet(EdmType type){
+		return hasFacet(type, EdmSimpleTypeFacet.Precision);
+	}
+	
+	public static boolean hasScaleFacet(EdmType type){
+		return hasFacet(type, EdmSimpleTypeFacet.Scale);
+	}
+	
+	public static boolean hasFacet(EdmType type,EdmSimpleTypeFacet facet){
+		if(type instanceof EdmSimpleType){
+			return ((EdmSimpleType) type).getValueKind().hasFacet(facet);
+		}
+		return false;
+	}
+
 	private final String	            name;
 	private final String	            fullQualifiedName;
-	private final EdmSimpleTypeKind	        valueKind;
+	private final EdmSimpleTypeKind	    valueKind;
 	private final Class<?>	            defaultJavaType;
 	private final Enumerable<Class<?>>	mappingJavaTypes;
 	
@@ -111,7 +134,7 @@ public class EdmSimpleType extends EdmType implements Named {
     public EdmTypeKind getTypeKind() {
 	    return EdmTypeKind.Simple;
     }
-
+	
 	public EdmSimpleTypeKind getValueKind() {
     	return valueKind;
     }

@@ -40,25 +40,26 @@ public class ODataRequestUtils {
 	}
 	
 	public static ODataVersion getAndCheckVersion(ODataProtocol protocol,ODataRequest request) throws ODataError {
-		ODataVersion dataServiceVersion    = dataServiceVersion(request);
-		ODataVersion minDataServiceVersion = minDataServiceVersion(request);
-		ODataVersion maxDataServiceVersion = maxDataServiceVersion(request);
-		
-		checkDataServiceVersion(protocol,dataServiceVersion);
-		checkDataServiceVersion(protocol,minDataServiceVersion);
-		checkDataServiceVersion(protocol,maxDataServiceVersion);
-		
-		ODataVersion version = protocol.getDefaultVersion();
-		
+		//check DataServiceVersion
+		ODataVersion dataServiceVersion = checkDataServiceVersion(protocol,dataServiceVersion(request));
 		if(null != dataServiceVersion){
-			version = dataServiceVersion;
-		}else if(null != maxDataServiceVersion && maxDataServiceVersion.isLessThan(version)){
-			version = maxDataServiceVersion;
-		}else if(null !=minDataServiceVersion && version.isLessThan(minDataServiceVersion)){
-			version = minDataServiceVersion;
+			return dataServiceVersion;
 		}
-
-		return version;
+		
+		//check MaxDataServiceVersion
+		ODataVersion maxDataServiceVersion = checkDataServiceVersion(protocol,maxDataServiceVersion(request));
+		if(null != maxDataServiceVersion){
+			return maxDataServiceVersion;
+		}
+		
+		//check MinDataServiceVersion
+		ODataVersion minDataServiceVersion = checkDataServiceVersion(protocol,minDataServiceVersion(request));
+		if(null != minDataServiceVersion && protocol.getDefaultVersion().isLessThan(minDataServiceVersion)){
+			return protocol.getMaxSupportedVersion();
+		}
+		
+		//return DefaultDataServiceVersion in protocol
+		return protocol.getDefaultVersion();
 	}
 	
 	public static ODataVersion dataServiceVersion(ODataRequest request) throws ODataError {
@@ -120,43 +121,37 @@ public class ODataRequestUtils {
 	
 	private static ODataFormat parseFormatFromHeader(ODataVersion version, String acceptValue) throws ODataError {
 		HttpHeader accept = new HttpHeader("", acceptValue);
-
-		ODataFormat format = null;
 		
 		for(HeaderElement element : accept.getElements()){
-			String mediaType = element.getName();
-			
-			if(HttpContentTypes.APPLICATION_ATOM_XML.equals(mediaType)){
-				format = ODataFormat.Atom;
-				break;
-			}else if(HttpContentTypes.APPLICATION_JSON.equals(mediaType)){
+			if(HttpContentTypes.APPLICATION_JSON.equals(element.getName())){
 				String jsonFormat = element.getParameter("odata");
 				
 				if(Strings.isEmpty(jsonFormat)){
-					format = version.getMajor() >= 3 ? ODataFormat.Json : ODataFormat.VerboseJson;
+					return version.getMajor() >= 3 ? ODataFormat.Json : ODataFormat.VerboseJson;
 				}else if(ODataFormat.VerboseJson.getValue().equals(jsonFormat)){
-					format = ODataFormat.VerboseJson;
+					return ODataFormat.VerboseJson;
 				}else {
-					format = ODataFormat.Json;
+					return ODataFormat.Json;
 				}
-				break;
-			}else if(HttpContentTypes.APPLICATION_XML.equals(mediaType)){
-				format = ODataFormat.Xml;
-			}else if(HttpContentTypes.WILDCARD.equals(mediaType)){
-				format = ODataFormat.Atom;
+			}
+		}
+
+		for(HeaderElement element : accept.getElements()){
+			String mediaType = element.getName();
+			if(HttpContentTypes.APPLICATION_ATOM_XML.equals(mediaType) || 
+			   HttpContentTypes.APPLICATION_XML.equals(mediaType) || 
+			   HttpContentTypes.WILDCARD.equals(mediaType)){
+				return ODataFormat.Atom;
 			}
 		}
 		
-		if(null == format){
-			format = ODataFormat.Atom;
-		}
-		
-		return format;
+		return null;
 	}
 	
-	private static void checkDataServiceVersion(ODataProtocol protocol, ODataVersion v){
+	private static ODataVersion checkDataServiceVersion(ODataProtocol protocol, ODataVersion v){
 		if(null != v && !protocol.isVersionSupported(v)){
 			throw ODataErrors.unsupportedDataServiceVersion(v.getValue());
 		}
+		return v;
 	}
 }

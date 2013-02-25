@@ -17,6 +17,7 @@ package bingo.odata.format.xml;
 
 import static bingo.odata.edm.EdmUtils.fullQualifiedName;
 import bingo.lang.Strings;
+import bingo.lang.http.HttpContentTypes;
 import bingo.lang.xml.XmlWriter;
 import bingo.odata.ODataContext;
 import bingo.odata.ODataServices;
@@ -26,15 +27,19 @@ import bingo.odata.edm.EdmComplexType;
 import bingo.odata.edm.EdmEntityContainer;
 import bingo.odata.edm.EdmEntitySet;
 import bingo.odata.edm.EdmEntityType;
+import bingo.odata.edm.EdmEnumMember;
+import bingo.odata.edm.EdmEnumType;
+import bingo.odata.edm.EdmFeedCustomization.SyndicationTextContentKind;
 import bingo.odata.edm.EdmFunctionImport;
 import bingo.odata.edm.EdmNavigationProperty;
 import bingo.odata.edm.EdmParameter;
 import bingo.odata.edm.EdmProperty;
 import bingo.odata.edm.EdmSchema;
+import bingo.odata.edm.EdmSimpleType;
 import bingo.odata.edm.EdmType;
-import bingo.odata.edm.EdmFeedCustomization.SyndicationTextContentKind;
+import bingo.odata.edm.EdmUtils;
 import bingo.odata.format.ODataXmlWriter;
-import bingo.lang.http.HttpContentTypes;
+import bingo.odata.utils.InternalTypeUtils;
 
 public class XmlMetadataDocumentWriter extends ODataXmlWriter<ODataServices> {
 	
@@ -74,6 +79,9 @@ public class XmlMetadataDocumentWriter extends ODataXmlWriter<ODataServices> {
 			
 			//ComplexType
 			writeComplexTypes(writer, schema);
+			
+			//EnumType
+			writeEnumTypes(writer,schema);
 			
 			//Function
 			writeFunctions(writer, schema);
@@ -159,23 +167,32 @@ public class XmlMetadataDocumentWriter extends ODataXmlWriter<ODataServices> {
 	
 	private static void writeProperties(XmlWriter writer,EdmSchema schema,Iterable<EdmProperty> properties) {
 		for (EdmProperty prop : properties) {
+			EdmType type = prop.getType();
+			
 			writer.startElement("Property");
 
 			writer.attribute("Name",  prop.getName());
-			writer.attribute("Type",  fullQualifiedName(schema, prop.getType()));
+			writer.attribute("Type",  fullQualifiedName(schema,type));
 			writer.attribute("Nullable", Boolean.toString(prop.isNullable()));
 
-			if (prop.getMaxLength() > 0) {
+			if (EdmSimpleType.hasMaxLengthFacet(type) && prop.getMaxLength() > 0) {
 				writer.attribute("MaxLength", Integer.toString(prop.getMaxLength()));
 			}
 
-			if (!Strings.isEmpty(prop.getDefaultValue())) {
+			if (type.isSimple() && !Strings.isEmpty(prop.getDefaultValue())) {
 				writer.attribute("DefaultValue", prop.getDefaultValue());
 			}
 
-			if (prop.getPrecision() > 0) {
+			if (EdmSimpleType.hasPrecisionFacet(type) && prop.getPrecision() > 0) {
 				writer.attribute("Precision", Integer.toString(prop.getPrecision()));
-				writer.attribute("Scale", Integer.toString(prop.getPrecision()));
+				
+				if(EdmSimpleType.hasScaleFacet(type)){
+					writer.attribute("Scale", Integer.toString(prop.getPrecision()));	
+				}
+			}
+			
+			if(EdmSimpleType.hasFixedLengthFacet(type) && prop.isFixedLength()){
+				writer.attribute("FixedLength", Boolean.toString(prop.isFixedLength()));
 			}
 			
 			//feed customerization attributes
@@ -248,6 +265,31 @@ public class XmlMetadataDocumentWriter extends ODataXmlWriter<ODataServices> {
 			      .attribute("Name", complexType.getName());
 			
 			writeProperties(writer, schema, complexType.getDeclaredProperties());
+			
+			writer.endElement();
+		}
+	}
+	
+	private static void writeEnumTypes(XmlWriter writer,EdmSchema schema) {
+		for(EdmEnumType enumType : schema.getEnumTypes()){
+			writer.startElement("EnumType")
+				  .attribute("Name",enumType.getName())
+				  .attribute("UnderlyingType",EdmUtils.fullQualifiedName(schema, enumType.getUnderlyingType()));
+			
+			if(enumType.isFlags()){
+				writer.attribute("IsFlags","true");
+			}
+			
+			for(EdmEnumMember member : enumType.getMembers()){
+				writer.startElement("Member")
+					  .attribute("Name",member.getName());
+				
+				if(!Strings.isEmpty(member.getValue())){
+					writer.attribute("Value",InternalTypeUtils.toEdmString(member.getValue(),enumType.getUnderlyingType()));
+				}
+				
+				writer.endElement();
+			}
 			
 			writer.endElement();
 		}

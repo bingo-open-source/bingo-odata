@@ -24,14 +24,14 @@ import bingo.lang.builder.HashCodeBuilder;
 
 public class ODataProtocol {
 
-	private final ODataVersion     minSupportedVersion;
-	private final ODataVersion     maxSupportedVersion;
-	private final ODataVersion     defaultVersion;
-	private final ODataFormat      defaultFormat;
-	private final Set<ODataFormat> supportedFormats;
+	protected final ODataVersion     minSupportedVersion;
+	protected final ODataVersion     maxSupportedVersion;
+	protected final ODataVersion     defaultVersion;
+	protected final ODataFormat      defaultFormat;
+	protected final Set<ODataFormat> supportedFormats;
 	
-	private final Registry<ODataReader<?>> readers;
-	private final Registry<ODataWriter<?>> writers;
+	protected final Registry<ODataReader<?>> readers;
+	protected final Registry<ODataWriter<?>> writers;
 	
 	protected ODataProtocol(ODataVersion minSupportedVersion, 
 							  ODataVersion maxSupportedVersion, 
@@ -107,7 +107,7 @@ public class ODataProtocol {
 		private final ODataVersion     version;
 		private final ODataFormat      format;
 		private final ODataObjectKind  kind;
-		private final int 			    hashCode;
+		private final int 			   hashCode;
 		
 		public Key(ODataVersion version, ODataFormat format, ODataObjectKind kind) {
 	        this.version = version;

@@ -188,16 +188,7 @@ public class InternalTypeUtils {
         return result;
     }
 
-    /**
-     * Converts a value to the String representation of the target WCF type.
-     * 
-     * @param value
-     *            The value to convert.
-     * @param type
-     *            The target WCF type.
-     * @return The converted value.
-     */
-    public static String toEdm(Object value, EdmSimpleType type) {
+    public static String toEdmString(Object value, EdmSimpleType type) {
         String adoNetType = type.getName();
         
         if (value == null && adoNetType == null) {
@@ -268,49 +259,18 @@ public class InternalTypeUtils {
         return result;
     }
 
-    /**
-     * Convert the given value to the String representation of a EDM Binary
-     * value.
-     * 
-     * @param value
-     *            The value to convert.
-     * @return The value converted as String object.
-     */
     public static String toEdmBinary(byte[] value) {
         return Base64.encode(value, false);
     }
 
-    /**
-     * Convert the given value to the String representation of a EDM Boolean
-     * value.
-     * 
-     * @param value
-     *            The value to convert.
-     * @return The value converted as String object.
-     */
     public static String toEdmBoolean(boolean value) {
         return Boolean.toString(value);
     }
 
-    /**
-     * Convert the given value to the String representation of a EDM Byte value.
-     * 
-     * @param value
-     *            The value to convert.
-     * @return The value converted as String object.
-     */
     public static String toEdmByte(byte value) {
         return Byte.toString(value);
     }
 
-    /**
-     * Convert the given value to the String representation of a EDM DateTime
-     * value.
-     * 
-     * @param value
-     *            The value to convert.
-     * @return The value converted as String object.
-     */
     public static String toEdmDateTime(Date value) {
         return Dates.format(value, dateTimeFormats[0]);
     }

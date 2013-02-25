@@ -152,6 +152,10 @@ public class ODataServletRequest implements ODataRequest {
 		String method = request.getHeader(HttpHeaders.X_HTTP_METHOD);
 		
 		if(Strings.isEmpty(method)){
+			method = request.getHeader(HttpHeaders.X_HTTP_METHOD_OVERRIDE);
+		}
+		
+		if(Strings.isEmpty(method)){
 			method = request.getParameter(QueryOptions.X_HTTP_METHOD);
 		}
 		

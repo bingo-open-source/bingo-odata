@@ -20,15 +20,15 @@ import bingo.odata.expression.OrderByExpression.Direction;
 public abstract class ExpressionVisitorBase implements ExpressionVisitor {
 
 	public void beforeDescend() {
-		throw new UnsupportedOperationException("visit beforeDescend");
+		
 	}
 
 	public void afterDescend() {
-		throw new UnsupportedOperationException("visit afterDescend");
+
     }
 
 	public void betweenDescend() {
-		throw new UnsupportedOperationException("visit betweenDescend");
+
     }
 
 	public void visit(String type) {

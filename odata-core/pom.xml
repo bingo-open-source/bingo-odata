@@ -8,7 +8,6 @@
 		<relativePath>../</relativePath>
 	</parent>
 
-	<groupId>bingo.odata</groupId>
 	<artifactId>bingo-odata-core</artifactId>
 	<packaging>jar</packaging>
 </project>

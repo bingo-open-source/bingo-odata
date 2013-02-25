@@ -35,9 +35,16 @@ public class EdmSchema extends EdmObjectWithDocumentation {
 	
 	private final Enumerable<EdmFunction> functions;
 	
-	public EdmSchema(String namespaceName,String alias,
-					  Iterable<EdmEntityContainer> entityContainers,Iterable<EdmEntityType> entityTypes,
-					  Iterable<EdmAssociation> associations,Iterable<EdmComplexType> complexTypes,Iterable<EdmFunction> functions) {
+	private final Enumerable<EdmEnumType> enumTypes;
+	
+	public EdmSchema(String namespaceName,
+			 		 String alias,
+					 Iterable<EdmEntityContainer> entityContainers,
+					 Iterable<EdmEntityType> entityTypes,
+					 Iterable<EdmAssociation> associations,
+					 Iterable<EdmComplexType> complexTypes,
+					 Iterable<EdmEnumType> enumTypes,
+					 Iterable<EdmFunction> functions) {
 		
 		this.namespaceName = namespaceName;
 		this.alias         = alias;
@@ -46,15 +53,21 @@ public class EdmSchema extends EdmObjectWithDocumentation {
 		this.entityTypes      = Enumerables.of(entityTypes);
 		this.associations     = Enumerables.of(associations);
 		this.complexTypes     = Enumerables.of(complexTypes);
+		this.enumTypes        = Enumerables.of(enumTypes);
 		this.functions        = Enumerables.of(functions);
 	}
 	
-	public EdmSchema(String namespaceName,String alias,
-					  Iterable<EdmEntityContainer> entityContainers,Iterable<EdmEntityType> entityTypes,
-					  Iterable<EdmAssociation> associations,Iterable<EdmComplexType> complexTypes,Iterable<EdmFunction> functions,
-					  EdmDocumentation documentation) {
+	public EdmSchema(String namespaceName,
+			 		 String alias,
+					 Iterable<EdmEntityContainer> entityContainers,
+					 Iterable<EdmEntityType> entityTypes,
+					 Iterable<EdmAssociation> associations,
+					 Iterable<EdmComplexType> complexTypes,
+					 Iterable<EdmEnumType> enumTypes,
+					 Iterable<EdmFunction> functions,
+					 EdmDocumentation documentation) {
 		
-		this(namespaceName,alias,entityContainers,entityTypes,associations,complexTypes,functions);
+		this(namespaceName,alias,entityContainers,entityTypes,associations,complexTypes,enumTypes,functions);
 		
 		this.documentation = documentation;
 	}
@@ -90,6 +103,10 @@ public class EdmSchema extends EdmObjectWithDocumentation {
 	public Enumerable<EdmComplexType> getComplexTypes() {
     	return complexTypes;
     }
+
+	public Enumerable<EdmEnumType> getEnumTypes() {
+		return enumTypes;
+	}
 
 	public Enumerable<EdmFunction> getFunctions() {
     	return functions;

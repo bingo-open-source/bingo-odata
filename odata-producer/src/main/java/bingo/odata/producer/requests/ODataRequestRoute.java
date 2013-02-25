@@ -28,7 +28,7 @@ public class ODataRequestRoute {
 	public static ODataRequestRoute compile(String method,String regex,ODataRequestHandler handler){
 		ODataRequestRoute route = new ODataRequestRoute();
 		route.method  = method;
-		route.regex    = regex;
+		route.regex   = regex;
 		route.handler = handler;
 		route.compile();
 		return route;
