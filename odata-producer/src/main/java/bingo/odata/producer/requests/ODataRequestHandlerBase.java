@@ -27,6 +27,7 @@ import bingo.odata.ODataReader;
 import bingo.odata.ODataRequest;
 import bingo.odata.ODataResponse;
 import bingo.odata.ODataWriter;
+import bingo.odata.data.ODataValue;
 import bingo.odata.producer.ODataProducerContext;
 
 public abstract class ODataRequestHandlerBase implements ODataRequestHandler {
@@ -44,6 +45,10 @@ public abstract class ODataRequestHandlerBase implements ODataRequestHandler {
         	}
         }
     }
+	
+	protected static void write(ODataProducerContext context,ODataRequest request,ODataResponse response,ODataValue returnValue) throws Throwable{
+		write(context,request,response,returnValue.getKind(),returnValue.getValue());
+	}
 	
 	protected static <T extends ODataObject> void write(ODataProducerContext context,ODataRequest request, ODataResponse response,ODataObjectKind kind,T target) throws Throwable {
 		ODataWriter<T> writer = getWriter(context, kind);

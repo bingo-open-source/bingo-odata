@@ -24,5 +24,9 @@ public enum ODataObjectKind {
 	
 	EntitySet,
 	
-	Entity;
+	Entity,
+
+	Property,
+	
+	Raw;
 }

@@ -27,6 +27,7 @@ import bingo.lang.uri.QueryStringBuilder;
 import bingo.odata.ODataConstants.QueryOptions;
 import bingo.odata.data.ODataEntity;
 import bingo.odata.data.ODataEntitySet;
+import bingo.odata.edm.EdmNavigationProperty;
 import bingo.odata.expression.EntitySimpleProperty;
 
 public class ODataUtils {
@@ -55,8 +56,24 @@ public class ODataUtils {
 		return Dates.format(dt, DATETIME_FORMAT);
 	}
 	
-	public static String getEntryId(ODataUrlInfo urlInfo,ODataEntity entity){
+	public static String getEntityUrl(ODataUrlInfo urlInfo,ODataEntity entity){
 		return urlInfo.getServiceRootUri() + entity.getKeyString();
+	}
+	
+	public static String getEntityUrlWithFormat(ODataUrlInfo urlInfo,ODataEntity entity,String format){
+		return getEntityUrl(urlInfo,entity) + "?" + QueryOptions.FORMAT + "=" + format;
+	}
+	
+	public static String getPropertyPath(ODataUrlInfo urlInfo,ODataEntity entity,EdmNavigationProperty prop){
+		return urlInfo.getServiceRootUri() +  entity.getKeyString() + "/" + prop.getName();
+	}
+	
+	public static String getPropertyPathWithFormat(ODataUrlInfo urlInfo,ODataEntity entity,EdmNavigationProperty prop,String format){
+		return getPropertyPath(urlInfo,entity,prop) + "?" + QueryOptions.FORMAT + "=" + format;
+	}
+	
+	public static String getNavPropertyLinkPath(ODataUrlInfo urlInfo,ODataEntity entity,EdmNavigationProperty prop){
+		return urlInfo.getServiceRootUri() +  entity.getKeyString() + "/$links/" + prop.getName();
 	}
 	
 	public static String nextHref(ODataContext context,ODataEntitySet entitySet){

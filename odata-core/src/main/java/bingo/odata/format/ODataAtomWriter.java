@@ -92,7 +92,7 @@ public abstract class ODataAtomWriter<T extends ODataObject> extends ODataXmlWri
 	protected static void writeEntryBody(ODataContext context, XmlWriter writer,ODataEntity entity,String updated,boolean isFeed) {
 		
 		if(context.isProducer()){
-			writer.startElement("id").text(ODataUtils.getEntryId(context.getUrlInfo(), entity)).endElement();
+			writer.startElement("id").text(ODataUtils.getEntityUrl(context.getUrlInfo(), entity)).endElement();
 		}
 		
 		writeEntryFeedCustomizationAttributes(context,writer,entity,updated);
@@ -164,7 +164,7 @@ public abstract class ODataAtomWriter<T extends ODataObject> extends ODataXmlWri
 		String type = isFeed ? ContentTypes.APPLICATION_ATOM_FEED : ContentTypes.APPLICATION_ATOM_ENTRY;
 		
 		for(EdmNavigationProperty navProp : entity.getEntityType().getDeclaredNavigationProperties()){
-			writeLink(writer, navProp.getName(), type,  entity.getKeyString() + "/" + navProp.getName(),RELATED_NS + navProp.getName());
+			writeLink(writer, navProp.getName(), type,ODataUtils.getPropertyPathWithFormat(context.getUrlInfo(),entity,navProp,context.getFormat().getValue()),RELATED_NS + navProp.getName());
 		}
 	}
 	

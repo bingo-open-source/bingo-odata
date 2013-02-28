@@ -24,6 +24,7 @@ public class EdmEntityType extends EdmNamedStructualType {
 	private final String             fullQualifiedName;
 	private final EdmEntityType   	 baseType;
 	private final boolean 		     hasStream;
+	private final boolean			 openType;
 	private final Enumerable<String> keys;
 	private final Enumerable<EdmNavigationProperty> navigationProperties;
 	
@@ -42,6 +43,7 @@ public class EdmEntityType extends EdmNamedStructualType {
 		this.navigationProperties = Enumerables.of(navigationProperties);
 		this.baseType   = baseType;
 		this.hasStream  = hasStream;
+		this.openType   = false;
 		
 		doCheckValidKeys();
 	}
@@ -52,12 +54,21 @@ public class EdmEntityType extends EdmNamedStructualType {
 						  Iterable<String> keys,
 						  boolean isAbstract,
 						  boolean hasStream,
+						  boolean openType,
 						  EdmEntityType baseType,
 						  EdmDocumentation documentation){
 		
-		this(name,fullQualifiedName,properties,navigationProperties,keys,isAbstract,hasStream,baseType);
+		super(name,properties,isAbstract);
 		
+		this.fullQualifiedName = fullQualifiedName;
+		this.keys       = Enumerables.of(keys);
+		this.navigationProperties = Enumerables.of(navigationProperties);
+		this.baseType   = baseType;
+		this.hasStream  = hasStream;
+		this.openType   = openType;
 		this.documentation = documentation;
+		
+		doCheckValidKeys();
 	}
 	
 	public String getFullQualifiedName() {
@@ -90,6 +101,14 @@ public class EdmEntityType extends EdmNamedStructualType {
 		return Enumerables.firstOrNull(navigationProperties,Predicates.<EdmNavigationProperty>nameEqualsIgnoreCase(name));
 	}
 	
+	public EdmNavigationProperty findNavigationProperty(String name){
+		EdmNavigationProperty p = findDeclaredNavigationProperty(name);
+		if(null == p && null != baseType){
+			return baseType.findNavigationProperty(name);
+		}
+		return p;
+	}
+	
 	public Enumerable<String> getKeys() {
     	return null == baseType ? keys : baseType.getKeys();
     }
@@ -98,6 +117,10 @@ public class EdmEntityType extends EdmNamedStructualType {
     	return hasStream;
     }
 	
+	public boolean isOpenType() {
+		return openType;
+	}
+
 	@Override
     public EdmTypeKind getTypeKind() {
 	    return EdmTypeKind.Entity;

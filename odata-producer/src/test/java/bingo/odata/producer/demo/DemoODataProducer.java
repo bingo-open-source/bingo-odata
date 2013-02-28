@@ -28,7 +28,7 @@ import bingo.odata.data.ODataEntitySet;
 import bingo.odata.data.ODataEntitySetBuilder;
 import bingo.odata.data.ODataKey;
 import bingo.odata.data.ODataParameters;
-import bingo.odata.data.ODataReturnValue;
+import bingo.odata.data.ODataValue;
 import bingo.odata.edm.EdmAssociation;
 import bingo.odata.edm.EdmAssociationBuilder;
 import bingo.odata.edm.EdmBuilders;
@@ -47,9 +47,10 @@ import bingo.odata.edm.EdmSchemaBuilder;
 import bingo.odata.edm.EdmSimpleType;
 import bingo.odata.exceptions.ODataBadRequestException;
 import bingo.odata.producer.ODataProducer;
+import bingo.odata.producer.ODataProducerAdapter;
 import bingo.odata.producer.ODataProducerContext;
 
-public class DemoODataProducer implements ODataProducer {
+public class DemoODataProducer extends ODataProducerAdapter implements ODataProducer {
 	
 	private final ODataServices metadata;
 	
@@ -176,7 +177,7 @@ public class DemoODataProducer implements ODataProducer {
 	    return entity;
     }
 	
-	public ODataReturnValue invokeFunction(ODataProducerContext context, EdmFunctionImport func, ODataParameters parameters) {
+	public ODataValue invokeFunction(ODataProducerContext context, EdmFunctionImport func, ODataParameters parameters) {
 		for(EdmParameter param : func.getParameters()){
 			if(null == parameters.getParameter(param.getName())){
 				throw new ODataBadRequestException(Strings.format("parameter '{0}' required",param.getName()));

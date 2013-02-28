@@ -31,6 +31,8 @@ public class EdmEntityTypeBuilder extends EdmNamedStructualTypeBuilder implement
 	private EdmEntityType baseType;
 
 	private boolean hasStream;
+	
+	private boolean openType;
 
 	private List<String> keys = new ArrayList<String>();
 
@@ -63,6 +65,11 @@ public class EdmEntityTypeBuilder extends EdmNamedStructualTypeBuilder implement
 		return this;
 	}
 	
+	public EdmEntityTypeBuilder setOpenType(boolean openType) {
+		this.openType = openType;
+		return this;
+	}
+
 	public EdmEntityTypeBuilder addKey(String key){
 //		if(!Enumerables.any(properties, Predicates.<EdmProperty>nameEqualsIgnoreCase(key))) {
 //			throw new EdmException("no key property '{0}' found in entity type",key);
@@ -175,7 +182,7 @@ public class EdmEntityTypeBuilder extends EdmNamedStructualTypeBuilder implement
     }
 
 	public EdmEntityType build() {
-		return new EdmEntityType(name, fullQualifiedName, properties, navigationProperties, keys, isAbstract, hasStream, baseType,documentation);
+		return new EdmEntityType(name, fullQualifiedName, properties, navigationProperties, keys, isAbstract, hasStream, openType, baseType,documentation);
 	}
 	
 	public EdmEntityTypeRef buildRef(EdmSchemaBuilder schema){

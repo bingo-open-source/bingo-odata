@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 the original author or authors.
+ * Copyright 2013 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,9 +18,21 @@ package bingo.odata.data;
 import bingo.odata.ODataObject;
 import bingo.odata.ODataObjectKind;
 
-public interface ODataReturnValue extends ODataObject {
+public class ODataValueImpl implements ODataValue {
 	
-	ODataObjectKind getKind();
+	protected final ODataObjectKind kind;
+	protected final ODataObject     value;
 	
-	ODataObject getValue();
+	public ODataValueImpl(ODataObjectKind kind,ODataObject value) {
+		this.kind  = kind;
+		this.value = value;
+	}
+
+	public ODataObjectKind getKind() {
+		return kind;
+	}
+
+	public ODataObject getValue() {
+		return value;
+	}
 }

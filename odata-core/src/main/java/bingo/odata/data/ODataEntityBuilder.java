@@ -22,8 +22,10 @@ import java.util.Map.Entry;
 
 import bingo.lang.Builder;
 import bingo.lang.exceptions.ObjectNotFoundException;
+import bingo.odata.edm.EdmBuilders;
 import bingo.odata.edm.EdmEntitySet;
 import bingo.odata.edm.EdmEntityType;
+import bingo.odata.edm.EdmType;
 import bingo.odata.edm.EdmFeedCustomization.SyndicationItemProperty;
 import bingo.odata.edm.EdmProperty;
 
@@ -36,6 +38,10 @@ public class ODataEntityBuilder implements Builder<ODataEntity>{
 	public ODataEntityBuilder(EdmEntitySet entitySet,EdmEntityType entityType){
 		this.entitySet        = entitySet;
 		this.entityType       = entityType;
+	}
+	
+	public EdmEntityType getEntityType(){
+		return entityType;
 	}
 
 	public ODataEntityBuilder addProperty(ODataProperty property){
@@ -67,6 +73,38 @@ public class ODataEntityBuilder implements Builder<ODataEntity>{
 		return addProperty(new ODataPropertyImpl(p,value));
 	}
 	
+	/**
+	 * @exception IllegalStateException throws if entity type is not a open type.
+	 */
+	public ODataEntityBuilder addDynamicProperty(EdmType type,String name,Object value) throws IllegalStateException{
+		if(!entityType.isOpenType()){
+			throw new IllegalStateException("only OpenEntitType can add dynamic property");
+		}
+		EdmProperty dynamicProperty = EdmBuilders.property(name).setType(type).setNullable(true).build();
+		return addProperty(new ODataPropertyImpl(dynamicProperty,value));
+	}
+	
+	public ODataEntityBuilder addPropertyIfExists(String name,Object value){
+		EdmProperty p = entityType.findProperty(name);
+
+		if(null == p){
+			return this;
+		}
+		
+		return addProperty(new ODataPropertyImpl(p,value));
+	}
+	
+	public boolean tryAddProperty(String name,Object value){
+		EdmProperty p = entityType.findProperty(name);
+
+		if(null == p){
+			return false;
+		}
+		
+		addProperty(new ODataPropertyImpl(p,value));
+		return true;
+	}
+	
 	public ODataEntityBuilder addProperties(Iterable<ODataProperty> properties){
 		for(ODataProperty p : properties){
 			addProperty(p);
@@ -85,7 +123,7 @@ public class ODataEntityBuilder implements Builder<ODataEntity>{
 	public ODataEntityBuilder addFeedPropertyIfExists(SyndicationItemProperty feedProperty,String value){
 		for(EdmProperty p : entityType.getDeclaredProperties()){
 			if(feedProperty.equalsValue(p.getFcTargetPath())){
-				return addProperty(ODataPropertyBuilder.build(p, value));
+				return addProperty(ODataPropertyBuilder.of(p, value));
 			}
 		}
 		return this;

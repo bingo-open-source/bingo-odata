@@ -16,10 +16,11 @@
 package bingo.odata.data;
 
 import bingo.lang.NamedValue;
+import bingo.odata.ODataObject;
 import bingo.odata.edm.EdmProperty;
 import bingo.odata.edm.EdmType;
 
-public interface ODataProperty extends NamedValue<Object>{
+public interface ODataProperty extends NamedValue<Object>,ODataObject{
 	
 	EdmProperty getMetadata();
 

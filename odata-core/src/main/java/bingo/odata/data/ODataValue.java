@@ -13,20 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.odata.format.json;
+package bingo.odata.data;
 
-import bingo.odata.ODataContext;
-import bingo.odata.data.ODataEntity;
-import bingo.odata.format.ODataJsonWriter;
-import bingo.lang.json.JSONWriter;
+import bingo.odata.ODataObject;
+import bingo.odata.ODataObjectKind;
 
-import static bingo.odata.format.json.JsonWriterUtils.*;
-
-public class JsonEntityWriter extends ODataJsonWriter<ODataEntity>{
-
-	@Override
-    protected void write(ODataContext context, JSONWriter writer, ODataEntity target) throws Throwable {
-		writeEntity(context, writer, target);
-    }
+public interface ODataValue extends ODataObject {
 	
+	ODataObjectKind getKind();
+	
+	ODataObject getValue();
 }

@@ -21,6 +21,7 @@ import bingo.odata.ODataResponse;
 import bingo.odata.data.ODataKey;
 import bingo.odata.edm.EdmEntitySet;
 import bingo.odata.edm.EdmEntityType;
+import bingo.odata.edm.EdmNavigationProperty;
 import bingo.odata.edm.EdmProperty;
 import bingo.odata.producer.ODataProducerContext;
 import bingo.odata.producer.requests.ODataRequestRouter;
@@ -33,16 +34,38 @@ public abstract class PropertyRequestHandlerBase extends EntityRequestHandlerBas
 
 		String entityPropertyName = context.getUrlInfo().getPathParameter(ODataRequestRouter.ENTITY_PROP_NAME);
 
-		EdmProperty property = entityType.findDeclaredProperty(entityPropertyName);
+		EdmProperty property = entityType.findProperty(entityPropertyName);
 		
-		if(null == property){
-			throw ODataErrors.notFound("Property '{0}' not found",entityPropertyName);
+		if(null != property){
+			doHandleProperty(context, request, response, entitySet, entityType, key, property);
+			return;
 		}
 		
-		doHandleEntity(context, request, response, entitySet, entityType, key, property);
+		EdmNavigationProperty navProperty = entityType.findNavigationProperty(entityPropertyName);
+		if(null != navProperty){
+			doHandleNavProperty(context, request, response, entitySet, entityType, key, navProperty);
+			return;
+		}
+		
+		if(entityType.isOpenType()){
+			doHandleDynaProperty(context, request, response, entitySet, entityType, entityPropertyName);
+			return;
+		}
+		
+		throw ODataErrors.notFound("[Navigation] Property '{0}' not found in Entity Type '{1}'",entityPropertyName,entityType.getName());
     }
 
-	protected abstract void doHandleEntity(ODataProducerContext context, ODataRequest request, ODataResponse response,
-											 EdmEntitySet entitySet,EdmEntityType entityType,ODataKey key,EdmProperty property) throws Throwable;
+	protected void doHandleProperty(ODataProducerContext context, ODataRequest request, ODataResponse response,
+							      EdmEntitySet entitySet,EdmEntityType entityType,ODataKey key,EdmProperty property) throws Throwable {
+		throw ODataErrors.notImplemented();
+	}
 
+	protected void doHandleNavProperty(ODataProducerContext context, ODataRequest request, ODataResponse response, EdmEntitySet entitySet,
+	        					  EdmEntityType entityType, ODataKey key, EdmNavigationProperty navProperty) throws Throwable {
+		throw ODataErrors.notImplemented();
+	}
+	
+	protected void doHandleDynaProperty(ODataProducerContext context, ODataRequest request, ODataResponse response, EdmEntitySet entitySet,EdmEntityType entityType,String name) throws Throwable {
+		throw ODataErrors.notImplemented();
+	}
 }

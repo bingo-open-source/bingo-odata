@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 the original author or authors.
+ * Copyright 2013 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,18 +15,21 @@
  */
 package bingo.odata.format.json;
 
+import java.io.Writer;
+
+import bingo.lang.json.JSON;
+import bingo.odata.ODataConstants.ContentTypes;
 import bingo.odata.ODataContext;
-import bingo.odata.data.ODataEntity;
-import bingo.odata.format.ODataJsonWriter;
-import bingo.lang.json.JSONWriter;
+import bingo.odata.ODataWriter;
+import bingo.odata.data.ODataRawValue;
 
-import static bingo.odata.format.json.JsonWriterUtils.*;
-
-public class JsonEntityWriter extends ODataJsonWriter<ODataEntity>{
-
-	@Override
-    protected void write(ODataContext context, JSONWriter writer, ODataEntity target) throws Throwable {
-		writeEntity(context, writer, target);
+public class JsonRawValueWriter implements ODataWriter<ODataRawValue>{
+	
+	public String getContentType() {
+	    return ContentTypes.APPLICATION_JSON_UTF8;
     }
 	
+	public void write(ODataContext context, Writer out, ODataRawValue target) throws Throwable {
+		JsonWriterUtils.writeRawValue(context,JSON.createWriter(out),target);
+    }
 }

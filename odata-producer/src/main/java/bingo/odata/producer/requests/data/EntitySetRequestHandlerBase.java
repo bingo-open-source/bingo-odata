@@ -22,7 +22,7 @@ import bingo.odata.ODataResponse;
 import bingo.odata.ODataServices;
 import bingo.odata.data.ODataParameterUtils;
 import bingo.odata.data.ODataParameters;
-import bingo.odata.data.ODataReturnValue;
+import bingo.odata.data.ODataValue;
 import bingo.odata.edm.EdmEntitySet;
 import bingo.odata.edm.EdmEntityType;
 import bingo.odata.edm.EdmFunctionImport;
@@ -83,7 +83,7 @@ public abstract class EntitySetRequestHandlerBase extends ODataRequestHandlerBas
 			
 			ODataParameters params = ODataParameterUtils.parse(functionImport, paramsString, context.getUrlInfo().getQueryOptions());
 			
-			ODataReturnValue returnValue = context.getProducer().invokeFunction(context, functionImport, params);
+			ODataValue returnValue = context.getProducer().invokeFunction(context, functionImport, params);
 			
 			if(functionImport.getReturnType() == null || returnValue == null){
 				response.setStatus(HttpStatus.SC_NO_CONTENT);

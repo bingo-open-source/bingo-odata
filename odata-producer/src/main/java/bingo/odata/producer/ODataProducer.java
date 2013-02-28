@@ -21,9 +21,11 @@ import bingo.odata.data.ODataEntity;
 import bingo.odata.data.ODataEntitySet;
 import bingo.odata.data.ODataKey;
 import bingo.odata.data.ODataParameters;
-import bingo.odata.data.ODataReturnValue;
+import bingo.odata.data.ODataValue;
 import bingo.odata.edm.EdmEntityType;
 import bingo.odata.edm.EdmFunctionImport;
+import bingo.odata.edm.EdmNavigationProperty;
+import bingo.odata.edm.EdmProperty;
 
 public interface ODataProducer {
 
@@ -37,7 +39,17 @@ public interface ODataProducer {
 	 * @return null if not exists
 	 */
 	ODataEntity retrieveEntity(ODataProducerContext context,EdmEntityType entityType,ODataKey key,ODataQueryInfo queryInfo);
-
+	
+	/**
+	 * must be not null
+	 */
+	ODataValue retrieveProperty(ODataProducerContext context,EdmEntityType entitType,ODataKey key,EdmProperty property);
+	
+	/**
+	 * must be not null
+	 */
+	ODataValue retrieveNavigationProperty(ODataProducerContext context,EdmEntityType entitType,ODataKey key,EdmNavigationProperty property);
+	
 	ODataEntity insertEntity(ODataProducerContext context,EdmEntityType entityType,ODataEntity entity);
 	
 	ODataEntity updateEntity(ODataProducerContext context,EdmEntityType entityType,ODataKey key,ODataEntity entity);
@@ -46,5 +58,5 @@ public interface ODataProducer {
 	
 	void deleteEntity(ODataProducerContext context,EdmEntityType entityType,ODataKey key);
 	
-	ODataReturnValue invokeFunction(ODataProducerContext context,EdmFunctionImport func,ODataParameters parameters);
+	ODataValue invokeFunction(ODataProducerContext context,EdmFunctionImport func,ODataParameters parameters);
 }

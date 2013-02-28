@@ -23,6 +23,8 @@ import bingo.odata.data.ODataEntity;
 import bingo.odata.data.ODataEntitySet;
 import bingo.odata.format.ODataJsonWriter;
 
+import static bingo.odata.format.json.JsonWriterUtils.*;
+
 public class JsonEntitySetWriter extends ODataJsonWriter<ODataEntitySet> {
 
 	@Override

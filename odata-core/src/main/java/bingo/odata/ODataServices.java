@@ -24,6 +24,7 @@ import bingo.lang.Named;
 import bingo.odata.edm.EdmEntityContainer;
 import bingo.odata.edm.EdmEntitySet;
 import bingo.odata.edm.EdmEntityType;
+import bingo.odata.edm.EdmEntityTypeRef;
 import bingo.odata.edm.EdmFunctionImport;
 import bingo.odata.edm.EdmSchema;
 
@@ -77,10 +78,47 @@ public class ODataServices implements Named,ODataObject {
 		return null;
 	}
 	
+	public EdmEntitySet findEntitySet(EdmEntityType entityType){
+		for(EdmSchema schema : schemas){
+			for(EdmEntityContainer container : schema.getEntityContainers()){
+				for(EdmEntitySet entitySet : container.getEntitySets()){
+					if(entitySet.getEntityType().getFullQualifiedName().equalsIgnoreCase(entityType.getFullQualifiedName())){
+						return entitySet;
+					}
+				}
+			}
+		}
+		return null;
+	}
+	
+	public EdmEntitySet findEntitySet(EdmEntityTypeRef entityTypeRef){
+		for(EdmSchema schema : schemas){
+			for(EdmEntityContainer container : schema.getEntityContainers()){
+				for(EdmEntitySet entitySet : container.getEntitySets()){
+					if(entitySet.getEntityType().getFullQualifiedName().equalsIgnoreCase(entityTypeRef.getFullQualifiedName())){
+						return entitySet;
+					}
+				}
+			}
+		}
+		return null;
+	}
+	
 	public EdmEntityType findEntityType(String entityTypeName) {
 		for(EdmSchema schema : schemas){
 			for(EdmEntityType entityType : schema.getEntityTypes()){
 				if(entityType.getName().equalsIgnoreCase(entityTypeName)){
+					return entityType;
+				}
+			}
+		}
+		return null;
+	}
+	
+	public EdmEntityType findEntityType(EdmEntityTypeRef entityTypeRef){
+		for(EdmSchema schema : schemas){
+			for(EdmEntityType entityType : schema.getEntityTypes()){
+				if(entityType.getFullQualifiedName().equalsIgnoreCase(entityTypeRef.getFullQualifiedName())){
 					return entityType;
 				}
 			}

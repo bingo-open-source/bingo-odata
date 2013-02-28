@@ -106,6 +106,10 @@ public class XmlMetadataDocumentWriter extends ODataXmlWriter<ODataServices> {
 			if(entityType.hasStream()){
 				writer.attribute(METADATA_NS, "HasStream","true");
 			}
+			
+			if(entityType.isOpenType()){
+				writer.attribute("OpenType","true");
+			}
 
 			//key
 			if(null == entityType.getBaseType()){

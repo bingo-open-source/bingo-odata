@@ -69,6 +69,10 @@ public class ODataErrors extends HttpStatus {
 		return new ODataError(SC_NOT_IMPLEMENTED,EC_NOT_IMPLEMENTED,message);
 	}
 	
+	public static ODataError notImplemented(String template,Object... args) {
+		return new ODataError(SC_NOT_IMPLEMENTED,EC_NOT_IMPLEMENTED,Strings.format(template, args));
+	}
+	
 	public static ODataError notFound(){
 		return new ODataError(SC_NOT_FOUND, EC_NOT_FOUND, "");
 	}

@@ -15,17 +15,48 @@
  */
 package bingo.odata.producer.requests.data.retrieve;
 
+import bingo.lang.Strings;
+import bingo.odata.ODataErrors;
 import bingo.odata.ODataRequest;
 import bingo.odata.ODataResponse;
+import bingo.odata.data.ODataKey;
+import bingo.odata.edm.EdmEntitySet;
+import bingo.odata.edm.EdmEntityType;
+import bingo.odata.edm.EdmNavigationProperty;
 import bingo.odata.producer.ODataProducerContext;
-import bingo.odata.producer.requests.ODataRequestHandlerBase;
+import bingo.odata.producer.requests.ODataRequestRouter;
+import bingo.odata.producer.requests.data.EntityRequestHandlerBase;
 
-public class RetrieveLinkRequestHandler extends ODataRequestHandlerBase {
+public class RetrieveLinkRequestHandler extends EntityRequestHandlerBase {
 
 	@Override
-	protected void doHandle(ODataProducerContext context, ODataRequest request, ODataResponse response) throws Throwable {
-		// TODO implement RetrieveLinkRequestHandler.doHandle
-
+    protected void doHandleEntity(ODataProducerContext context, 
+    							  ODataRequest request, 
+    							  ODataResponse response, 
+    							  EdmEntitySet entitySet,
+    							  EdmEntityType entityType,
+    							  ODataKey key) throws Throwable {
+		
+		String navPropertyName = context.getUrlInfo().getPathParameter(ODataRequestRouter.ENTITY_NAV_PROP_NAME);
+		if(Strings.isEmpty(navPropertyName)){
+			throw ODataErrors.badRequest("The nagivation property name of EntityType '{0}' must not be empty",entityType.getName());
+		}
+		
+		EdmNavigationProperty navProperty = entityType.findNavigationProperty(navPropertyName);
+		if(null == navProperty){
+			throw ODataErrors.notFound("The navigation property '{0}' not found in EntityType '{1}'",navPropertyName,entityType.getName());
+		}
+    }
+	
+	protected void doHandleEntityLink(ODataProducerContext context, 
+    							  ODataRequest request, 
+    							  ODataResponse response, 
+    							  EdmEntitySet entitySet,
+    							  EdmEntityType entityType,
+    							  ODataKey key,
+    							  EdmNavigationProperty navProperty) throws Throwable {
+		
+		//TODO : doHandleEntityLink
+		
 	}
-
 }

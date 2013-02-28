@@ -41,6 +41,10 @@ public final class EdmBuilders {
 		return new EdmPropertyBuilder(name);
 	}
 	
+	public static EdmPropertyBuilder dynamicProperty(EdmType type,String name) {
+		return new EdmPropertyBuilder(name).setType(type).setNullable(true);
+	}
+	
 	public static EdmNavigationPropertyBuilder navigationProperty(String name){
 		return new EdmNavigationPropertyBuilder(name);
 	}

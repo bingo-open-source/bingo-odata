@@ -15,21 +15,43 @@
  */
 package bingo.odata.data;
 
+import bingo.lang.Builder;
 import bingo.odata.ODataConverts;
 import bingo.odata.edm.EdmProperty;
 import bingo.odata.edm.EdmSimpleType;
 
-public class ODataPropertyBuilder {
-
-	public static ODataProperty build(EdmProperty property, Object value) {
+public class ODataPropertyBuilder implements Builder<ODataProperty>{
+	
+	public static ODataProperty of(EdmProperty property, Object value) {
 		return new ODataPropertyImpl(property,value);
 	}
 	
-	public static ODataProperty buildNull(EdmProperty property) {
+	public static ODataProperty of(EdmProperty property, String value) {
+		return new ODataPropertyImpl(property,ODataConverts.fromString((EdmSimpleType)property.getType(), value));
+	}
+	
+	public static ODataProperty nullOf(EdmProperty property) {
 		return new ODataPropertyImpl(property,null);
 	}
 	
-	public static ODataProperty build(EdmProperty property, String value) {
-		return new ODataPropertyImpl(property,ODataConverts.fromString((EdmSimpleType)property.getType(), value));
+	protected EdmProperty property;
+	protected Object      value;
+	
+	public ODataPropertyBuilder(EdmProperty property){
+		this.property = property;
 	}
+	
+	public ODataPropertyBuilder setRawValue(Object value){
+		this.value = value;
+		return this;
+	}
+	
+	public ODataPropertyBuilder setStringValue(String value){
+		this.value = ODataConverts.fromString((EdmSimpleType)property.getType(), value);
+		return this;
+	}
+
+	public ODataProperty build() {
+	    return new ODataPropertyImpl(property, value);
+    }
 }

@@ -90,9 +90,9 @@ public class AtomEntityReader extends ODataAtomReader<ODataEntity> {
 					String isNull = reader.getAttributeValue(METADATA_QN_NULL);
 					
 					if("true".equals(isNull)){
-						properties.add(ODataPropertyBuilder.buildNull(property));
+						properties.add(ODataPropertyBuilder.nullOf(property));
 					}else{
-						properties.add(ODataPropertyBuilder.build(property, reader.getElementText()));	
+						properties.add(ODataPropertyBuilder.of(property, reader.getElementText()));	
 					}
 				}
 				

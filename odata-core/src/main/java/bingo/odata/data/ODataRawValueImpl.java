@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 the original author or authors.
+ * Copyright 2013 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,20 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.odata.format.json;
+package bingo.odata.data;
 
-import bingo.odata.ODataContext;
-import bingo.odata.data.ODataEntity;
-import bingo.odata.format.ODataJsonWriter;
-import bingo.lang.json.JSONWriter;
+import bingo.odata.edm.EdmType;
 
-import static bingo.odata.format.json.JsonWriterUtils.*;
+public class ODataRawValueImpl implements ODataRawValue {
 
-public class JsonEntityWriter extends ODataJsonWriter<ODataEntity>{
-
-	@Override
-    protected void write(ODataContext context, JSONWriter writer, ODataEntity target) throws Throwable {
-		writeEntity(context, writer, target);
-    }
+	protected final EdmType type;
+	protected final Object  value;
 	
+	public ODataRawValueImpl(EdmType type,Object value) {
+		this.type = type;
+		this.value = type;
+	}
+
+	public EdmType getType() {
+		return type;
+	}
+
+	public Object getValue() {
+		return value;
+	}
 }
