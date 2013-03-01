@@ -19,9 +19,12 @@ import java.sql.Time;
 import java.util.Date;
 
 import bingo.lang.Converts;
+import bingo.lang.Strings;
 import bingo.lang.codec.Base64;
 import bingo.lang.json.JSONWriter;
-import bingo.odata.ODataContext;
+import bingo.odata.ODataConstants.CustomOptions;
+import bingo.odata.ODataConstants.ShowModes;
+import bingo.odata.ODataWriterContext;
 import bingo.odata.ODataErrors;
 import bingo.odata.ODataUtils;
 import bingo.odata.data.ODataEntity;
@@ -38,17 +41,26 @@ public class JsonWriterUtils {
 		
 	}
 	
-	public static void writeEntity(ODataContext context,JSONWriter writer,ODataEntity entity){
+	private static String showMode(ODataWriterContext context){
+		return context.getUrlInfo().getQueryOptions().getOption(CustomOptions.SHOW_MODE);
+	}
+	
+	public static void writeEntity(ODataWriterContext context,JSONWriter writer,ODataEntity entity){
 		writer.startObject();
 		
-		writeEntityMetadata(context, writer, entity);
-		
-		if(!entity.getProperties().isEmpty()){
-			writer.separator();
-			writeEntityProperties(context,writer,entity);
+		boolean full = !Strings.equals(showMode(context),ShowModes.MINIMAL);
+		if(full){
+			writeEntityMetadata(context, writer, entity);
 		}
 		
-		if(!entity.getEntityType().getDeclaredNavigationProperties().isEmpty()){
+		if(!entity.getProperties().isEmpty()){
+			if(full){
+				writer.separator();
+			}
+			writeEntityProperties(context,writer,entity);
+		}
+
+		if(full && !entity.getEntityType().getDeclaredNavigationProperties().isEmpty()){
 			writer.separator();
 			writeEntityLinks(context, writer, entity);
 		}
@@ -56,7 +68,7 @@ public class JsonWriterUtils {
 		writer.endObject();
 	}
 	
-	public static void writeEntityMetadata(ODataContext context,JSONWriter writer,ODataEntity entity){
+	public static void writeEntityMetadata(ODataWriterContext context,JSONWriter writer,ODataEntity entity){
 		
 		writer.startObject("__metadata");
 
@@ -66,7 +78,7 @@ public class JsonWriterUtils {
 		writer.endObject();
 	}
 	
-	public static void writeEntityProperties(ODataContext context,JSONWriter writer,ODataEntity entity){
+	public static void writeEntityProperties(ODataWriterContext context,JSONWriter writer,ODataEntity entity){
 		
 		int i=0;
 		for(ODataProperty p : entity.getProperties()){
@@ -86,7 +98,7 @@ public class JsonWriterUtils {
 		}
 	}
 	
-	public static void writeProperty(ODataContext context,JSONWriter writer,ODataProperty p){
+	public static void writeProperty(ODataWriterContext context,JSONWriter writer,ODataProperty p){
 		if(p.getType().isSimple()){
 			writer.name(p.getName());
 			writeValue(writer,(EdmSimpleType)p.getType(), p.getValue());	
@@ -95,7 +107,7 @@ public class JsonWriterUtils {
 		throw ODataErrors.notImplemented("ComplexType property not implemented");
 	}
 	
-	public static void writeRawValue(ODataContext context,JSONWriter writer,ODataRawValue rv){
+	public static void writeRawValue(ODataWriterContext context,JSONWriter writer,ODataRawValue rv){
 		if(rv.getValue() == null){
 			writer.nullValue();
 			return;
@@ -109,7 +121,7 @@ public class JsonWriterUtils {
 		throw ODataErrors.notImplemented("ComplexType property not implemented");
 	}
 	
-	public static void writeEntityLinks(ODataContext context,JSONWriter writer,ODataEntity entity){
+	public static void writeEntityLinks(ODataWriterContext context,JSONWriter writer,ODataEntity entity){
 //		String uri = ODataUtils.getEntryId(context.getUrlInfo(), entity);
 		
 		int i=0;

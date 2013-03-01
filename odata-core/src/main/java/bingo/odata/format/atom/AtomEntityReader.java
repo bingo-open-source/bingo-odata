@@ -22,9 +22,9 @@ import javax.xml.namespace.QName;
 
 import bingo.lang.Assert;
 import bingo.lang.xml.XmlReader;
-import bingo.odata.ODataContext;
 import bingo.odata.ODataErrors;
 import bingo.odata.ODataException;
+import bingo.odata.ODataReaderContext;
 import bingo.odata.data.ODataEntity;
 import bingo.odata.data.ODataEntityBuilder;
 import bingo.odata.data.ODataProperty;
@@ -37,7 +37,7 @@ import bingo.odata.format.ODataAtomReader;
 public class AtomEntityReader extends ODataAtomReader<ODataEntity> {
 
 	@Override
-    protected ODataEntity read(ODataContext context, XmlReader reader) throws Throwable {
+    protected ODataEntity read(ODataReaderContext context, XmlReader reader) throws Throwable {
 		
 		EdmEntitySet  entitySet  = context.getEntitySet();
 		EdmEntityType entityType = context.getEntityType();

@@ -19,15 +19,15 @@ import java.io.Reader;
 
 import bingo.lang.xml.XmlFactory;
 import bingo.lang.xml.XmlReader;
-import bingo.odata.ODataContext;
+import bingo.odata.ODataReaderContext;
 import bingo.odata.ODataObject;
 import bingo.odata.ODataReader;
 
 public abstract class ODataXmlReader<T extends ODataObject> extends ODataXmlConstants implements ODataReader<T> {
 	
-	public T read(ODataContext context, Reader in) throws Throwable {
+	public T read(ODataReaderContext context, Reader in) throws Throwable {
 		return read(context, XmlFactory.createReader(in));
 	}
 
-	protected abstract T read(ODataContext context, XmlReader reader) throws Throwable;
+	protected abstract T read(ODataReaderContext context, XmlReader reader) throws Throwable;
 }

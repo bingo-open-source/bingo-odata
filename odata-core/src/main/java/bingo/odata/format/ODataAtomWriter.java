@@ -15,16 +15,14 @@
  */
 package bingo.odata.format;
 
-import java.util.List;
-
 import bingo.lang.Converts;
 import bingo.lang.Strings;
 import bingo.lang.xml.XmlWriter;
 import bingo.odata.ODataConstants.ContentTypes;
-import bingo.odata.ODataContext;
 import bingo.odata.ODataConverts;
 import bingo.odata.ODataObject;
 import bingo.odata.ODataUtils;
+import bingo.odata.ODataWriterContext;
 import bingo.odata.data.ODataEntity;
 import bingo.odata.data.ODataProperty;
 import bingo.odata.edm.EdmFeedCustomization.SyndicationItemProperty;
@@ -89,7 +87,7 @@ public abstract class ODataAtomWriter<T extends ODataObject> extends ODataXmlWri
 			   .endElement();		
 	}
 	
-	protected static void writeEntryBody(ODataContext context, XmlWriter writer,ODataEntity entity,String updated,boolean isFeed) {
+	protected static void writeEntryBody(ODataWriterContext context, XmlWriter writer,ODataEntity entity,String updated,boolean isFeed) {
 		
 		if(context.isProducer()){
 			writer.startElement("id").text(ODataUtils.getEntityUrl(context.getUrlInfo(), entity)).endElement();
@@ -122,7 +120,7 @@ public abstract class ODataAtomWriter<T extends ODataObject> extends ODataXmlWri
 		writer.endElement();
 	}
 	
-	protected static void writeEntryFeedCustomizationAttributes(ODataContext context,XmlWriter writer,ODataEntity entity,String updated){
+	protected static void writeEntryFeedCustomizationAttributes(ODataWriterContext context,XmlWriter writer,ODataEntity entity,String updated){
 		EdmProperty titleProperty   = null;
 		Object      titleValue      = null;
 		
@@ -157,7 +155,7 @@ public abstract class ODataAtomWriter<T extends ODataObject> extends ODataXmlWri
 		writeUpdated(writer,updated);
 	}
 	
-	protected static void writeEntryAssociationLinks(ODataContext context,XmlWriter writer,ODataEntity entity, boolean isFeed){
+	protected static void writeEntryAssociationLinks(ODataWriterContext context,XmlWriter writer,ODataEntity entity, boolean isFeed){
 		//<link title="Products" type="application/atom+xml;type=feed" href="Categories(0)/Products" 
 		//		rel="http://schemas.microsoft.com/ado/2007/08/dataservices/related/Products"/>
 		
@@ -168,7 +166,7 @@ public abstract class ODataAtomWriter<T extends ODataObject> extends ODataXmlWri
 		}
 	}
 	
-	protected static void writeProperties(ODataContext context,XmlWriter writer,List<ODataProperty> properties){
+	protected static void writeProperties(ODataWriterContext context,XmlWriter writer,Iterable<ODataProperty> properties){
 		for(ODataProperty p : properties){
 			if(p.getMetadata().isFcKeepInContent() || Strings.isEmpty(p.getMetadata().getFcTargetPath())){
 				writeProperty(context, writer, p,false);	
@@ -176,7 +174,7 @@ public abstract class ODataAtomWriter<T extends ODataObject> extends ODataXmlWri
 		}
 	}
 	
-	protected static void writeProperty(ODataContext context,XmlWriter writer,ODataProperty property,boolean isRootElement){
+	protected static void writeProperty(ODataWriterContext context,XmlWriter writer,ODataProperty property,boolean isRootElement){
 		if(isRootElement){
 			writer.startElement(property.getName()).namespace(DATASERVICES_NS);
 		}else{

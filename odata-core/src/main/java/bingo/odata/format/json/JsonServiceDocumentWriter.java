@@ -15,7 +15,7 @@
  */
 package bingo.odata.format.json;
 
-import bingo.odata.ODataContext;
+import bingo.odata.ODataWriterContext;
 import bingo.odata.ODataServices;
 import bingo.odata.edm.EdmEntitySet;
 import bingo.odata.format.ODataJsonWriter;
@@ -24,7 +24,7 @@ import bingo.lang.json.JSONWriter;
 public class JsonServiceDocumentWriter extends ODataJsonWriter<ODataServices>{
 
 	@Override
-    protected void write(ODataContext context, JSONWriter writer, ODataServices target) throws Throwable {
+    protected void write(ODataWriterContext context, JSONWriter writer, ODataServices target) throws Throwable {
 		/*
 			 {
 				d: {

@@ -28,7 +28,7 @@ import bingo.odata.edm.EdmNavigationProperty;
 import bingo.odata.edm.EdmProperty;
 
 public interface ODataProducer {
-
+	
 	ODataServices retrieveServiceMetadata();
 	
 	ODataEntitySet retrieveEntitySet(ODataProducerContext context,EdmEntityType entityType,ODataQueryInfo queryInfo);

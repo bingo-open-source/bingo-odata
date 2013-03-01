@@ -16,7 +16,7 @@
 package bingo.odata.format.json;
 
 import bingo.lang.json.JSONWriter;
-import bingo.odata.ODataContext;
+import bingo.odata.ODataWriterContext;
 import bingo.odata.data.ODataProperty;
 import bingo.odata.format.ODataJsonWriter;
 
@@ -25,7 +25,7 @@ import static bingo.odata.format.json.JsonWriterUtils.*;
 public class JsonPropertyWriter extends ODataJsonWriter<ODataProperty>{
 
 	@Override
-    protected void write(ODataContext context, JSONWriter writer, ODataProperty target) throws Throwable {
+    protected void write(ODataWriterContext context, JSONWriter writer, ODataProperty target) throws Throwable {
 		writer.startObject();
 		writeProperty(context, writer, target);
 		writer.endObject();

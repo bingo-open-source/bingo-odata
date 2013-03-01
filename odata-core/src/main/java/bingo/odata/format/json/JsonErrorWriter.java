@@ -17,7 +17,7 @@ package bingo.odata.format.json;
 
 import java.io.Writer;
 
-import bingo.odata.ODataContext;
+import bingo.odata.ODataWriterContext;
 import bingo.odata.ODataError;
 import bingo.odata.ODataWriter;
 import bingo.odata.ODataConstants.ContentTypes;
@@ -30,7 +30,7 @@ public class JsonErrorWriter implements ODataWriter<ODataError> {
 	    return ContentTypes.APPLICATION_JSON;
     }
 
-	public void write(ODataContext context, Writer out, ODataError target) throws Throwable {
+	public void write(ODataWriterContext context, Writer out, ODataError target) throws Throwable {
 		JSONWriter writer = JSON.createWriter(out);
 		
 		writer.startObject();

@@ -18,7 +18,7 @@ package bingo.odata.format.json;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import bingo.odata.ODataContext;
+import bingo.odata.ODataReaderContext;
 import bingo.odata.ODataErrors;
 import bingo.odata.data.ODataEntity;
 import bingo.odata.data.ODataEntityBuilder;
@@ -31,7 +31,7 @@ import bingo.lang.json.JSONObject;
 public class JsonEntityReader extends ODataJsonReader<ODataEntity> {
 
 	@Override
-    protected ODataEntity read(ODataContext context, JSONObject json) {
+    protected ODataEntity read(ODataReaderContext context, JSONObject json) {
 		if(json.isNull() || json.isArray()){
 			throw ODataErrors.badRequest("invalid json content");
 		}

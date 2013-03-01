@@ -33,7 +33,7 @@ public class ODataProducerAdapter implements ODataProducer {
 	protected ODataProducerAdapter(){
 		
 	}
-
+	
 	public ODataServices retrieveServiceMetadata() {
 	    throw ODataErrors.notImplemented();
     }

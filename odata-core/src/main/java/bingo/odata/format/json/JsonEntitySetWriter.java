@@ -17,7 +17,7 @@ package bingo.odata.format.json;
 
 import bingo.lang.Strings;
 import bingo.lang.json.JSONWriter;
-import bingo.odata.ODataContext;
+import bingo.odata.ODataWriterContext;
 import bingo.odata.ODataUtils;
 import bingo.odata.data.ODataEntity;
 import bingo.odata.data.ODataEntitySet;
@@ -28,7 +28,7 @@ import static bingo.odata.format.json.JsonWriterUtils.*;
 public class JsonEntitySetWriter extends ODataJsonWriter<ODataEntitySet> {
 
 	@Override
-    protected void write(ODataContext context, JSONWriter writer, ODataEntitySet entitySet) throws Throwable {
+    protected void write(ODataWriterContext context, JSONWriter writer, ODataEntitySet entitySet) throws Throwable {
 		writer.startObject();
 		
 		if(entitySet.getInlineCount() != null){
@@ -48,7 +48,7 @@ public class JsonEntitySetWriter extends ODataJsonWriter<ODataEntitySet> {
 		writer.endObject();
     }
 	
-	protected static void writeEntities(ODataContext context,JSONWriter writer,ODataEntitySet entitySet){
+	protected static void writeEntities(ODataWriterContext context,JSONWriter writer,ODataEntitySet entitySet){
 		writer.startArray();
 		
 		int i=0;

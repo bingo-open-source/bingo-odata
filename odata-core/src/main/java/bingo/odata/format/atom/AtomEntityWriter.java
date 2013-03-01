@@ -16,7 +16,7 @@
 package bingo.odata.format.atom;
 
 import bingo.lang.xml.XmlWriter;
-import bingo.odata.ODataContext;
+import bingo.odata.ODataWriterContext;
 import bingo.odata.ODataUtils;
 import bingo.odata.data.ODataEntity;
 import bingo.odata.format.ODataAtomWriter;
@@ -24,7 +24,7 @@ import bingo.odata.format.ODataAtomWriter;
 public class AtomEntityWriter extends ODataAtomWriter<ODataEntity> {
 
 	@Override
-    protected void write(ODataContext context, XmlWriter writer, ODataEntity entity) throws Throwable {
+    protected void write(ODataWriterContext context, XmlWriter writer, ODataEntity entity) throws Throwable {
 		String updated = ODataUtils.lastUpdated();
 		
 		writer.startDocument();

@@ -19,7 +19,7 @@ import java.io.Writer;
 
 import bingo.lang.json.JSON;
 import bingo.odata.ODataConstants.ContentTypes;
-import bingo.odata.ODataContext;
+import bingo.odata.ODataWriterContext;
 import bingo.odata.ODataWriter;
 import bingo.odata.data.ODataRawValue;
 
@@ -29,7 +29,7 @@ public class JsonRawValueWriter implements ODataWriter<ODataRawValue>{
 	    return ContentTypes.APPLICATION_JSON_UTF8;
     }
 	
-	public void write(ODataContext context, Writer out, ODataRawValue target) throws Throwable {
+	public void write(ODataWriterContext context, Writer out, ODataRawValue target) throws Throwable {
 		JsonWriterUtils.writeRawValue(context,JSON.createWriter(out),target);
     }
 }

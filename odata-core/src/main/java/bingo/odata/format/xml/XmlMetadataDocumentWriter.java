@@ -19,7 +19,7 @@ import static bingo.odata.edm.EdmUtils.fullQualifiedName;
 import bingo.lang.Strings;
 import bingo.lang.http.HttpContentTypes;
 import bingo.lang.xml.XmlWriter;
-import bingo.odata.ODataContext;
+import bingo.odata.ODataWriterContext;
 import bingo.odata.ODataServices;
 import bingo.odata.edm.EdmAssociation;
 import bingo.odata.edm.EdmAssociationSet;
@@ -49,7 +49,7 @@ public class XmlMetadataDocumentWriter extends ODataXmlWriter<ODataServices> {
     }
 
 	@Override
-    protected void write(ODataContext context, XmlWriter writer, ODataServices services) throws Throwable {
+    protected void write(ODataWriterContext context, XmlWriter writer, ODataServices services) throws Throwable {
 		writer.startDocument();
 		
 		//Edmx

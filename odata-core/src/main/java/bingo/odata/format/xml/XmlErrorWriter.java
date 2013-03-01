@@ -16,14 +16,14 @@
 package bingo.odata.format.xml;
 
 import bingo.lang.xml.XmlWriter;
-import bingo.odata.ODataContext;
+import bingo.odata.ODataWriterContext;
 import bingo.odata.ODataError;
 import bingo.odata.format.ODataXmlWriter;
 
 public class XmlErrorWriter extends ODataXmlWriter<ODataError> {
 
 	@Override
-    protected void write(ODataContext context, XmlWriter writer, ODataError target) throws Throwable {
+    protected void write(ODataWriterContext context, XmlWriter writer, ODataError target) throws Throwable {
 		writer.startDocument();
 		
 		writer.startElement(METADATA_PREFIX,METADATA_NS,"error").namespace(METADATA_PREFIX, METADATA_NS);

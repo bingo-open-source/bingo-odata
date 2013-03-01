@@ -15,8 +15,9 @@
  */
 package bingo.odata.producer;
 
-import bingo.odata.ODataContext;
 import bingo.odata.ODataFormat;
+import bingo.odata.ODataReaderContext;
+import bingo.odata.ODataWriterContext;
 import bingo.odata.ODataProtocol;
 import bingo.odata.ODataQueryOptions;
 import bingo.odata.ODataServices;
@@ -27,19 +28,19 @@ import bingo.odata.edm.EdmEntitySet;
 import bingo.odata.edm.EdmEntityType;
 import bingo.odata.edm.EdmFunctionImport;
 
-public class ODataProducerContext implements ODataContext {
+public class ODataProducerContext implements ODataWriterContext,ODataReaderContext {
 
 	private final ODataProducer	producer;
-	private final ODataProtocol   protocol;
-	private final ODataVersion		version;
-	private final ODataFormat		format;
-	private final ODataUrlInfo		urlInfo;
+	private final ODataProtocol protocol;
+	private final ODataVersion	version;
+	private final ODataFormat	format;
+	private final ODataUrlInfo	urlInfo;
 	private final ODataServices	services;
 	
 	private EdmEntitySet	    entitySet;
 	private EdmEntityType	    entityType;
 	private ODataKey	        entityKey;
-	private EdmFunctionImport  functionImport;
+	private EdmFunctionImport   functionImport;
 
 	public ODataProducerContext(ODataProducer producer,ODataProtocol protocol,ODataVersion version,ODataFormat format,ODataUrlInfo urlInfo) {
 		this.producer = producer;

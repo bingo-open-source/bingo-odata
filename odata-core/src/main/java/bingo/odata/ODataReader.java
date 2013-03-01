@@ -19,6 +19,6 @@ import java.io.Reader;
 
 public interface ODataReader<T extends ODataObject> {
 
-	T read(ODataContext context,Reader in) throws Throwable;
+	T read(ODataReaderContext context,Reader in) throws Throwable;
 	
 }

@@ -16,7 +16,7 @@
 package bingo.odata.format.atom;
 
 import bingo.lang.xml.XmlWriter;
-import bingo.odata.ODataContext;
+import bingo.odata.ODataWriterContext;
 import bingo.odata.ODataServices;
 import bingo.odata.edm.EdmEntitySet;
 import bingo.odata.format.ODataXmlWriter;
@@ -24,7 +24,7 @@ import bingo.odata.format.ODataXmlWriter;
 public class AtomServiceDocumentWriter extends ODataXmlWriter<ODataServices>{
 	
 	@Override
-    protected void write(ODataContext context, XmlWriter writer, ODataServices services) throws Throwable {
+    protected void write(ODataWriterContext context, XmlWriter writer, ODataServices services) throws Throwable {
 		writer.startDocument();
 		
 		writer.startElement("service")

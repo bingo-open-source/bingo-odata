@@ -23,11 +23,10 @@ import javax.servlet.http.HttpServletRequest;
 
 import bingo.lang.Exceptions;
 import bingo.lang.Strings;
-import bingo.odata.ODataRequest;
-import bingo.odata.ODataConstants.QueryOptions;
 import bingo.lang.http.HttpHeaders;
 import bingo.lang.http.HttpMethods;
 import bingo.lang.servlet.Requests;
+import bingo.odata.ODataRequest;
 
 public class ODataServletRequest implements ODataRequest {
 	
@@ -153,10 +152,6 @@ public class ODataServletRequest implements ODataRequest {
 		
 		if(Strings.isEmpty(method)){
 			method = request.getHeader(HttpHeaders.X_HTTP_METHOD_OVERRIDE);
-		}
-		
-		if(Strings.isEmpty(method)){
-			method = request.getParameter(QueryOptions.X_HTTP_METHOD);
 		}
 		
 		if(!Strings.isEmpty(method)){

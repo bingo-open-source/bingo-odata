@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 the original author or authors.
+ * Copyright 2013 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,21 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.odata.format;
+package bingo.odata.producer;
 
-import java.io.Reader;
+import bingo.odata.ODataQueryOptions;
+import bingo.odata.ODataRequest;
 
-import bingo.odata.ODataReaderContext;
-import bingo.odata.ODataObject;
-import bingo.odata.ODataReader;
-import bingo.lang.json.JSON;
-import bingo.lang.json.JSONObject;
+public abstract class ODataProducerBase implements ODataProducer {
 
-public abstract class ODataJsonReader<T extends ODataObject> implements ODataReader<T> {
-
-	public final T read(ODataReaderContext context, Reader in) throws Throwable {
-	    return read(context,JSON.decode(in));
+	public ODataQueryOptions getContextQueryOptions(ODataRequest request,ODataQueryOptions parsedQueryOptions) {
+	    return null;
     }
-	
-	protected abstract T read(ODataReaderContext context,JSONObject json);
 }

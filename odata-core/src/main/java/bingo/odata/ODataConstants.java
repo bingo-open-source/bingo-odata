@@ -65,9 +65,21 @@ public final class ODataConstants {
 		public static final String	SELECT		    = "$select";
 
 		public static final String	CALLBACK		= "$callback";
+	}
+	
+	/**
+	 * custom options starts with "x_"
+	 */
+	public static class CustomOptions {
+		protected CustomOptions(){}
 		
-		//custom option
-		public static final String  X_HTTP_METHOD   = "x_http_method";
+		public static final String SHOW_MODE = "x_show";
+	}
+	
+	public static class ShowModes {
+		public static final String FULL    = "full";
+		public static final String MINIMAL = "min";
+		public static final String NO      = "no";
 	}
 	
 	public static final class ResourcePaths {

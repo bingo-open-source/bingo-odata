@@ -15,8 +15,7 @@
  */
 package bingo.odata.data;
 
-import java.util.List;
-
+import bingo.lang.Enumerable;
 import bingo.odata.ODataObject;
 import bingo.odata.edm.EdmEntitySet;
 
@@ -24,7 +23,7 @@ public interface ODataEntitySet extends ODataObject {
 
 	EdmEntitySet getMetadata();
 	
-	List<ODataEntity> getEntities();
+	Enumerable<ODataEntity> getEntities();
 	
 	Long getInlineCount();
 

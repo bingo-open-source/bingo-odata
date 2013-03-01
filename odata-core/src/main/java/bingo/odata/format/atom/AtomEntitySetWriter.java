@@ -17,7 +17,7 @@ package bingo.odata.format.atom;
 
 import bingo.lang.Strings;
 import bingo.lang.xml.XmlWriter;
-import bingo.odata.ODataContext;
+import bingo.odata.ODataWriterContext;
 import bingo.odata.ODataUtils;
 import bingo.odata.data.ODataEntity;
 import bingo.odata.data.ODataEntitySet;
@@ -26,7 +26,7 @@ import bingo.odata.format.ODataAtomWriter;
 public class AtomEntitySetWriter extends ODataAtomWriter<ODataEntitySet> {
 
 	@Override
-    protected void write(ODataContext context, XmlWriter writer, ODataEntitySet entitySet) throws Throwable {
+    protected void write(ODataWriterContext context, XmlWriter writer, ODataEntitySet entitySet) throws Throwable {
 		String updated = ODataUtils.lastUpdated();
 		
 		writer.startDocument();
@@ -48,7 +48,7 @@ public class AtomEntitySetWriter extends ODataAtomWriter<ODataEntitySet> {
 		writer.endDocument();
     }
 	
-	protected void writeHeader(ODataContext context, XmlWriter writer, ODataEntitySet entitySet,String updated) {
+	protected void writeHeader(ODataWriterContext context, XmlWriter writer, ODataEntitySet entitySet,String updated) {
 		
 		String entitySetName = entitySet.getMetadata().getName();
 		
@@ -67,7 +67,7 @@ public class AtomEntitySetWriter extends ODataAtomWriter<ODataEntitySet> {
 		}
 	}
 	
-	protected void writeEntries(ODataContext context, XmlWriter writer, ODataEntitySet entitySet,String updated) {
+	protected void writeEntries(ODataWriterContext context, XmlWriter writer, ODataEntitySet entitySet,String updated) {
 		for(ODataEntity entity : entitySet.getEntities()){
 			writer.startElement("entry");
 			
@@ -77,7 +77,7 @@ public class AtomEntitySetWriter extends ODataAtomWriter<ODataEntitySet> {
 		}
 	}
 	
-	protected void writeNext(ODataContext context, XmlWriter writer, ODataEntitySet entitySet) {
+	protected void writeNext(ODataWriterContext context, XmlWriter writer, ODataEntitySet entitySet) {
 		String nextHref = ODataUtils.nextHref(context, entitySet);
 		if(!Strings.isEmpty(nextHref)){
 			writer.startElement("link").attribute("rel","next").attribute("href",nextHref).endElement();

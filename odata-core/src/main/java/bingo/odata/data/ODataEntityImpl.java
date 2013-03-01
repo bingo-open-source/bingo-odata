@@ -22,16 +22,15 @@ import java.util.Map;
 import bingo.lang.Assert;
 import bingo.lang.Enumerable;
 import bingo.lang.Enumerables;
-import bingo.lang.Immutables;
 import bingo.lang.Predicates;
 import bingo.odata.edm.EdmEntitySet;
 import bingo.odata.edm.EdmEntityType;
 
 class ODataEntityImpl implements ODataEntity {
 
-	private final EdmEntityType	    entityType;
-	private final EdmEntitySet	    	entitySet;
-	private final List<ODataProperty>	properties;
+	private final EdmEntityType	    	    entityType;
+	private final EdmEntitySet	    	    entitySet;
+	private final Enumerable<ODataProperty>	properties;
 	
 	private ODataKey key;
 	private String   keyString;
@@ -42,7 +41,7 @@ class ODataEntityImpl implements ODataEntity {
 	    Assert.notNull(entityType,"entityType cannot be null");
 	    this.entitySet  = entitySet;
 	    this.entityType = entityType;
-	    this.properties = Immutables.listOf(properties);
+	    this.properties = Enumerables.of(properties);
     }
 
 	public EdmEntitySet getEntitySet() {
@@ -53,10 +52,10 @@ class ODataEntityImpl implements ODataEntity {
 	    return entityType;
     }
 
-	public List<ODataProperty> getProperties() {
+	public Enumerable<ODataProperty> getProperties() {
 		return properties;
 	}
-	
+
 	public Object getPropertyValue(String name) {
 		ODataProperty p = Enumerables.firstOrNull(properties,Predicates.<ODataProperty>nameEqualsIgnoreCase(name));
 		

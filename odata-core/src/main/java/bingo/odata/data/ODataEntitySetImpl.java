@@ -15,38 +15,37 @@
  */
 package bingo.odata.data;
 
-import java.util.List;
-
-import bingo.lang.Immutables;
+import bingo.lang.Enumerable;
+import bingo.lang.Enumerables;
 import bingo.odata.edm.EdmEntitySet;
 
 class ODataEntitySetImpl implements ODataEntitySet {
 	
-	private final EdmEntitySet      metadata;
-	private final List<ODataEntity> entities;
-	private final Long              inlineCount;
-	private final String            skipToken;
+	private final EdmEntitySet      	  metadata;
+	private final Enumerable<ODataEntity> entities;
+	private final Long              	  inlineCount;
+	private final String            	  skipToken;
 	
-	public ODataEntitySetImpl(EdmEntitySet metadata, List<ODataEntity> entities) {
+	public ODataEntitySetImpl(EdmEntitySet metadata, Iterable<ODataEntity> entities) {
 	    super();
 	    this.metadata    = metadata;
-	    this.entities    = Immutables.listOf(entities);
+	    this.entities    = Enumerables.of(entities);
 	    this.inlineCount = null;
 	    this.skipToken   = null;
     }	
 	
-	public ODataEntitySetImpl(EdmEntitySet metadata, List<ODataEntity> entities, Long inlineCount) {
+	public ODataEntitySetImpl(EdmEntitySet metadata, Iterable<ODataEntity> entities, Long inlineCount) {
 	    super();
 	    this.metadata    = metadata;
-	    this.entities    = Immutables.listOf(entities);
+	    this.entities    = Enumerables.of(entities);
 	    this.inlineCount = inlineCount;
 	    this.skipToken   = null;
     }
 	
-	public ODataEntitySetImpl(EdmEntitySet metadata, List<ODataEntity> entities, Long inlineCount, String skipToken) {
+	public ODataEntitySetImpl(EdmEntitySet metadata, Iterable<ODataEntity> entities, Long inlineCount, String skipToken) {
 	    super();
 	    this.metadata    = metadata;
-	    this.entities    = Immutables.listOf(entities);
+	    this.entities    = Enumerables.of(entities);
 	    this.inlineCount = inlineCount;
 	    this.skipToken   = skipToken;
     }
@@ -55,9 +54,9 @@ class ODataEntitySetImpl implements ODataEntitySet {
     	return metadata;
     }
 
-	public List<ODataEntity> getEntities() {
-    	return entities;
-    }
+	public Enumerable<ODataEntity> getEntities() {
+		return entities;
+	}
 
 	public Long getInlineCount() {
     	return inlineCount;

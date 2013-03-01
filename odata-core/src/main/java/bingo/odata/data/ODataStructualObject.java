@@ -15,14 +15,14 @@
  */
 package bingo.odata.data;
 
-import java.util.List;
 import java.util.Map;
 
+import bingo.lang.Enumerable;
 import bingo.odata.ODataObject;
 
 public interface ODataStructualObject extends ODataObject {
 
-	List<ODataProperty> getProperties();
+	Enumerable<ODataProperty> getProperties();
 	
 	Object getPropertyValue(String name);
 	

@@ -21,7 +21,7 @@ import bingo.lang.Strings;
 import bingo.lang.json.JSON;
 import bingo.lang.json.JSONWriter;
 import bingo.odata.ODataConstants.ContentTypes;
-import bingo.odata.ODataContext;
+import bingo.odata.ODataWriterContext;
 import bingo.odata.ODataObject;
 import bingo.odata.ODataWriter;
 
@@ -31,7 +31,7 @@ public abstract class ODataJsonWriter<T extends ODataObject> implements ODataWri
 	    return ContentTypes.APPLICATION_JSON_UTF8;
     }
 
-	public final void write(ODataContext context,Writer out, T target) throws Throwable {
+	public final void write(ODataWriterContext context,Writer out, T target) throws Throwable {
 		JSONWriter writer = JSON.createWriter(out);
 		
 		String callback = context.getUrlInfo().getQueryOptions().getCallback();
@@ -51,5 +51,5 @@ public abstract class ODataJsonWriter<T extends ODataObject> implements ODataWri
 		}
     }
 	
-	protected abstract void write(ODataContext context,JSONWriter writer,T target) throws Throwable;
+	protected abstract void write(ODataWriterContext context,JSONWriter writer,T target) throws Throwable;
 }
