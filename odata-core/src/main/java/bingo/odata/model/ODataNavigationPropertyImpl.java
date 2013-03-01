@@ -16,26 +16,31 @@
 package bingo.odata.model;
 
 import bingo.odata.ODataObject;
+import bingo.odata.ODataObjectKind;
 import bingo.odata.edm.EdmNavigationProperty;
 
 public class ODataNavigationPropertyImpl implements ODataNavigationProperty {
 
 	protected final EdmNavigationProperty metadata;
-	protected final ODataObject           inlineContent;
+	protected final ODataObjectKind		  inlineKind;
+	protected final ODataObject           inlineValue;
 	
 	public ODataNavigationPropertyImpl(EdmNavigationProperty metadata){
 		this.metadata      = metadata;
-		this.inlineContent = null;
+		this.inlineKind    = null;
+		this.inlineValue   = null;
 	}
 	
 	public ODataNavigationPropertyImpl(EdmNavigationProperty metadata,ODataEntity relatedEntity){
-		this.metadata      = metadata;
-		this.inlineContent = relatedEntity;
+		this.metadata    = metadata;
+		this.inlineKind  = ODataObjectKind.Entity;
+		this.inlineValue = relatedEntity;
 	}
 	
 	public ODataNavigationPropertyImpl(EdmNavigationProperty metadata,ODataEntitySet relatedEntitySet){
-		this.metadata      = metadata;
-		this.inlineContent = relatedEntitySet;
+		this.metadata    = metadata;
+		this.inlineKind  = ODataObjectKind.EntitySet;
+		this.inlineValue = relatedEntitySet;
 	}
 
 	public EdmNavigationProperty getMetadata() {
@@ -43,22 +48,22 @@ public class ODataNavigationPropertyImpl implements ODataNavigationProperty {
     }
 
 	public boolean isExpanded() {
-	    return null != inlineContent;
+	    return null != inlineKind;
     }
 	
 	public boolean isRelatedEntitySet() {
-	    return inlineContent instanceof ODataEntitySet;
+	    return ODataObjectKind.EntitySet.equals(inlineKind);
     }
 
 	public boolean isRelatedEntity() {
-	    return inlineContent instanceof ODataEntity;
+		return ODataObjectKind.Entity.equals(inlineKind);
     }
 
 	public ODataEntitySet getRelatedEntititySet() {
-	    return (ODataEntitySet)inlineContent;
+	    return (ODataEntitySet)inlineValue;
     }
 
 	public ODataEntity getRelatedEntity() {
-	    return (ODataEntity)inlineContent;
+	    return (ODataEntity)inlineValue;
     }
 }

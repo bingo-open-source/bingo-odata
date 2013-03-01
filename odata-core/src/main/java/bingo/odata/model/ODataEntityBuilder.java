@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import bingo.lang.Builder;
+import bingo.lang.Collections;
 import bingo.lang.exceptions.ObjectNotFoundException;
 import bingo.odata.edm.EdmBuilders;
 import bingo.odata.edm.EdmEntitySet;
@@ -36,6 +37,7 @@ public class ODataEntityBuilder implements Builder<ODataEntity>{
 	private final EdmEntityType 	  entityType;
 	private final List<ODataProperty> properties = new ArrayList<ODataProperty>();
 	private final List<ODataNavigationProperty> navigationProperties = new ArrayList<ODataNavigationProperty>();
+	private boolean createNotExpandedNavProperties = true;
 	
 	public ODataEntityBuilder(EdmEntitySet entitySet,EdmEntityType entityType){
 		this.entitySet        = entitySet;
@@ -44,6 +46,14 @@ public class ODataEntityBuilder implements Builder<ODataEntity>{
 	
 	public EdmEntityType getEntityType(){
 		return entityType;
+	}
+	
+	public boolean isCreateNotExpandedNavProperties() {
+		return createNotExpandedNavProperties;
+	}
+
+	public void setCreateNotExpandedNavProperties(boolean createNotExpandedNavProperties) {
+		this.createNotExpandedNavProperties = createNotExpandedNavProperties;
 	}
 
 	public ODataEntityBuilder addProperty(ODataProperty property){
@@ -131,19 +141,36 @@ public class ODataEntityBuilder implements Builder<ODataEntity>{
 		return this;
 	}
 	
-	public ODataEntityBuilder addAllNavigationPropertiesAsNotExpanded(){
-		for(EdmNavigationProperty np : entityType.getAllNavigationProperties()){
-			addNavigationProperty(new ODataNavigationPropertyImpl(np));
-		}
-		return this;
-	}
-	
 	public ODataEntityBuilder addNavigationProperty(ODataNavigationProperty navigationProperty){
 		navigationProperties.add(navigationProperty);
 		return this;
 	}
 	
+	public ODataEntityBuilder addNavigationProperties(Iterable<ODataNavigationProperty> navigationProperties){
+		Collections.addAll(this.navigationProperties, navigationProperties);
+		return this;
+	}
+	
 	public ODataEntity build() {
-	    return new ODataEntityImpl(entitySet, entityType, properties,navigationProperties);
+		if(createNotExpandedNavProperties){
+			List<ODataNavigationProperty> list = new ArrayList<ODataNavigationProperty>();
+			for(EdmNavigationProperty np : entityType.getAllNavigationProperties()){
+				boolean created = false;
+				for(ODataNavigationProperty onp : navigationProperties){
+					if(onp.getMetadata().getName().equalsIgnoreCase(np.getName())){
+						list.add(onp);
+						created = true;
+						break;
+					}
+				}
+				if(!created){
+					list.add(new ODataNavigationPropertyImpl(np));
+				}
+			}
+			
+			return new ODataEntityImpl(entitySet, entityType, properties,list);	 
+		}else{
+			return new ODataEntityImpl(entitySet, entityType, properties,navigationProperties);	
+		}
     }
 }
