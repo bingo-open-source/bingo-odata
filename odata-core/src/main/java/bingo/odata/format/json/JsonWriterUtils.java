@@ -18,6 +18,7 @@ package bingo.odata.format.json;
 import java.sql.Time;
 import java.util.Date;
 
+import bingo.lang.Converts;
 import bingo.lang.codec.Base64;
 import bingo.lang.json.JSONWriter;
 import bingo.odata.ODataContext;
@@ -59,7 +60,7 @@ public class JsonWriterUtils {
 		
 		writer.startObject("__metadata");
 
-		writer.property("uri",  ODataUtils.getEntityUrlWithFormat(context.getUrlInfo(), entity,context.getFormat().getValue())).separator()
+		writer.property("uri",  ODataUtils.getEntityUrl(context.getUrlInfo(), entity)).separator()
 		      .property("type", entity.getEntitySet().getName());
 		
 		writer.endObject();
@@ -121,7 +122,7 @@ public class JsonWriterUtils {
 			}
 			
 			writer.startObject(np.getName())
-			      .startObject("__deferred").property("uri",ODataUtils.getPropertyPathWithFormat(context.getUrlInfo(), entity,np,context.getFormat().getValue())).endObject()
+			      .startObject("__deferred").property("uri",ODataUtils.getPropertyPath(context.getUrlInfo(), entity,np)).endObject()
 				  .endObject();
 		}
 	}
@@ -130,11 +131,11 @@ public class JsonWriterUtils {
 		if(null == value){
 			writer.nullValue();
 		}else if(type == EdmSimpleType.STRING){
-			writer.value(value.toString());
+			writer.value(Converts.toString(value));
 		}else if (EdmSimpleType.GUID.equals(type)) {
-			writer.value(value.toString());
+			writer.value(Converts.toString(value));
         } else if (EdmSimpleType.BOOLEAN.equals(type)) {
-        	writer.value((Boolean)value);
+        	writer.value(Converts.toBoolean(value));
         } else if (EdmSimpleType.BYTE.equals(type)) {
         	writer.value(((UnsignedByte)value).byteValue());
         } else if (EdmSimpleType.SBYTE.equals(type)) {

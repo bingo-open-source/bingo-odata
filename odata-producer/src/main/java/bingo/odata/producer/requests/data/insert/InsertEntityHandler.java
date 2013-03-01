@@ -13,29 +13,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.odata.producer.requests.data.retrieve;
+package bingo.odata.producer.requests.data.insert;
 
-import bingo.odata.ODataQueryInfo;
-import bingo.odata.ODataQueryInfoParser;
+import bingo.lang.http.HttpHeaders;
+import bingo.lang.http.HttpStatus;
+import bingo.odata.ODataObjectKind;
 import bingo.odata.ODataRequest;
 import bingo.odata.ODataResponse;
+import bingo.odata.ODataUtils;
+import bingo.odata.data.ODataEntity;
 import bingo.odata.edm.EdmEntitySet;
 import bingo.odata.edm.EdmEntityType;
 import bingo.odata.producer.ODataProducerContext;
 import bingo.odata.producer.requests.data.EntitySetRequestHandlerBase;
-import bingo.lang.http.HttpStatus;
 
-public class RetrieveCountRequestHandler extends EntitySetRequestHandlerBase {
+public class InsertEntityHandler extends EntitySetRequestHandlerBase {
 
 	@Override
-    protected void doHandleEntitySet(ODataProducerContext context, ODataRequest request, ODataResponse response, 
-    								  EdmEntitySet entitySet,EdmEntityType entityType) throws Throwable {
+    protected void doHandleEntitySet(ODataProducerContext context, ODataRequest request, ODataResponse response, EdmEntitySet entitySet,
+            						  EdmEntityType entityType) throws Throwable {
+
+		ODataEntity oentity = read(context,request,ODataObjectKind.Entity);
+	    
+		ODataEntity created = context.getProducer().insertEntity(context, entityType, oentity);
 		
-		ODataQueryInfo queryInfo = ODataQueryInfoParser.parse(context.getUrlInfo().getQueryOptions());
+		response.setStatus(HttpStatus.SC_CREATED);
+		response.setHeader(HttpHeaders.LOCATION, ODataUtils.getEntityUrl(context.getUrlInfo(), created));
 		
-		long count = context.getProducer().retrieveCount(context, entityType, queryInfo);
-		
-		response.setStatus(HttpStatus.SC_OK);
-		response.getWriter().write(String.valueOf(count));
+		write(context, request, response, ODataObjectKind.Entity, created);
     }
 }

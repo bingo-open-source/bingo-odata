@@ -13,18 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.odata.producer.requests.data.retrieve;
+package bingo.odata.producer.requests.data.delete;
 
 import bingo.odata.ODataRequest;
 import bingo.odata.ODataResponse;
 import bingo.odata.producer.ODataProducerContext;
 import bingo.odata.producer.requests.ODataRequestHandlerBase;
 
-public class RetrieveValueRequestHandler extends ODataRequestHandlerBase {
+public class DeleteLinksHandler extends ODataRequestHandlerBase {
 
 	@Override
 	protected void doHandle(ODataProducerContext context, ODataRequest request, ODataResponse response) throws Throwable {
-		// TODO implement RetrieveValueRequestHandler
+		// TODO implement DeleteLinkRequestHandler.doHandle
 
 	}
 

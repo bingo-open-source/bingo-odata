@@ -13,18 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.odata.producer.requests.metadata;
+package bingo.odata.producer.requests.data.delete;
 
-import bingo.odata.ODataObjectKind;
 import bingo.odata.ODataRequest;
 import bingo.odata.ODataResponse;
+import bingo.odata.data.ODataKey;
+import bingo.odata.edm.EdmEntitySet;
+import bingo.odata.edm.EdmEntityType;
 import bingo.odata.producer.ODataProducerContext;
-import bingo.odata.producer.requests.ODataRequestHandlerBase;
+import bingo.odata.producer.requests.data.EntityRequestHandlerBase;
+import bingo.lang.http.HttpStatus;
 
-public class ServiceDocumentRequestHandler extends ODataRequestHandlerBase {
-	
+public class DeleteEntityHandler extends EntityRequestHandlerBase {
+
 	@Override
-    protected void doHandle(ODataProducerContext context, ODataRequest request, ODataResponse response) throws Throwable {
-		write(context,request,response,ODataObjectKind.ServiceDocument,context.getServices());
+    protected void doHandleEntity(ODataProducerContext context, ODataRequest request, ODataResponse response, EdmEntitySet entitySet,
+    								EdmEntityType entityType, ODataKey key) throws Throwable {
+
+		context.getProducer().deleteEntity(context, entityType, key);
+		
+		response.setStatus(HttpStatus.SC_OK);
     }
+	
 }

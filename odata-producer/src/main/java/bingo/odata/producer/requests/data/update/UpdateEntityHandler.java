@@ -15,17 +15,27 @@
  */
 package bingo.odata.producer.requests.data.update;
 
+import bingo.odata.ODataObjectKind;
 import bingo.odata.ODataRequest;
 import bingo.odata.ODataResponse;
+import bingo.odata.data.ODataEntity;
+import bingo.odata.data.ODataKey;
+import bingo.odata.edm.EdmEntitySet;
+import bingo.odata.edm.EdmEntityType;
 import bingo.odata.producer.ODataProducerContext;
-import bingo.odata.producer.requests.ODataRequestHandlerBase;
+import bingo.odata.producer.requests.data.EntityRequestHandlerBase;
+import bingo.lang.http.HttpStatus;
 
-public class UpdateLinkRequestHandler extends ODataRequestHandlerBase {
-
+public class UpdateEntityHandler extends EntityRequestHandlerBase {
+	
 	@Override
-	protected void doHandle(ODataProducerContext context, ODataRequest request, ODataResponse response) throws Throwable {
-		// TODO implement UpdateLinkRequestHandler.doHandle
+    protected void doHandleEntity(ODataProducerContext context, ODataRequest request, ODataResponse response, EdmEntitySet entitySet,
+            						EdmEntityType entityType, ODataKey key) throws Throwable {
 
-	}
-
+		ODataEntity oentity = read(context,request,ODataObjectKind.Entity);
+	    
+		context.getProducer().updateEntity(context,entityType,key,oentity);
+		
+		response.setStatus(HttpStatus.SC_NO_CONTENT);
+    }
 }

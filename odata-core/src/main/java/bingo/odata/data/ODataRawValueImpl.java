@@ -24,7 +24,7 @@ public class ODataRawValueImpl implements ODataRawValue {
 	
 	public ODataRawValueImpl(EdmType type,Object value) {
 		this.type = type;
-		this.value = type;
+		this.value = value;
 	}
 
 	public EdmType getType() {

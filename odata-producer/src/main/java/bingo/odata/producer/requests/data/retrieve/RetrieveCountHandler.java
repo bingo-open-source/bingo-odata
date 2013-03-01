@@ -13,29 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.odata.producer.requests.data.update;
+package bingo.odata.producer.requests.data.retrieve;
 
-import bingo.odata.ODataObjectKind;
+import bingo.odata.ODataQueryInfo;
+import bingo.odata.ODataQueryInfoParser;
 import bingo.odata.ODataRequest;
 import bingo.odata.ODataResponse;
-import bingo.odata.data.ODataEntity;
-import bingo.odata.data.ODataKey;
 import bingo.odata.edm.EdmEntitySet;
 import bingo.odata.edm.EdmEntityType;
 import bingo.odata.producer.ODataProducerContext;
-import bingo.odata.producer.requests.data.EntityRequestHandlerBase;
+import bingo.odata.producer.requests.data.EntitySetRequestHandlerBase;
 import bingo.lang.http.HttpStatus;
 
-public class UpdateEntityRequestHandler extends EntityRequestHandlerBase {
-	
-	@Override
-    protected void doHandleEntity(ODataProducerContext context, ODataRequest request, ODataResponse response, EdmEntitySet entitySet,
-            						EdmEntityType entityType, ODataKey key) throws Throwable {
+public class RetrieveCountHandler extends EntitySetRequestHandlerBase {
 
-		ODataEntity oentity = read(context,request,ODataObjectKind.Entity);
-	    
-		context.getProducer().updateEntity(context,entityType,key,oentity);
+	@Override
+    protected void doHandleEntitySet(ODataProducerContext context, ODataRequest request, ODataResponse response, 
+    								  EdmEntitySet entitySet,EdmEntityType entityType) throws Throwable {
 		
-		response.setStatus(HttpStatus.SC_NO_CONTENT);
+		ODataQueryInfo queryInfo = ODataQueryInfoParser.parse(context.getUrlInfo().getQueryOptions());
+		
+		long count = context.getProducer().retrieveCount(context, entityType, queryInfo);
+		
+		response.setStatus(HttpStatus.SC_OK);
+		response.getWriter().write(String.valueOf(count));
     }
 }

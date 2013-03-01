@@ -30,7 +30,7 @@ import bingo.odata.edm.EdmSimpleType;
 import bingo.odata.producer.ODataProducerContext;
 import bingo.odata.producer.requests.data.PropertyRequestHandlerBase;
 
-public class RetrievePropertyRequestHandler extends PropertyRequestHandlerBase {
+public class RetrievePropertyHandler extends PropertyRequestHandlerBase {
 
 	@Override
     protected void doHandleProperty(ODataProducerContext context, ODataRequest request, ODataResponse response, EdmEntitySet entitySet,
@@ -38,7 +38,7 @@ public class RetrievePropertyRequestHandler extends PropertyRequestHandlerBase {
 
 		ODataValue returnValue = context.getProducer().retrieveProperty(context, entityType, key, property);
 		if(null == returnValue){
-			throw ODataErrors.internalServerError("returnValue must be not null");
+			throw ODataErrors.internalServerError("return value must be not null");
 		}
 		write(context, request, response, returnValue);
     }
@@ -49,7 +49,7 @@ public class RetrievePropertyRequestHandler extends PropertyRequestHandlerBase {
 
 		ODataValue returnValue = context.getProducer().retrieveNavigationProperty(context, entityType, key, navProperty);
 		if(null == returnValue){
-			throw ODataErrors.internalServerError("returnValue must be not null");
+			throw ODataErrors.internalServerError("return value must be not null");
 		}
 		write(context, request, response, returnValue);
 	}

@@ -13,18 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.odata.producer.requests.metadata;
+package bingo.odata.producer.requests.data.insert;
 
-import bingo.odata.ODataObjectKind;
 import bingo.odata.ODataRequest;
 import bingo.odata.ODataResponse;
 import bingo.odata.producer.ODataProducerContext;
 import bingo.odata.producer.requests.ODataRequestHandlerBase;
 
-public class MetadataDocumentRequestHandler extends ODataRequestHandlerBase {
-	
+public class InsertLinksHandler extends ODataRequestHandlerBase {
+
 	@Override
-    protected void doHandle(ODataProducerContext context, ODataRequest request, ODataResponse response) throws Throwable {
-		write(context,request,response,ODataObjectKind.MetadataDocument,context.getServices());
-    }
+	protected void doHandle(ODataProducerContext context, ODataRequest request, ODataResponse response) throws Throwable {
+		// TODO implement InsertLinkRequestHandler.doHandle
+
+	}
+
 }

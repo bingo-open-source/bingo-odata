@@ -164,7 +164,7 @@ public abstract class ODataAtomWriter<T extends ODataObject> extends ODataXmlWri
 		String type = isFeed ? ContentTypes.APPLICATION_ATOM_FEED : ContentTypes.APPLICATION_ATOM_ENTRY;
 		
 		for(EdmNavigationProperty navProp : entity.getEntityType().getDeclaredNavigationProperties()){
-			writeLink(writer, navProp.getName(), type,ODataUtils.getPropertyPathWithFormat(context.getUrlInfo(),entity,navProp,context.getFormat().getValue()),RELATED_NS + navProp.getName());
+			writeLink(writer, navProp.getName(), type,ODataUtils.getPropertyPath(context.getUrlInfo(),entity,navProp),RELATED_NS + navProp.getName());
 		}
 	}
 	

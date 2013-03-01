@@ -27,7 +27,7 @@ import bingo.odata.producer.ODataProducerContext;
 import bingo.odata.producer.requests.ODataRequestRouter;
 import bingo.odata.producer.requests.data.EntityRequestHandlerBase;
 
-public class RetrieveLinkRequestHandler extends EntityRequestHandlerBase {
+public class RetrieveLinksHandler extends EntityRequestHandlerBase {
 
 	@Override
     protected void doHandleEntity(ODataProducerContext context, 

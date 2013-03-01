@@ -15,28 +15,34 @@
  */
 package bingo.odata.producer.requests.data.retrieve;
 
+import bingo.odata.ODataErrors;
 import bingo.odata.ODataObjectKind;
 import bingo.odata.ODataQueryInfo;
 import bingo.odata.ODataQueryInfoParser;
 import bingo.odata.ODataRequest;
 import bingo.odata.ODataResponse;
-import bingo.odata.data.ODataEntitySet;
+import bingo.odata.data.ODataEntity;
+import bingo.odata.data.ODataKey;
 import bingo.odata.edm.EdmEntitySet;
 import bingo.odata.edm.EdmEntityType;
 import bingo.odata.producer.ODataProducerContext;
-import bingo.odata.producer.requests.data.EntitySetRequestHandlerBase;
+import bingo.odata.producer.requests.data.EntityRequestHandlerBase;
 
-public class RetrieveEntitySetRequestHandler extends EntitySetRequestHandlerBase {
-
+public class RetrieveEntityHandler extends EntityRequestHandlerBase {
+	
 	@Override
-    protected void doHandleEntitySet(ODataProducerContext context, ODataRequest request, ODataResponse response, 
-    								  EdmEntitySet entitySet,EdmEntityType entityType) throws Throwable {
-
-		ODataQueryInfo queryInfo = ODataQueryInfoParser.parse(context.getUrlInfo().getQueryOptions());
+    protected void doHandleEntity(ODataProducerContext context, ODataRequest request, ODataResponse response,
+    							   EdmEntitySet entitySet,EdmEntityType entityType,ODataKey key) throws Throwable {
 		
-		ODataEntitySet data = context.getProducer().retrieveEntitySet(context,entityType, queryInfo);
+		ODataQueryInfo queryInfo = ODataQueryInfoParser.parseForSingleEntity(context.getUrlInfo().getQueryOptions());
 		
-		write(context,request,response,ODataObjectKind.EntitySet,data);
+		ODataEntity data = context.getProducer().retrieveEntity(context, entityType, key, queryInfo);
 		
+		if(null == data){
+			throw ODataErrors.notFound("Resource '{0}' not found",context.getUrlInfo().getResourcePath().getFullPath());
+		}else{
+			write(context,request,response,ODataObjectKind.Entity,data);	
+		}	    
     }
+
 }

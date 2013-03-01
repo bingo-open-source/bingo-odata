@@ -19,13 +19,13 @@ import org.junit.Test;
 
 import bingo.lang.Assert;
 import bingo.odata.producer.demo.DemoODataTestBase;
-import bingo.odata.producer.requests.metadata.MetadataDocumentRequestHandler;
-import bingo.odata.producer.requests.metadata.ServiceDocumentRequestHandler;
+import bingo.odata.producer.requests.metadata.MetadataDocumentHandler;
+import bingo.odata.producer.requests.metadata.ServiceDocumentHandler;
 
 public class TestDemoMetadataRequest extends DemoODataTestBase {
 	
-	private ServiceDocumentRequestHandler serviceDocumentHandler   = new ServiceDocumentRequestHandler();
-	private MetadataDocumentRequestHandler metadataDocumentHandler = new MetadataDocumentRequestHandler();
+	private ServiceDocumentHandler serviceDocumentHandler   = new ServiceDocumentHandler();
+	private MetadataDocumentHandler metadataDocumentHandler = new MetadataDocumentHandler();
 	
 	@Test
 	public void testDemoServiceDocumentAtom() {

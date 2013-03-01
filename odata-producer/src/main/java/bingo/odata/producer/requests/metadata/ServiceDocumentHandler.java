@@ -13,30 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.odata.producer.requests.data.update;
+package bingo.odata.producer.requests.metadata;
 
 import bingo.odata.ODataObjectKind;
 import bingo.odata.ODataRequest;
 import bingo.odata.ODataResponse;
-import bingo.odata.data.ODataEntity;
-import bingo.odata.data.ODataKey;
-import bingo.odata.edm.EdmEntitySet;
-import bingo.odata.edm.EdmEntityType;
 import bingo.odata.producer.ODataProducerContext;
-import bingo.odata.producer.requests.data.EntityRequestHandlerBase;
-import bingo.lang.http.HttpStatus;
+import bingo.odata.producer.requests.ODataRequestHandlerBase;
 
-public class MergeEntityRequestHandler extends EntityRequestHandlerBase {
-
+public class ServiceDocumentHandler extends ODataRequestHandlerBase {
+	
 	@Override
-    protected void doHandleEntity(ODataProducerContext context, ODataRequest request, ODataResponse response, EdmEntitySet entitySet,
-            						EdmEntityType entityType, ODataKey key) throws Throwable {
-
-		ODataEntity oentity = read(context,request,ODataObjectKind.Entity);
-	    
-		context.getProducer().mergeEntity(context,entityType,key,oentity);
-		
-		response.setStatus(HttpStatus.SC_NO_CONTENT);
+    protected void doHandle(ODataProducerContext context, ODataRequest request, ODataResponse response) throws Throwable {
+		write(context,request,response,ODataObjectKind.ServiceDocument,context.getServices());
     }
-
 }

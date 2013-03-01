@@ -15,7 +15,12 @@
  */
 package bingo.odata.producer.requests;
 
-import static bingo.lang.http.HttpMethods.*;
+import static bingo.lang.http.HttpMethods.DELETE;
+import static bingo.lang.http.HttpMethods.GET;
+import static bingo.lang.http.HttpMethods.MERGE;
+import static bingo.lang.http.HttpMethods.PATCH;
+import static bingo.lang.http.HttpMethods.POST;
+import static bingo.lang.http.HttpMethods.PUT;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,19 +32,21 @@ import bingo.odata.ODataException;
 import bingo.odata.ODataRequest;
 import bingo.odata.ODataResponse;
 import bingo.odata.producer.requests.batch.BatchRequestHandler;
-import bingo.odata.producer.requests.data.delete.DeleteEntityRequestHandler;
-import bingo.odata.producer.requests.data.delete.DeleteLinkRequestHandler;
-import bingo.odata.producer.requests.data.insert.InsertEntityRequestHandler;
-import bingo.odata.producer.requests.data.insert.InsertLinkRequestHandler;
-import bingo.odata.producer.requests.data.retrieve.RetrieveCountRequestHandler;
-import bingo.odata.producer.requests.data.retrieve.RetrieveEntityRequestHandler;
-import bingo.odata.producer.requests.data.retrieve.RetrieveEntitySetRequestHandler;
-import bingo.odata.producer.requests.data.retrieve.RetrieveLinkRequestHandler;
-import bingo.odata.producer.requests.data.retrieve.RetrievePropertyRequestHandler;
-import bingo.odata.producer.requests.data.update.MergeEntityRequestHandler;
-import bingo.odata.producer.requests.data.update.UpdateLinkRequestHandler;
-import bingo.odata.producer.requests.metadata.MetadataDocumentRequestHandler;
-import bingo.odata.producer.requests.metadata.ServiceDocumentRequestHandler;
+import bingo.odata.producer.requests.data.delete.DeleteEntityHandler;
+import bingo.odata.producer.requests.data.delete.DeleteLinksHandler;
+import bingo.odata.producer.requests.data.insert.InsertEntityHandler;
+import bingo.odata.producer.requests.data.insert.InsertLinksHandler;
+import bingo.odata.producer.requests.data.retrieve.RetrieveCountHandler;
+import bingo.odata.producer.requests.data.retrieve.RetrieveEntityHandler;
+import bingo.odata.producer.requests.data.retrieve.RetrieveEntitySetHandler;
+import bingo.odata.producer.requests.data.retrieve.RetrieveLinksHandler;
+import bingo.odata.producer.requests.data.retrieve.RetrievePropertyHandler;
+import bingo.odata.producer.requests.data.retrieve.RetrievePropertyValueHandler;
+import bingo.odata.producer.requests.data.update.MergeEntityHandler;
+import bingo.odata.producer.requests.data.update.UpdateEntityHandler;
+import bingo.odata.producer.requests.data.update.UpdateLinksHandler;
+import bingo.odata.producer.requests.metadata.MetadataDocumentHandler;
+import bingo.odata.producer.requests.metadata.ServiceDocumentHandler;
 
 public class ODataRequestRouter {
 
@@ -52,28 +59,28 @@ public class ODataRequestRouter {
 
 	static {
 		//Retrieve Requests
-		add(GET,	"/",							   														new ServiceDocumentRequestHandler());
-		add(GET,	"/\\$metadata",					   														new MetadataDocumentRequestHandler());
-		add(GET,	"/{entitySetName:[^/()]+?}(?:\\(\\))?",				   									new RetrieveEntitySetRequestHandler());
-		add(GET,	"/{entitySetName:[^/()]+?}{entityKeyString:\\(.+?\\)}",									new RetrieveEntityRequestHandler());
-		add(GET,	"/{entitySetName:[^/()]+?}(?:\\(\\))?/\\$count",										new RetrieveCountRequestHandler());
-		add(GET,	"/{entitySetName:[^/()]+?}(?:\\(\\))?/\\$links/{entityNavProperyName}",					new RetrieveLinkRequestHandler());
-		add(GET,	"/{entitySetName:[^/()]+?}{entityKeyString:\\(.+?\\)}/{entityProperyName}",				new RetrievePropertyRequestHandler());
-		add(GET,	"/{entitySetName:[^/()]+?}{entityKeyString:\\(.+?\\)}/{entityProperyName}/\\$value",	new RetrievePropertyRequestHandler());
+		add(GET,	"/",							   														new ServiceDocumentHandler());
+		add(GET,	"/\\$metadata",					   														new MetadataDocumentHandler());
+		add(GET,	"/{entitySetName:[^/()]+?}(?:\\(\\))?",				   									new RetrieveEntitySetHandler());
+		add(GET,	"/{entitySetName:[^/()]+?}{entityKeyString:\\(.+?\\)}",									new RetrieveEntityHandler());
+		add(GET,	"/{entitySetName:[^/()]+?}(?:\\(\\))?/\\$count",										new RetrieveCountHandler());
+		add(GET,	"/{entitySetName:[^/()]+?}(?:\\(\\))?/\\$links/{entityNavProperyName}",					new RetrieveLinksHandler());
+		add(GET,	"/{entitySetName:[^/()]+?}{entityKeyString:\\(.+?\\)}/{entityProperyName}",				new RetrievePropertyHandler());
+		add(GET,	"/{entitySetName:[^/()]+?}{entityKeyString:\\(.+?\\)}/{entityProperyName}/\\$value",	new RetrievePropertyValueHandler());
 		
 		//Insert Requests
-		add(POST,	"/{entitySetName:[^/()]+?}(?:\\(\\))?",				   									new InsertEntityRequestHandler());
-		add(POST,	"/{entitySetName:[^/()]+?}(?:\\(\\))?/\\$links/{entityNavProperyName}",					new InsertLinkRequestHandler());
+		add(POST,	"/{entitySetName:[^/()]+?}(?:\\(\\))?",				   									new InsertEntityHandler());
+		add(POST,	"/{entitySetName:[^/()]+?}(?:\\(\\))?/\\$links/{entityNavProperyName}",					new InsertLinksHandler());
 		
 		//Update Requests
-		add(PUT,	"/{entitySetName:[^/()]+?}{entityKeyString:\\(.+?\\)}",				   					new UpdateLinkRequestHandler());
-		add(MERGE,	"/{entitySetName:[^/()]+?}{entityKeyString:\\(.+?\\)}",				   					new MergeEntityRequestHandler());
-		add(PATCH,	"/{entitySetName:[^/()]+?}{entityKeyString:\\(.+?\\)}",				   					new MergeEntityRequestHandler());		
-		add(PUT,	"/{entitySetName:[^/()]+?}{entityKeyString:\\(.+?\\)}/\\$links/{entityNavProperyName}",	new UpdateLinkRequestHandler());	
+		add(PUT,	"/{entitySetName:[^/()]+?}{entityKeyString:\\(.+?\\)}",				   					new UpdateEntityHandler());
+		add(MERGE,	"/{entitySetName:[^/()]+?}{entityKeyString:\\(.+?\\)}",				   					new MergeEntityHandler());
+		add(PATCH,	"/{entitySetName:[^/()]+?}{entityKeyString:\\(.+?\\)}",				   					new MergeEntityHandler());
+		add(PUT,	"/{entitySetName:[^/()]+?}{entityKeyString:\\(.+?\\)}/\\$links/{entityNavProperyName}",	new UpdateLinksHandler());	
 		
 		//Delete Requests
-		add(DELETE,	"/{entitySetName:[^/()]+?}{entityKeyString:\\(.+?\\)}",				   					new DeleteEntityRequestHandler());
-		add(DELETE,	"/{entitySetName:[^/()]+?}{entityKeyString:\\(.+?\\)}/\\$links/{entityNavProperyName}",	new DeleteLinkRequestHandler());		
+		add(DELETE,	"/{entitySetName:[^/()]+?}{entityKeyString:\\(.+?\\)}",				   					new DeleteEntityHandler());
+		add(DELETE,	"/{entitySetName:[^/()]+?}{entityKeyString:\\(.+?\\)}/\\$links/{entityNavProperyName}",	new DeleteLinksHandler());
 		
 		//Batch Request
 		add("*",	"/\\$batch",						   													new BatchRequestHandler());

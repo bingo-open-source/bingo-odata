@@ -13,33 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.odata.producer.requests.data.insert;
+package bingo.odata.producer.requests.data.update;
 
-import bingo.lang.http.HttpHeaders;
-import bingo.lang.http.HttpStatus;
 import bingo.odata.ODataObjectKind;
 import bingo.odata.ODataRequest;
 import bingo.odata.ODataResponse;
-import bingo.odata.ODataUtils;
 import bingo.odata.data.ODataEntity;
+import bingo.odata.data.ODataKey;
 import bingo.odata.edm.EdmEntitySet;
 import bingo.odata.edm.EdmEntityType;
 import bingo.odata.producer.ODataProducerContext;
-import bingo.odata.producer.requests.data.EntitySetRequestHandlerBase;
+import bingo.odata.producer.requests.data.EntityRequestHandlerBase;
+import bingo.lang.http.HttpStatus;
 
-public class InsertEntityRequestHandler extends EntitySetRequestHandlerBase {
+public class MergeEntityHandler extends EntityRequestHandlerBase {
 
 	@Override
-    protected void doHandleEntitySet(ODataProducerContext context, ODataRequest request, ODataResponse response, EdmEntitySet entitySet,
-            						  EdmEntityType entityType) throws Throwable {
+    protected void doHandleEntity(ODataProducerContext context, ODataRequest request, ODataResponse response, EdmEntitySet entitySet,
+            						EdmEntityType entityType, ODataKey key) throws Throwable {
 
 		ODataEntity oentity = read(context,request,ODataObjectKind.Entity);
 	    
-		ODataEntity created = context.getProducer().insertEntity(context, entityType, oentity);
+		context.getProducer().mergeEntity(context,entityType,key,oentity);
 		
-		response.setStatus(HttpStatus.SC_CREATED);
-		response.setHeader(HttpHeaders.LOCATION, ODataUtils.getEntityUrl(context.getUrlInfo(), created));
-		
-		write(context, request, response, ODataObjectKind.Entity, created);
+		response.setStatus(HttpStatus.SC_NO_CONTENT);
     }
+
 }
