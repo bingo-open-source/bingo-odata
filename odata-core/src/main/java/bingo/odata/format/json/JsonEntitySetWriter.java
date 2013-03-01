@@ -15,54 +15,16 @@
  */
 package bingo.odata.format.json;
 
-import bingo.lang.Strings;
+import static bingo.odata.format.json.JsonWriterUtils.writeEntitySet;
 import bingo.lang.json.JSONWriter;
 import bingo.odata.ODataWriterContext;
-import bingo.odata.ODataUtils;
-import bingo.odata.data.ODataEntity;
-import bingo.odata.data.ODataEntitySet;
 import bingo.odata.format.ODataJsonWriter;
-
-import static bingo.odata.format.json.JsonWriterUtils.*;
+import bingo.odata.model.ODataEntitySet;
 
 public class JsonEntitySetWriter extends ODataJsonWriter<ODataEntitySet> {
 
 	@Override
     protected void write(ODataWriterContext context, JSONWriter writer, ODataEntitySet entitySet) throws Throwable {
-		writer.startObject();
-		
-		if(entitySet.getInlineCount() != null){
-			writer.property("__count", String.valueOf(entitySet.getInlineCount())).separator();
-		}
-		
-		writer.name("results");
-		
-		writeEntities(context, writer, entitySet);
-	
-		String nextHref = ODataUtils.nextHref(context, entitySet);
-		if(!Strings.isEmpty(nextHref)){
-			writer.separator()
-			      .property("__next", nextHref);
-		}
-		
-		writer.endObject();
+		writeEntitySet(context, writer, entitySet);
     }
-	
-	protected static void writeEntities(ODataWriterContext context,JSONWriter writer,ODataEntitySet entitySet){
-		writer.startArray();
-		
-		int i=0;
-		for(ODataEntity entity : entitySet.getEntities()){
-			
-			if(i==0){
-				i=1;
-			}else{
-				writer.separator();
-			}
-			
-			writeEntity(context, writer, entity);
-		}
-		
-		writer.endArray();
-	}
 }

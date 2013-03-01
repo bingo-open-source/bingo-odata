@@ -20,12 +20,12 @@ import java.util.Map.Entry;
 
 import bingo.odata.ODataReaderContext;
 import bingo.odata.ODataErrors;
-import bingo.odata.data.ODataEntity;
-import bingo.odata.data.ODataEntityBuilder;
 import bingo.odata.edm.EdmEntityType;
 import bingo.odata.edm.EdmNavigationProperty;
 import bingo.odata.edm.EdmProperty;
 import bingo.odata.format.ODataJsonReader;
+import bingo.odata.model.ODataEntity;
+import bingo.odata.model.ODataEntityBuilder;
 import bingo.lang.json.JSONObject;
 
 public class JsonEntityReader extends ODataJsonReader<ODataEntity> {

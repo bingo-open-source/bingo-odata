@@ -13,10 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.odata.data;
+package bingo.odata.model;
 
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 import bingo.lang.Assert;
@@ -31,17 +30,21 @@ class ODataEntityImpl implements ODataEntity {
 	private final EdmEntityType	    	    entityType;
 	private final EdmEntitySet	    	    entitySet;
 	private final Enumerable<ODataProperty>	properties;
+	private final Enumerable<ODataNavigationProperty> navigationProperties;
 	
 	private ODataKey key;
 	private String   keyString;
 	
-	public ODataEntityImpl(EdmEntitySet entitySet, EdmEntityType entityType, List<ODataProperty> properties) {
+	public ODataEntityImpl(EdmEntitySet entitySet, 
+						   EdmEntityType entityType, 
+						   Iterable<ODataProperty> properties,Iterable<ODataNavigationProperty> navigationProperties) {
 	    super();
 	    Assert.notNull(entitySet,"entitySet cannot be null");
 	    Assert.notNull(entityType,"entityType cannot be null");
 	    this.entitySet  = entitySet;
 	    this.entityType = entityType;
 	    this.properties = Enumerables.of(properties);
+	    this.navigationProperties = Enumerables.of(navigationProperties);
     }
 
 	public EdmEntitySet getEntitySet() {
@@ -54,6 +57,10 @@ class ODataEntityImpl implements ODataEntity {
 
 	public Enumerable<ODataProperty> getProperties() {
 		return properties;
+	}
+	
+	public Enumerable<ODataNavigationProperty> getNavigationProperties() {
+		return navigationProperties;
 	}
 
 	public Object getPropertyValue(String name) {

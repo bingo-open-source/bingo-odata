@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 the original author or authors.
+ * Copyright 2013 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,19 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.odata.data;
+package bingo.odata.model;
 
-import bingo.lang.Enumerable;
 import bingo.odata.ODataObject;
-import bingo.odata.edm.EdmEntitySet;
+import bingo.odata.ODataObjectKind;
 
-public interface ODataEntitySet extends ODataObject {
-
-	EdmEntitySet getMetadata();
+public class ODataValueImpl implements ODataValue {
 	
-	Enumerable<ODataEntity> getEntities();
+	protected final ODataObjectKind kind;
+	protected final ODataObject     value;
 	
-	Long getInlineCount();
+	public ODataValueImpl(ODataObjectKind kind,ODataObject value) {
+		this.kind  = kind;
+		this.value = value;
+	}
 
-	String getSkipToken();
+	public ODataObjectKind getKind() {
+		return kind;
+	}
+
+	public ODataObject getValue() {
+		return value;
+	}
 }

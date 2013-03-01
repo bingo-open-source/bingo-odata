@@ -25,14 +25,14 @@ import bingo.lang.xml.XmlReader;
 import bingo.odata.ODataErrors;
 import bingo.odata.ODataException;
 import bingo.odata.ODataReaderContext;
-import bingo.odata.data.ODataEntity;
-import bingo.odata.data.ODataEntityBuilder;
-import bingo.odata.data.ODataProperty;
-import bingo.odata.data.ODataPropertyBuilder;
 import bingo.odata.edm.EdmEntitySet;
 import bingo.odata.edm.EdmEntityType;
 import bingo.odata.edm.EdmProperty;
 import bingo.odata.format.ODataAtomReader;
+import bingo.odata.model.ODataEntity;
+import bingo.odata.model.ODataEntityBuilder;
+import bingo.odata.model.ODataProperty;
+import bingo.odata.model.ODataPropertyBuilder;
 
 public class AtomEntityReader extends ODataAtomReader<ODataEntity> {
 

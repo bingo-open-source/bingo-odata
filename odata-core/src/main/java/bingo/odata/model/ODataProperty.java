@@ -13,18 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.odata.data;
+package bingo.odata.model;
 
-import java.util.Map;
-
-import bingo.lang.Enumerable;
+import bingo.lang.NamedValue;
 import bingo.odata.ODataObject;
+import bingo.odata.edm.EdmProperty;
+import bingo.odata.edm.EdmType;
 
-public interface ODataStructualObject extends ODataObject {
+public interface ODataProperty extends NamedValue<Object>,ODataObject{
+	
+	EdmProperty getMetadata();
 
-	Enumerable<ODataProperty> getProperties();
+	EdmType getType();
 	
-	Object getPropertyValue(String name);
-	
-	Map<String,Object> toMap();
 }

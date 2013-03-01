@@ -13,14 +13,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.odata.data;
+package bingo.odata.model;
 
-import bingo.odata.ODataObject;
-import bingo.odata.ODataObjectKind;
+import bingo.odata.edm.EdmProperty;
+import bingo.odata.edm.EdmType;
 
-public interface ODataValue extends ODataObject {
+class ODataPropertyImpl implements ODataProperty {
 	
-	ODataObjectKind getKind();
+	private final EdmProperty metadata;
+	private final Object     value;
 	
-	ODataObject getValue();
+	public ODataPropertyImpl(EdmProperty metadata,Object value) {
+	    super();
+	    this.metadata = metadata;
+	    this.value    = value;
+    }
+	
+	public EdmProperty getMetadata() {
+	    return metadata;
+    }
+
+	public EdmType getType() {
+    	return metadata.getType();
+    }
+	
+	public String getName() {
+    	return metadata.getName();
+    }
+	
+	public Object getValue() {
+    	return value;
+    }
 }

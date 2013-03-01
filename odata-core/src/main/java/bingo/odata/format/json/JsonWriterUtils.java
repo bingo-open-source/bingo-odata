@@ -22,16 +22,15 @@ import bingo.lang.Converts;
 import bingo.lang.Strings;
 import bingo.lang.codec.Base64;
 import bingo.lang.json.JSONWriter;
-import bingo.odata.ODataConstants.CustomOptions;
-import bingo.odata.ODataConstants.ShowModes;
-import bingo.odata.ODataWriterContext;
 import bingo.odata.ODataErrors;
 import bingo.odata.ODataUtils;
-import bingo.odata.data.ODataEntity;
-import bingo.odata.data.ODataProperty;
-import bingo.odata.data.ODataRawValue;
-import bingo.odata.edm.EdmNavigationProperty;
+import bingo.odata.ODataWriterContext;
 import bingo.odata.edm.EdmSimpleType;
+import bingo.odata.model.ODataEntity;
+import bingo.odata.model.ODataEntitySet;
+import bingo.odata.model.ODataNavigationProperty;
+import bingo.odata.model.ODataProperty;
+import bingo.odata.model.ODataRawValue;
 import bingo.odata.values.DateTimeOffset;
 import bingo.odata.values.UnsignedByte;
 
@@ -41,28 +40,59 @@ public class JsonWriterUtils {
 		
 	}
 	
-	private static String showMode(ODataWriterContext context){
-		return context.getUrlInfo().getQueryOptions().getOption(CustomOptions.SHOW_MODE);
+	public static void writeEntitySet(ODataWriterContext context,JSONWriter writer,ODataEntitySet entitySet){
+		writer.startObject();
+		
+		if(entitySet.getInlineCount() != null){
+			writer.property("__count", String.valueOf(entitySet.getInlineCount())).separator();
+		}
+		
+		writer.name("results");
+		writeEntities(context, writer, entitySet.getEntities());
+	
+		String nextHref = ODataUtils.nextHref(context, entitySet);
+		if(!Strings.isEmpty(nextHref)){
+			writer.separator()
+			      .property("__next", nextHref);
+		}
+		
+		writer.endObject();
+	}
+	
+	public static void writeEntities(ODataWriterContext context,JSONWriter writer,Iterable<ODataEntity> entities){
+		writer.startArray();
+		
+		int i=0;
+		for(ODataEntity entity : entities){
+			
+			if(i==0){
+				i=1;
+			}else{
+				writer.separator();
+			}
+			
+			writeEntity(context, writer, entity);
+		}
+		
+		writer.endArray();
 	}
 	
 	public static void writeEntity(ODataWriterContext context,JSONWriter writer,ODataEntity entity){
 		writer.startObject();
 		
-		boolean full = !Strings.equals(showMode(context),ShowModes.MINIMAL);
-		if(full){
+		if(!context.isMinimal()){
 			writeEntityMetadata(context, writer, entity);
 		}
 		
 		if(!entity.getProperties().isEmpty()){
-			if(full){
+			if(!context.isMinimal()){
 				writer.separator();
 			}
 			writeEntityProperties(context,writer,entity);
 		}
-
-		if(full && !entity.getEntityType().getDeclaredNavigationProperties().isEmpty()){
-			writer.separator();
-			writeEntityLinks(context, writer, entity);
+		
+		if(!entity.getNavigationProperties().isEmpty()){
+			writeNavigationProperties(context, writer, entity);
 		}
 		
 		writer.endObject();
@@ -121,21 +151,33 @@ public class JsonWriterUtils {
 		throw ODataErrors.notImplemented("ComplexType property not implemented");
 	}
 	
-	public static void writeEntityLinks(ODataWriterContext context,JSONWriter writer,ODataEntity entity){
+	private static void writeNavigationProperties(ODataWriterContext context,JSONWriter writer,ODataEntity entity){
 //		String uri = ODataUtils.getEntryId(context.getUrlInfo(), entity);
 		
-		int i=0;
-		for(EdmNavigationProperty np : entity.getEntityType().getDeclaredNavigationProperties()){
+		for(ODataNavigationProperty np : entity.getNavigationProperties()){
 			
-			if(i==0){
-				i=1;
-			}else{
+			if(np.isExpanded()){
 				writer.separator();
-			}
-			
-			writer.startObject(np.getName())
-			      .startObject("__deferred").property("uri",ODataUtils.getPropertyPath(context.getUrlInfo(), entity,np)).endObject()
+				writer.name(np.getMetadata().getName());
+
+				if(np.isRelatedEntity()){
+					ODataEntity oentity = np.getRelatedEntity();
+					
+					if(null == oentity){
+						writer.nullValue();
+					}else{
+						writeEntity(context, writer, oentity);
+					}
+				}else{
+					ODataEntitySet entitySet = np.getRelatedEntititySet();
+					writeEntitySet(context,writer,entitySet);
+				}
+			}else if(!context.isMinimal()){
+				writer.separator();
+				writer.startObject(np.getMetadata().getName())
+			      .startObject("__deferred").property("uri",ODataUtils.getNavPropertyPath(context.getUrlInfo(),entity,np.getMetadata())).endObject()
 				  .endObject();
+			}
 		}
 	}
 	

@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 the original author or authors.
+ * Copyright 2012 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,10 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.odata;
+package bingo.odata.model;
 
-public interface ODataLink extends ODataObject {
+import java.util.Map;
 
-	boolean isInline();
+import bingo.lang.Enumerable;
+import bingo.odata.ODataObject;
+
+public interface ODataStructualObject extends ODataObject {
+
+	Enumerable<ODataProperty> getProperties();
 	
+	Object getPropertyValue(String name);
+	
+	Map<String,Object> toMap();
 }

@@ -73,13 +73,7 @@ public final class ODataConstants {
 	public static class CustomOptions {
 		protected CustomOptions(){}
 		
-		public static final String SHOW_MODE = "x_show";
-	}
-	
-	public static class ShowModes {
-		public static final String FULL    = "full";
-		public static final String MINIMAL = "min";
-		public static final String NO      = "no";
+		public static final String X_MINIMAL = "x_minimal";
 	}
 	
 	public static final class ResourcePaths {

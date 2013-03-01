@@ -23,14 +23,14 @@ import bingo.odata.ODataConverts;
 import bingo.odata.ODataObject;
 import bingo.odata.ODataUtils;
 import bingo.odata.ODataWriterContext;
-import bingo.odata.data.ODataEntity;
-import bingo.odata.data.ODataProperty;
 import bingo.odata.edm.EdmFeedCustomization.SyndicationItemProperty;
 import bingo.odata.edm.EdmFeedCustomization.SyndicationTextContentKind;
 import bingo.odata.edm.EdmNavigationProperty;
 import bingo.odata.edm.EdmProperty;
 import bingo.odata.edm.EdmSimpleType;
 import bingo.odata.edm.EdmType;
+import bingo.odata.model.ODataEntity;
+import bingo.odata.model.ODataProperty;
 
 public abstract class ODataAtomWriter<T extends ODataObject> extends ODataXmlWriter<T> {
 
@@ -162,7 +162,7 @@ public abstract class ODataAtomWriter<T extends ODataObject> extends ODataXmlWri
 		String type = isFeed ? ContentTypes.APPLICATION_ATOM_FEED : ContentTypes.APPLICATION_ATOM_ENTRY;
 		
 		for(EdmNavigationProperty navProp : entity.getEntityType().getDeclaredNavigationProperties()){
-			writeLink(writer, navProp.getName(), type,ODataUtils.getPropertyPath(context.getUrlInfo(),entity,navProp),RELATED_NS + navProp.getName());
+			writeLink(writer, navProp.getName(), type,ODataUtils.getNavPropertyPath(context.getUrlInfo(),entity,navProp),RELATED_NS + navProp.getName());
 		}
 	}
 	

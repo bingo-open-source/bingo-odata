@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.odata.data;
+package bingo.odata.model;
 
 import bingo.odata.edm.EdmBuilders;
 import bingo.odata.edm.EdmEntitySet;

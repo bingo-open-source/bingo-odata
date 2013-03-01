@@ -17,4 +17,6 @@ package bingo.odata;
 
 public interface ODataWriterContext extends ODataContext {
 	
+	boolean isMinimal();
+	
 }

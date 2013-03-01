@@ -25,10 +25,10 @@ import bingo.lang.Dates;
 import bingo.lang.Strings;
 import bingo.lang.uri.QueryStringBuilder;
 import bingo.odata.ODataConstants.QueryOptions;
-import bingo.odata.data.ODataEntity;
-import bingo.odata.data.ODataEntitySet;
 import bingo.odata.edm.EdmNavigationProperty;
 import bingo.odata.expression.EntitySimpleProperty;
+import bingo.odata.model.ODataEntity;
+import bingo.odata.model.ODataEntitySet;
 
 public class ODataUtils {
 	
@@ -64,12 +64,12 @@ public class ODataUtils {
 		return getEntityUrl(urlInfo,entity) + "?" + QueryOptions.FORMAT + "=" + format;
 	}
 	
-	public static String getPropertyPath(ODataUrlInfo urlInfo,ODataEntity entity,EdmNavigationProperty prop){
+	public static String getNavPropertyPath(ODataUrlInfo urlInfo,ODataEntity entity,EdmNavigationProperty prop){
 		return urlInfo.getServiceRootUri() +  entity.getKeyString() + "/" + prop.getName();
 	}
 	
-	public static String getPropertyPathWithFormat(ODataUrlInfo urlInfo,ODataEntity entity,EdmNavigationProperty prop,String format){
-		return getPropertyPath(urlInfo,entity,prop) + "?" + QueryOptions.FORMAT + "=" + format;
+	public static String getNavPropertyPathWithFormat(ODataUrlInfo urlInfo,ODataEntity entity,EdmNavigationProperty prop,String format){
+		return getNavPropertyPath(urlInfo,entity,prop) + "?" + QueryOptions.FORMAT + "=" + format;
 	}
 	
 	public static String getNavPropertyLinkPath(ODataUrlInfo urlInfo,ODataEntity entity,EdmNavigationProperty prop){

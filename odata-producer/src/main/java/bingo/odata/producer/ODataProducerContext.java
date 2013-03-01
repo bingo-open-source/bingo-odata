@@ -23,10 +23,11 @@ import bingo.odata.ODataQueryOptions;
 import bingo.odata.ODataServices;
 import bingo.odata.ODataUrlInfo;
 import bingo.odata.ODataVersion;
-import bingo.odata.data.ODataKey;
+import bingo.odata.ODataConstants.CustomOptions;
 import bingo.odata.edm.EdmEntitySet;
 import bingo.odata.edm.EdmEntityType;
 import bingo.odata.edm.EdmFunctionImport;
+import bingo.odata.model.ODataKey;
 
 public class ODataProducerContext implements ODataWriterContext,ODataReaderContext {
 
@@ -36,6 +37,7 @@ public class ODataProducerContext implements ODataWriterContext,ODataReaderConte
 	private final ODataFormat	format;
 	private final ODataUrlInfo	urlInfo;
 	private final ODataServices	services;
+	private final boolean		minimal;
 	
 	private EdmEntitySet	    entitySet;
 	private EdmEntityType	    entityType;
@@ -49,6 +51,7 @@ public class ODataProducerContext implements ODataWriterContext,ODataReaderConte
 		this.version  = version;
 		this.format   = format;
 		this.urlInfo  = urlInfo;
+		this.minimal  = "1".equals(urlInfo.getQueryOptions().getOption(CustomOptions.X_MINIMAL));
 	}
 
 	public ODataProducer getProducer() {
@@ -117,5 +120,9 @@ public class ODataProducerContext implements ODataWriterContext,ODataReaderConte
 
 	public void setFunctionImport(EdmFunctionImport functionImport) {
     	this.functionImport = functionImport;
+    }
+
+	public boolean isMinimal() {
+	    return minimal;
     }
 }

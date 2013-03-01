@@ -17,8 +17,8 @@ package bingo.odata.format.json;
 
 import bingo.lang.json.JSONWriter;
 import bingo.odata.ODataWriterContext;
-import bingo.odata.data.ODataProperty;
 import bingo.odata.format.ODataJsonWriter;
+import bingo.odata.model.ODataProperty;
 
 import static bingo.odata.format.json.JsonWriterUtils.*;
 

@@ -18,8 +18,8 @@ package bingo.odata.format.atom;
 import bingo.lang.xml.XmlWriter;
 import bingo.odata.ODataWriterContext;
 import bingo.odata.ODataUtils;
-import bingo.odata.data.ODataEntity;
 import bingo.odata.format.ODataAtomWriter;
+import bingo.odata.model.ODataEntity;
 
 public class AtomEntityWriter extends ODataAtomWriter<ODataEntity> {
 

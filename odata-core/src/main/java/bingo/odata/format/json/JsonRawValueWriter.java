@@ -21,7 +21,7 @@ import bingo.lang.json.JSON;
 import bingo.odata.ODataConstants.ContentTypes;
 import bingo.odata.ODataWriterContext;
 import bingo.odata.ODataWriter;
-import bingo.odata.data.ODataRawValue;
+import bingo.odata.model.ODataRawValue;
 
 public class JsonRawValueWriter implements ODataWriter<ODataRawValue>{
 	

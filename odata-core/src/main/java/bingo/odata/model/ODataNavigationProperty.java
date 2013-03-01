@@ -13,26 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.odata.data;
+package bingo.odata.model;
 
 import bingo.odata.ODataObject;
-import bingo.odata.ODataObjectKind;
+import bingo.odata.edm.EdmNavigationProperty;
 
-public class ODataValueImpl implements ODataValue {
+public interface ODataNavigationProperty extends ODataObject {
 	
-	protected final ODataObjectKind kind;
-	protected final ODataObject     value;
+	EdmNavigationProperty getMetadata();
+
+	boolean isExpanded();
 	
-	public ODataValueImpl(ODataObjectKind kind,ODataObject value) {
-		this.kind  = kind;
-		this.value = value;
-	}
-
-	public ODataObjectKind getKind() {
-		return kind;
-	}
-
-	public ODataObject getValue() {
-		return value;
-	}
+	boolean isRelatedEntitySet();
+	
+	boolean isRelatedEntity();
+	
+	ODataEntitySet getRelatedEntititySet();
+	
+	ODataEntity getRelatedEntity();
 }

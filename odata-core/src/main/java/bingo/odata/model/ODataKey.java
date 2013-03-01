@@ -13,21 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.odata.data;
+package bingo.odata.model;
 
-import java.util.Map;
+import bingo.lang.NamedValues;
+import bingo.odata.ODataObject;
 
-import bingo.lang.Enumerable;
-
-public interface ODataParameters extends Iterable<ODataParameter> {
+public interface ODataKey extends ODataObject {
 	
-	int size();
+	boolean isPrimitiveValue();
 	
-	boolean isEmpty();
-
-	ODataParameter getParameter(String name);
+	Object getPrimitiveValue();
 	
-	Map<String, Object> getParametersMap();
-
-	Enumerable<ODataParameter> asEnumerable();
+	boolean isNamedValues();
+	
+	NamedValues<Object> getNamedValues();
+	
+	String toKeyString();
 }

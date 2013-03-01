@@ -20,9 +20,9 @@ import bingo.odata.ODataQueryInfo;
 import bingo.odata.ODataQueryInfoParser;
 import bingo.odata.ODataRequest;
 import bingo.odata.ODataResponse;
-import bingo.odata.data.ODataEntitySet;
 import bingo.odata.edm.EdmEntitySet;
 import bingo.odata.edm.EdmEntityType;
+import bingo.odata.model.ODataEntitySet;
 import bingo.odata.producer.ODataProducerContext;
 import bingo.odata.producer.requests.data.EntitySetRequestHandlerBase;
 

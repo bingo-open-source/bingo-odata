@@ -19,9 +19,9 @@ import bingo.lang.Strings;
 import bingo.lang.xml.XmlWriter;
 import bingo.odata.ODataWriterContext;
 import bingo.odata.ODataUtils;
-import bingo.odata.data.ODataEntity;
-import bingo.odata.data.ODataEntitySet;
 import bingo.odata.format.ODataAtomWriter;
+import bingo.odata.model.ODataEntity;
+import bingo.odata.model.ODataEntitySet;
 
 public class AtomEntitySetWriter extends ODataAtomWriter<ODataEntitySet> {
 

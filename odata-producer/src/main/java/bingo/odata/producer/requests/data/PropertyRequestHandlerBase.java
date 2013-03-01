@@ -18,11 +18,11 @@ package bingo.odata.producer.requests.data;
 import bingo.odata.ODataErrors;
 import bingo.odata.ODataRequest;
 import bingo.odata.ODataResponse;
-import bingo.odata.data.ODataKey;
 import bingo.odata.edm.EdmEntitySet;
 import bingo.odata.edm.EdmEntityType;
 import bingo.odata.edm.EdmNavigationProperty;
 import bingo.odata.edm.EdmProperty;
+import bingo.odata.model.ODataKey;
 import bingo.odata.producer.ODataProducerContext;
 import bingo.odata.producer.requests.ODataRequestRouter;
 

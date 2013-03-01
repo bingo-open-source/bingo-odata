@@ -18,15 +18,15 @@ package bingo.odata.producer;
 import bingo.odata.ODataErrors;
 import bingo.odata.ODataQueryInfo;
 import bingo.odata.ODataServices;
-import bingo.odata.data.ODataEntity;
-import bingo.odata.data.ODataEntitySet;
-import bingo.odata.data.ODataKey;
-import bingo.odata.data.ODataParameters;
-import bingo.odata.data.ODataValue;
 import bingo.odata.edm.EdmEntityType;
 import bingo.odata.edm.EdmFunctionImport;
 import bingo.odata.edm.EdmNavigationProperty;
 import bingo.odata.edm.EdmProperty;
+import bingo.odata.model.ODataEntity;
+import bingo.odata.model.ODataEntitySet;
+import bingo.odata.model.ODataKey;
+import bingo.odata.model.ODataParameters;
+import bingo.odata.model.ODataValue;
 
 public class ODataProducerAdapter implements ODataProducer {
 	

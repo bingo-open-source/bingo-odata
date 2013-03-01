@@ -13,20 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.odata.data;
+package bingo.odata.model;
 
-import bingo.lang.NamedValues;
-import bingo.odata.ODataObject;
+import bingo.lang.NamedValue;
+import bingo.odata.edm.EdmParameter;
+import bingo.odata.edm.EdmType;
 
-public interface ODataKey extends ODataObject {
-	
-	boolean isPrimitiveValue();
-	
-	Object getPrimitiveValue();
-	
-	boolean isNamedValues();
-	
-	NamedValues<Object> getNamedValues();
-	
-	String toKeyString();
+public interface ODataParameter extends NamedValue<Object> {
+
+	EdmParameter getMetadata();
+
+	EdmType getType();
 }

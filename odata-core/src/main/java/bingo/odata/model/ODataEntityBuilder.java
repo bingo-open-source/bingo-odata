@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.odata.data;
+package bingo.odata.model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,15 +25,17 @@ import bingo.lang.exceptions.ObjectNotFoundException;
 import bingo.odata.edm.EdmBuilders;
 import bingo.odata.edm.EdmEntitySet;
 import bingo.odata.edm.EdmEntityType;
-import bingo.odata.edm.EdmType;
 import bingo.odata.edm.EdmFeedCustomization.SyndicationItemProperty;
+import bingo.odata.edm.EdmNavigationProperty;
 import bingo.odata.edm.EdmProperty;
+import bingo.odata.edm.EdmType;
 
 public class ODataEntityBuilder implements Builder<ODataEntity>{
 	
 	private final EdmEntitySet  	  entitySet;
 	private final EdmEntityType 	  entityType;
 	private final List<ODataProperty> properties = new ArrayList<ODataProperty>();
+	private final List<ODataNavigationProperty> navigationProperties = new ArrayList<ODataNavigationProperty>();
 	
 	public ODataEntityBuilder(EdmEntitySet entitySet,EdmEntityType entityType){
 		this.entitySet        = entitySet;
@@ -129,7 +131,19 @@ public class ODataEntityBuilder implements Builder<ODataEntity>{
 		return this;
 	}
 	
+	public ODataEntityBuilder addAllNavigationPropertiesAsNotExpanded(){
+		for(EdmNavigationProperty np : entityType.getAllNavigationProperties()){
+			addNavigationProperty(new ODataNavigationPropertyImpl(np));
+		}
+		return this;
+	}
+	
+	public ODataEntityBuilder addNavigationProperty(ODataNavigationProperty navigationProperty){
+		navigationProperties.add(navigationProperty);
+		return this;
+	}
+	
 	public ODataEntity build() {
-	    return new ODataEntityImpl(entitySet, entityType, properties);
+	    return new ODataEntityImpl(entitySet, entityType, properties,navigationProperties);
     }
 }

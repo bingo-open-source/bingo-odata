@@ -13,17 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.odata.data;
+package bingo.odata.model;
 
-import bingo.lang.NamedValue;
-import bingo.odata.ODataObject;
-import bingo.odata.edm.EdmProperty;
-import bingo.odata.edm.EdmType;
+import bingo.lang.Enumerable;
+import bingo.odata.edm.EdmEntitySet;
+import bingo.odata.edm.EdmEntityType;
 
-public interface ODataProperty extends NamedValue<Object>,ODataObject{
+public interface ODataEntity extends ODataStructualObject {
 	
-	EdmProperty getMetadata();
-
-	EdmType getType();
+	EdmEntitySet getEntitySet();
 	
+	EdmEntityType getEntityType();
+	
+	ODataKey getKey();
+
+	String getKeyString();
+	
+	Enumerable<ODataNavigationProperty> getNavigationProperties();
 }

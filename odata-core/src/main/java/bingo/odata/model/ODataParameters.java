@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 the original author or authors.
+ * Copyright 2012 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,25 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.odata.data;
+package bingo.odata.model;
 
-import bingo.odata.edm.EdmType;
+import java.util.Map;
 
-public class ODataRawValueImpl implements ODataRawValue {
+import bingo.lang.Enumerable;
 
-	protected final EdmType type;
-	protected final Object  value;
+public interface ODataParameters extends Iterable<ODataParameter> {
 	
-	public ODataRawValueImpl(EdmType type,Object value) {
-		this.type = type;
-		this.value = value;
-	}
+	int size();
+	
+	boolean isEmpty();
 
-	public EdmType getType() {
-		return type;
-	}
+	ODataParameter getParameter(String name);
+	
+	Map<String, Object> getParametersMap();
 
-	public Object getValue() {
-		return value;
-	}
+	Enumerable<ODataParameter> asEnumerable();
 }

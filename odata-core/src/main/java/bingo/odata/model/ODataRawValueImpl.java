@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 the original author or authors.
+ * Copyright 2013 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,18 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.odata.data;
+package bingo.odata.model;
 
-import bingo.odata.edm.EdmEntitySet;
-import bingo.odata.edm.EdmEntityType;
+import bingo.odata.edm.EdmType;
 
-public interface ODataEntity extends ODataStructualObject {
-	
-	EdmEntitySet getEntitySet();
-	
-	EdmEntityType getEntityType();
-	
-	ODataKey getKey();
+public class ODataRawValueImpl implements ODataRawValue {
 
-	String getKeyString();
+	protected final EdmType type;
+	protected final Object  value;
+	
+	public ODataRawValueImpl(EdmType type,Object value) {
+		this.type = type;
+		this.value = value;
+	}
+
+	public EdmType getType() {
+		return type;
+	}
+
+	public Object getValue() {
+		return value;
+	}
 }

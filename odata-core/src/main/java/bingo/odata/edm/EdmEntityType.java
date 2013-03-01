@@ -109,6 +109,22 @@ public class EdmEntityType extends EdmNamedStructualType {
 		return p;
 	}
 	
+	@SuppressWarnings("unchecked")
+    public Enumerable<EdmProperty> getAllProperties(){
+		if(null == baseType){
+			return properties;
+		}
+		return Enumerables.concat(baseType.getAllProperties(),properties);
+	}
+	
+	@SuppressWarnings("unchecked")
+    public Enumerable<EdmNavigationProperty> getAllNavigationProperties(){
+		if(null == baseType){
+			return navigationProperties;
+		}
+		return Enumerables.concat(baseType.getAllNavigationProperties(),navigationProperties);
+	}
+	
 	public Enumerable<String> getKeys() {
     	return null == baseType ? keys : baseType.getKeys();
     }
