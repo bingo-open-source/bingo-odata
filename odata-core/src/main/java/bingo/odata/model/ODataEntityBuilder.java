@@ -38,6 +38,7 @@ public class ODataEntityBuilder implements Builder<ODataEntity>{
 	private final List<ODataProperty> properties = new ArrayList<ODataProperty>();
 	private final List<ODataNavigationProperty> navigationProperties = new ArrayList<ODataNavigationProperty>();
 	private boolean createNotExpandedNavProperties = true;
+	private ODataKey key;
 	
 	public ODataEntityBuilder(EdmEntitySet entitySet,EdmEntityType entityType){
 		this.entitySet        = entitySet;
@@ -52,8 +53,14 @@ public class ODataEntityBuilder implements Builder<ODataEntity>{
 		return createNotExpandedNavProperties;
 	}
 
-	public void setCreateNotExpandedNavProperties(boolean createNotExpandedNavProperties) {
+	public ODataEntityBuilder setCreateNotExpandedNavProperties(boolean createNotExpandedNavProperties) {
 		this.createNotExpandedNavProperties = createNotExpandedNavProperties;
+		return this;
+	}
+	
+	public ODataEntityBuilder setKey(ODataKey key) {
+		this.key = key;
+		return this;
 	}
 
 	public ODataEntityBuilder addProperty(ODataProperty property){
@@ -168,9 +175,9 @@ public class ODataEntityBuilder implements Builder<ODataEntity>{
 				}
 			}
 			
-			return new ODataEntityImpl(entitySet, entityType, properties,list);	 
+			return new ODataEntityImpl(entitySet, entityType, key, properties,list);	 
 		}else{
-			return new ODataEntityImpl(entitySet, entityType, properties,navigationProperties);	
+			return new ODataEntityImpl(entitySet, entityType, key, properties,navigationProperties);	
 		}
     }
 }

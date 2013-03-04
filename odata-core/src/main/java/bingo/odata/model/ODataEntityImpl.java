@@ -25,24 +25,26 @@ import bingo.lang.Predicates;
 import bingo.odata.edm.EdmEntitySet;
 import bingo.odata.edm.EdmEntityType;
 
-class ODataEntityImpl implements ODataEntity {
+public class ODataEntityImpl implements ODataEntity {
 
 	private final EdmEntityType	    	    entityType;
 	private final EdmEntitySet	    	    entitySet;
+	private final ODataKey 					key;
 	private final Enumerable<ODataProperty>	properties;
 	private final Enumerable<ODataNavigationProperty> navigationProperties;
 	
-	private ODataKey key;
-	private String   keyString;
+	private String keyString;
 	
 	public ODataEntityImpl(EdmEntitySet entitySet, 
 						   EdmEntityType entityType, 
+						   ODataKey	key,
 						   Iterable<ODataProperty> properties,Iterable<ODataNavigationProperty> navigationProperties) {
 	    super();
 	    Assert.notNull(entitySet,"entitySet cannot be null");
 	    Assert.notNull(entityType,"entityType cannot be null");
 	    this.entitySet  = entitySet;
 	    this.entityType = entityType;
+	    this.key		= key;
 	    this.properties = Enumerables.of(properties);
 	    this.navigationProperties = Enumerables.of(navigationProperties);
     }
@@ -70,29 +72,6 @@ class ODataEntityImpl implements ODataEntity {
     }
 
 	public ODataKey getKey() {
-		if(null == key){
-			Enumerable<String> keys = entityType.getKeys();
-			
-			if(keys.size() == 1){
-				String keyName = entityType.getKeys().first();
-				for(ODataProperty p : properties){
-					if(p.getName().equalsIgnoreCase(keyName)){
-						key = new ODataKeyImpl(p.getValue());
-						break;
-					}
-				}
-			}else{
-				Object[] values = new Object[keys.size()];
-				
-				for(ODataProperty p : properties){
-					for(int i=0;i<values.length;i++){
-						if(keys.get(i).equalsIgnoreCase(p.getName())){
-							values[i] = p.getValue();
-						}
-					}
-				}
-			}
-		}
 	    return key;
     }
 

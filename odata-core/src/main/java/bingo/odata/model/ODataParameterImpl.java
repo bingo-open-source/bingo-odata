@@ -15,10 +15,11 @@
  */
 package bingo.odata.model;
 
+import bingo.lang.exceptions.ReadonlyException;
 import bingo.odata.edm.EdmParameter;
 import bingo.odata.edm.EdmType;
 
-class ODataParameterImpl implements ODataParameter {
+public class ODataParameterImpl implements ODataParameter {
 	
 	private final EdmParameter metadata;
 	private final Object       value;
@@ -42,5 +43,13 @@ class ODataParameterImpl implements ODataParameter {
 	
 	public Object getValue() {
     	return value;
+    }
+
+	public String getKey() {
+	    return getName();
+    }
+
+	public Object setValue(Object value) {
+		throw new ReadonlyException();
     }
 }

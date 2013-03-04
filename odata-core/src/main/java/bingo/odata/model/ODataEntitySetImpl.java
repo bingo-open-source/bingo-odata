@@ -19,7 +19,7 @@ import bingo.lang.Enumerable;
 import bingo.lang.Enumerables;
 import bingo.odata.edm.EdmEntitySet;
 
-class ODataEntitySetImpl implements ODataEntitySet {
+public class ODataEntitySetImpl implements ODataEntitySet {
 	
 	private final EdmEntitySet      	  metadata;
 	private final Enumerable<ODataEntity> entities;

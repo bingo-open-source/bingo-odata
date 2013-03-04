@@ -23,7 +23,7 @@ import bingo.lang.NamedValues;
 import bingo.lang.tuple.ImmutableNamedValues;
 import bingo.odata.expression.Expressions;
 
-class ODataKeyImpl implements ODataKey {
+public class ODataKeyImpl implements ODataKey {
 	
 	private final boolean			    isPrimitive;
 	private final Object 			    primitiveValue;
