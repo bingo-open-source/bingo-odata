@@ -51,7 +51,7 @@ public class ODataProducerContext implements ODataWriterContext,ODataReaderConte
 		this.version  = version;
 		this.format   = format;
 		this.urlInfo  = urlInfo;
-		this.minimal  = "1".equals(urlInfo.getQueryOptions().getOption(CustomOptions.X_MINIMAL));
+		this.minimal  = null == urlInfo ? false : "1".equals(urlInfo.getQueryOptions().getOption(CustomOptions.X_MINIMAL));
 	}
 
 	public ODataProducer getProducer() {

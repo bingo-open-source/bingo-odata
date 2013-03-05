@@ -42,7 +42,7 @@ public class ODataProtocols {
 	public static final ODataProtocol DEFAULT = V3;
 	
 	private static ODataProtocol v3(){
-		ODataProtocolBuilder v3builder = new ODataProtocolBuilder(ODataVersion.V2, ODataVersion.V3, ODataVersion.V3, ODataFormat.Json);
+		ODataProtocolBuilder v3builder = new ODataProtocolBuilder(ODataVersion.V1, ODataVersion.V3, ODataVersion.V3, ODataFormat.Json);
 		
 		//supported format
 		v3builder.addSupportedFormats(ODataFormat.Atom,ODataFormat.Json);
