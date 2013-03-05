@@ -18,10 +18,10 @@ package bingo.odata.format.json;
 import java.sql.Time;
 import java.util.Date;
 
-import bingo.lang.Converts;
 import bingo.lang.Strings;
 import bingo.lang.codec.Base64;
 import bingo.lang.json.JSONWriter;
+import bingo.odata.ODataConverts;
 import bingo.odata.ODataErrors;
 import bingo.odata.ODataUtils;
 import bingo.odata.ODataWriterContext;
@@ -182,14 +182,16 @@ public class JsonWriterUtils {
 	}
 	
 	public static void writeValue(JSONWriter writer, EdmSimpleType type,Object value){
+		value = ODataConverts.convert(type, value);
+		
 		if(null == value){
 			writer.nullValue();
 		}else if(type == EdmSimpleType.STRING){
-			writer.value(Converts.toString(value));
+			writer.value((String)value);
 		}else if (EdmSimpleType.GUID.equals(type)) {
-			writer.value(Converts.toString(value));
+			writer.value(value.toString());
         } else if (EdmSimpleType.BOOLEAN.equals(type)) {
-        	writer.value(Converts.toBoolean(value));
+        	writer.value((Boolean)value);
         } else if (EdmSimpleType.BYTE.equals(type)) {
         	writer.value(((UnsignedByte)value).byteValue());
         } else if (EdmSimpleType.SBYTE.equals(type)) {

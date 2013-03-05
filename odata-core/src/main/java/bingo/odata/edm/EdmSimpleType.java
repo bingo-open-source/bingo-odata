@@ -146,6 +146,20 @@ public class EdmSimpleType extends EdmType implements Named {
 	public Iterable<Class<?>> getMappingJavaTypes() {
     	return mappingJavaTypes;
     }
+	
+	public boolean isMappingType(Class<?> javaType){
+		if(null == javaType){
+			return false;
+		}
+		
+		for(Class<?> mappingType : mappingJavaTypes){
+			if(mappingType.equals(javaType)){
+				return true;
+			}
+		}
+		
+		return false;
+	}
 
 	private static EdmSimpleType add(EdmSimpleTypeKind kind,Class<?>... javaTypes){
 		EdmSimpleType type = new EdmSimpleType(kind,javaTypes);
