@@ -17,7 +17,6 @@ package bingo.odata.producer.requests;
 
 import static bingo.lang.http.HttpMethods.DELETE;
 import static bingo.lang.http.HttpMethods.GET;
-import static bingo.lang.http.HttpMethods.MERGE;
 import static bingo.lang.http.HttpMethods.PATCH;
 import static bingo.lang.http.HttpMethods.POST;
 import static bingo.lang.http.HttpMethods.PUT;
@@ -74,7 +73,6 @@ public class ODataRequestRouter {
 		
 		//Update Requests
 		add(PUT,	"/{entitySetName:[^/()]+?}{entityKeyString:\\(.+?\\)}",				   					new UpdateEntityHandler());
-		add(MERGE,	"/{entitySetName:[^/()]+?}{entityKeyString:\\(.+?\\)}",				   					new MergeEntityHandler());
 		add(PATCH,	"/{entitySetName:[^/()]+?}{entityKeyString:\\(.+?\\)}",				   					new MergeEntityHandler());
 		add(PUT,	"/{entitySetName:[^/()]+?}{entityKeyString:\\(.+?\\)}/\\$links/{entityNavProperyName}",	new UpdateLinksHandler());	
 		

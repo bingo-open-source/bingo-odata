@@ -117,13 +117,9 @@ public class ODataServletRequest implements ODataRequest {
 	public boolean isPut() {
 		return HttpMethods.PUT.equalsIgnoreCase(getMethod());
     }
-	
-	public boolean isMerge() {
-	    return HttpMethods.PATCH.equalsIgnoreCase(getMethod());
-    }
 
 	public boolean isPatch() {
-	    return HttpMethods.MERGE.equalsIgnoreCase(getMethod());
+	    return HttpMethods.PATCH.equalsIgnoreCase(getMethod());
     }
 
 	private String serviceRootUri(){

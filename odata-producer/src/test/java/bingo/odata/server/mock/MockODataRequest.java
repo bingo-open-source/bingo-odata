@@ -181,11 +181,7 @@ public class MockODataRequest implements ODataRequest {
 		return HttpMethods.PUT.equalsIgnoreCase(getMethodOverrideOrOriginal());
     }
 
-	public boolean isMerge() {
-	    return HttpMethods.PATCH.equalsIgnoreCase(getMethodOverrideOrOriginal());
-    }
-
 	public boolean isPatch() {
-	    return HttpMethods.MERGE.equalsIgnoreCase(getMethodOverrideOrOriginal());
+	    return HttpMethods.PATCH.equalsIgnoreCase(getMethodOverrideOrOriginal());
     }
 }

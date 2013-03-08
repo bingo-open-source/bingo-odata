@@ -57,6 +57,4 @@ public interface ODataRequest {
 	boolean isDelete();
 	
 	boolean isPatch();
-	
-	boolean isMerge();
 }
