@@ -17,35 +17,34 @@ package bingo.odata.edm;
 
 public class EdmFunctionImport extends EdmFunctionBase {
 
-	private final String entitySet;
-	private final String httpMethod;
+	private final String  entitySet;
+	private final String  httpMethod;
+	private final boolean sideEffecting;
 	
 	public EdmFunctionImport(String name,String entitySet, EdmType returnType,Iterable<EdmParameter> parameters) {
 	    super(name,returnType,parameters);
 	    
-	    this.entitySet  = entitySet;
-	    this.httpMethod = null;
+	    this.entitySet     = entitySet;
+	    this.httpMethod    = null;
+	    this.sideEffecting = true;
     }
 	
-	public EdmFunctionImport(String name,String entitySet, EdmType returnType,Iterable<EdmParameter> parameters,String httpMethod) {
-	    super(name,returnType,parameters);
-	    
-	    this.entitySet  = entitySet;
-	    this.httpMethod = httpMethod;
-    }
-	
-	public EdmFunctionImport(String name,String entitySet, EdmType returnType,Iterable<EdmParameter> parameters, EdmDocumentation documentation) {
-	    this(name, entitySet, returnType, parameters);
+	public EdmFunctionImport(String name,String entitySet, EdmType returnType,Iterable<EdmParameter> parameters, 
+							 String httpMethod, boolean sideEffecting, 
+							 EdmDocumentation documentation) {
+		
+		super(name,returnType,parameters);
 
+		this.entitySet     = entitySet;
+	    this.httpMethod    = httpMethod;
+	    this.sideEffecting = sideEffecting;
 	    this.documentation = documentation;
     }
 	
-	public EdmFunctionImport(String name,String entitySet, EdmType returnType,Iterable<EdmParameter> parameters, String httpMethod, EdmDocumentation documentation) {
-	    this(name, entitySet, returnType, parameters, httpMethod);
+	public boolean isSideEffecting() {
+		return sideEffecting;
+	}
 
-	    this.documentation = documentation;
-    }
-	
 	public String getHttpMethod() {
     	return httpMethod;
     }

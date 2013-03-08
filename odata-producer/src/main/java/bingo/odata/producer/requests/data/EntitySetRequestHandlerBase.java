@@ -23,13 +23,9 @@ import bingo.odata.ODataServices;
 import bingo.odata.edm.EdmEntitySet;
 import bingo.odata.edm.EdmEntityType;
 import bingo.odata.edm.EdmFunctionImport;
-import bingo.odata.model.ODataParameterUtils;
-import bingo.odata.model.ODataParameters;
-import bingo.odata.model.ODataValue;
 import bingo.odata.producer.ODataProducerContext;
 import bingo.odata.producer.requests.ODataRequestHandlerBase;
 import bingo.odata.producer.requests.ODataRequestRouter;
-import bingo.lang.http.HttpStatus;
 
 public abstract class EntitySetRequestHandlerBase extends ODataRequestHandlerBase {
 
@@ -50,17 +46,13 @@ public abstract class EntitySetRequestHandlerBase extends ODataRequestHandlerBas
 			EdmFunctionImport functionImport = services.findFunctionImport(entitySetName);
 			
 			if(null != functionImport){
-				
-				context.setFunctionImport(functionImport);
-				
 				doHandleFunctionImport(context,request,response,functionImport);
-				
 				return;
 			}
 		}
 		
 		if(null == entitySet){
-			throw ODataErrors.notFound("EntitySet '{0} not found",entitySetName);
+			throw ODataErrors.notFound("EntitySet or Function '{0} not found",entitySetName);
 		}
 		
 		EdmEntityType entityType = services.findEntityType(entitySet.getEntityType().getName());
@@ -74,26 +66,6 @@ public abstract class EntitySetRequestHandlerBase extends ODataRequestHandlerBas
 		
 		doHandleEntitySet(context, request, response, entitySet, entityType);
     } 
-	
-	protected void doHandleFunctionImport(ODataProducerContext context,ODataRequest request,ODataResponse response,EdmFunctionImport functionImport) throws Throwable {
-		
-		if(Strings.isEmpty(functionImport.getHttpMethod()) || functionImport.getHttpMethod().equalsIgnoreCase(request.getMethod())){
-
-			String paramsString = context.getUrlInfo().getPathParameter(ODataRequestRouter.ENTITY_KEY_STRING);
-			
-			ODataParameters params = ODataParameterUtils.parse(functionImport, paramsString, context.getUrlInfo().getQueryOptions());
-			
-			ODataValue returnValue = context.getProducer().invokeFunction(context, functionImport, params);
-			
-			if(functionImport.getReturnType() == null || returnValue == null){
-				response.setStatus(HttpStatus.SC_NO_CONTENT);
-			}else {
-				write(context, request, response, returnValue.getKind(), returnValue.getValue());
-			}
-		}else{
-			throw ODataErrors.badRequest("unsupported http method '{0}' on current resource '{1}'",request.getMethod(),request.getResourcePath());
-		}
-	}
 	
 	protected abstract void doHandleEntitySet(ODataProducerContext context,ODataRequest request,ODataResponse response,EdmEntitySet entitySet,EdmEntityType entityType) throws Throwable;
 }

@@ -305,6 +305,10 @@ public class XmlMetadataDocumentWriter extends ODataXmlWriter<ODataServices> {
 		  .attributeOptional("EntitySet", func.getEntitySet())
 		  .attributeOptional(METADATA_NS, "HttpMethod", func.getHttpMethod())
 		  .attribute("ReturnType",fullQualifiedName(schema, func.getReturnType()));
+		
+		if(!func.isSideEffecting()){
+			writer.attribute("IsSideEffecting","false");
+		}
 		  
 		for(EdmParameter param : func.getParameters()){
 			writer.startElement("Parameter")

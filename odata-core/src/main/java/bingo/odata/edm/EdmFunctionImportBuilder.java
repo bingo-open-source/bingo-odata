@@ -28,6 +28,10 @@ public class EdmFunctionImportBuilder extends EdmNamedBuilder implements Builder
 	
 	protected EdmType returnType;
 	
+	protected String httpMethod;
+	
+	protected boolean sideEffecting = true;
+	
 	protected List<EdmParameter> parameters = new ArrayList<EdmParameter>();
 	
 	public EdmFunctionImportBuilder() {
@@ -50,6 +54,16 @@ public class EdmFunctionImportBuilder extends EdmNamedBuilder implements Builder
     	this.entitySet = entitySet;
     	return this;
     }
+	
+	public EdmFunctionImportBuilder setHttpMethod(String httpMethod) {
+		this.httpMethod = httpMethod;
+		return this;
+	}
+
+	public EdmFunctionImportBuilder setSideEffecting(boolean sideEffecting) {
+		this.sideEffecting = sideEffecting;
+		return this;
+	}
 
 	public EdmType getReturnType() {
     	return returnType;
@@ -99,6 +113,6 @@ public class EdmFunctionImportBuilder extends EdmNamedBuilder implements Builder
     }
 
 	public EdmFunctionImport build() {
-	    return new EdmFunctionImport(name, entitySet, returnType, parameters, documentation);
+	    return new EdmFunctionImport(name, entitySet, returnType, parameters,httpMethod,sideEffecting,documentation);
     }
 }

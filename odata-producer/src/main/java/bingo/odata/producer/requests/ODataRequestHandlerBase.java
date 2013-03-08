@@ -17,6 +17,8 @@ package bingo.odata.producer.requests;
 
 import java.io.StringWriter;
 
+import bingo.lang.Strings;
+import bingo.lang.http.HttpStatus;
 import bingo.lang.logging.Log;
 import bingo.lang.logging.LogFactory;
 import bingo.odata.ODataErrors;
@@ -27,6 +29,9 @@ import bingo.odata.ODataReader;
 import bingo.odata.ODataRequest;
 import bingo.odata.ODataResponse;
 import bingo.odata.ODataWriter;
+import bingo.odata.edm.EdmFunctionImport;
+import bingo.odata.model.ODataParameterUtils;
+import bingo.odata.model.ODataParameters;
 import bingo.odata.model.ODataValue;
 import bingo.odata.producer.ODataProducerContext;
 
@@ -45,6 +50,26 @@ public abstract class ODataRequestHandlerBase implements ODataRequestHandler {
         	}
         }
     }
+	
+	protected void doHandleFunctionImport(ODataProducerContext context,ODataRequest request,ODataResponse response,EdmFunctionImport functionImport) throws Throwable {
+		if(Strings.isEmpty(functionImport.getHttpMethod()) || functionImport.getHttpMethod().equalsIgnoreCase(request.getMethod())){
+			context.setFunctionImport(functionImport);
+			
+			String paramsString = context.getUrlInfo().getPathParameter(ODataRequestRouter.ENTITY_KEY_STRING);
+			
+			ODataParameters params = ODataParameterUtils.parse(functionImport, paramsString, context.getUrlInfo().getQueryOptions());
+			
+			ODataValue returnValue = context.getProducer().invokeFunction(context, functionImport, params);
+			
+			if(functionImport.getReturnType() == null || returnValue == null){
+				response.setStatus(HttpStatus.SC_NO_CONTENT);
+			}else {
+				write(context, request, response, returnValue.getKind(), returnValue.getValue());
+			}
+		}else{
+			throw ODataErrors.badRequest("unsupported http method '{0}' on current resource '{1}'",request.getMethod(),request.getResourcePath());
+		}
+	}	
 	
 	protected static void write(ODataProducerContext context,ODataRequest request,ODataResponse response,ODataValue returnValue) throws Throwable{
 		write(context,request,response,returnValue.getKind(),returnValue.getValue());

@@ -31,6 +31,7 @@ import bingo.odata.ODataException;
 import bingo.odata.ODataRequest;
 import bingo.odata.ODataResponse;
 import bingo.odata.producer.requests.batch.BatchRequestHandler;
+import bingo.odata.producer.requests.data.FunctionRequestHandler;
 import bingo.odata.producer.requests.data.delete.DeleteEntityHandler;
 import bingo.odata.producer.requests.data.delete.DeleteLinksHandler;
 import bingo.odata.producer.requests.data.insert.InsertEntityHandler;
@@ -55,11 +56,17 @@ public class ODataRequestRouter {
 	public static final String ENTITY_KEY_STRING 	= "entityKeyString";
 	public static final String ENTITY_NAV_PROP_NAME = "entityNavProperyName";
 	public static final String ENTITY_PROP_NAME   	= "entityProperyName";
+	public static final String FUNCTION_NAME        = "functionName";
 
 	static {
-		//Retrieve Requests
+		//Metadata Requests
 		add(GET,	"/",							   														new ServiceDocumentHandler());
 		add(GET,	"/\\$metadata",					   														new MetadataDocumentHandler());
+
+		//Batch Request
+		add("*",	"/\\$batch",						   													new BatchRequestHandler());
+		
+		//Reterieve Requests
 		add(GET,	"/{entitySetName:[^/()]+?}(?:\\(\\))?",				   									new RetrieveEntitySetHandler());
 		add(GET,	"/{entitySetName:[^/()]+?}{entityKeyString:\\(.+?\\)}",									new RetrieveEntityHandler());
 		add(GET,	"/{entitySetName:[^/()]+?}(?:\\(\\))?/\\$count",										new RetrieveCountHandler());
@@ -80,8 +87,11 @@ public class ODataRequestRouter {
 		add(DELETE,	"/{entitySetName:[^/()]+?}{entityKeyString:\\(.+?\\)}",				   					new DeleteEntityHandler());
 		add(DELETE,	"/{entitySetName:[^/()]+?}{entityKeyString:\\(.+?\\)}/\\$links/{entityNavProperyName}",	new DeleteLinksHandler());
 		
-		//Batch Request
-		add("*",	"/\\$batch",						   													new BatchRequestHandler());
+		//Function Requests
+		add("*",	"/{functionName:[^/()]+?}",				   												new FunctionRequestHandler());
+		add("*",	"/{entitySetName:[^/()]+?}/{functionName:[^/()]+?}",				   					new FunctionRequestHandler());
+//		add("*",	"/{entitySetName:[^/()]+?}{entityKeyString:\\(.+?\\)}/{functionName:[^/()]+?}",			new FunctionRequestHandler());
+
 	}
 	
 	private static void add(String method,String path,ODataRequestHandler handler) {

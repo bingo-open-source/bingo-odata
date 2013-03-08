@@ -20,6 +20,7 @@ import bingo.odata.ODataRequest;
 import bingo.odata.ODataResponse;
 import bingo.odata.edm.EdmEntitySet;
 import bingo.odata.edm.EdmEntityType;
+import bingo.odata.edm.EdmFunctionImport;
 import bingo.odata.edm.EdmNavigationProperty;
 import bingo.odata.edm.EdmProperty;
 import bingo.odata.model.ODataKey;
@@ -44,6 +45,12 @@ public abstract class PropertyRequestHandlerBase extends EntityRequestHandlerBas
 		EdmNavigationProperty navProperty = entityType.findNavigationProperty(entityPropertyName);
 		if(null != navProperty){
 			doHandleNavProperty(context, request, response, entitySet, entityType, key, navProperty);
+			return;
+		}
+		
+		EdmFunctionImport func = context.getServices().findFunctionImport(entitySet.getName() + "." + entityPropertyName);
+		if(null != func){
+			doHandleFunctionImport(context, request, response, func);
 			return;
 		}
 		
