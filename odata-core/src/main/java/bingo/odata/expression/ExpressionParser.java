@@ -13,9 +13,9 @@ import bingo.lang.Func2;
 import bingo.lang.codec.Hex;
 import bingo.lang.enumerable.IterableEnumerable;
 import bingo.lang.time.DateFormats;
+import bingo.lang.value.Guid;
 import bingo.odata.expression.OrderByExpression.Direction;
 import bingo.odata.utils.InternalTypeUtils;
-import bingo.odata.values.Guid;
 
 public class ExpressionParser {
 

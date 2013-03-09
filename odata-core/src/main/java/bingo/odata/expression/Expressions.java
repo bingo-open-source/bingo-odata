@@ -4,12 +4,12 @@ import java.math.BigDecimal;
 import java.sql.Time;
 import java.util.Date;
 
+import bingo.lang.value.DateTimeOffset;
+import bingo.lang.value.Guid;
+import bingo.lang.value.UnsignedByte;
 import bingo.meta.edm.EdmSimpleType;
 import bingo.odata.expression.ExpressionParser.AggregateFunction;
 import bingo.odata.expression.OrderByExpression.Direction;
-import bingo.odata.values.DateTimeOffset;
-import bingo.odata.values.Guid;
-import bingo.odata.values.UnsignedByte;
 
 public class Expressions {
 

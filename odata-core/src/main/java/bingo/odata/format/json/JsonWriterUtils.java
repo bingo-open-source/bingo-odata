@@ -22,6 +22,8 @@ import bingo.lang.Strings;
 import bingo.lang.codec.Base64;
 import bingo.lang.json.JSON;
 import bingo.lang.json.JSONWriter;
+import bingo.lang.value.DateTimeOffset;
+import bingo.lang.value.UnsignedByte;
 import bingo.meta.edm.EdmSimpleType;
 import bingo.odata.ODataConverts;
 import bingo.odata.ODataErrors;
@@ -32,8 +34,6 @@ import bingo.odata.model.ODataEntitySet;
 import bingo.odata.model.ODataNavigationProperty;
 import bingo.odata.model.ODataProperty;
 import bingo.odata.model.ODataRawValue;
-import bingo.odata.values.DateTimeOffset;
-import bingo.odata.values.UnsignedByte;
 
 public class JsonWriterUtils {
 	

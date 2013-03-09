@@ -1,6 +1,6 @@
 package bingo.odata.expression;
 
-import bingo.odata.values.Guid;
+import bingo.lang.value.Guid;
 
 public interface GuidLiteral extends LiteralExpression {
 
