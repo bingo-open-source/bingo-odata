@@ -16,8 +16,8 @@
 package bingo.odata.model;
 
 import bingo.lang.Enumerable;
+import bingo.meta.edm.EdmEntitySet;
 import bingo.odata.ODataObject;
-import bingo.odata.edm.EdmEntitySet;
 
 public interface ODataEntitySet extends ODataObject {
 

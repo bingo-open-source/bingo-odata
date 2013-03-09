@@ -18,13 +18,13 @@ package bingo.odata.producer.requests.data.update;
 import bingo.odata.ODataObjectKind;
 import bingo.odata.ODataRequest;
 import bingo.odata.ODataResponse;
-import bingo.odata.edm.EdmEntitySet;
-import bingo.odata.edm.EdmEntityType;
 import bingo.odata.model.ODataEntity;
 import bingo.odata.model.ODataKey;
 import bingo.odata.producer.ODataProducerContext;
 import bingo.odata.producer.requests.data.EntityRequestHandlerBase;
 import bingo.lang.http.HttpStatus;
+import bingo.meta.edm.EdmEntitySet;
+import bingo.meta.edm.EdmEntityType;
 
 public class MergeEntityHandler extends EntityRequestHandlerBase {
 

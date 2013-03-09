@@ -23,13 +23,13 @@ import java.util.Map.Entry;
 import bingo.lang.Builder;
 import bingo.lang.Collections;
 import bingo.lang.exceptions.ObjectNotFoundException;
-import bingo.odata.edm.EdmBuilders;
-import bingo.odata.edm.EdmEntitySet;
-import bingo.odata.edm.EdmEntityType;
-import bingo.odata.edm.EdmFeedCustomization.SyndicationItemProperty;
-import bingo.odata.edm.EdmNavigationProperty;
-import bingo.odata.edm.EdmProperty;
-import bingo.odata.edm.EdmType;
+import bingo.meta.edm.EdmBuilders;
+import bingo.meta.edm.EdmEntitySet;
+import bingo.meta.edm.EdmEntityType;
+import bingo.meta.edm.EdmNavigationProperty;
+import bingo.meta.edm.EdmProperty;
+import bingo.meta.edm.EdmType;
+import bingo.meta.edm.EdmFeedCustomization.SyndicationItemProperty;
 
 public class ODataEntityBuilder implements Builder<ODataEntity>{
 	

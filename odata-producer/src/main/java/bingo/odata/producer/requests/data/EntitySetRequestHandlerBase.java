@@ -16,13 +16,13 @@
 package bingo.odata.producer.requests.data;
 
 import bingo.lang.Strings;
+import bingo.meta.edm.EdmEntitySet;
+import bingo.meta.edm.EdmEntityType;
+import bingo.meta.edm.EdmFunctionImport;
 import bingo.odata.ODataErrors;
 import bingo.odata.ODataRequest;
 import bingo.odata.ODataResponse;
 import bingo.odata.ODataServices;
-import bingo.odata.edm.EdmEntitySet;
-import bingo.odata.edm.EdmEntityType;
-import bingo.odata.edm.EdmFunctionImport;
 import bingo.odata.producer.ODataProducerContext;
 import bingo.odata.producer.requests.ODataRequestHandlerBase;
 import bingo.odata.producer.requests.ODataRequestRouter;

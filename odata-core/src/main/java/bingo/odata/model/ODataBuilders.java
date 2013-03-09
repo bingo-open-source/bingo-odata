@@ -15,11 +15,11 @@
  */
 package bingo.odata.model;
 
-import bingo.odata.edm.EdmBuilders;
-import bingo.odata.edm.EdmEntitySet;
-import bingo.odata.edm.EdmEntityType;
-import bingo.odata.edm.EdmProperty;
-import bingo.odata.edm.EdmType;
+import bingo.meta.edm.EdmBuilders;
+import bingo.meta.edm.EdmEntitySet;
+import bingo.meta.edm.EdmEntityType;
+import bingo.meta.edm.EdmProperty;
+import bingo.meta.edm.EdmType;
 
 public class ODataBuilders {
 

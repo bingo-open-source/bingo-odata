@@ -17,7 +17,7 @@ package bingo.odata.model;
 
 import bingo.lang.Enumerable;
 import bingo.lang.Enumerables;
-import bingo.odata.edm.EdmEntitySet;
+import bingo.meta.edm.EdmEntitySet;
 
 public class ODataEntitySetImpl implements ODataEntitySet {
 	

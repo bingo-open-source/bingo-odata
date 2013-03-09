@@ -20,12 +20,12 @@ import java.io.Writer;
 import bingo.lang.Strings;
 import bingo.lang.xml.XmlFactory;
 import bingo.lang.xml.XmlWriter;
+import bingo.meta.edm.EdmDocumentation;
+import bingo.meta.edm.EdmObjectWithDocumentation;
 import bingo.odata.ODataWriterContext;
 import bingo.odata.ODataObject;
 import bingo.odata.ODataWriter;
 import bingo.odata.ODataConstants.ContentTypes;
-import bingo.odata.edm.EdmDocumentation;
-import bingo.odata.edm.EdmObjectWithDocumentation;
 
 public abstract class ODataXmlWriter<T extends ODataObject> extends ODataXmlConstants implements ODataWriter<T> {
 

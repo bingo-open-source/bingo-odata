@@ -16,8 +16,8 @@
 package bingo.odata.model;
 
 import bingo.lang.Enumerable;
-import bingo.odata.edm.EdmEntitySet;
-import bingo.odata.edm.EdmEntityType;
+import bingo.meta.edm.EdmEntitySet;
+import bingo.meta.edm.EdmEntityType;
 
 public interface ODataEntity extends ODataStructualObject {
 	

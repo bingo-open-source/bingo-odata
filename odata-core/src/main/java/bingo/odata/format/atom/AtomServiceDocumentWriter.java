@@ -16,9 +16,9 @@
 package bingo.odata.format.atom;
 
 import bingo.lang.xml.XmlWriter;
+import bingo.meta.edm.EdmEntitySet;
 import bingo.odata.ODataWriterContext;
 import bingo.odata.ODataServices;
-import bingo.odata.edm.EdmEntitySet;
 import bingo.odata.format.ODataXmlWriter;
 
 public class AtomServiceDocumentWriter extends ODataXmlWriter<ODataServices>{

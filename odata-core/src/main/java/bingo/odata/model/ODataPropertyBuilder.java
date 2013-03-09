@@ -16,9 +16,9 @@
 package bingo.odata.model;
 
 import bingo.lang.Builder;
+import bingo.meta.edm.EdmProperty;
+import bingo.meta.edm.EdmSimpleType;
 import bingo.odata.ODataConverts;
-import bingo.odata.edm.EdmProperty;
-import bingo.odata.edm.EdmSimpleType;
 
 public class ODataPropertyBuilder implements Builder<ODataProperty>{
 	

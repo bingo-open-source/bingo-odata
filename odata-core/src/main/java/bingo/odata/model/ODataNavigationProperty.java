@@ -15,8 +15,8 @@
  */
 package bingo.odata.model;
 
+import bingo.meta.edm.EdmNavigationProperty;
 import bingo.odata.ODataObject;
-import bingo.odata.edm.EdmNavigationProperty;
 
 public interface ODataNavigationProperty extends ODataObject {
 	

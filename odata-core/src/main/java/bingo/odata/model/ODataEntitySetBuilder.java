@@ -19,8 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import bingo.lang.Builder;
-import bingo.odata.edm.EdmEntitySet;
-import bingo.odata.edm.EdmEntityType;
+import bingo.meta.edm.EdmEntitySet;
+import bingo.meta.edm.EdmEntityType;
 
 public class ODataEntitySetBuilder implements Builder<ODataEntitySet>{
 

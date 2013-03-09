@@ -43,9 +43,9 @@ import java.util.Locale;
 import bingo.lang.Dates;
 import bingo.lang.codec.Base64;
 import bingo.lang.exceptions.NotImplementedException;
+import bingo.meta.edm.EdmSimpleType;
 import bingo.odata.ODataErrors;
 import bingo.odata.ODataException;
-import bingo.odata.edm.EdmSimpleType;
 import bingo.odata.values.DateTimeOffset;
 
 /**

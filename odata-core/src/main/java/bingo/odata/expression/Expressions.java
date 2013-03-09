@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.sql.Time;
 import java.util.Date;
 
-import bingo.odata.edm.EdmSimpleType;
+import bingo.meta.edm.EdmSimpleType;
 import bingo.odata.expression.ExpressionParser.AggregateFunction;
 import bingo.odata.expression.OrderByExpression.Direction;
 import bingo.odata.values.DateTimeOffset;

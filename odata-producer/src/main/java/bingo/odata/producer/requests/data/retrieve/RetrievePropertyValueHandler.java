@@ -15,14 +15,14 @@
  */
 package bingo.odata.producer.requests.data.retrieve;
 
+import bingo.meta.edm.EdmEntitySet;
+import bingo.meta.edm.EdmEntityType;
+import bingo.meta.edm.EdmProperty;
+import bingo.meta.edm.EdmSimpleType;
 import bingo.odata.ODataErrors;
 import bingo.odata.ODataObjectKind;
 import bingo.odata.ODataRequest;
 import bingo.odata.ODataResponse;
-import bingo.odata.edm.EdmEntitySet;
-import bingo.odata.edm.EdmEntityType;
-import bingo.odata.edm.EdmProperty;
-import bingo.odata.edm.EdmSimpleType;
 import bingo.odata.model.ODataBuilders;
 import bingo.odata.model.ODataKey;
 import bingo.odata.model.ODataProperty;

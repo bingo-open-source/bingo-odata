@@ -16,10 +16,10 @@
 package bingo.odata.model;
 
 import bingo.lang.Builder;
+import bingo.meta.edm.EdmType;
 import bingo.odata.ODataObject;
 import bingo.odata.ODataObjectKind;
 import bingo.odata.ODataServices;
-import bingo.odata.edm.EdmType;
 
 public class ODataValueBuilder implements Builder<ODataValue> {
 	

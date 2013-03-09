@@ -19,8 +19,6 @@ import java.math.BigDecimal;
 import java.sql.Time;
 import java.util.Date;
 
-import bingo.odata.edm.EdmSimpleType;
-import bingo.odata.edm.EdmSimpleTypeKind;
 import bingo.odata.utils.InternalDateUtils;
 import bingo.odata.utils.InternalTypeUtils;
 import bingo.odata.values.DateTimeOffset;
@@ -29,6 +27,8 @@ import bingo.odata.values.UnsignedByte;
 import bingo.lang.Converts;
 import bingo.lang.Strings;
 import bingo.lang.codec.Base64;
+import bingo.meta.edm.EdmSimpleType;
+import bingo.meta.edm.EdmSimpleTypeKind;
 
 public class ODataConverts {
 	

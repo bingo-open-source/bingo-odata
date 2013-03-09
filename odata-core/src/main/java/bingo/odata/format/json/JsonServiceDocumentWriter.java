@@ -17,9 +17,9 @@ package bingo.odata.format.json;
 
 import bingo.odata.ODataWriterContext;
 import bingo.odata.ODataServices;
-import bingo.odata.edm.EdmEntitySet;
 import bingo.odata.format.ODataJsonWriter;
 import bingo.lang.json.JSONWriter;
+import bingo.meta.edm.EdmEntitySet;
 
 public class JsonServiceDocumentWriter extends ODataJsonWriter<ODataServices>{
 

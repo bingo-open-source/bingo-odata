@@ -16,9 +16,9 @@
 package bingo.odata.model;
 
 import bingo.lang.NamedValue;
+import bingo.meta.edm.EdmProperty;
+import bingo.meta.edm.EdmType;
 import bingo.odata.ODataObject;
-import bingo.odata.edm.EdmProperty;
-import bingo.odata.edm.EdmType;
 
 public interface ODataProperty extends NamedValue<Object>,ODataObject{
 	

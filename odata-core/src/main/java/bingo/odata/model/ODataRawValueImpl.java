@@ -15,7 +15,7 @@
  */
 package bingo.odata.model;
 
-import bingo.odata.edm.EdmType;
+import bingo.meta.edm.EdmType;
 
 public class ODataRawValueImpl implements ODataRawValue {
 

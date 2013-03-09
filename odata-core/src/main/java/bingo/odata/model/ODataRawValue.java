@@ -15,8 +15,8 @@
  */
 package bingo.odata.model;
 
+import bingo.meta.edm.EdmType;
 import bingo.odata.ODataObject;
-import bingo.odata.edm.EdmType;
 
 public interface ODataRawValue extends ODataObject{
 	EdmType getType();

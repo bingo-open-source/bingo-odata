@@ -15,12 +15,12 @@
  */
 package bingo.odata.producer;
 
+import bingo.meta.edm.EdmEntityType;
+import bingo.meta.edm.EdmFunctionImport;
+import bingo.meta.edm.EdmNavigationProperty;
+import bingo.meta.edm.EdmProperty;
 import bingo.odata.ODataQueryInfo;
 import bingo.odata.ODataServices;
-import bingo.odata.edm.EdmEntityType;
-import bingo.odata.edm.EdmFunctionImport;
-import bingo.odata.edm.EdmNavigationProperty;
-import bingo.odata.edm.EdmProperty;
 import bingo.odata.model.ODataEntity;
 import bingo.odata.model.ODataEntitySet;
 import bingo.odata.model.ODataKey;

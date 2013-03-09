@@ -22,8 +22,8 @@ import bingo.lang.Assert;
 import bingo.lang.Enumerable;
 import bingo.lang.Enumerables;
 import bingo.lang.Predicates;
-import bingo.odata.edm.EdmEntitySet;
-import bingo.odata.edm.EdmEntityType;
+import bingo.meta.edm.EdmEntitySet;
+import bingo.meta.edm.EdmEntityType;
 
 public class ODataEntityImpl implements ODataEntity {
 

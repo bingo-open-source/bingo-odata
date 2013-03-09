@@ -15,9 +15,9 @@
  */
 package bingo.odata;
 
-import bingo.odata.edm.EdmEntitySet;
-import bingo.odata.edm.EdmEntityType;
-import bingo.odata.edm.EdmFunctionImport;
+import bingo.meta.edm.EdmEntitySet;
+import bingo.meta.edm.EdmEntityType;
+import bingo.meta.edm.EdmFunctionImport;
 import bingo.odata.model.ODataKey;
 
 public interface ODataContext {

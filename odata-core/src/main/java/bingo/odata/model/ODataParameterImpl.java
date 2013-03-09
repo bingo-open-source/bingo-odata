@@ -16,8 +16,8 @@
 package bingo.odata.model;
 
 import bingo.lang.exceptions.ReadonlyException;
-import bingo.odata.edm.EdmParameter;
-import bingo.odata.edm.EdmType;
+import bingo.meta.edm.EdmParameter;
+import bingo.meta.edm.EdmType;
 
 public class ODataParameterImpl implements ODataParameter {
 	

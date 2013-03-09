@@ -15,29 +15,29 @@
  */
 package bingo.odata.format.xml;
 
-import static bingo.odata.edm.EdmUtils.fullQualifiedName;
+import static bingo.meta.edm.EdmUtils.fullQualifiedName;
 import bingo.lang.Strings;
 import bingo.lang.http.HttpContentTypes;
 import bingo.lang.xml.XmlWriter;
+import bingo.meta.edm.EdmAssociation;
+import bingo.meta.edm.EdmAssociationSet;
+import bingo.meta.edm.EdmComplexType;
+import bingo.meta.edm.EdmEntityContainer;
+import bingo.meta.edm.EdmEntitySet;
+import bingo.meta.edm.EdmEntityType;
+import bingo.meta.edm.EdmEnumMember;
+import bingo.meta.edm.EdmEnumType;
+import bingo.meta.edm.EdmFunctionImport;
+import bingo.meta.edm.EdmNavigationProperty;
+import bingo.meta.edm.EdmParameter;
+import bingo.meta.edm.EdmProperty;
+import bingo.meta.edm.EdmSchema;
+import bingo.meta.edm.EdmSimpleType;
+import bingo.meta.edm.EdmType;
+import bingo.meta.edm.EdmUtils;
+import bingo.meta.edm.EdmFeedCustomization.SyndicationTextContentKind;
 import bingo.odata.ODataWriterContext;
 import bingo.odata.ODataServices;
-import bingo.odata.edm.EdmAssociation;
-import bingo.odata.edm.EdmAssociationSet;
-import bingo.odata.edm.EdmComplexType;
-import bingo.odata.edm.EdmEntityContainer;
-import bingo.odata.edm.EdmEntitySet;
-import bingo.odata.edm.EdmEntityType;
-import bingo.odata.edm.EdmEnumMember;
-import bingo.odata.edm.EdmEnumType;
-import bingo.odata.edm.EdmFeedCustomization.SyndicationTextContentKind;
-import bingo.odata.edm.EdmFunctionImport;
-import bingo.odata.edm.EdmNavigationProperty;
-import bingo.odata.edm.EdmParameter;
-import bingo.odata.edm.EdmProperty;
-import bingo.odata.edm.EdmSchema;
-import bingo.odata.edm.EdmSimpleType;
-import bingo.odata.edm.EdmType;
-import bingo.odata.edm.EdmUtils;
 import bingo.odata.format.ODataXmlWriter;
 import bingo.odata.utils.InternalTypeUtils;
 

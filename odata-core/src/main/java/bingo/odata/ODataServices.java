@@ -21,12 +21,12 @@ import java.util.List;
 import bingo.lang.Enumerable;
 import bingo.lang.Enumerables;
 import bingo.lang.Named;
-import bingo.odata.edm.EdmEntityContainer;
-import bingo.odata.edm.EdmEntitySet;
-import bingo.odata.edm.EdmEntityType;
-import bingo.odata.edm.EdmEntityTypeRef;
-import bingo.odata.edm.EdmFunctionImport;
-import bingo.odata.edm.EdmSchema;
+import bingo.meta.edm.EdmEntityContainer;
+import bingo.meta.edm.EdmEntitySet;
+import bingo.meta.edm.EdmEntityType;
+import bingo.meta.edm.EdmEntityTypeRef;
+import bingo.meta.edm.EdmFunctionImport;
+import bingo.meta.edm.EdmSchema;
 
 public class ODataServices implements Named,ODataObject {
 	

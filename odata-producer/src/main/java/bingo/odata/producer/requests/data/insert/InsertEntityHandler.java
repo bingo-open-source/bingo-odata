@@ -17,12 +17,12 @@ package bingo.odata.producer.requests.data.insert;
 
 import bingo.lang.http.HttpHeaders;
 import bingo.lang.http.HttpStatus;
+import bingo.meta.edm.EdmEntitySet;
+import bingo.meta.edm.EdmEntityType;
 import bingo.odata.ODataObjectKind;
 import bingo.odata.ODataRequest;
 import bingo.odata.ODataResponse;
 import bingo.odata.ODataUtils;
-import bingo.odata.edm.EdmEntitySet;
-import bingo.odata.edm.EdmEntityType;
 import bingo.odata.model.ODataEntity;
 import bingo.odata.producer.ODataProducerContext;
 import bingo.odata.producer.requests.data.EntitySetRequestHandlerBase;

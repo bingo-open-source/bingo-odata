@@ -22,12 +22,12 @@ import javax.xml.namespace.QName;
 
 import bingo.lang.Assert;
 import bingo.lang.xml.XmlReader;
+import bingo.meta.edm.EdmEntitySet;
+import bingo.meta.edm.EdmEntityType;
+import bingo.meta.edm.EdmProperty;
 import bingo.odata.ODataErrors;
 import bingo.odata.ODataException;
 import bingo.odata.ODataReaderContext;
-import bingo.odata.edm.EdmEntitySet;
-import bingo.odata.edm.EdmEntityType;
-import bingo.odata.edm.EdmProperty;
 import bingo.odata.format.ODataAtomReader;
 import bingo.odata.model.ODataEntity;
 import bingo.odata.model.ODataEntityBuilder;
