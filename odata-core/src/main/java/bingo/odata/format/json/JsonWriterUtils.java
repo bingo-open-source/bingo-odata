@@ -20,6 +20,7 @@ import java.util.Date;
 
 import bingo.lang.Strings;
 import bingo.lang.codec.Base64;
+import bingo.lang.json.JSON;
 import bingo.lang.json.JSONWriter;
 import bingo.odata.ODataConverts;
 import bingo.odata.ODataErrors;
@@ -148,7 +149,7 @@ public class JsonWriterUtils {
 			return;
 		}
 		
-		throw ODataErrors.notImplemented("ComplexType property not implemented");
+		writer.raw(JSON.encode(rv.getValue()));
 	}
 	
 	private static void writeNavigationProperties(ODataWriterContext context,JSONWriter writer,ODataEntity entity){

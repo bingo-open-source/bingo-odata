@@ -48,7 +48,7 @@ public class JsonEntityReader extends ODataJsonReader<ODataEntity> {
 				continue;
 			}
 			
-			EdmProperty p = entityType.findDeclaredProperty(name);
+			EdmProperty p = entityType.findProperty(name);
 			
 			if(null != p){
 				Object value = entry.getValue();
@@ -60,7 +60,7 @@ public class JsonEntityReader extends ODataJsonReader<ODataEntity> {
 				continue;
 			}
 			
-			EdmNavigationProperty np = entityType.findDeclaredNavigationProperty(name);
+			EdmNavigationProperty np = entityType.findNavigationProperty(name);
 			
 			if(null != np){
 				

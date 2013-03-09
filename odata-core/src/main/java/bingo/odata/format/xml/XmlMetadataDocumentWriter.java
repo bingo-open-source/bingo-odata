@@ -309,6 +309,10 @@ public class XmlMetadataDocumentWriter extends ODataXmlWriter<ODataServices> {
 		if(!func.isSideEffecting()){
 			writer.attribute("IsSideEffecting","false");
 		}
+		
+		if(!func.getParameters().isEmpty()){
+			writer.attribute("IsBindable", "true");
+		}
 		  
 		for(EdmParameter param : func.getParameters()){
 			writer.startElement("Parameter")
