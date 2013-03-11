@@ -60,6 +60,30 @@ public class ODataValueBuilder implements Builder<ODataValue> {
 		return this;
 	}
 	
+	public ODataValueBuilder namedEntity(String name,ODataEntity value){
+		this.kind  = ODataObjectKind.NamedValue;
+		this.value = new ODataNamedValueImpl(name,ODataObjectKind.Entity,value);
+		return this;
+	}
+	
+	public ODataValueBuilder namedEntitySet(String name,ODataEntitySet value){
+		this.kind  = ODataObjectKind.NamedValue;
+		this.value = new ODataNamedValueImpl(name,ODataObjectKind.EntitySet,value);
+		return this;
+	}
+	
+	public ODataValueBuilder namedProperty(String name,ODataProperty value){
+		this.kind  = ODataObjectKind.NamedValue;
+		this.value = new ODataNamedValueImpl(name,ODataObjectKind.Property,value);
+		return this;
+	}
+	
+	public ODataValueBuilder namedRawValue(String name,EdmType type,Object value){
+		this.kind  = ODataObjectKind.NamedValue;
+		this.value = new ODataNamedValueImpl(name,ODataObjectKind.Raw,new ODataRawValueImpl(type, value));
+		return this;
+	}
+	
 	public ODataValue build() {
 	    return new ODataValueImpl(kind, value);
     }

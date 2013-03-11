@@ -28,6 +28,7 @@ import bingo.odata.format.json.JsonEntityReader;
 import bingo.odata.format.json.JsonEntitySetWriter;
 import bingo.odata.format.json.JsonEntityWriter;
 import bingo.odata.format.json.JsonErrorWriter;
+import bingo.odata.format.json.JsonNamedValueWriter;
 import bingo.odata.format.json.JsonPropertyWriter;
 import bingo.odata.format.json.JsonRawValueWriter;
 import bingo.odata.format.json.JsonServiceDocumentWriter;
@@ -67,6 +68,7 @@ public class ODataProtocols {
 		v3builder.addWriter(Json,Entity,		  new JsonEntityWriter());
 		v3builder.addWriter(Json,Property,		  new JsonPropertyWriter());
 		v3builder.addWriter(Json,Raw,		  	  new JsonRawValueWriter());
+		v3builder.addWriter(Json,NamedValue,      new JsonNamedValueWriter());
 		
 		return v3builder.build();
 	}

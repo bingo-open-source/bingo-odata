@@ -26,8 +26,8 @@ import bingo.meta.edm.EdmParameter;
 import bingo.meta.edm.EdmSimpleType;
 import bingo.odata.ODataConverts;
 import bingo.odata.ODataQueryOptions;
-import bingo.odata.expression.Expressions;
 import bingo.odata.expression.ExpressionParser;
+import bingo.odata.expression.Expressions;
 import bingo.odata.expression.LiteralExpression;
 
 public class ODataParameterUtils {
@@ -76,9 +76,7 @@ public class ODataParameterUtils {
 				String string = options.getOption(p.getName());
 				
 				if(!Strings.isEmpty(string)){
-					Object value = Expressions.literalValue((LiteralExpression)ExpressionParser.parse(string));
-					
-					params.add(createParameter(p,value));
+					params.add(createParameter(p,string));
 				}
 			}
 		}

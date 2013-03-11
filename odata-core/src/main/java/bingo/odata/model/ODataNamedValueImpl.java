@@ -13,23 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.odata.format.json;
+package bingo.odata.model;
 
-import java.io.Writer;
+import bingo.lang.tuple.ImmutableNamedValue;
+import bingo.odata.ODataObject;
+import bingo.odata.ODataObjectKind;
 
-import bingo.lang.json.JSON;
-import bingo.odata.ODataConstants.ContentTypes;
-import bingo.odata.ODataWriterContext;
-import bingo.odata.ODataWriter;
-import bingo.odata.model.ODataRawValue;
+public class ODataNamedValueImpl extends ImmutableNamedValue<ODataObject> implements ODataNamedValue {
 
-public class JsonRawValueWriter implements ODataWriter<ODataRawValue>{
+	private static final long serialVersionUID = 300652794613428927L;
+
+	protected ODataObjectKind valueKind;
 	
-	public String getContentType() {
-	    return ContentTypes.APPLICATION_JSON_UTF8;
+	public ODataNamedValueImpl(String name,ODataObjectKind valueKind, ODataObject value) {
+		super(name,value);
+		this.valueKind = valueKind;
     }
-	
-	public void write(ODataWriterContext context, Writer out, ODataRawValue target) throws Throwable {
-		JsonWriterUtils.writeValue(context,JSON.createWriter(out),target.getType(),target.getValue());
+
+	public ODataObjectKind getValueKind() {
+	    return valueKind;
     }
 }

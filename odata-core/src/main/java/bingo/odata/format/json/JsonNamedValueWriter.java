@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 the original author or authors.
+ * Copyright 2013 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,22 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.odata;
+package bingo.odata.format.json;
 
-public enum ODataObjectKind {
-	ServiceDocument,
-	
-	MetadataDocument,
-	
-	Error,
-	
-	EntitySet,
-	
-	Entity,
+import bingo.lang.json.JSONWriter;
+import bingo.odata.ODataWriterContext;
+import bingo.odata.format.ODataJsonWriter;
+import bingo.odata.model.ODataNamedValue;
 
-	Property,
+public class JsonNamedValueWriter extends ODataJsonWriter<ODataNamedValue>{
+
+	@Override
+    protected void write(ODataWriterContext context, JSONWriter writer, ODataNamedValue target) throws Throwable {
+	    JsonWriterUtils.writeValue(context, writer, target.getValueKind(), target.getValue());
+    }
 	
-	Raw,
-	
-	NamedValue;
 }

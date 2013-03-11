@@ -18,15 +18,19 @@ package bingo.odata.format.json;
 import java.sql.Time;
 import java.util.Date;
 
+import bingo.lang.Enumerable;
+import bingo.lang.Enumerables;
 import bingo.lang.Strings;
 import bingo.lang.codec.Base64;
-import bingo.lang.json.JSON;
 import bingo.lang.json.JSONWriter;
 import bingo.lang.value.DateTimeOffset;
 import bingo.lang.value.UnsignedByte;
 import bingo.meta.edm.EdmSimpleType;
+import bingo.meta.edm.EdmType;
 import bingo.odata.ODataConverts;
 import bingo.odata.ODataErrors;
+import bingo.odata.ODataObject;
+import bingo.odata.ODataObjectKind;
 import bingo.odata.ODataUtils;
 import bingo.odata.ODataWriterContext;
 import bingo.odata.model.ODataEntity;
@@ -122,7 +126,7 @@ public class JsonWriterUtils {
 			
 			if(p.getType().isSimple()){
 				writer.name(p.getName());
-				writeValue(writer,(EdmSimpleType)p.getType(), p.getValue());	
+				writeSimpleValue(writer,(EdmSimpleType)p.getType(), p.getValue());	
 			}
 			
 			//TODO : ComplexType
@@ -132,24 +136,83 @@ public class JsonWriterUtils {
 	public static void writeProperty(ODataWriterContext context,JSONWriter writer,ODataProperty p){
 		if(p.getType().isSimple()){
 			writer.name(p.getName());
-			writeValue(writer,(EdmSimpleType)p.getType(), p.getValue());	
+			writeSimpleValue(writer,(EdmSimpleType)p.getType(), p.getValue());	
 			return;
 		}
 		throw ODataErrors.notImplemented("ComplexType property not implemented");
 	}
 	
-	public static void writeRawValue(ODataWriterContext context,JSONWriter writer,ODataRawValue rv){
-		if(rv.getValue() == null){
+	public static void writeValue(ODataWriterContext context,JSONWriter writer,ODataObjectKind kind,ODataObject value){
+		if(null == value){
 			writer.nullValue();
 			return;
 		}
 		
-		if(rv.getType().isSimple()){
-			writeValue(writer,(EdmSimpleType)rv.getType(), rv.getValue());	
+		if(value instanceof ODataRawValue){
+			ODataRawValue rv = (ODataRawValue)value;
+			writeValue(context, writer, rv.getType(), rv.getValue());
 			return;
 		}
 		
-		writer.raw(JSON.encode(rv.getValue()));
+		if(value instanceof ODataEntity){
+			ODataEntity entity = (ODataEntity)value;
+			writeValue(context, writer, entity.getEntityType(), entity);
+			return;
+		}
+		
+		if(value instanceof ODataEntitySet){
+			ODataEntitySet entitySet = (ODataEntitySet)value;
+			writeEntitySet(context, writer, entitySet);
+			return;
+		}
+		
+		if(value instanceof ODataProperty){
+			ODataProperty property = (ODataProperty)value;
+			writeProperty(context, writer, property);
+			return;
+		}
+		
+		throw ODataErrors.notImplemented("unsupported type '{0}'",value.getClass().getName()); 
+	}
+	
+	public static void writeValue(ODataWriterContext context,JSONWriter writer,EdmType type,Object value){
+		if(null == value){
+			writer.nullValue();
+			return;
+		}
+		
+		if(type.isSimple()){
+			writeSimpleValue(writer, type.asSimple(), value);
+			return;
+		}
+		
+		if(type.isEntity()){
+			writeEntity(context, writer, (ODataEntity)value);
+			return;
+		}
+		
+		if(type.isComplex()){
+			//TODO : complex type
+			return;
+		}
+		
+		if(type.isCollection()){
+			EdmType elementType = type.asCollection().getElementType();
+			Enumerable<Object> enumerable = Enumerables.ofObject(value);
+			writer.startArray();
+			int i=0;
+			for(Object elementValue : enumerable){
+				if(i==0){
+					i=1;
+				}else{
+					writer.separator();
+				}
+				writeValue(context,writer,elementType,elementValue);
+			}
+			writer.endArray();
+		}
+		
+		throw ODataErrors.notImplemented("unsupported type '{0}'",type.getTypeKind());
 	}
 	
 	private static void writeNavigationProperties(ODataWriterContext context,JSONWriter writer,ODataEntity entity){
@@ -182,7 +245,11 @@ public class JsonWriterUtils {
 		}
 	}
 	
-	public static void writeValue(JSONWriter writer, EdmSimpleType type,Object value){
+	public static void writeSimpleValue(JSONWriter writer, EdmSimpleType type,Object value){
+		if(value instanceof ODataRawValue){
+			value = ((ODataRawValue)value).getValue();
+		}
+		
 		value = ODataConverts.convert(type, value);
 		
 		if(null == value){
