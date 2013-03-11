@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Map;
 
 import bingo.lang.Converts;
+import bingo.lang.Enumerables;
+import bingo.lang.Enums;
 import bingo.lang.Strings;
 import bingo.lang.exceptions.NotImplementedException;
 import bingo.lang.http.HttpContentTypes;
@@ -15,6 +17,7 @@ import bingo.lang.json.JSON;
 import bingo.lang.json.JSONObject;
 import bingo.meta.edm.EdmSimpleType;
 import bingo.meta.edm.EdmType;
+import bingo.meta.edm.EdmTypeKind;
 import bingo.odata.ODataConverts;
 import bingo.odata.ODataError;
 import bingo.odata.ODataObjectKind;
@@ -92,7 +95,7 @@ public class Response {
 	}
 	
 	public <T> T convertToObject(Class<T> clazz, EdmType edmType, ODataConsumerContext context) {
-		if(edmType.isComplex()) {
+		if(edmType.isComplex() || edmType.getTypeKind() == EdmTypeKind.Reference) {
 			if(null != context.getFunctionImport()) {
 				String jsonString = this.getString(), funcName = context.getFunctionImport().getName();
 				JSONObject jsonObject = JSON.decode(jsonString);
