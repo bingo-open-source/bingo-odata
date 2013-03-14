@@ -62,4 +62,6 @@ public interface ODataProducer {
 	ODataValue invokeFunction(ODataProducerContext context,EdmFunctionImport func,ODataParameters parameters);
 	
 	ODataContent query(ODataProducerContext context,ODataQueryInfo queryInfo);
+	
+	EdmFunctionImport findFunctionImport(ODataProducerContext context,String entitySetName,String functionName);
 }

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.odata.producer.requests.data;
+package bingo.odata.producer.requests.invoke;
 
 import bingo.lang.Strings;
 import bingo.meta.edm.EdmEntitySet;
@@ -48,8 +48,7 @@ public class FunctionRequestHandler extends ODataRequestHandlerBase {
 		
 		EdmFunctionImport func = context.getServices().findFunctionImport(functionName);
 		if(null == func && !Strings.isEmpty(entitySetName)){
-			functionName = entitySetName + "." + functionName;
-			func = context.getServices().findFunctionImport(functionName);
+			func = context.getProducer().findFunctionImport(context,entitySetName,functionName);
 		}
 		
 		if(null == func){

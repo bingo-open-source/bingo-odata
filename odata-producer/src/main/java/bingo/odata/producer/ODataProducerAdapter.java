@@ -83,4 +83,8 @@ public class ODataProducerAdapter implements ODataProducer {
 	public ODataContent query(ODataProducerContext context, ODataQueryInfo queryInfo) {
 		throw ODataErrors.notImplemented();
     }
+
+	public EdmFunctionImport findFunctionImport(ODataProducerContext context, String entitySetName, String functionName) {
+	    return null;
+    }
 }

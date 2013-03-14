@@ -47,6 +47,6 @@ public abstract class DemoODataTestBase {
 	protected ODataProducerContext context(){
 		ODataUrlInfo url = new ODataUrlInfo(request.getServiceRootUri(), request.getResourcePath(), request.getParameters());
 
-		return new ODataProducerContext(producer,ODataProtocols.DEFAULT,ODataVersion.V3,ODataFormat.Atom,url);
+		return new ODataProducerContext(request,producer,ODataProtocols.DEFAULT,ODataVersion.V3,ODataFormat.Atom,url);
 	}
 }

@@ -31,7 +31,6 @@ import bingo.odata.ODataException;
 import bingo.odata.ODataRequest;
 import bingo.odata.ODataResponse;
 import bingo.odata.producer.requests.batch.BatchRequestHandler;
-import bingo.odata.producer.requests.data.FunctionRequestHandler;
 import bingo.odata.producer.requests.data.QueryRequesthandler;
 import bingo.odata.producer.requests.data.delete.DeleteEntityHandler;
 import bingo.odata.producer.requests.data.delete.DeleteLinksHandler;
@@ -46,6 +45,7 @@ import bingo.odata.producer.requests.data.retrieve.RetrievePropertyValueHandler;
 import bingo.odata.producer.requests.data.update.MergeEntityHandler;
 import bingo.odata.producer.requests.data.update.UpdateEntityHandler;
 import bingo.odata.producer.requests.data.update.UpdateLinksHandler;
+import bingo.odata.producer.requests.invoke.FunctionRequestHandler;
 import bingo.odata.producer.requests.metadata.MetadataDocumentHandler;
 import bingo.odata.producer.requests.metadata.ServiceDocumentHandler;
 

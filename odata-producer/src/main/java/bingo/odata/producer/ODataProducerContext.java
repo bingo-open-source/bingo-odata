@@ -22,6 +22,7 @@ import bingo.odata.ODataFormat;
 import bingo.odata.ODataProtocol;
 import bingo.odata.ODataQueryOptions;
 import bingo.odata.ODataReaderContext;
+import bingo.odata.ODataRequest;
 import bingo.odata.ODataServices;
 import bingo.odata.ODataUrlInfo;
 import bingo.odata.ODataVersion;
@@ -30,6 +31,7 @@ import bingo.odata.model.ODataKey;
 
 public class ODataProducerContext implements ODataWriterContext,ODataReaderContext {
 
+	private final ODataRequest  request;
 	private final ODataProducer	producer;
 	private final ODataProtocol protocol;
 	private final ODataVersion	version;
@@ -43,7 +45,8 @@ public class ODataProducerContext implements ODataWriterContext,ODataReaderConte
 	private ODataKey	        entityKey;
 	private EdmFunctionImport   functionImport;
 
-	public ODataProducerContext(ODataProducer producer,ODataProtocol protocol,ODataVersion version,ODataFormat format,ODataUrlInfo urlInfo) {
+	public ODataProducerContext(ODataRequest request,ODataProducer producer,ODataProtocol protocol,ODataVersion version,ODataFormat format,ODataUrlInfo urlInfo) {
+		this.request  = request;
 		this.producer = producer;
 		this.protocol = protocol;
 		this.services = producer.retrieveServiceMetadata();
@@ -51,6 +54,10 @@ public class ODataProducerContext implements ODataWriterContext,ODataReaderConte
 		this.format   = format;
 		this.urlInfo  = urlInfo;
 		this.minimal  = null == urlInfo ? false : urlInfo.getQueryOptions().isXMinimal();
+	}
+	
+	public ODataRequest getRequest() {
+		return request;
 	}
 
 	public ODataProducer getProducer() {

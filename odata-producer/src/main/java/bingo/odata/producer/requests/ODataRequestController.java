@@ -86,7 +86,7 @@ public class ODataRequestController {
 			format  = Objects.firstNotNull(ODataRequestUtils.dataServiceFormat(request, version),protocol.getDefaultFormat());
 			version = ODataRequestUtils.getAndCheckVersion(protocol,request);
 			
-	        context = new ODataProducerContext(producer,protocol,version,format,urlInfo);
+	        context = new ODataProducerContext(request,producer,protocol,version,format,urlInfo);
 
 	        handler = router.route(context, request, response);
 	        
@@ -143,7 +143,7 @@ public class ODataRequestController {
 		}
 		
 		if(null == context){
-			context = new ODataProducerContext(producer,protocol,version,format,urlInfo);
+			context = new ODataProducerContext(request,producer,protocol,version,format,urlInfo);
 		}
 		
 		StringWriter out = new StringWriter();
