@@ -17,6 +17,8 @@ package bingo.odata.producer.requests;
 
 import java.io.StringWriter;
 
+import javax.servlet.http.HttpServletResponse;
+
 import bingo.lang.Strings;
 import bingo.lang.http.HttpStatus;
 import bingo.lang.logging.Log;
@@ -34,6 +36,7 @@ import bingo.odata.model.ODataParameterUtils;
 import bingo.odata.model.ODataParameters;
 import bingo.odata.model.ODataValue;
 import bingo.odata.producer.ODataProducerContext;
+import bingo.odata.producer.ext.ODataContent;
 
 public abstract class ODataRequestHandlerBase implements ODataRequestHandler {
 	
@@ -61,7 +64,7 @@ public abstract class ODataRequestHandlerBase implements ODataRequestHandler {
 			
 			ODataValue returnValue = context.getProducer().invokeFunction(context, functionImport, params);
 			
-			if(functionImport.getReturnType() == null || returnValue == null){
+			if(returnValue == null){
 				response.setStatus(HttpStatus.SC_NO_CONTENT);
 			}else {
 				write(context, request, response, returnValue.getKind(), returnValue.getValue());
@@ -76,22 +79,43 @@ public abstract class ODataRequestHandlerBase implements ODataRequestHandler {
 	}
 	
 	protected static <T extends ODataObject> void write(ODataProducerContext context,ODataRequest request, ODataResponse response,ODataObjectKind kind,T target) throws Throwable {
-		ODataWriter<T> writer = getWriter(context, kind);
+		if(target instanceof ODataContent) {
+			write(context,request,response,(ODataContent)target);
+		}else{
+			ODataWriter<T> writer = getWriter(context, kind);
 
-		StringWriter out = new StringWriter();
-		
-		writer.write(context, out, target);
-		
-		String content = out.toString();
-		
-		if(log.isDebugEnabled()){
-			log.debug("response content type : {}",	     writer.getContentType());
-			log.trace("response content text : \n\n{}\n",content);
+			StringWriter out = new StringWriter();
+			
+			writer.write(context, out, target);
+			
+			String content = out.toString();
+			
+			if(log.isDebugEnabled()){
+				log.debug("response content type : {}",	     writer.getContentType());
+				log.trace("response content text : \n\n{}\n",content);
+			}
+			
+			//The response's character encoding is only set from the given content type if this method is called before getWriter is called
+			response.setContentType(writer.getContentType());
+			response.getWriter().write(content);
+		}
+	}
+	
+	protected static <T extends ODataObject> void write(ODataProducerContext context,ODataRequest request, ODataResponse response,ODataContent content) throws Throwable {
+		Object contentBody = content.getContentBody();
+		if(null == contentBody){
+			response.setStatus(HttpServletResponse.SC_NO_CONTENT);
 		}
 		
-		//The response's character encoding is only set from the given content type if this method is called before getWriter is called
-		response.setContentType(writer.getContentType());
-		response.getWriter().write(content);
+		if(contentBody.getClass().equals(byte[].class)){
+			byte[] data = (byte[])contentBody;
+			response.setContentType(content.getContentType());
+			response.getOutputStream().write(data);
+			return;
+		}else{
+			response.setContentType(content.getContentType());
+			response.getWriter().write(contentBody.toString());
+		}
 	}
 	
 	protected static <T extends ODataObject> T read(ODataProducerContext context,ODataRequest request,ODataObjectKind kind) throws Throwable {

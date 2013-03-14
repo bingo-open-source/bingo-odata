@@ -19,14 +19,13 @@ import bingo.meta.edm.EdmEntitySet;
 import bingo.meta.edm.EdmEntityType;
 import bingo.meta.edm.EdmFunctionImport;
 import bingo.odata.ODataFormat;
-import bingo.odata.ODataReaderContext;
-import bingo.odata.ODataWriterContext;
 import bingo.odata.ODataProtocol;
 import bingo.odata.ODataQueryOptions;
+import bingo.odata.ODataReaderContext;
 import bingo.odata.ODataServices;
 import bingo.odata.ODataUrlInfo;
 import bingo.odata.ODataVersion;
-import bingo.odata.ODataConstants.CustomOptions;
+import bingo.odata.ODataWriterContext;
 import bingo.odata.model.ODataKey;
 
 public class ODataProducerContext implements ODataWriterContext,ODataReaderContext {
@@ -51,7 +50,7 @@ public class ODataProducerContext implements ODataWriterContext,ODataReaderConte
 		this.version  = version;
 		this.format   = format;
 		this.urlInfo  = urlInfo;
-		this.minimal  = null == urlInfo ? false : "1".equals(urlInfo.getQueryOptions().getOption(CustomOptions.X_MINIMAL));
+		this.minimal  = null == urlInfo ? false : urlInfo.getQueryOptions().isXMinimal();
 	}
 
 	public ODataProducer getProducer() {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 the original author or authors.
+ * Copyright 2013 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,24 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.odata;
+package bingo.odata.producer.ext;
 
-public enum ODataObjectKind {
-	ServiceDocument,
+public class ODataContentImpl implements ODataContent {
 	
-	MetadataDocument,
+	protected final String contentType;
+	protected final Object contentBody;
 	
-	Error,
+	public ODataContentImpl(String contentType,Object contentBody){
+		this.contentType = contentType;
+		this.contentBody = contentBody;
+	}
 	
-	EntitySet,
-	
-	Entity,
+	public String getContentType() {
+		return contentType;
+	}
 
-	Property,
-	
-	ComplexObject,
-	
-	Raw,
-	
-	NamedValue;
+	public Object getContentBody() {
+		return contentBody;
+	}
 }

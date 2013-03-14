@@ -30,6 +30,11 @@ public class ODataValueBuilder implements Builder<ODataValue> {
 		
 	}
 	
+	public ODataValueBuilder setValue(ODataObject value){
+		this.value = value;
+		return this;
+	}
+	
 	public ODataValueBuilder entity(ODataEntity value){
 		this.kind  = ODataObjectKind.Entity;
 		this.value = value;

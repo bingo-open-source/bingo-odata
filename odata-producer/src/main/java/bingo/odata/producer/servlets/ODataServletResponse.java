@@ -16,6 +16,7 @@
 package bingo.odata.producer.servlets;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.Writer;
 
 import javax.servlet.http.HttpServletResponse;
@@ -50,6 +51,14 @@ public class ODataServletResponse implements ODataResponse {
 	public Writer getWriter() {
 		try {
 	        return response.getWriter();
+        } catch (IOException e) {
+        	throw Exceptions.uncheck(e);
+        }
+	}
+
+	public OutputStream getOutputStream() {
+		try {
+			return response.getOutputStream();
         } catch (IOException e) {
         	throw Exceptions.uncheck(e);
         }

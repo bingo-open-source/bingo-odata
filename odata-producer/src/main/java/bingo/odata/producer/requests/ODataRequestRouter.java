@@ -32,6 +32,7 @@ import bingo.odata.ODataRequest;
 import bingo.odata.ODataResponse;
 import bingo.odata.producer.requests.batch.BatchRequestHandler;
 import bingo.odata.producer.requests.data.FunctionRequestHandler;
+import bingo.odata.producer.requests.data.QueryRequesthandler;
 import bingo.odata.producer.requests.data.delete.DeleteEntityHandler;
 import bingo.odata.producer.requests.data.delete.DeleteLinksHandler;
 import bingo.odata.producer.requests.data.insert.InsertEntityHandler;
@@ -65,6 +66,9 @@ public class ODataRequestRouter {
 
 		//Batch Request
 		add("*",	"/\\$batch",						   													new BatchRequestHandler());
+		
+		//Query Request ( not standard odata request )
+		add(GET, 	"/\\$query",																			new QueryRequesthandler());
 		
 		//Reterieve Requests
 		add(GET,	"/{entitySetName:[^/()]+?}(?:\\(\\))?",				   									new RetrieveEntitySetHandler());

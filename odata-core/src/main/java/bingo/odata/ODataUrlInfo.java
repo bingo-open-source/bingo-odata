@@ -67,6 +67,10 @@ public class ODataUrlInfo {
 		return pathParameters.get(name);
 	}
 	
+	public Map<String,String> getPathParametersMap(){
+		return pathParameters;
+	}
+	
 	public void setPathParameter(String name,String value){
 		pathParameters.put(name, value);
 	}

@@ -68,12 +68,14 @@ public final class ODataConstants {
 	}
 	
 	/**
-	 * custom options starts with "x_"
+	 * custom options starts with "x$"
 	 */
 	public static class CustomOptions {
 		protected CustomOptions(){}
 		
-		public static final String X_MINIMAL = "x_minimal";
+		public static final String X_MINIMAL = "x$minimal";
+		
+		public static final String X_VERBOSE = "x$verbose";
 	}
 	
 	public static final class ResourcePaths {

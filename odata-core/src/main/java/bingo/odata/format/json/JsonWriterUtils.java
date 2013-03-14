@@ -33,6 +33,7 @@ import bingo.odata.ODataObject;
 import bingo.odata.ODataObjectKind;
 import bingo.odata.ODataUtils;
 import bingo.odata.ODataWriterContext;
+import bingo.odata.model.ODataComplexObject;
 import bingo.odata.model.ODataEntity;
 import bingo.odata.model.ODataEntitySet;
 import bingo.odata.model.ODataNavigationProperty;
@@ -134,12 +135,8 @@ public class JsonWriterUtils {
 	}
 	
 	public static void writeProperty(ODataWriterContext context,JSONWriter writer,ODataProperty p){
-		if(p.getType().isSimple()){
-			writer.name(p.getName());
-			writeSimpleValue(writer,(EdmSimpleType)p.getType(), p.getValue());	
-			return;
-		}
-		throw ODataErrors.notImplemented("ComplexType property not implemented");
+		writer.name(p.getName());
+		writeValue(context, writer, p.getType(), p.getValue());
 	}
 	
 	public static void writeValue(ODataWriterContext context,JSONWriter writer,ODataObjectKind kind,ODataObject value){
@@ -175,6 +172,21 @@ public class JsonWriterUtils {
 		throw ODataErrors.notImplemented("unsupported type '{0}'",value.getClass().getName()); 
 	}
 	
+	public static void writeComplexObject(ODataWriterContext context,JSONWriter writer,ODataComplexObject co){
+		if(null == co){
+			writer.nullValue();
+			return;
+		}
+		
+		writer.startObject();
+		
+		for(ODataProperty p : co.getProperties()){
+			writeProperty(context, writer, p);
+		}
+		
+		writer.endObject();
+	}
+	
 	public static void writeValue(ODataWriterContext context,JSONWriter writer,EdmType type,Object value){
 		if(null == value){
 			writer.nullValue();
@@ -192,7 +204,7 @@ public class JsonWriterUtils {
 		}
 		
 		if(type.isComplex()){
-			//TODO : complex type
+			writeComplexObject(context, writer, (ODataComplexObject)value);
 			return;
 		}
 		
@@ -210,6 +222,7 @@ public class JsonWriterUtils {
 				writeValue(context,writer,elementType,elementValue);
 			}
 			writer.endArray();
+			return;
 		}
 		
 		throw ODataErrors.notImplemented("unsupported type '{0}'",type.getTypeKind());

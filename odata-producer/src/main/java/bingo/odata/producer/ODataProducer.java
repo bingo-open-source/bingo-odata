@@ -26,6 +26,7 @@ import bingo.odata.model.ODataEntitySet;
 import bingo.odata.model.ODataKey;
 import bingo.odata.model.ODataParameters;
 import bingo.odata.model.ODataValue;
+import bingo.odata.producer.ext.ODataContent;
 
 public interface ODataProducer {
 	
@@ -59,4 +60,6 @@ public interface ODataProducer {
 	void deleteEntity(ODataProducerContext context,EdmEntityType entityType,ODataKey key);
 	
 	ODataValue invokeFunction(ODataProducerContext context,EdmFunctionImport func,ODataParameters parameters);
+	
+	ODataContent query(ODataProducerContext context,ODataQueryInfo queryInfo);
 }

@@ -77,10 +77,14 @@ public class ODataUtils {
 	}
 	
 	public static String nextHref(ODataContext context,ODataEntitySet entitySet){
-		if(!Strings.isEmpty(entitySet.getSkipToken())){
+		return nextHref(context, entitySet.getSkipToken());
+	}
+	
+	public static String nextHref(ODataContext context,String skiptoken){
+		if(!Strings.isEmpty(skiptoken)){
 			QueryStringBuilder qs = new QueryStringBuilder();
 			
-			Map<String,String> params = context.getUrlInfo().getQueryOptions().getOptionsMap();
+			Map<String,String> params = context.getUrlInfo().getQueryOptions().getAllOptionsMap();
 			for(Entry<String,String> param : params.entrySet()){
 				if(!param.getKey().equals(QueryOptions.TOP) && 
 				   !param.getKey().equals(QueryOptions.SKIP) && 
@@ -89,7 +93,7 @@ public class ODataUtils {
 					qs.add(param.getKey(),param.getValue());
 				}
 			}
-			qs.add(QueryOptions.SKIP_TOKEN,entitySet.getSkipToken());
+			qs.add(QueryOptions.SKIP_TOKEN,skiptoken);
 			
 			return context.getUrlInfo().getResourceUri() + "?" + qs.build();
 		}

@@ -18,9 +18,11 @@ package bingo.odata;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import bingo.lang.Immutables;
 import bingo.lang.Strings;
+import bingo.odata.ODataConstants.CustomOptions;
 import bingo.odata.ODataConstants.QueryOptions;
 
 public class ODataQueryOptions {
@@ -79,9 +81,35 @@ public class ODataQueryOptions {
 		return options.get(name);
 	}
 	
-	public Map<String, String> getOptionsMap() {
+	public String getXMinimal(){
+		return options.get(CustomOptions.X_MINIMAL);
+	}
+	
+	public boolean isXMinimal(){
+		return "1".equals(getXMinimal());
+	}
+	
+	public String getXVerbose(){
+		return options.get(CustomOptions.X_VERBOSE);
+	}
+	
+	public boolean isXVerbose(){
+		return "1".equals(getXVerbose());
+	}
+	
+	public Map<String, String> getAllOptionsMap() {
     	return options;
     }
+	
+	public Map<String,String> getUserOptionsMap(){
+		Map<String,String> map = new LinkedHashMap<String, String>();
+		for(Entry<String,String> entry : options.entrySet()){
+			if(!entry.getKey().startsWith("$") && !entry.getKey().startsWith("x$")){
+				map.put(entry.getKey(),entry.getValue());
+			}
+		}
+		return map;
+	}
 	
 	private Map<String, String> parse(String queryString){
 		if(Strings.isEmpty(queryString)){

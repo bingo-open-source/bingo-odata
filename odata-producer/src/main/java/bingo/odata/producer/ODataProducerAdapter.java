@@ -27,6 +27,7 @@ import bingo.odata.model.ODataEntitySet;
 import bingo.odata.model.ODataKey;
 import bingo.odata.model.ODataParameters;
 import bingo.odata.model.ODataValue;
+import bingo.odata.producer.ext.ODataContent;
 
 public class ODataProducerAdapter implements ODataProducer {
 	
@@ -76,6 +77,10 @@ public class ODataProducerAdapter implements ODataProducer {
     }
 
 	public ODataValue invokeFunction(ODataProducerContext context, EdmFunctionImport func, ODataParameters parameters) {
+		throw ODataErrors.notImplemented();
+    }
+
+	public ODataContent query(ODataProducerContext context, ODataQueryInfo queryInfo) {
 		throw ODataErrors.notImplemented();
     }
 }

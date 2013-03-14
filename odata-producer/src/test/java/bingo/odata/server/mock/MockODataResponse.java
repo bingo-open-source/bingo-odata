@@ -15,6 +15,9 @@
  */
 package bingo.odata.server.mock;
 
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStream;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.HashMap;
@@ -28,6 +31,7 @@ public class MockODataResponse implements ODataResponse {
 	private Writer	      writer	   = new StringWriter();
 	private int          status       = 200;
 	private Map<String, String> headers = new HashMap<String, String>();
+	private OutputStream out = new BufferedOutputStream(new ByteArrayOutputStream());
 
 	public String getContentType() {
 		return contentType;
@@ -60,4 +64,8 @@ public class MockODataResponse implements ODataResponse {
 	public String getContent(){
 		return writer.toString();
 	}
+
+	public OutputStream getOutputStream() {
+	    return out;
+    }
 }

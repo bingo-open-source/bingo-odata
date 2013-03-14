@@ -15,6 +15,7 @@
  */
 package bingo.odata;
 
+import java.io.OutputStream;
 import java.io.Writer;
 
 public interface ODataResponse {
@@ -28,4 +29,6 @@ public interface ODataResponse {
 	void setHeader(String name,String value);
 	
 	Writer getWriter();
+	
+	OutputStream getOutputStream();
 }

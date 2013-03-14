@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 the original author or authors.
+ * Copyright 2013 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,24 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.odata;
+package bingo.odata.producer.ext;
 
-public enum ODataObjectKind {
-	ServiceDocument,
-	
-	MetadataDocument,
-	
-	Error,
-	
-	EntitySet,
-	
-	Entity,
+import bingo.odata.ODataConstants;
 
-	Property,
+public class ODataContents {
 	
-	ComplexObject,
+	public static ODataContent json(String jsonContent){
+		return new ODataContentImpl(ODataConstants.ContentTypes.APPLICATION_JSON_UTF8, jsonContent);
+	}
 	
-	Raw,
-	
-	NamedValue;
+	public static ODataContent xml(String xmlContent){
+		return new ODataContentImpl(ODataConstants.ContentTypes.APPLICATION_XML_UTF8, xmlContent);
+	}
+
 }
