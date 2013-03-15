@@ -17,15 +17,14 @@ package bingo.odata.format;
 
 import java.io.Writer;
 
-import bingo.lang.Strings;
 import bingo.lang.xml.XmlFactory;
 import bingo.lang.xml.XmlWriter;
 import bingo.meta.edm.EdmDocumentation;
 import bingo.meta.edm.EdmObjectWithDocumentation;
-import bingo.odata.ODataWriterContext;
+import bingo.odata.ODataConstants.ContentTypes;
 import bingo.odata.ODataObject;
 import bingo.odata.ODataWriter;
-import bingo.odata.ODataConstants.ContentTypes;
+import bingo.odata.ODataWriterContext;
 
 public abstract class ODataXmlWriter<T extends ODataObject> extends ODataXmlConstants implements ODataWriter<T> {
 
@@ -42,10 +41,10 @@ public abstract class ODataXmlWriter<T extends ODataObject> extends ODataXmlCons
 	protected static void writeDocument(XmlWriter writer,EdmObjectWithDocumentation item){
 		EdmDocumentation doc = item.getDocumentation();
 		
-		if(null != doc && !Strings.isEmpty(doc.getSummary()) && !Strings.isEmpty(item.getDocumentation())){
-			writer.startElement(EDM2006_NS,"Documentation");
-			writer.elementOptional(EDM2006_NS, "Summary");
-			writer.elementOptional(EDM2006_NS, "LongDescription");
+		if(null != doc){
+			writer.startElement("Documentation");
+			writer.elementOptional("Summary",item.getSummary());
+			writer.elementOptional("LongDescription",item.getLongDescription());
 			writer.endElement();
 		}
 	}

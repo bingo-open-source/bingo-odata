@@ -45,7 +45,7 @@ public class XmlMetadataDocumentWriter extends ODataXmlWriter<ODataServices> {
 	
 	@Override
     public String getContentType() {
-	    return HttpContentTypes.APPLICATION_XML;
+	    return HttpContentTypes.APPLICATION_XML_UTF8;
     }
 
 	@Override
@@ -205,6 +205,8 @@ public class XmlMetadataDocumentWriter extends ODataXmlWriter<ODataServices> {
 				      .attribute(METADATA_NS, "FC_CcontentKind",Strings.isEmpty(prop.getFcContentKind())? SyndicationTextContentKind.Text.getValue() : prop.getFcContentKind())
 				      .attribute(METADATA_NS, "FC_KeepInContent",prop.isFcKeepInContent() ? "true" : "false");
 			}
+			
+			writeDocument(writer,prop);
 			
 			writer.endElement();
 		}
