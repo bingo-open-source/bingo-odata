@@ -21,10 +21,14 @@ import java.util.Date;
 import bingo.lang.Enumerable;
 import bingo.lang.Enumerables;
 import bingo.lang.Strings;
+import bingo.lang.beans.BeanModel;
+import bingo.lang.beans.BeanProperty;
 import bingo.lang.codec.Base64;
 import bingo.lang.json.JSONWriter;
 import bingo.lang.value.DateTimeOffset;
 import bingo.lang.value.UnsignedByte;
+import bingo.meta.edm.EdmComplexType;
+import bingo.meta.edm.EdmProperty;
 import bingo.meta.edm.EdmSimpleType;
 import bingo.meta.edm.EdmType;
 import bingo.odata.ODataConverts;
@@ -172,16 +176,42 @@ public class JsonWriterUtils {
 		throw ODataErrors.notImplemented("unsupported type '{0}'",value.getClass().getName()); 
 	}
 	
-	public static void writeComplexObject(ODataWriterContext context,JSONWriter writer,ODataComplexObject co){
-		if(null == co){
+	public static void writeComplexObject(ODataWriterContext context,JSONWriter writer,EdmComplexType type, Object object){
+		if(null == object){
 			writer.nullValue();
 			return;
 		}
 		
 		writer.startObject();
 		
-		for(ODataProperty p : co.getProperties()){
-			writeProperty(context, writer, p);
+		if(object instanceof ODataComplexObject){
+			ODataComplexObject co = (ODataComplexObject)object;
+			int i=0;
+			for(ODataProperty p : co.getProperties()){
+				if(i==0){
+					i = 0;
+				}else{
+					writer.separator();
+				}
+				writeProperty(context, writer, p);
+			}
+		}else{
+			BeanModel<?> model = BeanModel.get(object.getClass());
+			
+			int i=0;
+			for(EdmProperty p : type.getDeclaredProperties()){
+				BeanProperty bp = model.getProperty(p.getName());
+				if(null != bp){
+					if(i == 0){
+						i = 1;
+					}else{
+						writer.separator();
+					}
+					
+					writer.name(p.getName());
+					writeValue(context, writer, p.getType(), bp.getValue(object));
+				}
+			}
 		}
 		
 		writer.endObject();
@@ -204,7 +234,7 @@ public class JsonWriterUtils {
 		}
 		
 		if(type.isComplex()){
-			writeComplexObject(context, writer, (ODataComplexObject)value);
+			writeComplexObject(context, writer,(EdmComplexType)type, value);
 			return;
 		}
 		

@@ -16,6 +16,7 @@
 package bingo.odata.model;
 
 import bingo.meta.edm.EdmBuilders;
+import bingo.meta.edm.EdmComplexType;
 import bingo.meta.edm.EdmEntitySet;
 import bingo.meta.edm.EdmEntityType;
 import bingo.meta.edm.EdmProperty;
@@ -45,5 +46,13 @@ public class ODataBuilders {
 
 	public static ODataValueBuilder value(){
 		return new ODataValueBuilder();
+	}
+	
+	public static ODataComplexObjectBuilder complexObject(){
+		return new ODataComplexObjectBuilder();
+	}
+	
+	public static ODataComplexObjectBuilder complexObject(EdmComplexType metadata){
+		return new ODataComplexObjectBuilder(metadata);
 	}
 }

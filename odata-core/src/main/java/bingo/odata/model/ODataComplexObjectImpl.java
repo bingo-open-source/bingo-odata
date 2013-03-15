@@ -13,21 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.odata.format.json;
+package bingo.odata.model;
 
-import bingo.lang.json.JSONWriter;
-import bingo.odata.ODataWriterContext;
-import bingo.odata.format.ODataJsonWriter;
-import bingo.odata.model.ODataNamedValue;
+import bingo.lang.Enumerable;
+import bingo.meta.edm.EdmComplexType;
 
-public class JsonNamedValueWriter extends ODataJsonWriter<ODataNamedValue>{
-
-	@Override
-    protected void write(ODataWriterContext context, JSONWriter writer, ODataNamedValue target) throws Throwable {
-		writer.startObject();
-		writer.name(target.getName());
-	    JsonWriterUtils.writeValue(context, writer, target.getValueKind(), target.getValue());
-	    writer.endObject();
-    }
+public class ODataComplexObjectImpl implements ODataComplexObject {
 	
+	protected final EdmComplexType 			  metadata;
+	protected final Enumerable<ODataProperty> properties;
+	
+	public ODataComplexObjectImpl(EdmComplexType metadata, Enumerable<ODataProperty> properties) {
+	    this.metadata = metadata;
+	    this.properties = properties;
+    }
+
+	public EdmComplexType getMetadata() {
+		return metadata;
+	}
+
+	public Enumerable<ODataProperty> getProperties() {
+		return properties;
+	}
 }
