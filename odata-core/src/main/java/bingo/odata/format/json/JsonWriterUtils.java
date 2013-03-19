@@ -40,6 +40,7 @@ import bingo.odata.ODataWriterContext;
 import bingo.odata.model.ODataComplexObject;
 import bingo.odata.model.ODataEntity;
 import bingo.odata.model.ODataEntitySet;
+import bingo.odata.model.ODataNamedValue;
 import bingo.odata.model.ODataNavigationProperty;
 import bingo.odata.model.ODataProperty;
 import bingo.odata.model.ODataRawValue;
@@ -155,6 +156,12 @@ public class JsonWriterUtils {
 			return;
 		}
 		
+		if(value instanceof ODataNamedValue){
+			ODataNamedValue nv = (ODataNamedValue)value;
+			writeNamedValue(context, writer, nv);
+			return;
+		}
+		
 		if(value instanceof ODataEntity){
 			ODataEntity entity = (ODataEntity)value;
 			writeValue(context, writer, entity.getEntityType(), entity);
@@ -173,48 +180,13 @@ public class JsonWriterUtils {
 			return;
 		}
 		
-		throw ODataErrors.notImplemented("unsupported type '{0}'",value.getClass().getName()); 
-	}
-	
-	public static void writeComplexObject(ODataWriterContext context,JSONWriter writer,EdmComplexType type, Object object){
-		if(null == object){
-			writer.nullValue();
+		if(value instanceof ODataComplexObject) {
+			ODataComplexObject complexObject = (ODataComplexObject)value;
+			writeComplexObject(context, writer, complexObject.getMetadata(), complexObject);
 			return;
 		}
 		
-		writer.startObject();
-		
-		if(object instanceof ODataComplexObject){
-			ODataComplexObject co = (ODataComplexObject)object;
-			int i=0;
-			for(ODataProperty p : co.getProperties()){
-				if(i==0){
-					i = 0;
-				}else{
-					writer.separator();
-				}
-				writeProperty(context, writer, p);
-			}
-		}else{
-			BeanModel<?> model = BeanModel.get(object.getClass());
-			
-			int i=0;
-			for(EdmProperty p : type.getDeclaredProperties()){
-				BeanProperty bp = model.getProperty(p.getName());
-				if(null != bp){
-					if(i == 0){
-						i = 1;
-					}else{
-						writer.separator();
-					}
-					
-					writer.name(p.getName());
-					writeValue(context, writer, p.getType(), bp.getValue(object));
-				}
-			}
-		}
-		
-		writer.endObject();
+		throw ODataErrors.notImplemented("unsupported type '{0}'",value.getClass().getName()); 
 	}
 	
 	public static void writeValue(ODataWriterContext context,JSONWriter writer,EdmType type,Object value){
@@ -258,6 +230,54 @@ public class JsonWriterUtils {
 		throw ODataErrors.notImplemented("unsupported type '{0}'",type.getTypeKind());
 	}
 	
+	public static void writeNamedValue(ODataWriterContext context,JSONWriter writer,ODataNamedValue nv){
+		writer.startObject();
+		writer.name(nv.getName());
+	    JsonWriterUtils.writeValue(context, writer, nv.getValueKind(), nv.getValue());
+	    writer.endObject();
+	}
+	
+	public static void writeComplexObject(ODataWriterContext context,JSONWriter writer,EdmComplexType type, Object object){
+		if(null == object){
+			writer.nullValue();
+			return;
+		}
+		
+		writer.startObject();
+		
+		if(object instanceof ODataComplexObject){
+			ODataComplexObject co = (ODataComplexObject)object;
+			int i=0;
+			for(ODataProperty p : co.getProperties()){
+				if(i==0){
+					i = 0;
+				}else{
+					writer.separator();
+				}
+				writeProperty(context, writer, p);
+			}
+		}else{
+			BeanModel<?> model = BeanModel.get(object.getClass());
+			
+			int i=0;
+			for(EdmProperty p : type.getDeclaredProperties()){
+				BeanProperty bp = model.getProperty(p.getName());
+				if(null != bp){
+					if(i == 0){
+						i = 1;
+					}else{
+						writer.separator();
+					}
+					
+					writer.name(p.getName());
+					writeValue(context, writer, p.getType(), bp.getValue(object));
+				}
+			}
+		}
+		
+		writer.endObject();
+	}
+	
 	private static void writeNavigationProperties(ODataWriterContext context,JSONWriter writer,ODataEntity entity){
 //		String uri = ODataUtils.getEntryId(context.getUrlInfo(), entity);
 		
@@ -268,12 +288,25 @@ public class JsonWriterUtils {
 				writer.name(np.getMetadata().getName());
 
 				if(np.isRelatedEntity()){
-					ODataEntity oentity = np.getRelatedEntity();
+					ODataEntity relatedEntity = np.getRelatedEntity();
 					
-					if(null == oentity){
+					if(null == relatedEntity){
 						writer.nullValue();
 					}else{
-						writeEntity(context, writer, oentity);
+						writer.startObject();
+						
+						if(!context.isMinimal()){
+							writer.startObject("__deferred").property("uri",ODataUtils.getNavPropertyPath(context.getUrlInfo(),entity,np.getMetadata())).endObject();
+						}
+						
+						if(!relatedEntity.getProperties().isEmpty()){
+							if(!context.isMinimal()){
+								writer.separator();
+							}
+							writeEntityProperties(context,writer,relatedEntity);
+						}
+						
+						writer.endObject();
 					}
 				}else{
 					ODataEntitySet entitySet = np.getRelatedEntititySet();

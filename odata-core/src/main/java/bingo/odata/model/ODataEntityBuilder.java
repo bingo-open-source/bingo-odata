@@ -153,6 +153,16 @@ public class ODataEntityBuilder implements Builder<ODataEntity>{
 		return this;
 	}
 	
+	public ODataEntityBuilder addNavigationProperty(EdmNavigationProperty navProp,ODataEntity relatedEntity){
+		navigationProperties.add(new ODataNavigationPropertyImpl(navProp, relatedEntity));
+		return this;
+	}
+	
+	public ODataEntityBuilder addNavigationProperty(EdmNavigationProperty navProp,ODataEntitySet relatedEntitySet){
+		navigationProperties.add(new ODataNavigationPropertyImpl(navProp, relatedEntitySet));
+		return this;
+	}
+	
 	public ODataEntityBuilder addNavigationProperties(Iterable<ODataNavigationProperty> navigationProperties){
 		Collections.addAll(this.navigationProperties, navigationProperties);
 		return this;
