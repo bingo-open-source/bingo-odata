@@ -30,6 +30,8 @@ import bingo.odata.producer.ext.ODataContent;
 
 public interface ODataProducer {
 	
+	ODataProducerConfig config();
+	
 	ODataServices retrieveServiceMetadata();
 	
 	ODataEntitySet retrieveEntitySet(ODataProducerContext context,EdmEntityType entityType,ODataQueryInfo queryInfo);

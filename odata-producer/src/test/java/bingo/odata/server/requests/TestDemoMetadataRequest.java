@@ -28,7 +28,7 @@ public class TestDemoMetadataRequest extends DemoODataTestBase {
 	private MetadataDocumentHandler metadataDocumentHandler = new MetadataDocumentHandler();
 	
 	@Test
-	public void testDemoServiceDocumentAtom() {
+	public void testDemoServiceDocumentAtom() throws Throwable {
 		serviceDocumentHandler.handle(context(), request, response);
 		
 		String content = response.getContent();
@@ -39,7 +39,7 @@ public class TestDemoMetadataRequest extends DemoODataTestBase {
 	}
 
 	@Test
-	public void testDemoMetadataDocument(){
+	public void testDemoMetadataDocument() throws Throwable{
 		metadataDocumentHandler.handle(context(), request, response);
 		
 		String content = response.getContent();

@@ -19,7 +19,6 @@ import java.util.Map;
 
 import bingo.odata.ODataContext;
 import bingo.odata.ODataErrors;
-import bingo.odata.ODataException;
 import bingo.odata.ODataRequest;
 import bingo.odata.ODataResponse;
 import bingo.odata.producer.ODataProducerContext;
@@ -27,11 +26,11 @@ import bingo.odata.producer.requests.ODataRequestHandler;
 
 public class BatchRequestHandler implements ODataRequestHandler {
 
-	public boolean matches(ODataContext context, ODataRequest request, Map<String, String> params) throws ODataException {
+	public boolean matches(ODataContext context, ODataRequest request, Map<String, String> params) throws Throwable {
 	    return true;
     }
 
-	public void handle(ODataProducerContext context, ODataRequest request, ODataResponse response) throws ODataException {
+	public void handle(ODataProducerContext context, ODataRequest request, ODataResponse response) throws Throwable {
 		throw ODataErrors.notImplemented();
     }
 

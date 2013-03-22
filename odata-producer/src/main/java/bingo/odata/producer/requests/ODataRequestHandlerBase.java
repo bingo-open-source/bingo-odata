@@ -25,7 +25,6 @@ import bingo.lang.logging.Log;
 import bingo.lang.logging.LogFactory;
 import bingo.meta.edm.EdmFunctionImport;
 import bingo.odata.ODataErrors;
-import bingo.odata.ODataException;
 import bingo.odata.ODataObject;
 import bingo.odata.ODataObjectKind;
 import bingo.odata.ODataReader;
@@ -42,16 +41,8 @@ public abstract class ODataRequestHandlerBase implements ODataRequestHandler {
 	
 	private static final Log log = LogFactory.get(ODataRequestHandlerBase.class);
 	
-	public final void handle(ODataProducerContext context, ODataRequest request, ODataResponse response) throws ODataException {
-	    try {
-	        doHandle(context,request,response);
-        } catch (Throwable e) {
-        	if(e instanceof ODataException){
-        		throw (ODataException)e;
-        	}else{
-        		throw new ODataException(e);	
-        	}
-        }
+	public final void handle(ODataProducerContext context, ODataRequest request, ODataResponse response) throws Throwable {
+        doHandle(context,request,response);
     }
 	
 	protected void doHandleFunctionImport(ODataProducerContext context,ODataRequest request,ODataResponse response,EdmFunctionImport functionImport) throws Throwable {

@@ -20,6 +20,9 @@ import bingo.meta.edm.EdmFunctionImport;
 import bingo.meta.edm.EdmNavigationProperty;
 import bingo.meta.edm.EdmProperty;
 import bingo.odata.ODataErrors;
+import bingo.odata.ODataFormat;
+import bingo.odata.ODataProtocol;
+import bingo.odata.ODataProtocols;
 import bingo.odata.ODataQueryInfo;
 import bingo.odata.ODataServices;
 import bingo.odata.model.ODataEntity;
@@ -31,10 +34,31 @@ import bingo.odata.producer.ext.ODataContent;
 
 public class ODataProducerAdapter implements ODataProducer {
 	
+	protected ODataProducerConfig config;
+	
 	protected ODataProducerAdapter(){
 		
 	}
 	
+	public ODataProducerConfig config() {
+		if(null == config){
+			config = new ODataProducerConfig() {
+				public ODataProtocol getProtocol() {
+					return ODataProtocols.DEFAULT;
+				}
+				
+				public ODataFormat getDefaultFormat() {
+					return getProtocol().getDefaultFormat();
+				}
+
+				public boolean isPrintStackTrace() {
+					return true;
+				}
+			};
+		}
+		return config;
+	}
+
 	public ODataServices retrieveServiceMetadata() {
 	    throw ODataErrors.notImplemented();
     }

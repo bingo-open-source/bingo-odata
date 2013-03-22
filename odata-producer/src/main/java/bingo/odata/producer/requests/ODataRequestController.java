@@ -15,6 +15,7 @@
  */
 package bingo.odata.producer.requests;
 
+import java.io.PrintWriter;
 import java.io.StringWriter;
 
 import bingo.lang.Objects;
@@ -29,7 +30,6 @@ import bingo.odata.ODataErrors;
 import bingo.odata.ODataFormat;
 import bingo.odata.ODataObjectKind;
 import bingo.odata.ODataProtocol;
-import bingo.odata.ODataProtocols;
 import bingo.odata.ODataRequest;
 import bingo.odata.ODataResponse;
 import bingo.odata.ODataUrlInfo;
@@ -44,7 +44,7 @@ public class ODataRequestController {
 	
 	protected ODataProducer producer;
 	
-	protected ODataProtocol protocol = ODataProtocols.DEFAULT;
+	protected ODataProtocol protocol;
 	
 	protected ODataRequestRouter router = new ODataRequestRouter();
 	
@@ -54,11 +54,7 @@ public class ODataRequestController {
 	
 	public ODataRequestController(ODataProducer producer){
 		this.producer = producer;
-	}
-	
-	public ODataRequestController(ODataProducer producer,ODataProtocol protocol){
-		this.producer = producer;
-		this.protocol = protocol;
+		this.protocol = producer.config().getProtocol();
 	}
 	
 	public void setProducer(ODataProducer producer) {
@@ -69,10 +65,6 @@ public class ODataRequestController {
     	this.router = router;
     }
 	
-	public void setProtocol(ODataProtocol protocol) {
-    	this.protocol = protocol;
-    }
-
 	public void execute(ODataRequest request, ODataResponse response) {
 		ODataVersion version = null;
 		ODataFormat  format  = null;
@@ -83,7 +75,7 @@ public class ODataRequestController {
 		
 		try{
 			urlInfo = ODataRequestUtils.createUrlInfo(request);
-			format  = Objects.firstNotNull(ODataRequestUtils.dataServiceFormat(request, version),protocol.getDefaultFormat());
+			format  = Objects.firstNotNull(ODataRequestUtils.dataServiceFormat(request, version),producer.config().getDefaultFormat());
 			version = ODataRequestUtils.getAndCheckVersion(protocol,request);
 			
 	        context = new ODataProducerContext(request,producer,protocol,version,format,urlInfo);
@@ -120,11 +112,11 @@ public class ODataRequestController {
 					log.warn("[{}] -> Error on request '{}' : {}","None",request.getResourcePath(),e.getMessage(),e);
 				}
 			}
-			error(ODataErrors.internalServerError(e.getMessage()),context,version,format,urlInfo,request,response);
+			error(ODataErrors.internalServerError(errorMessage(e)),context,version,format,urlInfo,request,response);
 		}
 	}
 	
-	private void endResponse(ODataRequest request, ODataResponse response, ODataContext context) throws Throwable {
+	protected void endResponse(ODataRequest request, ODataResponse response, ODataContext context) throws Throwable {
         try {
 	        response.setHeader(Headers.DATA_SERVICE_VERSION, context.getVersion().getValue());
 	        response.getWriter().close();
@@ -133,7 +125,20 @@ public class ODataRequestController {
         }	
 	}
 	
-	private void error(ODataError error,ODataProducerContext context,ODataVersion version,ODataFormat format,ODataUrlInfo urlInfo, ODataRequest request, ODataResponse response){
+	protected String errorMessage(Throwable e){
+		if(!producer.config().isPrintStackTrace()){
+			return e.getMessage();
+		}
+		
+		StringWriter out    = new StringWriter();
+		PrintWriter  writer = new PrintWriter(out);
+		
+		e.printStackTrace(writer);
+		
+		return out.toString();
+	}
+	
+	protected void error(ODataError error,ODataProducerContext context,ODataVersion version,ODataFormat format,ODataUrlInfo urlInfo, ODataRequest request, ODataResponse response){
 		if(null == version || !protocol.isVersionSupported(version)){
 			version = protocol.getDefaultVersion();
 		}

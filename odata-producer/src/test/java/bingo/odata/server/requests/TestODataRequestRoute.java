@@ -15,19 +15,20 @@
  */
 package bingo.odata.server.requests;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.Test;
 
-import bingo.odata.ODataException;
 import bingo.odata.ODataRequest;
 import bingo.odata.ODataResponse;
 import bingo.odata.producer.ODataProducerContext;
 import bingo.odata.producer.requests.ODataRequestHandler;
 import bingo.odata.producer.requests.ODataRequestRoute;
-
-import static org.junit.Assert.*;
 
 public class TestODataRequestRoute {
 
@@ -43,7 +44,7 @@ public class TestODataRequestRoute {
 	}
 	
 	private static final class DummyHandler implements ODataRequestHandler {
-		public void handle(ODataProducerContext context, ODataRequest request, ODataResponse response) throws ODataException {
+		public void handle(ODataProducerContext context, ODataRequest request, ODataResponse response) throws Throwable {
 	        
         }
 	}
