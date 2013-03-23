@@ -46,7 +46,7 @@ public class FunctionRequestHandler extends ODataRequestHandlerBase {
 			context.setEntityType(entityType);
 		}
 		
-		EdmFunctionImport func = context.getServices().findFunctionImport(functionName);
+		EdmFunctionImport func = context.getServices().findFunctionImport(functionName,context.getRequest().getMethod());
 		if(null == func && !Strings.isEmpty(entitySetName)){
 			func = context.getProducer().findFunctionImport(context,entitySetName,functionName);
 		}

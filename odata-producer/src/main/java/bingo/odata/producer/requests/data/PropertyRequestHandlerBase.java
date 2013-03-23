@@ -48,7 +48,7 @@ public abstract class PropertyRequestHandlerBase extends EntityRequestHandlerBas
 			return;
 		}
 		
-		EdmFunctionImport func = context.getServices().findFunctionImport(entitySet.getName() + "." + entityPropertyName);
+		EdmFunctionImport func = context.getProducer().findFunctionImport(context,entitySet.getName(),entityPropertyName);
 		if(null != func){
 			doHandleFunctionImport(context, request, response, func);
 			return;

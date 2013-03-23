@@ -18,6 +18,7 @@ package bingo.odata.format.xml;
 import static bingo.meta.edm.EdmUtils.fullQualifiedName;
 import bingo.lang.Strings;
 import bingo.lang.http.HttpContentTypes;
+import bingo.lang.http.HttpMethods;
 import bingo.lang.xml.XmlWriter;
 import bingo.meta.edm.EdmAssociation;
 import bingo.meta.edm.EdmAssociationSet;
@@ -304,9 +305,15 @@ public class XmlMetadataDocumentWriter extends ODataXmlWriter<ODataServices> {
 	private static void writeFunctionImport(XmlWriter writer,EdmSchema schema,EdmFunctionImport func) {
 		writer.startElement("FunctionImport")
 		  .attribute("Name", func.getName())
-		  .attributeOptional("EntitySet", func.getEntitySet())
-		  .attributeOptional(METADATA_NS, "HttpMethod", func.getHttpMethod())
-		  .attribute("ReturnType",fullQualifiedName(schema, func.getReturnType()));
+		  .attributeOptional("EntitySet", func.getEntitySet());
+		
+		if(!(Strings.isEmpty(func.getHttpMethod()) || Strings.equals(HttpMethods.ALL, func.getHttpMethod()))){
+			writer.attribute(METADATA_NS,"HttpMethod", func.getHttpMethod());
+		}
+		
+		if(func.getReturnType() != null){
+			writer.attribute("ReturnType",fullQualifiedName(schema, func.getReturnType()));
+		}
 		
 		if(!func.isSideEffecting()){
 			writer.attribute("IsSideEffecting","false");

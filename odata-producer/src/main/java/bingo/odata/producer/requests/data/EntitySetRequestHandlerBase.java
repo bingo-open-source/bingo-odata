@@ -43,7 +43,7 @@ public abstract class EntitySetRequestHandlerBase extends ODataRequestHandlerBas
 		EdmEntitySet entitySet = services.findEntitySet(entitySetName);
 		
 		if(null == entitySet){
-			EdmFunctionImport functionImport = services.findFunctionImport(entitySetName);
+			EdmFunctionImport functionImport = services.findFunctionImport(entitySetName,context.getRequest().getMethod());
 			
 			if(null != functionImport){
 				doHandleFunctionImport(context,request,response,functionImport);

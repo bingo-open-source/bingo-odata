@@ -21,6 +21,8 @@ import java.util.List;
 import bingo.lang.Enumerable;
 import bingo.lang.Enumerables;
 import bingo.lang.Named;
+import bingo.lang.Strings;
+import bingo.lang.http.HttpMethods;
 import bingo.meta.edm.EdmEntityContainer;
 import bingo.meta.edm.EdmEntitySet;
 import bingo.meta.edm.EdmEntityType;
@@ -126,16 +128,51 @@ public class ODataServices implements Named,ODataObject {
 		return null;
 	}
 	
-	public EdmFunctionImport findFunctionImport(String functionName){
+	public EdmFunctionImport[] findFunctionImport(String functionName){
+		List<EdmFunctionImport> list = new ArrayList<EdmFunctionImport>();
+		
 		for(EdmSchema schema : schemas){
 			for(EdmEntityContainer container : schema.getEntityContainers()){
 				for(EdmFunctionImport functionImport : container.getFunctionImports()){
 					if(functionImport.getName().equalsIgnoreCase(functionName)){
-						return functionImport;
+						list.add(functionImport);
 					}
 				}
 			}
 		}
+		return list.toArray(new EdmFunctionImport[list.size()]);
+	}
+	
+	public EdmFunctionImport findFunctionImport(String functionName,String httpMethod){
+		EdmFunctionImport[] funcs = findFunctionImport(functionName);
+		return findFunctionImportMatched(funcs, httpMethod);
+	}
+	
+	public static EdmFunctionImport findFunctionImportMatched(EdmFunctionImport[] funcs,String httpMethod){
+		if(funcs.length == 0){
+			return null;
+		}
+		
+		if(funcs.length == 1){
+			EdmFunctionImport func = funcs[0];
+			if(Strings.isEmpty(func.getHttpMethod()) || HttpMethods.ALL.equals(func.getHttpMethod()) || func.getHttpMethod().equalsIgnoreCase(httpMethod)){
+				return func;
+			}
+			return null;
+		}
+		
+		for(EdmFunctionImport func : funcs){
+			if(Strings.equalsIgnoreCase(func.getHttpMethod(),httpMethod)){
+				return func;
+			}
+		}
+		
+		for(EdmFunctionImport func : funcs){
+			if(Strings.isEmpty(func.getHttpMethod()) || HttpMethods.ALL.equals(func.getHttpMethod())){
+				return func;
+			}
+		}
+		
 		return null;
 	}
 }
