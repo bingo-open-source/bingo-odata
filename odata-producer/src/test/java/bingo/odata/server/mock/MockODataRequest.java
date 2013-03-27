@@ -57,6 +57,10 @@ public class MockODataRequest implements ODataRequest {
 	    return new StringReader(Strings.trim(content));
     }
 
+	public Map<String, String> getHeaders() {
+		return headers;
+	}
+
 	public String getContent() {
     	return content;
     }

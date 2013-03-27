@@ -24,6 +24,8 @@ public interface ODataRequest {
 
 	String getContentType();
 	
+	Map<String,String> getHeaders();
+	
 	String getHeader(String name);
 	
 	String getParameter(String name);

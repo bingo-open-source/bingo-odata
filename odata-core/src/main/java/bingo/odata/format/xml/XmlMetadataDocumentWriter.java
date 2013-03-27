@@ -26,6 +26,7 @@ import bingo.meta.edm.EdmComplexType;
 import bingo.meta.edm.EdmEntityContainer;
 import bingo.meta.edm.EdmEntitySet;
 import bingo.meta.edm.EdmEntityType;
+import bingo.meta.edm.EdmEntityTypeRef;
 import bingo.meta.edm.EdmEnumMember;
 import bingo.meta.edm.EdmEnumType;
 import bingo.meta.edm.EdmFunctionImport;
@@ -37,6 +38,7 @@ import bingo.meta.edm.EdmSimpleType;
 import bingo.meta.edm.EdmType;
 import bingo.meta.edm.EdmUtils;
 import bingo.meta.edm.EdmFeedCustomization.SyndicationTextContentKind;
+import bingo.odata.ODataVersion;
 import bingo.odata.ODataWriterContext;
 import bingo.odata.ODataServices;
 import bingo.odata.format.ODataXmlWriter;
@@ -73,7 +75,7 @@ public class XmlMetadataDocumentWriter extends ODataXmlWriter<ODataServices> {
 			writeDocument(writer, schema);
 
 			//EntityType
-			writeEntityTypes(writer, schema);
+			writeEntityTypes(context,writer, schema);
 			
 			//Association
 			writeAssociations(writer, schema);
@@ -88,14 +90,14 @@ public class XmlMetadataDocumentWriter extends ODataXmlWriter<ODataServices> {
 			writeFunctions(writer, schema);
 			
 			//EntityContainer
-			writeEntityContainers(writer, schema);
+			writeEntityContainers(context,writer, schema);
 		}
 		
 		writer.endDocument();
 		writer.close();
     }
 
-	private static void writeEntityTypes(XmlWriter writer,EdmSchema schema) {
+	private static void writeEntityTypes(ODataWriterContext context,XmlWriter writer,EdmSchema schema) {
 		for(EdmEntityType entityType : schema.getEntityTypes()){
 			writer.startElement("EntityType")
 				  .attribute("Name", entityType.getName());
@@ -108,8 +110,10 @@ public class XmlMetadataDocumentWriter extends ODataXmlWriter<ODataServices> {
 				writer.attribute(METADATA_NS, "HasStream","true");
 			}
 			
-			if(entityType.isOpenType()){
-				writer.attribute("OpenType","true");
+			if(context.getVersion().isGreaterThanOrEqualsTo(ODataVersion.V3)){
+				if(entityType.isOpenType()){
+					writer.attribute("OpenType","true");
+				}
 			}
 
 			//key
@@ -213,7 +217,7 @@ public class XmlMetadataDocumentWriter extends ODataXmlWriter<ODataServices> {
 		}
 	}
 
-	private static void writeEntityContainers(XmlWriter writer,EdmSchema schema) {
+	private static void writeEntityContainers(ODataWriterContext context, XmlWriter writer,EdmSchema schema) {
 		for(EdmEntityContainer ec : schema.getEntityContainers()){
 			
 			writer.startElement("EntityContainer")
@@ -259,7 +263,7 @@ public class XmlMetadataDocumentWriter extends ODataXmlWriter<ODataServices> {
 			
 			//FunctionImports
 			for(EdmFunctionImport func : ec.getFunctionImports()){
-				writeFunctionImport(writer,schema,func);
+				writeFunctionImport(context,writer,schema,func);
 			}
 			
 			writer.endElement();
@@ -302,7 +306,7 @@ public class XmlMetadataDocumentWriter extends ODataXmlWriter<ODataServices> {
 		}
 	}
 	
-	private static void writeFunctionImport(XmlWriter writer,EdmSchema schema,EdmFunctionImport func) {
+	private static void writeFunctionImport(ODataWriterContext context,XmlWriter writer,EdmSchema schema,EdmFunctionImport func) {
 		writer.startElement("FunctionImport")
 		  .attribute("Name", func.getName())
 		  .attributeOptional("EntitySet", func.getEntitySet());
@@ -313,15 +317,23 @@ public class XmlMetadataDocumentWriter extends ODataXmlWriter<ODataServices> {
 		
 		if(func.getReturnType() != null){
 			writer.attribute("ReturnType",fullQualifiedName(schema, func.getReturnType()));
+			
+			if(func.getReturnType().isEntity()){
+				writer.attribute("EntitySet",context.getServices().findEntitySet((EdmEntityType)func.getReturnType()).getName());
+			}else if(func.getReturnType().isEntityRef()){
+				writer.attribute("EntitySet",context.getServices().findEntitySet(((EdmEntityTypeRef)func.getReturnType()).getName()).getName());
+			}
 		}
 		
 		if(!func.isSideEffecting()){
 			writer.attribute("IsSideEffecting","false");
 		}
 		
+		/*
 		if(!func.getParameters().isEmpty()){
 			writer.attribute("IsBindable", "true");
 		}
+		*/
 		  
 		for(EdmParameter param : func.getParameters()){
 			writer.startElement("Parameter")

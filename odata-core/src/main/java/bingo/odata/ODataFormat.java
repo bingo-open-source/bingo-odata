@@ -20,6 +20,8 @@ import bingo.odata.ODataConstants.ContentTypes;
 
 public enum ODataFormat implements Valued<String> {
 	
+	Default("default",""),
+	
 	Atom("atom",ContentTypes.APPLICATION_ATOM_XML),
 	
 	Json("json",ContentTypes.APPLICATION_JSON_LIGHT),

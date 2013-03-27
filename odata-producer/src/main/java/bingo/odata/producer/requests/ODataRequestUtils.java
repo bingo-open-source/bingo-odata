@@ -85,6 +85,11 @@ public class ODataRequestUtils {
 			if(!Strings.isEmpty(accept)){
 				return parseFormatFromHeader(version,accept);
 			}
+			
+			String contentType = request.getContentType();
+			if(!Strings.isEmpty(contentType)){
+				return parseFormatFromHeader(version,contentType);
+			}
 		}
 
 		return null;
@@ -140,6 +145,7 @@ public class ODataRequestUtils {
 			String mediaType = element.getName();
 			if(HttpContentTypes.APPLICATION_ATOM_XML.equals(mediaType) || 
 			   HttpContentTypes.APPLICATION_XML.equals(mediaType) || 
+			   HttpContentTypes.APPLICATION_SOAP_XML.equals(mediaType) ||
 			   HttpContentTypes.WILDCARD.equals(mediaType)){
 				return ODataFormat.Atom;
 			}

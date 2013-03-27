@@ -17,6 +17,8 @@ package bingo.odata.producer.servlets;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.util.Enumeration;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -37,6 +39,7 @@ public class ODataServletRequest implements ODataRequest {
 	private final String             serviceRootUrl;
 	private final String             resourcePath;
 	private Map<String, String> 	 requestParameters;
+	private Map<String, String>      headers;
 	
 	public ODataServletRequest(HttpServletRequest request){
 		this(request,request.getServletPath());
@@ -61,6 +64,20 @@ public class ODataServletRequest implements ODataRequest {
 
 	public String getContentType() {
 		return request.getContentType();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public Map<String, String> getHeaders() {
+		if(null == headers){
+			headers = new LinkedHashMap<String, String>();
+			Enumeration<String> names = request.getHeaderNames();
+			
+			while(names.hasMoreElements()){
+				String name = names.nextElement();
+				headers.put(name,request.getHeader(name));
+			}
+		}
+		return headers;
 	}
 
 	public String getHeader(String name) {

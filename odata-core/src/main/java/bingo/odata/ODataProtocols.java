@@ -43,7 +43,7 @@ public class ODataProtocols {
 	public static final ODataProtocol DEFAULT = V3;
 	
 	private static ODataProtocol v3(){
-		ODataProtocolBuilder v3builder = new ODataProtocolBuilder(ODataVersion.V1, ODataVersion.V3, ODataVersion.V3, ODataFormat.Json);
+		ODataProtocolBuilder v3builder = new ODataProtocolBuilder(ODataVersion.V1, ODataVersion.V3, ODataVersion.V2, ODataFormat.Json);
 		
 		//supported format
 		v3builder.addSupportedFormats(ODataFormat.Atom,ODataFormat.Json);
@@ -55,11 +55,11 @@ public class ODataProtocols {
 		v3builder.addReader(Json, Entity, new JsonEntityReader());
 		
 		//Atom writers
-		v3builder.addWriter(Atom,ServiceDocument, new AtomServiceDocumentWriter());
-		v3builder.addWriter(Atom,MetadataDocument,new XmlMetadataDocumentWriter());
-		v3builder.addWriter(Atom,Error,			  new XmlErrorWriter());
-		v3builder.addWriter(Atom,EntitySet,		  new AtomEntitySetWriter());
-		v3builder.addWriter(Atom,Entity,		  new AtomEntityWriter());
+		v3builder.addWriter(Atom,ServiceDocument, 	 new AtomServiceDocumentWriter());
+		v3builder.addWriter(Atom,MetadataDocument,	 new XmlMetadataDocumentWriter());
+		v3builder.addWriter(Atom,Error,			  	 new XmlErrorWriter());
+		v3builder.addWriter(Atom,EntitySet,		  	 new AtomEntitySetWriter());
+		v3builder.addWriter(Atom,Entity,		  	 new AtomEntityWriter());
 		
 		//Json writers
 		v3builder.addWriter(Json,ServiceDocument, new JsonServiceDocumentWriter());
@@ -69,6 +69,16 @@ public class ODataProtocols {
 		v3builder.addWriter(Json,Property,		  new JsonPropertyWriter());
 		v3builder.addWriter(Json,Raw,		  	  new JsonRawValueWriter());
 		v3builder.addWriter(Json,NamedValue,      new JsonNamedValueWriter());
+
+		//Default writers
+		v3builder.addWriter(Default,ServiceDocument, new JsonServiceDocumentWriter());
+		v3builder.addWriter(Default,MetadataDocument,new XmlMetadataDocumentWriter());
+		v3builder.addWriter(Default,Error,			 new JsonErrorWriter());
+		v3builder.addWriter(Default,EntitySet,		 new JsonEntitySetWriter());
+		v3builder.addWriter(Default,Entity,		  	 new JsonEntityWriter());
+		v3builder.addWriter(Default,Property,		 new JsonPropertyWriter());
+		v3builder.addWriter(Default,Raw,		  	 new JsonRawValueWriter());
+		v3builder.addWriter(Default,NamedValue,      new JsonNamedValueWriter());
 		
 		return v3builder.build();
 	}

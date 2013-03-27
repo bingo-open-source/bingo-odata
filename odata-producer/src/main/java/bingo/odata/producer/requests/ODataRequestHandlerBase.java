@@ -25,6 +25,7 @@ import bingo.lang.logging.Log;
 import bingo.lang.logging.LogFactory;
 import bingo.meta.edm.EdmFunctionImport;
 import bingo.odata.ODataErrors;
+import bingo.odata.ODataFormat;
 import bingo.odata.ODataObject;
 import bingo.odata.ODataObjectKind;
 import bingo.odata.ODataReader;
@@ -116,20 +117,24 @@ public abstract class ODataRequestHandlerBase implements ODataRequestHandler {
 	}
 	
 	protected static <T extends ODataObject> ODataReader<T> getReader(ODataProducerContext context,ODataObjectKind kind) {
-		ODataReader<T> reader = context.getProtocol().getReader(context.getVersion(),context.getFormat(), kind);
+		ODataFormat format = context.getFormatOrDefault();
+		
+		ODataReader<T> reader = context.getProtocol().getReader(context.getVersion(),format, kind);
 		
 		if(null == reader){
-			throw ODataErrors.unsupportedDataServiceFormat(context.getFormat().getValue());
+			throw ODataErrors.unsupportedDataServiceFormat(context.getFormat().getValue());	
 		}
 		
 		return reader;
 	}
 	
 	protected static <T extends ODataObject> ODataWriter<T> getWriter(ODataProducerContext context,ODataObjectKind kind) {
-		ODataWriter<T> writer = context.getProtocol().getWriter(context.getVersion(),context.getFormat(), kind);
+		ODataFormat format = context.getFormatOrDefault();
+		
+		ODataWriter<T> writer = context.getProtocol().getWriter(context.getVersion(),format, kind);
 		
 		if(null == writer){
-			throw ODataErrors.unsupportedDataServiceFormat(context.getFormat().getValue());
+			throw ODataErrors.unsupportedDataServiceFormat(format.getValue());
 		}
 		
 		return writer;

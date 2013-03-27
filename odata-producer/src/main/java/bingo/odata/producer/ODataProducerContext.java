@@ -75,6 +75,10 @@ public class ODataProducerContext implements ODataWriterContext,ODataReaderConte
 	public ODataFormat getFormat() {
     	return format;
     }
+	
+	public ODataFormat getFormatOrDefault(){
+		return null == format ? ODataFormat.Default : format;
+	}
 
 	public ODataUrlInfo getUrlInfo() {
     	return urlInfo;

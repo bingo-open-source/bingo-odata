@@ -18,7 +18,6 @@ package bingo.odata.producer.requests;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
-import bingo.lang.Objects;
 import bingo.lang.StopWatch;
 import bingo.lang.http.HttpStatus;
 import bingo.lang.logging.Log;
@@ -75,7 +74,7 @@ public class ODataRequestController {
 		
 		try{
 			urlInfo = ODataRequestUtils.createUrlInfo(request);
-			format  = Objects.firstNotNull(ODataRequestUtils.dataServiceFormat(request, version),producer.config().getDefaultFormat());
+			format  = ODataRequestUtils.dataServiceFormat(request, version); //may be null
 			version = ODataRequestUtils.getAndCheckVersion(protocol,request);
 			
 	        context = new ODataProducerContext(request,producer,protocol,version,format,urlInfo);
@@ -143,8 +142,8 @@ public class ODataRequestController {
 			version = protocol.getDefaultVersion();
 		}
 		
-		if(null == format || !protocol.isFormatSupported(format)){
-			format = protocol.getDefaultFormat();
+		if(null == format){
+			format = ODataFormat.Default;
 		}
 		
 		if(null == context){

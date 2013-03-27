@@ -62,12 +62,14 @@ public class ODataRequestRouter {
 	static {
 		//Metadata Requests
 		add(GET,	"/",							   														new ServiceDocumentHandler());
+		add(POST,	"/",							   														new ServiceDocumentHandler());
 		add(GET,	"/\\$metadata",					   														new MetadataDocumentHandler());
+		add(POST,	"/\\$metadata",					   														new MetadataDocumentHandler());
 
 		//Batch Request
 		add("*",	"/\\$batch",						   													new BatchRequestHandler());
 		
-		//Query Request ( not standard odata request )
+		//Query Request (not standard odata request )
 		add(GET, 	"/\\$query",																			new QueryRequesthandler());
 		
 		//Reterieve Requests

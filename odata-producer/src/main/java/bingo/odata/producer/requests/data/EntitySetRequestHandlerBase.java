@@ -38,6 +38,11 @@ public abstract class EntitySetRequestHandlerBase extends ODataRequestHandlerBas
 			throw ODataErrors.badRequest("entitySetName cannot be empty");
 		}
 		
+	    // visual studio will send a soap mex request
+	    if (entitySetName.equals("mex") && request.getContentType().startsWith("application/soap+xml")){
+	    	throw ODataErrors.notImplemented("SOAP mex requests are not supported");
+	    }
+		
 		ODataServices services = context.getServices();
 		
 		EdmEntitySet entitySet = services.findEntitySet(entitySetName);

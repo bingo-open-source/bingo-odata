@@ -94,11 +94,18 @@ public class ODataServices implements Named,ODataObject {
 	}
 	
 	public EdmEntitySet findEntitySet(EdmEntityTypeRef entityTypeRef){
+		boolean fullQualified = !entityTypeRef.getName().equalsIgnoreCase(entityTypeRef.getFullQualifiedName());
 		for(EdmSchema schema : schemas){
 			for(EdmEntityContainer container : schema.getEntityContainers()){
 				for(EdmEntitySet entitySet : container.getEntitySets()){
-					if(entitySet.getEntityType().getFullQualifiedName().equalsIgnoreCase(entityTypeRef.getFullQualifiedName())){
-						return entitySet;
+					if(fullQualified){
+						if(entitySet.getEntityType().getFullQualifiedName().equalsIgnoreCase(entityTypeRef.getFullQualifiedName())){
+							return entitySet;
+						}	
+					}else{
+						if(entitySet.getEntityType().getName().equalsIgnoreCase(entityTypeRef.getName())){
+							return entitySet;
+						}	
 					}
 				}
 			}
