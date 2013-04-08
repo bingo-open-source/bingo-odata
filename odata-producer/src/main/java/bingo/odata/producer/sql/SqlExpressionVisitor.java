@@ -129,7 +129,11 @@ public class SqlExpressionVisitor extends ExpressionVisitorBase {
 
 	@Override
 	public boolean visit(EqExpression expr) {
-		stack.add(" = ");
+		if(expr.getRHS() instanceof NullLiteral){
+			stack.add(" is ");
+		}else{
+			stack.add(" = ");	
+		}
 		return true;
 	}
 

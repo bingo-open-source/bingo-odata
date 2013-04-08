@@ -42,4 +42,10 @@ public class TestSqlFilter extends Assert {
 		assertEquals("a LIKE ?",filter("substringof(a,'xx')"));
 		assertEquals("a LIKE ?",filter("startswith('xx',a)"));
 	}
+	
+	@Test
+	public void testNullEquals(){
+		assertEquals("a is null",filter("a eq null"));
+		assertEquals("a is null AND b < ?",filter("a eq null and b lt 0"));
+	}
 }
