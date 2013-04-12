@@ -55,7 +55,7 @@ public class JsonWriterUtils {
 		writer.startObject();
 		
 		if(entitySet.getInlineCount() != null){
-			writer.property("__count", String.valueOf(entitySet.getInlineCount())).separator();
+			writer.property("__count", entitySet.getInlineCount()).separator();
 		}
 		
 		writer.name("results");
