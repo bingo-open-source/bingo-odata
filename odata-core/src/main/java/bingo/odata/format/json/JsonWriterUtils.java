@@ -355,7 +355,7 @@ public class JsonWriterUtils {
         } else if (EdmSimpleType.BINARY.equals(type)) {
         	writer.value(Base64.encode((byte[])value));
         } else if (EdmSimpleType.DATETIME.equals(type)) {
-        	writer.value((Date)value);
+        	writer.value(formatDateTimeForJson((Date)value));
         } else if (EdmSimpleType.DATETIME_OFFSET.equals(type)) {
             writer.value(((DateTimeOffset)value).getTimestamp());
         } else if (EdmSimpleType.TIME.equals(type)) {
@@ -363,6 +363,13 @@ public class JsonWriterUtils {
         } else{
         	throw ODataErrors.notImplemented("'" + type.getFullQualifiedName() + "' not supported");	
         }
+	}
+	
+	static final String	DATETIME_JSON_SUFFIX = ")\\/";
+	static final String	DATETIME_JSON_PREFIX = "\\/Date(";
+	
+	public static String formatDateTimeForJson(Date date) {
+		return DATETIME_JSON_PREFIX + date.getTime() + DATETIME_JSON_SUFFIX;
 	}
 
 }
