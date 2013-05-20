@@ -146,7 +146,7 @@ public abstract class ODataAtomWriter<T extends ODataObject> extends ODataXmlWri
 			writeTitle(writer, Converts.toString(titleValue),type);
 		}
 		
-		if(null != summaryProperty){
+		if(null != summaryValue){
 			String type  = Strings.isEmpty(summaryProperty.getFcContentKind()) ? SyndicationTextContentKind.Text.getValue() : summaryProperty.getFcContentKind();
 			
 			writeSummary(writer, Converts.toString(summaryValue),type);
