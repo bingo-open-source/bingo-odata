@@ -33,21 +33,32 @@ import bingo.meta.edm.EdmSchema;
 public class ODataServices implements Named,ODataObject {
 	
 	private final String name;
+	
+	private final ODataVersion version;
 
 	private final Enumerable<EdmSchema> schemas;
 	
 	public ODataServices(Iterable<EdmSchema> schemas){
-		this(ODataConstants.Defaults.DATA_SERVICE_NAME,schemas);
+		this(ODataConstants.Defaults.DATA_SERVICE_NAME,null,schemas);
 	}
 	
-	public ODataServices(String name,Iterable<EdmSchema> schemas){
+	public ODataServices(ODataVersion version,Iterable<EdmSchema> schemas){
+		this(ODataConstants.Defaults.DATA_SERVICE_NAME,version,schemas);
+	}
+	
+	public ODataServices(String name,ODataVersion version,Iterable<EdmSchema> schemas){
 		this.name    = name;
+		this.version = version;
 		this.schemas = Enumerables.of(schemas);
 	}
 
 	public String getName() {
 	    return name;
     }
+	
+	public ODataVersion getVersion() {
+		return version;
+	}
 
 	public Enumerable<EdmSchema> getSchemas() {
     	return schemas;

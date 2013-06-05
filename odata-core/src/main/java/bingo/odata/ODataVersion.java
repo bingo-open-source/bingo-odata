@@ -69,4 +69,19 @@ public enum ODataVersion implements Valued<String> {
 	public boolean isLessThanOrEqualsTo(ODataVersion v){
 		return value.compareTo(v.getValue()) <= 0; 
 	}
+	
+	public static ODataVersion parse(String string){
+		if("1.0".equals(string)){
+			return V1;
+		}
+		
+		if("2.0".equals(string)){
+			return V2;
+		}
+		
+		if("3.0".equals(string)){
+			return V3;
+		}
+		return null;
+	}
 }

@@ -1,0 +1,1852 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx" Version="1.0">
+  <edmx:DataServices xmlns:d="http://schemas.microsoft.com/ado/2007/08/dataservices" xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" m:DataServiceVersion="2.0">
+    <Schema xmlns="http://schemas.microsoft.com/ado/2007/05/edm" Namespace="Default">
+      <EntityType Name="Role">
+        <Key>
+          <PropertyRef Name="id" />
+        </Key>
+        <Property Name="id" Type="Edm.Guid" Nullable="false" />
+        <Property Name="name" Type="Edm.String" Nullable="true" MaxLength="150" m:FC_TargetPath="SyndicationTitle" m:FC_CcontentKind="text" m:FC_KeepInContent="false" />
+        <Property Name="description" Type="Edm.String" Nullable="true" MaxLength="65535" m:FC_TargetPath="SyndicationSummary" m:FC_CcontentKind="text" m:FC_KeepInContent="false" />
+        <Property Name="type" Type="Edm.Int64" Nullable="true" />
+        <Property Name="participantType" Type="Edm.Int64" Nullable="true" />
+        <Property Name="createdBy" Type="Edm.String" Nullable="true" MaxLength="38" DefaultValue="@{env.User.Name}" />
+        <Property Name="createdDate" Type="Edm.DateTime" Nullable="true" DefaultValue="@{env.Now}" />
+        <Property Name="lastUpdatedBy" Type="Edm.String" Nullable="true" MaxLength="38" DefaultValue="@{env.User.Name}" />
+        <Property Name="lastUpdatedDate" Type="Edm.DateTime" Nullable="true" DefaultValue="@{env.Now}" />
+        <NavigationProperty Name="Users" Relationship="Default.User_Role" FromRole="RoleRoles" ToRole="User" />
+      </EntityType>
+      <EntityType Name="Attachment">
+        <Key>
+          <PropertyRef Name="id" />
+        </Key>
+        <Property Name="id" Type="Edm.Guid" Nullable="false" />
+        <Property Name="entity" Type="Edm.String" Nullable="false" MaxLength="255" />
+        <Property Name="recordId" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="name" Type="Edm.String" Nullable="false" MaxLength="255" m:FC_TargetPath="SyndicationTitle" m:FC_CcontentKind="text" m:FC_KeepInContent="false" />
+        <Property Name="content" Type="Edm.String" Nullable="false" MaxLength="255" />
+        <Property Name="createdTime" Type="Edm.DateTime" Nullable="true" DefaultValue="@{env.Now}" />
+        <Property Name="modifiedTime" Type="Edm.DateTime" Nullable="true" DefaultValue="@{env.Now}" />
+        <Property Name="modifiedBy" Type="Edm.Guid" Nullable="true" DefaultValue="@{env.User.Id}" />
+        <Property Name="createdBy" Type="Edm.Guid" Nullable="true" DefaultValue="@{env.User.Id}" />
+        <NavigationProperty Name="User1" Relationship="Default.Attachment_User" FromRole="Attachment" ToRole="UserUser1" />
+        <NavigationProperty Name="User" Relationship="Default.Attachment_User" FromRole="Attachment" ToRole="UserUser" />
+      </EntityType>
+      <EntityType Name="UserOpportunity">
+        <Key>
+          <PropertyRef Name="userId" />
+          <PropertyRef Name="opportunityId" />
+        </Key>
+        <Property Name="userId" Type="Edm.String" Nullable="false" MaxLength="255" />
+        <Property Name="opportunityId" Type="Edm.String" Nullable="false" MaxLength="255" />
+      </EntityType>
+      <EntityType Name="Area">
+        <Key>
+          <PropertyRef Name="id" />
+        </Key>
+        <Property Name="id" Type="Edm.Int32" Nullable="false" />
+        <Property Name="code" Type="Edm.String" Nullable="false" MaxLength="255" />
+        <Property Name="name" Type="Edm.String" Nullable="false" MaxLength="255" m:FC_TargetPath="SyndicationTitle" m:FC_CcontentKind="text" m:FC_KeepInContent="false" />
+        <Property Name="cityId" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <NavigationProperty Name="City" Relationship="Default.Area_City" FromRole="Area" ToRole="CityCity" />
+      </EntityType>
+      <EntityType Name="Country">
+        <Key>
+          <PropertyRef Name="id" />
+        </Key>
+        <Property Name="id" Type="Edm.Guid" Nullable="false" />
+        <Property Name="code" Type="Edm.String" Nullable="false" MaxLength="255" />
+        <Property Name="name" Type="Edm.String" Nullable="false" MaxLength="255" m:FC_TargetPath="SyndicationTitle" m:FC_CcontentKind="text" m:FC_KeepInContent="false" />
+        <NavigationProperty Name="Province" Relationship="Default.Province_Country" FromRole="CountryCountry" ToRole="Province" />
+      </EntityType>
+      <EntityType Name="ActivityItem">
+        <Key>
+          <PropertyRef Name="id" />
+        </Key>
+        <Property Name="id" Type="Edm.Guid" Nullable="false" />
+        <Property Name="entityName" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="name" Type="Edm.String" Nullable="false" MaxLength="255" DefaultValue="无主题" m:FC_TargetPath="SyndicationTitle" m:FC_CcontentKind="text" m:FC_KeepInContent="false" />
+        <Property Name="recordId" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="type" Type="Edm.String" Nullable="false" MaxLength="255" />
+        <Property Name="createdBy" Type="Edm.Guid" Nullable="false" DefaultValue="@{env.User.id}" />
+        <Property Name="modifiedBy" Type="Edm.Guid" Nullable="false" DefaultValue="@{env.User.id}" />
+        <Property Name="aim" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="modifiedTime" Type="Edm.DateTime" Nullable="false" DefaultValue="@{env.Now}" m:FC_TargetPath="SyndicationUpdated" m:FC_CcontentKind="text" m:FC_KeepInContent="false" />
+        <Property Name="followedTime" Type="Edm.DateTime" Nullable="true" DefaultValue="@{env.Now}" />
+        <Property Name="createdTime" Type="Edm.DateTime" Nullable="false" DefaultValue="@{env.Now}" />
+        <NavigationProperty Name="User" Relationship="Default.ActivityItem_User" FromRole="ActivityItem" ToRole="UserUser" />
+        <NavigationProperty Name="User1" Relationship="Default.ActivityItem_User" FromRole="ActivityItem" ToRole="UserUser1" />
+      </EntityType>
+      <EntityType Name="ActivityComment" BaseType="Default.ActivityItem">
+        <Property Name="content" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="parentId" Type="Edm.String" Nullable="true" MaxLength="255" />
+      </EntityType>
+      <EntityType Name="Quotation">
+        <Key>
+          <PropertyRef Name="id" />
+        </Key>
+        <Property Name="id" Type="Edm.Guid" Nullable="false" />
+        <Property Name="customerPotentialId" Type="Edm.Guid" Nullable="true" />
+        <Property Name="customerId" Type="Edm.Guid" Nullable="true" />
+        <Property Name="totalPrice" Type="Edm.Decimal" Nullable="false" Precision="19" Scale="19" />
+        <Property Name="discount" Type="Edm.Decimal" Nullable="true" Precision="19" Scale="19" />
+        <Property Name="discountedPrice" Type="Edm.Decimal" Nullable="true" Precision="19" Scale="19" />
+        <Property Name="description" Type="Edm.String" Nullable="true" MaxLength="1000" m:FC_TargetPath="SyndicationSummary" m:FC_CcontentKind="text" m:FC_KeepInContent="false" />
+        <Property Name="quoteDate" Type="Edm.DateTime" Nullable="true" DefaultValue="@{env.Now}" />
+        <Property Name="isApproval" Type="Edm.Boolean" Nullable="false" DefaultValue="0" />
+        <Property Name="approvedBy" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="createdTime" Type="Edm.DateTime" Nullable="true" DefaultValue="@{env.Now}" />
+        <Property Name="modifiedTime" Type="Edm.DateTime" Nullable="true" DefaultValue="@{env.Now}" />
+        <Property Name="quotationNum" Type="Edm.String" Nullable="false" MaxLength="500" m:FC_TargetPath="SyndicationTitle" m:FC_CcontentKind="text" m:FC_KeepInContent="false" />
+        <Property Name="modifiedBy" Type="Edm.Guid" Nullable="true" DefaultValue="@{env.User.Id}" />
+        <Property Name="createdBy" Type="Edm.Guid" Nullable="true" DefaultValue="@{env.User.Id}" />
+        <Property Name="quotedBy" Type="Edm.Guid" Nullable="true" DefaultValue="@{env.User.Id}" />
+        <NavigationProperty Name="CustomerPotential" Relationship="Default.Quotation_CustomerPotential" FromRole="Quotation" ToRole="CustomerPotentialCustomerPotential" />
+        <NavigationProperty Name="Customer" Relationship="Default.Quotation_Customer" FromRole="Quotation" ToRole="CustomerCustomer" />
+        <NavigationProperty Name="User1" Relationship="Default.Quotation_User" FromRole="Quotation" ToRole="UserUser1" />
+        <NavigationProperty Name="User" Relationship="Default.Quotation_User" FromRole="Quotation" ToRole="UserUser" />
+        <NavigationProperty Name="User2" Relationship="Default.Quotation_User" FromRole="Quotation" ToRole="UserUser2" />
+      </EntityType>
+      <EntityType Name="Organization">
+        <Key>
+          <PropertyRef Name="id" />
+        </Key>
+        <Property Name="id" Type="Edm.Guid" Nullable="false" />
+        <Property Name="name" Type="Edm.String" Nullable="false" MaxLength="64" m:FC_TargetPath="SyndicationTitle" m:FC_CcontentKind="text" m:FC_KeepInContent="false" />
+        <Property Name="fullName" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="parentId" Type="Edm.Guid" Nullable="true" />
+        <Property Name="code" Type="Edm.String" Nullable="true" MaxLength="65535" />
+        <Property Name="level" Type="Edm.Int32" Nullable="true" />
+        <Property Name="type" Type="Edm.String" Nullable="true" MaxLength="50" DefaultValue="1" />
+        <Property Name="status" Type="Edm.Int16" Nullable="false" DefaultValue="0" />
+        <Property Name="orderNo" Type="Edm.Int32" Nullable="true" />
+        <Property Name="description" Type="Edm.String" Nullable="true" MaxLength="65535" m:FC_TargetPath="SyndicationSummary" m:FC_CcontentKind="text" m:FC_KeepInContent="false" />
+        <Property Name="icode" Type="Edm.Int32" Nullable="true" />
+        <Property Name="orgType" Type="Edm.String" Nullable="false" MaxLength="8" />
+        <NavigationProperty Name="Organization" Relationship="Default.Organization_Organization" FromRole="Organization" ToRole="OrganizationOrganization" />
+        <NavigationProperty Name="负责商机" Relationship="Default.Opportunity_Organization" FromRole="OrganizationImplementDepartment" ToRole="Opportunity" />
+      </EntityType>
+      <EntityType Name="ActivityResponse">
+        <Key>
+          <PropertyRef Name="id" />
+        </Key>
+        <Property Name="id" Type="Edm.Guid" Nullable="false" />
+        <Property Name="createdTime" Type="Edm.DateTime" Nullable="true" DefaultValue="@{env.Now}" />
+        <Property Name="modifiedTime" Type="Edm.DateTime" Nullable="true" DefaultValue="@{env.Now}" m:FC_TargetPath="SyndicationUpdated" m:FC_CcontentKind="text" m:FC_KeepInContent="false" />
+        <Property Name="name" Type="Edm.String" Nullable="false" MaxLength="255" m:FC_TargetPath="SyndicationTitle" m:FC_CcontentKind="text" m:FC_KeepInContent="false" />
+        <Property Name="modifiedBy" Type="Edm.Guid" Nullable="true" DefaultValue="@{env.User.id}" />
+        <Property Name="createdBy" Type="Edm.Guid" Nullable="true" DefaultValue="@{env.User.id}" />
+        <Property Name="channel" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="priority" Type="Edm.String" Nullable="true" MaxLength="255" DefaultValue="1" />
+        <Property Name="customerEmail" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="responseCode" Type="Edm.String" Nullable="true" MaxLength="255" DefaultValue="1" />
+        <Property Name="customerName" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="receiveTime" Type="Edm.DateTime" Nullable="true" />
+        <Property Name="finishTime" Type="Edm.DateTime" Nullable="true" />
+        <Property Name="customerPhone" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="companyName" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="description" Type="Edm.String" Nullable="true" MaxLength="255" m:FC_TargetPath="SyndicationSummary" m:FC_CcontentKind="text" m:FC_KeepInContent="false" />
+        <Property Name="customerId" Type="Edm.Guid" Nullable="true" />
+        <Property Name="MarketingActivityId" Type="Edm.Guid" Nullable="true" />
+        <Property Name="userId" Type="Edm.Guid" Nullable="true" DefaultValue="@{env.User.Id}" />
+        <NavigationProperty Name="Customer_4_65663251584" Relationship="Default.ActivityResponse_Customer" FromRole="ActivityResponse" ToRole="CustomerCustomer_4_65663251584" />
+        <NavigationProperty Name="MarketingA_65663177955" Relationship="Default.ActivityResponse_MarketingActivity" FromRole="ActivityResponse" ToRole="MarketingActivityMarketingA_65663177955" />
+        <NavigationProperty Name="User_06821_65663206821" Relationship="Default.ActivityResponse_User" FromRole="ActivityResponse" ToRole="UserUser_06821_65663206821" />
+        <NavigationProperty Name="User_76422_65661676422" Relationship="Default.ActivityResponse_User" FromRole="ActivityResponse" ToRole="UserUser_76422_65661676422" />
+        <NavigationProperty Name="User_73553_65661673553" Relationship="Default.ActivityResponse_User" FromRole="ActivityResponse" ToRole="UserUser_73553_65661673553" />
+      </EntityType>
+      <EntityType Name="ActivityEmail" BaseType="Default.ActivityItem">
+        <Property Name="sender" Type="Edm.String" Nullable="false" MaxLength="255" />
+        <Property Name="receiver" Type="Edm.String" Nullable="false" MaxLength="255" />
+        <Property Name="receiverCopy" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="receiverSecret" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="content" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="sendedTime" Type="Edm.DateTime" Nullable="true" />
+      </EntityType>
+      <EntityType Name="DataChangeLog">
+        <Key>
+          <PropertyRef Name="id" />
+        </Key>
+        <Property Name="id" Type="Edm.Guid" Nullable="false" />
+        <Property Name="entityName" Type="Edm.String" Nullable="false" MaxLength="255" />
+        <Property Name="recordId" Type="Edm.String" Nullable="false" MaxLength="255" />
+        <Property Name="reason" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="operator" Type="Edm.String" Nullable="false" MaxLength="255" DefaultValue="@{env.User.Name}" />
+        <Property Name="changeTime" Type="Edm.DateTime" Nullable="false" DefaultValue="@{env.Now}" m:FC_TargetPath="SyndicationTitle" m:FC_CcontentKind="text" m:FC_KeepInContent="false" />
+      </EntityType>
+      <EntityType Name="UamUser">
+        <Key>
+          <PropertyRef Name="userId" />
+        </Key>
+        <Property Name="userId" Type="Edm.Guid" Nullable="false" />
+        <Property Name="orgId" Type="Edm.Guid" Nullable="true" />
+        <Property Name="userNum" Type="Edm.String" Nullable="true" MaxLength="128" />
+        <Property Name="name" Type="Edm.String" Nullable="false" MaxLength="64" m:FC_TargetPath="SyndicationTitle" m:FC_CcontentKind="text" m:FC_KeepInContent="false" />
+        <Property Name="fullName" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="loginId" Type="Edm.String" Nullable="false" MaxLength="50" />
+        <Property Name="password" Type="Edm.String" Nullable="true" MaxLength="100" />
+        <Property Name="domain" Type="Edm.String" Nullable="true" MaxLength="50" />
+        <Property Name="type" Type="Edm.Int16" Nullable="true" DefaultValue="1" />
+        <Property Name="status" Type="Edm.Int16" Nullable="true" DefaultValue="1" />
+        <Property Name="sex" Type="Edm.Int16" Nullable="true" DefaultValue="0" />
+        <Property Name="rank" Type="Edm.Int32" Nullable="true" />
+        <Property Name="email" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="mobile" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="mobile2" Type="Edm.String" Nullable="true" MaxLength="500" />
+        <Property Name="mobile3" Type="Edm.String" Nullable="true" MaxLength="500" />
+        <Property Name="telephone" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="homeTelephone" Type="Edm.String" Nullable="true" MaxLength="500" />
+        <Property Name="im" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="birthday" Type="Edm.DateTime" Nullable="true" />
+        <Property Name="picture" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="orderNo" Type="Edm.Int32" Nullable="true" DefaultValue="0" />
+        <Property Name="description" Type="Edm.String" Nullable="true" MaxLength="1000" m:FC_TargetPath="SyndicationSummary" m:FC_CcontentKind="text" m:FC_KeepInContent="false" />
+        <Property Name="createdBy" Type="Edm.String" Nullable="true" MaxLength="500" DefaultValue="@{env.User.Id}" />
+        <Property Name="createdDate" Type="Edm.DateTime" Nullable="true" DefaultValue="@{env.Now}" />
+        <Property Name="diskQuota" Type="Edm.String" Nullable="true" MaxLength="500" />
+        <Property Name="appPassword" Type="Edm.String" Nullable="true" MaxLength="500" />
+        <Property Name="lastUpdatedDate" Type="Edm.DateTime" Nullable="true" DefaultValue="@{env.Now}" m:FC_TargetPath="SyndicationUpdated" m:FC_CcontentKind="text" m:FC_KeepInContent="false" />
+        <Property Name="lastUpdatedBy" Type="Edm.String" Nullable="true" MaxLength="500" DefaultValue="@{env.User.Id}" />
+        <Property Name="namePinYin" Type="Edm.String" Nullable="true" MaxLength="500" />
+        <Property Name="namePY" Type="Edm.String" Nullable="true" MaxLength="500" />
+        <NavigationProperty Name="UamOrganization" Relationship="Default.UamUser_UamOrganization" FromRole="UamUser" ToRole="UamOrganizationUamOrganization" />
+      </EntityType>
+      <EntityType Name="UamOrganization">
+        <Key>
+          <PropertyRef Name="orgId" />
+        </Key>
+        <Property Name="orgId" Type="Edm.Guid" Nullable="false" />
+        <Property Name="orgNum" Type="Edm.String" Nullable="true" MaxLength="128" />
+        <Property Name="name" Type="Edm.String" Nullable="false" MaxLength="64" m:FC_TargetPath="SyndicationTitle" m:FC_CcontentKind="text" m:FC_KeepInContent="false" />
+        <Property Name="fullName" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="parentId" Type="Edm.Guid" Nullable="true" />
+        <Property Name="code" Type="Edm.String" Nullable="true" MaxLength="1000" />
+        <Property Name="level" Type="Edm.Int32" Nullable="true" />
+        <Property Name="type" Type="Edm.Int32" Nullable="true" DefaultValue="1" />
+        <Property Name="status" Type="Edm.Int16" Nullable="false" DefaultValue="1" />
+        <Property Name="orderNo" Type="Edm.Int32" Nullable="true" DefaultValue="0" />
+        <Property Name="description" Type="Edm.String" Nullable="true" MaxLength="1000" m:FC_TargetPath="SyndicationSummary" m:FC_CcontentKind="text" m:FC_KeepInContent="false" />
+        <Property Name="icode" Type="Edm.Int32" Nullable="true" />
+        <Property Name="createdBy" Type="Edm.String" Nullable="true" MaxLength="500" DefaultValue="@{env.User.Id}" />
+        <Property Name="lastUpdatedDate" Type="Edm.DateTime" Nullable="true" DefaultValue="@{env.Now}" />
+        <Property Name="namePY" Type="Edm.String" Nullable="true" MaxLength="100" />
+        <Property Name="diskQuota" Type="Edm.String" Nullable="true" MaxLength="500" />
+        <Property Name="createdDate" Type="Edm.DateTime" Nullable="true" DefaultValue="@{env.Now}" />
+        <Property Name="namePinYin" Type="Edm.String" Nullable="true" MaxLength="500" />
+        <Property Name="lastUpdatedBy" Type="Edm.String" Nullable="true" MaxLength="500" DefaultValue="@{env.User.Id}" />
+        <NavigationProperty Name="FK_Reference_12" Relationship="Default.UamOrganization_UamOrganization" FromRole="UamOrganization" ToRole="UamOrganizationFK_Reference_12" />
+      </EntityType>
+      <EntityType Name="Customer">
+        <Key>
+          <PropertyRef Name="id" />
+        </Key>
+        <Property Name="id" Type="Edm.Guid" Nullable="false" />
+        <Property Name="name" Type="Edm.String" Nullable="false" MaxLength="255" m:FC_TargetPath="SyndicationTitle" m:FC_CcontentKind="text" m:FC_KeepInContent="false" />
+        <Property Name="logo" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="type" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="country" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="province" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="city" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="companyAddress" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="zipcode" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="potentialCustomerId" Type="Edm.Guid" Nullable="true" />
+        <Property Name="createdTime" Type="Edm.DateTime" Nullable="true" DefaultValue="@{env.Now}" />
+        <Property Name="modifiedTime" Type="Edm.DateTime" Nullable="true" DefaultValue="@{env.Now}" />
+        <Property Name="createdBy" Type="Edm.Guid" Nullable="true" DefaultValue="@{env.User.Id}" />
+        <Property Name="modifiedBy" Type="Edm.Guid" Nullable="true" DefaultValue="@{env.User.Id}" />
+        <Property Name="customerNum" Type="Edm.String" Nullable="true" MaxLength="500" />
+        <Property Name="phone" Type="Edm.String" Nullable="true" MaxLength="500" />
+        <Property Name="area" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="parentId" Type="Edm.Guid" Nullable="true" />
+        <Property Name="managerId" Type="Edm.Guid" Nullable="true" />
+        <NavigationProperty Name="Customer" Relationship="Default.Customer_Customer" FromRole="Customer" ToRole="CustomerCustomer" />
+        <NavigationProperty Name="User" Relationship="Default.Customer_User" FromRole="Customer" ToRole="UserUser" />
+        <NavigationProperty Name="User1" Relationship="Default.Customer_User" FromRole="Customer" ToRole="UserUser1" />
+        <NavigationProperty Name="CustomerPotential" Relationship="Default.Customer_CustomerPotential" FromRole="Customer" ToRole="CustomerPotentialCustomerPotential" />
+        <NavigationProperty Name="User2" Relationship="Default.Customer_User" FromRole="Customer" ToRole="UserUser2" />
+        <NavigationProperty Name="Contact" Relationship="Default.Contact_Customer" FromRole="CustomerCustomer" ToRole="Contact" />
+        <NavigationProperty Name="MarketingList" Relationship="Default.Customer_MarketingList" FromRole="Customer" ToRole="MarketingListMarketingList" />
+      </EntityType>
+      <EntityType Name="Share">
+        <Key>
+          <PropertyRef Name="id" />
+        </Key>
+        <Property Name="id" Type="Edm.Guid" Nullable="false" />
+        <Property Name="status" Type="Edm.String" Nullable="true" MaxLength="255" DefaultValue="0" />
+        <Property Name="shareEntity" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="createdBy" Type="Edm.Guid" Nullable="true" DefaultValue="@{env.User.id}" />
+        <Property Name="shareRecordId" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="shareDisplayName" Type="Edm.String" Nullable="true" MaxLength="255" m:FC_TargetPath="SyndicationTitle" m:FC_CcontentKind="text" m:FC_KeepInContent="false" />
+        <Property Name="targetEntity" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="targetRecordId" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="targetDisplayName" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="createdTime" Type="Edm.DateTime" Nullable="true" DefaultValue="@{env.Now}" />
+        <NavigationProperty Name="User" Relationship="Default.Share_User" FromRole="Share" ToRole="UserUser" />
+      </EntityType>
+      <EntityType Name="UamExternalOrganization">
+        <Key>
+          <PropertyRef Name="orgId" />
+        </Key>
+        <Property Name="orgId" Type="Edm.Guid" Nullable="false" />
+        <Property Name="orgName" Type="Edm.String" Nullable="true" MaxLength="128" />
+        <Property Name="name" Type="Edm.String" Nullable="false" MaxLength="64" m:FC_TargetPath="SyndicationTitle" m:FC_CcontentKind="text" m:FC_KeepInContent="false" />
+        <Property Name="fullName" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="parentId" Type="Edm.Guid" Nullable="true" />
+        <Property Name="code" Type="Edm.String" Nullable="true" MaxLength="1000" />
+        <Property Name="level" Type="Edm.Int32" Nullable="true" />
+        <Property Name="status" Type="Edm.Int16" Nullable="false" DefaultValue="1" />
+        <Property Name="orderNo" Type="Edm.Int32" Nullable="true" DefaultValue="0" />
+        <Property Name="description" Type="Edm.String" Nullable="true" MaxLength="1000" m:FC_TargetPath="SyndicationSummary" m:FC_CcontentKind="text" m:FC_KeepInContent="false" />
+        <Property Name="icode" Type="Edm.Int32" Nullable="true" />
+        <Property Name="createdDate" Type="Edm.DateTime" Nullable="true" DefaultValue="@{env.Now}" />
+        <Property Name="lastUpdatedDate" Type="Edm.DateTime" Nullable="true" DefaultValue="@{env.Now}" m:FC_TargetPath="SyndicationUpdated" m:FC_CcontentKind="text" m:FC_KeepInContent="false" />
+        <Property Name="createdBy" Type="Edm.String" Nullable="true" MaxLength="500" DefaultValue="@{env.User.Id}" />
+        <Property Name="lastUpdatedBy" Type="Edm.String" Nullable="true" MaxLength="500" DefaultValue="@{env.User.Id}" />
+        <NavigationProperty Name="UamExternalOrganization" Relationship="Default.UamExternalOrganization_UamExternalOrganization" FromRole="UamExternalOrganization"
+          ToRole="UamExternalOrganizationUamExternalOrganization" />
+      </EntityType>
+      <EntityType Name="RolePermission">
+        <Key>
+          <PropertyRef Name="roleId" />
+          <PropertyRef Name="operationId" />
+        </Key>
+        <Property Name="roleId" Type="Edm.String" Nullable="false" MaxLength="38" />
+        <Property Name="operationId" Type="Edm.String" Nullable="false" MaxLength="38" />
+        <Property Name="ruleId" Type="Edm.String" Nullable="true" MaxLength="38" />
+        <Property Name="createdBy" Type="Edm.String" Nullable="true" MaxLength="38" DefaultValue="@{env.User.Name}" />
+        <Property Name="createdDate" Type="Edm.DateTime" Nullable="true" DefaultValue="@{env.Now}" />
+        <Property Name="lastUpdatedBy" Type="Edm.String" Nullable="true" MaxLength="38" DefaultValue="@{env.User.Name}" />
+        <Property Name="lastUpdatedDate" Type="Edm.DateTime" Nullable="true" DefaultValue="@{env.Now}" />
+      </EntityType>
+      <EntityType Name="UamSnsGroup">
+        <Key>
+          <PropertyRef Name="groupId" />
+        </Key>
+        <Property Name="groupId" Type="Edm.Guid" Nullable="false" />
+        <Property Name="typeId" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="name" Type="Edm.String" Nullable="false" MaxLength="255" m:FC_TargetPath="SyndicationTitle" m:FC_CcontentKind="text" m:FC_KeepInContent="false" />
+        <Property Name="icon" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="status" Type="Edm.Int16" Nullable="true" />
+        <Property Name="owner" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="createdSource" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="createdBy" Type="Edm.String" Nullable="true" MaxLength="255" DefaultValue="@{env.User.Id}" />
+        <Property Name="createdDate" Type="Edm.DateTime" Nullable="true" DefaultValue="@{env.Now}" />
+        <Property Name="lastUpdatedBy" Type="Edm.String" Nullable="true" MaxLength="255" DefaultValue="@{env.User.Id}" />
+        <Property Name="lastUpdatedDate" Type="Edm.DateTime" Nullable="true" DefaultValue="@{env.Now}" m:FC_TargetPath="SyndicationUpdated" m:FC_CcontentKind="text" m:FC_KeepInContent="false" />
+        <Property Name="memo" Type="Edm.String" Nullable="true" MaxLength="255" />
+      </EntityType>
+      <EntityType Name="ScriptLib">
+        <Key>
+          <PropertyRef Name="id" />
+        </Key>
+        <Property Name="id" Type="Edm.Guid" Nullable="false" />
+        <Property Name="name" Type="Edm.String" Nullable="false" MaxLength="255" />
+        <Property Name="displayName" Type="Edm.String" Nullable="false" MaxLength="255" m:FC_TargetPath="SyndicationTitle" m:FC_CcontentKind="text" m:FC_KeepInContent="false" />
+        <Property Name="content" Type="Edm.String" Nullable="true" MaxLength="8000" />
+        <Property Name="summary" Type="Edm.String" Nullable="true" MaxLength="255" m:FC_TargetPath="SyndicationSummary" m:FC_CcontentKind="text" m:FC_KeepInContent="false" />
+        <Property Name="url" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="isSystem" Type="Edm.Boolean" Nullable="true" DefaultValue="false" />
+        <Property Name="creator" Type="Edm.String" Nullable="false" MaxLength="255" DefaultValue="@{env.User.Name}" />
+        <Property Name="createdTime" Type="Edm.DateTime" Nullable="false" DefaultValue="@{env.Now}" />
+        <Property Name="modifiedBy" Type="Edm.String" Nullable="false" MaxLength="255" DefaultValue="@{env.User.Name}" />
+        <Property Name="modifiedTime" Type="Edm.DateTime" Nullable="false" DefaultValue="@{env.Now}" m:FC_TargetPath="SyndicationUpdated" m:FC_CcontentKind="text" m:FC_KeepInContent="false" />
+      </EntityType>
+      <EntityType Name="PortalMenu">
+        <Key>
+          <PropertyRef Name="id" />
+        </Key>
+        <Property Name="id" Type="Edm.Guid" Nullable="false" />
+        <Property Name="name" Type="Edm.String" Nullable="true" MaxLength="255" m:FC_TargetPath="SyndicationTitle" m:FC_CcontentKind="text" m:FC_KeepInContent="false" />
+        <Property Name="url" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="submenuSource" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="submenuSourceType" Type="Edm.String" Nullable="true" MaxLength="255" DefaultValue="normal" />
+        <Property Name="icon" Type="Edm.String" Nullable="true" MaxLength="255" DefaultValue="led-icons/plugin.png" />
+        <Property Name="displayOrder" Type="Edm.Int32" Nullable="true" DefaultValue="0" />
+        <Property Name="showType" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="menuSource" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="menuSourceId" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="level" Type="Edm.Int32" Nullable="true" />
+        <Property Name="modifiedBy" Type="Edm.String" Nullable="true" MaxLength="38" DefaultValue="@{env.User.Name}" />
+        <Property Name="modifiedTime" Type="Edm.DateTime" Nullable="true" DefaultValue="@{env.Now}" m:FC_TargetPath="SyndicationUpdated" m:FC_CcontentKind="text" m:FC_KeepInContent="false" />
+        <Property Name="parentId" Type="Edm.Guid" Nullable="true" />
+        <NavigationProperty Name="ParentId" Relationship="Default.PortalMenu_PortalMenu" FromRole="PortalMenu" ToRole="PortalMenuParentId" />
+      </EntityType>
+      <EntityType Name="ResourcePermission">
+        <Key>
+          <PropertyRef Name="id" />
+        </Key>
+        <Property Name="id" Type="Edm.Guid" Nullable="false" />
+        <Property Name="code" Type="Edm.String" Nullable="false" MaxLength="255" />
+        <Property Name="entity" Type="Edm.String" Nullable="true" MaxLength="38" />
+        <Property Name="resourceName" Type="Edm.String" Nullable="true" MaxLength="255" m:FC_TargetPath="SyndicationTitle" m:FC_CcontentKind="text" m:FC_KeepInContent="false" />
+        <Property Name="resourceType" Type="Edm.String" Nullable="true" MaxLength="38" />
+        <Property Name="resourceOperation" Type="Edm.String" Nullable="true" MaxLength="38" />
+      </EntityType>
+      <EntityType Name="MarketingActivity">
+        <Key>
+          <PropertyRef Name="id" />
+        </Key>
+        <Property Name="id" Type="Edm.Guid" Nullable="false" />
+        <Property Name="name" Type="Edm.String" Nullable="false" MaxLength="255" m:FC_TargetPath="SyndicationTitle" m:FC_CcontentKind="text" m:FC_KeepInContent="false" />
+        <Property Name="type" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="status" Type="Edm.Int16" Nullable="false" DefaultValue="1" />
+        <Property Name="description" Type="Edm.String" Nullable="true" MaxLength="1000" m:FC_TargetPath="SyndicationSummary" m:FC_CcontentKind="text" m:FC_KeepInContent="false" />
+        <Property Name="content" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="startTime" Type="Edm.DateTime" Nullable="true" />
+        <Property Name="endTime" Type="Edm.DateTime" Nullable="true" />
+        <Property Name="createdTime" Type="Edm.DateTime" Nullable="true" DefaultValue="@{env.Now}" />
+        <Property Name="modifiedTime" Type="Edm.DateTime" Nullable="true" DefaultValue="@{env.Now}" />
+        <Property Name="planEndTime" Type="Edm.DateTime" Nullable="true" />
+        <Property Name="planStartTime" Type="Edm.DateTime" Nullable="true" />
+        <Property Name="modifiedBy" Type="Edm.Guid" Nullable="true" DefaultValue="@{env.User.Id}" />
+        <Property Name="createdBy" Type="Edm.Guid" Nullable="true" DefaultValue="@{env.User.Id}" />
+        <Property Name="leadedBy" Type="Edm.Guid" Nullable="true" DefaultValue="@{env.User.Id}" />
+        <NavigationProperty Name="User1" Relationship="Default.MarketingActivity_User" FromRole="MarketingActivity" ToRole="UserUser1" />
+        <NavigationProperty Name="User" Relationship="Default.MarketingActivity_User" FromRole="MarketingActivity" ToRole="UserUser" />
+        <NavigationProperty Name="User2" Relationship="Default.MarketingActivity_User" FromRole="MarketingActivity" ToRole="UserUser2" />
+        <NavigationProperty Name="ActivityResponse" Relationship="Default.ActivityResponse_MarketingActivity" FromRole="MarketingActivityMarketingA_65663177955" ToRole="ActivityResponse" />
+        <NavigationProperty Name="MarketingList" Relationship="Default.MarketingActivity_MarketingList" FromRole="MarketingActivity" ToRole="MarketingListMarketingList" />
+      </EntityType>
+      <EntityType Name="DataChangeLogItem">
+        <Key>
+          <PropertyRef Name="id" />
+        </Key>
+        <Property Name="id" Type="Edm.Guid" Nullable="false" />
+        <Property Name="field" Type="Edm.String" Nullable="false" MaxLength="255" />
+        <Property Name="before" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="after" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="logId" Type="Edm.Guid" Nullable="true" />
+        <NavigationProperty Name="LogId" Relationship="Default.DataChangeLogItem_DataChangeLog" FromRole="DataChangeLogItem" ToRole="DataChangeLogLogId" />
+      </EntityType>
+      <EntityType Name="Permission">
+        <Key>
+          <PropertyRef Name="id" />
+        </Key>
+        <Property Name="id" Type="Edm.Guid" Nullable="false" />
+        <Property Name="parent" Type="Edm.String" Nullable="true" MaxLength="38" />
+        <Property Name="code" Type="Edm.String" Nullable="true" MaxLength="50" />
+        <Property Name="name" Type="Edm.String" Nullable="true" MaxLength="150" m:FC_TargetPath="SyndicationTitle" m:FC_CcontentKind="text" m:FC_KeepInContent="false" />
+        <Property Name="url" Type="Edm.String" Nullable="true" MaxLength="300" />
+        <Property Name="elementId" Type="Edm.String" Nullable="true" MaxLength="50" />
+        <Property Name="element_behaviour" Type="Edm.String" Nullable="true" MaxLength="30" />
+        <Property Name="order" Type="Edm.Int32" Nullable="true" />
+        <Property Name="description" Type="Edm.String" Nullable="true" MaxLength="1000" m:FC_TargetPath="SyndicationSummary" m:FC_CcontentKind="text" m:FC_KeepInContent="false" />
+        <Property Name="icon" Type="Edm.String" Nullable="true" MaxLength="500" />
+        <Property Name="icon_large" Type="Edm.String" Nullable="true" MaxLength="500" />
+        <Property Name="icon_small" Type="Edm.String" Nullable="true" MaxLength="500" />
+        <Property Name="icon_middle" Type="Edm.String" Nullable="true" MaxLength="500" />
+        <Property Name="createdBy" Type="Edm.String" Nullable="true" MaxLength="38" DefaultValue="@{env.User.Name}" />
+        <Property Name="createdDate" Type="Edm.DateTime" Nullable="true" DefaultValue="@{env.Now}" />
+        <Property Name="lastUpdatedBy" Type="Edm.String" Nullable="true" MaxLength="38" DefaultValue="@{env.User.Name}" />
+        <Property Name="lastUpdatedDate" Type="Edm.DateTime" Nullable="true" DefaultValue="@{env.Now}" />
+        <Property Name="isReference" Type="Edm.Boolean" Nullable="true" DefaultValue="true" />
+        <Property Name="reference" Type="Edm.String" Nullable="true" MaxLength="255" />
+      </EntityType>
+      <EntityType Name="SignTemplate">
+        <Key>
+          <PropertyRef Name="id" />
+        </Key>
+        <Property Name="id" Type="Edm.Guid" Nullable="false" />
+        <Property Name="name" Type="Edm.String" Nullable="false" MaxLength="255" m:FC_TargetPath="SyndicationTitle" m:FC_CcontentKind="text" m:FC_KeepInContent="false" />
+        <Property Name="content" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="createdTime" Type="Edm.DateTime" Nullable="true" DefaultValue="@{env.Now}" />
+        <Property Name="modifiedTime" Type="Edm.DateTime" Nullable="true" DefaultValue="@{env.Now}" />
+        <Property Name="createdBy" Type="Edm.Guid" Nullable="true" DefaultValue="@{env.User.Id}" />
+        <Property Name="modifiedBy" Type="Edm.Guid" Nullable="true" DefaultValue="@{env.User.Id}" />
+        <NavigationProperty Name="User1" Relationship="Default.SignTemplate_User" FromRole="SignTemplate" ToRole="UserUser1" />
+        <NavigationProperty Name="User" Relationship="Default.SignTemplate_User" FromRole="SignTemplate" ToRole="UserUser" />
+      </EntityType>
+      <EntityType Name="MetauiOperation">
+        <Key>
+          <PropertyRef Name="id" />
+        </Key>
+        <Property Name="id" Type="Edm.Guid" Nullable="false" />
+        <Property Name="name" Type="Edm.String" Nullable="false" MaxLength="255" />
+        <Property Name="displayName" Type="Edm.String" Nullable="false" MaxLength="255" m:FC_TargetPath="SyndicationTitle" m:FC_CcontentKind="text" m:FC_KeepInContent="false" />
+        <Property Name="entityName" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="scope" Type="Edm.String" Nullable="false" MaxLength="255" />
+        <Property Name="recordType" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="icon" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="iconSmall" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="iconLarge" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="toolTip" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="scriptLib" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="script" Type="Edm.String" Nullable="true" MaxLength="8000" />
+        <Property Name="mainFunc" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="isDefault" Type="Edm.Boolean" Nullable="true" DefaultValue="false" />
+        <Property Name="displayOrder" Type="Edm.Int32" Nullable="true" DefaultValue="0" />
+        <Property Name="creator" Type="Edm.String" Nullable="false" MaxLength="255" DefaultValue="@{env.User.Name}" />
+        <Property Name="createdTime" Type="Edm.DateTime" Nullable="false" DefaultValue="@{env.Now}" />
+        <Property Name="modifiedBy" Type="Edm.String" Nullable="false" MaxLength="255" DefaultValue="@{env.User.Name}" />
+        <Property Name="modifiedTime" Type="Edm.DateTime" Nullable="false" DefaultValue="@{env.Now}" m:FC_TargetPath="SyndicationUpdated" m:FC_CcontentKind="text" m:FC_KeepInContent="false" />
+        <Property Name="inControl" Type="Edm.Boolean" Nullable="true" DefaultValue="true" />
+        <Property Name="enabled" Type="Edm.Boolean" Nullable="false" DefaultValue="true" />
+      </EntityType>
+      <EntityType Name="OpportunityType">
+        <Key>
+          <PropertyRef Name="id" />
+        </Key>
+        <Property Name="id" Type="Edm.Guid" Nullable="false" />
+        <Property Name="name" Type="Edm.String" Nullable="false" MaxLength="255" m:FC_TargetPath="SyndicationTitle" m:FC_CcontentKind="text" m:FC_KeepInContent="false" />
+        <Property Name="createdTime" Type="Edm.DateTime" Nullable="true" DefaultValue="@{env.Now}" />
+        <Property Name="modifiedTime" Type="Edm.DateTime" Nullable="true" DefaultValue="@{env.Now}" />
+        <Property Name="createdBy" Type="Edm.Guid" Nullable="true" DefaultValue="@{env.User.Id}" />
+        <Property Name="quotedBy" Type="Edm.Guid" Nullable="true" DefaultValue="@{env.User.Id}" />
+        <NavigationProperty Name="User" Relationship="Default.OpportunityType_User" FromRole="OpportunityType" ToRole="UserUser" />
+        <NavigationProperty Name="User2" Relationship="Default.OpportunityType_User" FromRole="OpportunityType" ToRole="UserUser2" />
+      </EntityType>
+      <EntityType Name="Province">
+        <Key>
+          <PropertyRef Name="id" />
+        </Key>
+        <Property Name="id" Type="Edm.Int32" Nullable="false" />
+        <Property Name="code" Type="Edm.String" Nullable="false" MaxLength="255" />
+        <Property Name="name" Type="Edm.String" Nullable="false" MaxLength="255" m:FC_TargetPath="SyndicationTitle" m:FC_CcontentKind="text" m:FC_KeepInContent="false" />
+        <Property Name="countryId" Type="Edm.String" Nullable="true" MaxLength="255" DefaultValue="86" />
+        <NavigationProperty Name="Country" Relationship="Default.Province_Country" FromRole="Province" ToRole="CountryCountry" />
+        <NavigationProperty Name="City" Relationship="Default.City_Province" FromRole="ProvinceProvince" ToRole="City" />
+      </EntityType>
+      <EntityType Name="MktListCustomerPotential">
+        <Key>
+          <PropertyRef Name="marketingListId" />
+          <PropertyRef Name="customerPotentialId" />
+        </Key>
+        <Property Name="marketingListId" Type="Edm.String" Nullable="false" MaxLength="255" />
+        <Property Name="customerPotentialId" Type="Edm.String" Nullable="false" MaxLength="255" />
+      </EntityType>
+      <EntityType Name="Stakeholder">
+        <Key>
+          <PropertyRef Name="id" />
+        </Key>
+        <Property Name="id" Type="Edm.Guid" Nullable="false" />
+        <Property Name="opportunityId" Type="Edm.Guid" Nullable="true" />
+        <Property Name="name" Type="Edm.String" Nullable="false" MaxLength="255" m:FC_TargetPath="SyndicationTitle" m:FC_CcontentKind="text" m:FC_KeepInContent="false" />
+        <Property Name="stakeholderRole" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="mobilePhone" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="email" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="createdTime" Type="Edm.DateTime" Nullable="true" DefaultValue="@{env.Now}" />
+        <Property Name="createdBy" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="modifiedTime" Type="Edm.DateTime" Nullable="true" DefaultValue="@{env.Now}" />
+        <Property Name="modifiedBy" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="contactId" Type="Edm.Guid" Nullable="true" />
+        <NavigationProperty Name="Opportunity" Relationship="Default.Stakeholder_Opportunity" FromRole="Stakeholder" ToRole="OpportunityOpportunity" />
+        <NavigationProperty Name="Contact" Relationship="Default.Stakeholder_Contact" FromRole="Stakeholder" ToRole="ContactContact" />
+      </EntityType>
+      <EntityType Name="MetaAppconfig">
+        <Key>
+          <PropertyRef Name="key" />
+        </Key>
+        <Property Name="key" Type="Edm.String" Nullable="false" MaxLength="100" />
+        <Property Name="name" Type="Edm.String" Nullable="true" MaxLength="100" m:FC_TargetPath="SyndicationTitle" m:FC_CcontentKind="text" m:FC_KeepInContent="false" />
+        <Property Name="value" Type="Edm.String" Nullable="true" MaxLength="2000" />
+      </EntityType>
+      <EntityType Name="DefaultFields">
+        <Key>
+          <PropertyRef Name="id" />
+        </Key>
+        <Property Name="id" Type="Edm.Guid" Nullable="false" />
+        <Property Name="name" Type="Edm.String" Nullable="false" MaxLength="255" m:FC_TargetPath="SyndicationTitle" m:FC_CcontentKind="text" m:FC_KeepInContent="false" />
+        <Property Name="createdBy" Type="Edm.String" Nullable="true" MaxLength="255" DefaultValue="@{env.User.id}" />
+        <Property Name="createdTime" Type="Edm.DateTime" Nullable="true" DefaultValue="@{env.Now}" />
+        <Property Name="modifiedBy" Type="Edm.String" Nullable="true" MaxLength="255" DefaultValue="@{env.User.id}" />
+        <Property Name="modifiedTime" Type="Edm.DateTime" Nullable="true" DefaultValue="@{env.Now}" m:FC_TargetPath="SyndicationUpdated" m:FC_CcontentKind="text" m:FC_KeepInContent="false" />
+      </EntityType>
+      <EntityType Name="UamExternalUser">
+        <Key>
+          <PropertyRef Name="userId" />
+        </Key>
+        <Property Name="userId" Type="Edm.Guid" Nullable="false" />
+        <Property Name="userNum" Type="Edm.String" Nullable="true" MaxLength="128" />
+        <Property Name="name" Type="Edm.String" Nullable="false" MaxLength="64" m:FC_TargetPath="SyndicationTitle" m:FC_CcontentKind="text" m:FC_KeepInContent="false" />
+        <Property Name="fullName" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="loginId" Type="Edm.String" Nullable="false" MaxLength="50" />
+        <Property Name="password" Type="Edm.String" Nullable="true" MaxLength="100" />
+        <Property Name="appPassword" Type="Edm.String" Nullable="true" MaxLength="100" />
+        <Property Name="orgId" Type="Edm.Guid" Nullable="true" />
+        <Property Name="channelManagerId" Type="Edm.Guid" Nullable="true" />
+        <Property Name="domain" Type="Edm.String" Nullable="true" MaxLength="50" />
+        <Property Name="type" Type="Edm.Int16" Nullable="true" />
+        <Property Name="status" Type="Edm.Int16" Nullable="true" DefaultValue="1" />
+        <Property Name="sex" Type="Edm.Int16" Nullable="true" DefaultValue="0" />
+        <Property Name="rank" Type="Edm.Int32" Nullable="true" />
+        <Property Name="email" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="mobile" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="im" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="telephone" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="birthday" Type="Edm.DateTime" Nullable="true" />
+        <Property Name="picture" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="orderNo" Type="Edm.Int32" Nullable="true" DefaultValue="0" />
+        <Property Name="description" Type="Edm.String" Nullable="true" MaxLength="1000" m:FC_TargetPath="SyndicationSummary" m:FC_CcontentKind="text" m:FC_KeepInContent="false" />
+        <Property Name="createdDate" Type="Edm.DateTime" Nullable="true" DefaultValue="@{env.Now}" />
+        <Property Name="lastUpdatedDate" Type="Edm.DateTime" Nullable="true" DefaultValue="@{env.Now}" m:FC_TargetPath="SyndicationUpdated" m:FC_CcontentKind="text" m:FC_KeepInContent="false" />
+        <Property Name="mobile2" Type="Edm.String" Nullable="true" MaxLength="500" />
+        <Property Name="homeTelephone" Type="Edm.String" Nullable="true" MaxLength="500" />
+        <Property Name="mobile3" Type="Edm.String" Nullable="true" MaxLength="500" />
+        <Property Name="createdBy" Type="Edm.String" Nullable="true" MaxLength="50" DefaultValue="@{env.User.Id}" />
+        <Property Name="lastUpdatedBy" Type="Edm.String" Nullable="true" MaxLength="50" DefaultValue="@{env.User.Id}" />
+        <Property Name="sourceApp" Type="Edm.String" Nullable="true" MaxLength="500" />
+        <Property Name="owner" Type="Edm.String" Nullable="true" MaxLength="500" />
+        <NavigationProperty Name="UamExternalOrganization" Relationship="Default.UamExternalUser_UamExternalOrganization" FromRole="UamExternalUser" ToRole="UamExternalOrganizationUamExternalOrganization" />
+        <NavigationProperty Name="ChannelManager" Relationship="Default.UamExternalUser_UamUser" FromRole="UamExternalUser" ToRole="UamUserChannelManager" />
+      </EntityType>
+      <EntityType Name="StakeholderRole">
+        <Key>
+          <PropertyRef Name="id" />
+        </Key>
+        <Property Name="id" Type="Edm.Guid" Nullable="false" />
+        <Property Name="name" Type="Edm.String" Nullable="false" MaxLength="255" m:FC_TargetPath="SyndicationTitle" m:FC_CcontentKind="text" m:FC_KeepInContent="false" />
+        <Property Name="description" Type="Edm.String" Nullable="true" MaxLength="1000" m:FC_TargetPath="SyndicationSummary" m:FC_CcontentKind="text" m:FC_KeepInContent="false" />
+        <Property Name="createdTime" Type="Edm.DateTime" Nullable="true" DefaultValue="@{env.Now}" />
+        <Property Name="modifiedTime" Type="Edm.DateTime" Nullable="true" DefaultValue="@{env.Now}" />
+        <Property Name="createdBy" Type="Edm.Guid" Nullable="true" DefaultValue="@{env.User.Id}" />
+        <Property Name="modifiedBy" Type="Edm.Guid" Nullable="true" DefaultValue="@{env.User.Id}" />
+        <NavigationProperty Name="User" Relationship="Default.StakeholderRole_User" FromRole="StakeholderRole" ToRole="UserUser" />
+        <NavigationProperty Name="User1" Relationship="Default.StakeholderRole_User" FromRole="StakeholderRole" ToRole="UserUser1" />
+      </EntityType>
+      <EntityType Name="Contract">
+        <Key>
+          <PropertyRef Name="id" />
+        </Key>
+        <Property Name="id" Type="Edm.String" Nullable="false" MaxLength="255" />
+        <Property Name="customerId" Type="Edm.Guid" Nullable="true" />
+        <Property Name="status" Type="Edm.Int16" Nullable="false" DefaultValue="1" />
+        <Property Name="name" Type="Edm.String" Nullable="false" MaxLength="255" m:FC_TargetPath="SyndicationTitle" m:FC_CcontentKind="text" m:FC_KeepInContent="false" />
+        <Property Name="content" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="startDate" Type="Edm.DateTime" Nullable="true" />
+        <Property Name="endDate" Type="Edm.DateTime" Nullable="true" />
+        <Property Name="createdTime" Type="Edm.DateTime" Nullable="true" DefaultValue="@{env.Now}" />
+        <Property Name="modifiedTime" Type="Edm.DateTime" Nullable="true" DefaultValue="@{env.Now}" />
+        <Property Name="leadedBy" Type="Edm.Guid" Nullable="true" DefaultValue="@{env.User.Id}" />
+        <Property Name="modifiedBy" Type="Edm.Guid" Nullable="true" DefaultValue="@{env.User.Id}" />
+        <Property Name="quotationId" Type="Edm.Guid" Nullable="true" />
+        <Property Name="createdBy" Type="Edm.Guid" Nullable="true" DefaultValue="@{env.User.Id}" />
+        <NavigationProperty Name="Customer" Relationship="Default.Contract_Customer" FromRole="Contract" ToRole="CustomerCustomer" />
+        <NavigationProperty Name="Quotation" Relationship="Default.Contract_Quotation" FromRole="Contract" ToRole="QuotationQuotation" />
+        <NavigationProperty Name="User1" Relationship="Default.Contract_User" FromRole="Contract" ToRole="UserUser1" />
+        <NavigationProperty Name="User" Relationship="Default.Contract_User" FromRole="Contract" ToRole="UserUser" />
+        <NavigationProperty Name="User2" Relationship="Default.Contract_User" FromRole="Contract" ToRole="UserUser2" />
+      </EntityType>
+      <EntityType Name="OpportunityPossible">
+        <Key>
+          <PropertyRef Name="id" />
+        </Key>
+        <Property Name="id" Type="Edm.Guid" Nullable="false" />
+        <Property Name="opportunityTypeId" Type="Edm.Guid" Nullable="true" />
+        <Property Name="name" Type="Edm.String" Nullable="false" MaxLength="255" m:FC_TargetPath="SyndicationTitle" m:FC_CcontentKind="text" m:FC_KeepInContent="false" />
+        <Property Name="createdTime" Type="Edm.DateTime" Nullable="true" DefaultValue="@{env.Now}" />
+        <Property Name="modifiedTime" Type="Edm.DateTime" Nullable="true" DefaultValue="@{env.Now}" m:FC_TargetPath="SyndicationUpdated" m:FC_CcontentKind="text" m:FC_KeepInContent="false" />
+        <Property Name="createdBy" Type="Edm.Guid" Nullable="true" DefaultValue="@{env.User.id}" />
+        <Property Name="modifiedBy" Type="Edm.Guid" Nullable="true" DefaultValue="@{env.User.id}" />
+        <Property Name="possible" Type="Edm.Decimal" Nullable="true" Precision="19" Scale="19" />
+        <NavigationProperty Name="CreateBy" Relationship="Default.OpportunityPossible_User" FromRole="OpportunityPossible" ToRole="UserCreateBy" />
+        <NavigationProperty Name="ModifiedBy" Relationship="Default.OpportunityPossible_User" FromRole="OpportunityPossible" ToRole="UserModifiedBy" />
+        <NavigationProperty Name="OpportunityType" Relationship="Default.OpportunityPossible_OpportunityType" FromRole="OpportunityPossible" ToRole="OpportunityTypeOpportunityType" />
+      </EntityType>
+      <EntityType Name="CompetitorOpportunity">
+        <Key>
+          <PropertyRef Name="competitorId" />
+          <PropertyRef Name="opportunityId" />
+        </Key>
+        <Property Name="competitorId" Type="Edm.String" Nullable="false" MaxLength="255" />
+        <Property Name="opportunityId" Type="Edm.String" Nullable="false" MaxLength="255" />
+      </EntityType>
+      <EntityType Name="ActivityTask" BaseType="Default.ActivityItem">
+        <Property Name="meetTime" Type="Edm.DateTime" Nullable="true" />
+        <Property Name="meetAddress" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="description" Type="Edm.String" Nullable="true" MaxLength="255" m:FC_TargetPath="SyndicationSummary" m:FC_CcontentKind="text" m:FC_KeepInContent="false" />
+      </EntityType>
+      <EntityType Name="CustomerPotential">
+        <Key>
+          <PropertyRef Name="id" />
+        </Key>
+        <Property Name="id" Type="Edm.Guid" Nullable="false" />
+        <Property Name="title" Type="Edm.String" Nullable="false" MaxLength="255" m:FC_TargetPath="SyndicationTitle" m:FC_CcontentKind="text" m:FC_KeepInContent="false" />
+        <Property Name="contactName" Type="Edm.String" Nullable="false" MaxLength="255" />
+        <Property Name="sex" Type="Edm.String" Nullable="true" MaxLength="255" DefaultValue="M" />
+        <Property Name="email" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="mobilePhone" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="workPhone" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="homePhone" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="otherPhone" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="country" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="custName" Type="Edm.String" Nullable="false" MaxLength="255" />
+        <Property Name="province" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="url" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="city" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="address" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="zipcode" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="priority" Type="Edm.Int16" Nullable="true" DefaultValue="1" />
+        <Property Name="leadedBy" Type="Edm.Guid" Nullable="true" DefaultValue="@{env.User.Id}" />
+        <Property Name="comeFrom" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="description" Type="Edm.String" Nullable="true" MaxLength="255" m:FC_TargetPath="SyndicationSummary" m:FC_CcontentKind="text" m:FC_KeepInContent="false" />
+        <Property Name="isCustomer" Type="Edm.Boolean" Nullable="false" DefaultValue="0" />
+        <Property Name="createdTime" Type="Edm.DateTime" Nullable="true" DefaultValue="@{env.Now}" />
+        <Property Name="modifiedTime" Type="Edm.DateTime" Nullable="true" DefaultValue="@{env.Now}" />
+        <Property Name="area" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="status" Type="Edm.String" Nullable="true" MaxLength="255" DefaultValue="0" />
+        <Property Name="modifiedBy" Type="Edm.Guid" Nullable="true" DefaultValue="@{env.User.Id}" />
+        <Property Name="createdBy" Type="Edm.Guid" Nullable="true" DefaultValue="@{env.User.Id}" />
+        <Property Name="activityId" Type="Edm.Guid" Nullable="true" />
+        <NavigationProperty Name="User2" Relationship="Default.CustomerPotential_User" FromRole="CustomerPotential" ToRole="UserUser2" />
+        <NavigationProperty Name="User1" Relationship="Default.CustomerPotential_User" FromRole="CustomerPotential" ToRole="UserUser1" />
+        <NavigationProperty Name="User" Relationship="Default.CustomerPotential_User" FromRole="CustomerPotential" ToRole="UserUser" />
+        <NavigationProperty Name="MarketingActivity" Relationship="Default.CustomerPotential_MarketingActivity" FromRole="CustomerPotential" ToRole="MarketingActivityMarketingActivity" />
+        <NavigationProperty Name="Contact" Relationship="Default.Contact_CustomerPotential" FromRole="CustomerPotentialCustomerPotential" ToRole="Contact" />
+        <NavigationProperty Name="MarketingList" Relationship="Default.CustomerPotential_MarketingList" FromRole="CustomerPotential" ToRole="MarketingListMarketingList" />
+      </EntityType>
+      <EntityType Name="RoleInheritance">
+        <Key>
+          <PropertyRef Name="parentRoleId" />
+        </Key>
+        <Property Name="parentRoleId" Type="Edm.String" Nullable="false" MaxLength="255" />
+        <Property Name="createdBy" Type="Edm.String" Nullable="true" MaxLength="255" DefaultValue="@{env.User.Name}" />
+        <Property Name="createdDate" Type="Edm.DateTime" Nullable="true" DefaultValue="@{Now}" />
+        <Property Name="lastUpdatedBy" Type="Edm.String" Nullable="true" MaxLength="255" DefaultValue="@{env.User.Name}" />
+        <Property Name="lastUpdatedDate" Type="Edm.DateTime" Nullable="true" DefaultValue="@{env.Now}" />
+      </EntityType>
+      <EntityType Name="ActivityAppointment" BaseType="Default.ActivityItem">
+        <Property Name="meetTime" Type="Edm.DateTime" Nullable="true" />
+        <Property Name="meetAddress" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="description" Type="Edm.String" Nullable="true" MaxLength="255" m:FC_TargetPath="SyndicationSummary" m:FC_CcontentKind="text" m:FC_KeepInContent="false" />
+      </EntityType>
+      <EntityType Name="OrgOpportunity">
+        <Key>
+          <PropertyRef Name="organizationId" />
+          <PropertyRef Name="opportunityId" />
+        </Key>
+        <Property Name="organizationId" Type="Edm.String" Nullable="false" MaxLength="255" />
+        <Property Name="opportunityId" Type="Edm.String" Nullable="false" MaxLength="255" />
+      </EntityType>
+      <EntityType Name="Opportunity">
+        <Key>
+          <PropertyRef Name="id" />
+        </Key>
+        <Property Name="id" Type="Edm.Guid" Nullable="false" />
+        <Property Name="title" Type="Edm.String" Nullable="false" MaxLength="255" m:FC_TargetPath="SyndicationTitle" m:FC_CcontentKind="text" m:FC_KeepInContent="false" />
+        <Property Name="titlePinYin" Type="Edm.String" Nullable="true" MaxLength="36" />
+        <Property Name="bingoProjectNum" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="customerId" Type="Edm.Guid" Nullable="true" />
+        <Property Name="bingoContractNum" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="customerPotentialId" Type="Edm.Guid" Nullable="true" />
+        <Property Name="properties" Type="Edm.Int16" Nullable="false" DefaultValue="1" />
+        <Property Name="serviceIncome" Type="Edm.Decimal" Nullable="false" DefaultValue="0" Precision="19" Scale="19" />
+        <Property Name="productIncome" Type="Edm.Decimal" Nullable="false" DefaultValue="0" Precision="19" Scale="19" />
+        <Property Name="integrationIncome" Type="Edm.Decimal" Nullable="false" DefaultValue="0" Precision="19" Scale="19" />
+        <Property Name="totalIncome" Type="Edm.Decimal" Nullable="true" DefaultValue="0" Precision="19" Scale="19" />
+        <Property Name="proceedSatus" Type="Edm.Int16" Nullable="true" DefaultValue="1" />
+        <Property Name="estimatedSignDate" Type="Edm.DateTime" Nullable="false" />
+        <Property Name="estimatedStartDate" Type="Edm.DateTime" Nullable="false" />
+        <Property Name="industryCategory" Type="Edm.Int16" Nullable="true" DefaultValue="1" />
+        <Property Name="businessCategory" Type="Edm.Int16" Nullable="true" DefaultValue="1" />
+        <Property Name="actualIncome" Type="Edm.Decimal" Nullable="true" Precision="19" Scale="19" />
+        <Property Name="actualSignDate" Type="Edm.DateTime" Nullable="true" />
+        <Property Name="description" Type="Edm.String" Nullable="true" MaxLength="255" m:FC_TargetPath="SyndicationSummary" m:FC_CcontentKind="text" m:FC_KeepInContent="false" />
+        <Property Name="status" Type="Edm.Int16" Nullable="false" DefaultValue="1" />
+        <Property Name="createdTime" Type="Edm.DateTime" Nullable="true" DefaultValue="@{env.Now}" />
+        <Property Name="modifiedTime" Type="Edm.DateTime" Nullable="true" DefaultValue="@{env.Now}" />
+        <Property Name="createdBy" Type="Edm.Guid" Nullable="true" DefaultValue="@{env.User.Id}" />
+        <Property Name="modifiedBy" Type="Edm.Guid" Nullable="true" DefaultValue="@{env.User.Id}" />
+        <Property Name="opportunityType" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="opportunityPossible" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="progress" Type="Edm.String" Nullable="true" MaxLength="2147483647" />
+        <Property Name="loseType" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="loseReason" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="marketingActivityId" Type="Edm.Guid" Nullable="true" />
+        <Property Name="leadedBy" Type="Edm.Guid" Nullable="true" DefaultValue="@{env.User.Id}" />
+        <Property Name="channelManager" Type="Edm.Guid" Nullable="true" DefaultValue="@{env.User.Id}" />
+        <NavigationProperty Name="User1" Relationship="Default.Opportunity_User" FromRole="Opportunity" ToRole="UserUser1" />
+        <NavigationProperty Name="MarketingActivity" Relationship="Default.Opportunity_MarketingActivity" FromRole="Opportunity" ToRole="MarketingActivityMarketingActivity" />
+        <NavigationProperty Name="CustomerPotential" Relationship="Default.Opportunity_CustomerPotential" FromRole="Opportunity" ToRole="CustomerPotentialCustomerPotential" />
+        <NavigationProperty Name="Customer" Relationship="Default.Opportunity_Customer" FromRole="Opportunity" ToRole="CustomerCustomer" />
+        <NavigationProperty Name="User2" Relationship="Default.Opportunity_User" FromRole="Opportunity" ToRole="UserUser2" />
+        <NavigationProperty Name="User" Relationship="Default.Opportunity_User" FromRole="Opportunity" ToRole="UserUser" />
+        <NavigationProperty Name="ChannelManager" Relationship="Default.Opportunity_User" FromRole="Opportunity" ToRole="UserChannelManager" />
+        <NavigationProperty Name="PreSale" Relationship="Default.Opportunity_User" FromRole="Opportunity" ToRole="UserPreSale" />
+        <NavigationProperty Name="ImplementDepartment" Relationship="Default.Opportunity_Organization" FromRole="Opportunity" ToRole="OrganizationImplementDepartment" />
+        <NavigationProperty Name="Competitor" Relationship="Default.Opportunity_Competitor" FromRole="Opportunity" ToRole="CompetitorCompetitor" />
+      </EntityType>
+      <EntityType Name="PartnerUser">
+        <Key>
+          <PropertyRef Name="id" />
+        </Key>
+        <Property Name="id" Type="Edm.Guid" Nullable="false" />
+        <Property Name="userNum" Type="Edm.String" Nullable="true" MaxLength="128" />
+        <Property Name="name" Type="Edm.String" Nullable="false" MaxLength="64" m:FC_TargetPath="SyndicationTitle" m:FC_CcontentKind="text" m:FC_KeepInContent="false" />
+        <Property Name="fullName" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="loginId" Type="Edm.String" Nullable="false" MaxLength="50" />
+        <Property Name="password" Type="Edm.String" Nullable="true" MaxLength="100" />
+        <Property Name="partnerId" Type="Edm.Guid" Nullable="true" />
+        <Property Name="channelManagerId" Type="Edm.Guid" Nullable="true" />
+        <Property Name="domain" Type="Edm.String" Nullable="true" MaxLength="50" />
+        <Property Name="type" Type="Edm.Int16" Nullable="true" />
+        <Property Name="status" Type="Edm.Int16" Nullable="true" DefaultValue="1" />
+        <Property Name="sex" Type="Edm.Int16" Nullable="true" DefaultValue="0" />
+        <Property Name="rank" Type="Edm.Int32" Nullable="true" />
+        <Property Name="email" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="mobile" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="im" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="telephone" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="birthday" Type="Edm.DateTime" Nullable="true" />
+        <Property Name="picture" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="description" Type="Edm.String" Nullable="true" MaxLength="1000" m:FC_TargetPath="SyndicationSummary" m:FC_CcontentKind="text" m:FC_KeepInContent="false" />
+        <Property Name="createdDate" Type="Edm.DateTime" Nullable="true" DefaultValue="@{env.Now}" />
+        <Property Name="lastUpdatedDate" Type="Edm.DateTime" Nullable="true" DefaultValue="@{env.Now}" m:FC_TargetPath="SyndicationUpdated" m:FC_CcontentKind="text" m:FC_KeepInContent="false" />
+        <Property Name="mobile2" Type="Edm.String" Nullable="true" MaxLength="500" />
+        <Property Name="homeTelephone" Type="Edm.String" Nullable="true" MaxLength="500" />
+        <Property Name="mobile3" Type="Edm.String" Nullable="true" MaxLength="500" />
+        <Property Name="createdBy" Type="Edm.String" Nullable="true" MaxLength="50" DefaultValue="@{env.User.Id}" />
+        <Property Name="lastUpdatedBy" Type="Edm.String" Nullable="true" MaxLength="50" DefaultValue="@{env.User.Id}" />
+        <Property Name="sourceApp" Type="Edm.String" Nullable="true" MaxLength="500" />
+        <Property Name="owner" Type="Edm.String" Nullable="true" MaxLength="500" />
+        <NavigationProperty Name="PartnerOrganization" Relationship="Default.PartnerUser_PartnerOrganization" FromRole="PartnerUser" ToRole="PartnerOrganizationPartnerOrganization" />
+        <NavigationProperty Name="ChannelManager" Relationship="Default.PartnerUser_UamUser" FromRole="PartnerUser" ToRole="UamUserChannelManager" />
+      </EntityType>
+      <EntityType Name="PermissionRule">
+        <Key>
+          <PropertyRef Name="id" />
+        </Key>
+        <Property Name="id" Type="Edm.Guid" Nullable="false" />
+        <Property Name="operationId" Type="Edm.String" Nullable="true" MaxLength="38" />
+        <Property Name="name" Type="Edm.String" Nullable="true" MaxLength="150" m:FC_TargetPath="SyndicationTitle" m:FC_CcontentKind="text" m:FC_KeepInContent="false" />
+        <Property Name="priority" Type="Edm.Int32" Nullable="true" DefaultValue="10" />
+        <Property Name="rule" Type="Edm.String" Nullable="true" MaxLength="65535" />
+        <Property Name="behaviour" Type="Edm.String" Nullable="true" MaxLength="30" />
+        <Property Name="scopeType" Type="Edm.Int32" Nullable="true" />
+        <Property Name="description" Type="Edm.String" Nullable="true" MaxLength="65535" m:FC_TargetPath="SyndicationSummary" m:FC_CcontentKind="text" m:FC_KeepInContent="false" />
+        <Property Name="createdBy" Type="Edm.String" Nullable="true" MaxLength="38" DefaultValue="@{env.User.Name}" />
+        <Property Name="createdDate" Type="Edm.DateTime" Nullable="true" DefaultValue="@{env.Now}" />
+        <Property Name="lastUpdatedBy" Type="Edm.String" Nullable="true" MaxLength="38" DefaultValue="@{env.User.Name}" />
+        <Property Name="lastUpdatedDate" Type="Edm.DateTime" Nullable="true" DefaultValue="@{env.Now}" />
+      </EntityType>
+      <EntityType Name="UamGroup">
+        <Key>
+          <PropertyRef Name="groupId" />
+        </Key>
+        <Property Name="groupId" Type="Edm.Guid" Nullable="false" />
+        <Property Name="typeId" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="name" Type="Edm.String" Nullable="false" MaxLength="255" m:FC_TargetPath="SyndicationTitle" m:FC_CcontentKind="text" m:FC_KeepInContent="false" />
+        <Property Name="icon" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="status" Type="Edm.Int16" Nullable="true" DefaultValue="1" />
+        <Property Name="type" Type="Edm.Int16" Nullable="true" />
+        <Property Name="isPublic" Type="Edm.Boolean" Nullable="true" DefaultValue="1" />
+        <Property Name="isOpen" Type="Edm.Boolean" Nullable="true" DefaultValue="1" />
+        <Property Name="source" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="createdBy" Type="Edm.String" Nullable="true" MaxLength="255" DefaultValue="@{env.User.Id}" />
+        <Property Name="createdDate" Type="Edm.DateTime" Nullable="true" DefaultValue="@{env.Now}" />
+        <Property Name="lastUpdatedBy" Type="Edm.String" Nullable="true" MaxLength="255" DefaultValue="@{env.User.Id}" />
+        <Property Name="lastUpdatedDate" Type="Edm.DateTime" Nullable="true" DefaultValue="@{env.Now}" m:FC_TargetPath="SyndicationUpdated" m:FC_CcontentKind="text" m:FC_KeepInContent="false" />
+        <Property Name="memo" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="diskQuota" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="namePY" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="namePinYin" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="owner" Type="Edm.Guid" Nullable="true" />
+        <NavigationProperty Name="User" Relationship="Default.UamGroup_User" FromRole="UamGroup" ToRole="UserUser" />
+      </EntityType>
+      <EntityType Name="MktActivityMktList">
+        <Key>
+          <PropertyRef Name="marketingActivityId" />
+          <PropertyRef Name="marketingListId" />
+        </Key>
+        <Property Name="marketingActivityId" Type="Edm.String" Nullable="false" MaxLength="255" />
+        <Property Name="marketingListId" Type="Edm.String" Nullable="false" MaxLength="255" />
+      </EntityType>
+      <EntityType Name="UserRole">
+        <Key>
+          <PropertyRef Name="userId" />
+          <PropertyRef Name="roleId" />
+        </Key>
+        <Property Name="userId" Type="Edm.Guid" Nullable="false" />
+        <Property Name="roleId" Type="Edm.Guid" Nullable="false" />
+        <Property Name="createdBy" Type="Edm.String" Nullable="true" MaxLength="38" DefaultValue="@{env.User.Name}" />
+        <Property Name="createdDate" Type="Edm.DateTime" Nullable="true" DefaultValue="@{env.Now}" />
+        <Property Name="lastUpdatedBy" Type="Edm.String" Nullable="true" MaxLength="38" DefaultValue="@{env.User.Name}" />
+        <Property Name="lastUpdatedDate" Type="Edm.DateTime" Nullable="true" DefaultValue="@{env.Now}" />
+        <NavigationProperty Name="User" Relationship="Default.UserRole_User" FromRole="UserRole" ToRole="UserUser" />
+        <NavigationProperty Name="Role" Relationship="Default.UserRole_Role" FromRole="UserRole" ToRole="RoleRole" />
+      </EntityType>
+      <EntityType Name="Contact">
+        <Key>
+          <PropertyRef Name="id" />
+        </Key>
+        <Property Name="id" Type="Edm.Guid" Nullable="false" />
+        <Property Name="CustomerPotentialId" Type="Edm.Guid" Nullable="true" />
+        <Property Name="customerId" Type="Edm.Guid" Nullable="true" />
+        <Property Name="name" Type="Edm.String" Nullable="false" MaxLength="255" m:FC_TargetPath="SyndicationTitle" m:FC_CcontentKind="text" m:FC_KeepInContent="false" />
+        <Property Name="sex" Type="Edm.String" Nullable="true" MaxLength="255" DefaultValue="M" />
+        <Property Name="department" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="job" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="role" Type="Edm.String" Nullable="true" MaxLength="255" DefaultValue="unknown" />
+        <Property Name="qq" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="country" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="province" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="msn" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="city" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="mobilePhone" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="workPhone" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="address" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="homePhone" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="zipcode" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="email" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="createdTime" Type="Edm.DateTime" Nullable="true" DefaultValue="@{env.Now}" />
+        <Property Name="modifiedTime" Type="Edm.DateTime" Nullable="true" DefaultValue="@{env.Now}" />
+        <Property Name="area" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="modifiedBy" Type="Edm.Guid" Nullable="true" DefaultValue="@{env.User.Id}" />
+        <Property Name="createdBy" Type="Edm.Guid" Nullable="true" DefaultValue="@{env.User.Id}" />
+        <NavigationProperty Name="User1" Relationship="Default.Contact_User" FromRole="Contact" ToRole="UserUser1" />
+        <NavigationProperty Name="User" Relationship="Default.Contact_User" FromRole="Contact" ToRole="UserUser" />
+        <NavigationProperty Name="Customer" Relationship="Default.Contact_Customer" FromRole="Contact" ToRole="CustomerCustomer" />
+        <NavigationProperty Name="CustomerPotential" Relationship="Default.Contact_CustomerPotential" FromRole="Contact" ToRole="CustomerPotentialCustomerPotential" />
+      </EntityType>
+      <EntityType Name="City">
+        <Key>
+          <PropertyRef Name="id" />
+        </Key>
+        <Property Name="id" Type="Edm.Int32" Nullable="false" />
+        <Property Name="code" Type="Edm.String" Nullable="false" MaxLength="255" />
+        <Property Name="name" Type="Edm.String" Nullable="false" MaxLength="255" m:FC_TargetPath="SyndicationTitle" m:FC_CcontentKind="text" m:FC_KeepInContent="false" />
+        <Property Name="provinceId" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <NavigationProperty Name="Province" Relationship="Default.City_Province" FromRole="City" ToRole="ProvinceProvince" />
+        <NavigationProperty Name="Area" Relationship="Default.Area_City" FromRole="CityCity" ToRole="Area" />
+      </EntityType>
+      <EntityType Name="Competitor">
+        <Key>
+          <PropertyRef Name="id" />
+        </Key>
+        <Property Name="id" Type="Edm.Guid" Nullable="false" />
+        <Property Name="name" Type="Edm.String" Nullable="false" MaxLength="255" m:FC_TargetPath="SyndicationTitle" m:FC_CcontentKind="text" m:FC_KeepInContent="false" />
+        <Property Name="createdBy" Type="Edm.Guid" Nullable="true" DefaultValue="@{env.User.id}" />
+        <Property Name="modifiedBy" Type="Edm.Guid" Nullable="true" DefaultValue="@{env.User.id}" />
+        <Property Name="createdTime" Type="Edm.DateTime" Nullable="true" DefaultValue="@{env.Now}" />
+        <Property Name="modifiedTime" Type="Edm.DateTime" Nullable="true" DefaultValue="@{env.Now}" m:FC_TargetPath="SyndicationUpdated" m:FC_CcontentKind="text" m:FC_KeepInContent="false" />
+        <NavigationProperty Name="User" Relationship="Default.Competitor_User" FromRole="Competitor" ToRole="UserUser" />
+        <NavigationProperty Name="User1" Relationship="Default.Competitor_User" FromRole="Competitor" ToRole="UserUser1" />
+        <NavigationProperty Name="Opportunity" Relationship="Default.Opportunity_Competitor" FromRole="CompetitorCompetitor" ToRole="Opportunity" />
+      </EntityType>
+      <EntityType Name="UamSnsGroupUser">
+        <Key />
+        <Property Name="groupId" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="ufId" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="lastUpdatedBy" Type="Edm.String" Nullable="true" MaxLength="255" DefaultValue="@{env.User.Id}" />
+        <Property Name="createdDate" Type="Edm.DateTime" Nullable="true" DefaultValue="@{env.Now}" />
+        <Property Name="createdBy" Type="Edm.String" Nullable="true" MaxLength="255" DefaultValue="@{env.User.Id}" />
+        <Property Name="lastUpdatedDate" Type="Edm.DateTime" Nullable="true" DefaultValue="@{env.Now}" m:FC_TargetPath="SyndicationUpdated" m:FC_CcontentKind="text" m:FC_KeepInContent="false" />
+      </EntityType>
+      <EntityType Name="MetauiTemplate">
+        <Key>
+          <PropertyRef Name="id" />
+        </Key>
+        <Property Name="id" Type="Edm.Guid" Nullable="false" />
+        <Property Name="name" Type="Edm.String" Nullable="false" MaxLength="255" />
+        <Property Name="entityName" Type="Edm.String" Nullable="false" MaxLength="255" />
+        <Property Name="displayName" Type="Edm.String" Nullable="false" MaxLength="255" m:FC_TargetPath="SyndicationTitle" m:FC_CcontentKind="text" m:FC_KeepInContent="false" />
+        <Property Name="type" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="creator" Type="Edm.String" Nullable="true" MaxLength="255" DefaultValue="@{env.User.Name}" />
+        <Property Name="creationTime" Type="Edm.DateTime" Nullable="true" DefaultValue="@{env.Now}" />
+        <Property Name="lastModifiedBy" Type="Edm.String" Nullable="true" MaxLength="255" DefaultValue="@{env.User.Name}" />
+        <Property Name="lastModified" Type="Edm.DateTime" Nullable="true" DefaultValue="@{env.Now}" m:FC_TargetPath="SyndicationUpdated" m:FC_CcontentKind="text" m:FC_KeepInContent="false" />
+        <Property Name="configData" Type="Edm.String" Nullable="true" MaxLength="65535" />
+        <Property Name="converter" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="template" Type="Edm.String" Nullable="true" MaxLength="2147483647" />
+        <Property Name="priorityBy" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="version" Type="Edm.Int32" Nullable="true" DefaultValue="1" />
+        <Property Name="status" Type="Edm.Int32" Nullable="true" DefaultValue="0" />
+        <Property Name="layoutType" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="url" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="realPath" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="description" Type="Edm.String" Nullable="true" MaxLength="255" m:FC_TargetPath="SyndicationSummary" m:FC_CcontentKind="text" m:FC_KeepInContent="false" />
+        <Property Name="dataSourceType" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="sql" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="inControl" Type="Edm.Boolean" Nullable="true" DefaultValue="true" />
+      </EntityType>
+      <EntityType Name="MktListCustomer">
+        <Key>
+          <PropertyRef Name="customerId" />
+          <PropertyRef Name="marketingListId" />
+        </Key>
+        <Property Name="customerId" Type="Edm.String" Nullable="false" MaxLength="255" />
+        <Property Name="marketingListId" Type="Edm.String" Nullable="false" MaxLength="255" />
+      </EntityType>
+      <EntityType Name="UamSnsGroupType">
+        <Key>
+          <PropertyRef Name="typeId" />
+        </Key>
+        <Property Name="typeId" Type="Edm.Guid" Nullable="false" />
+        <Property Name="name" Type="Edm.String" Nullable="true" MaxLength="255" m:FC_TargetPath="SyndicationTitle" m:FC_CcontentKind="text" m:FC_KeepInContent="false" />
+        <Property Name="memo" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="lastUpdatedBy" Type="Edm.String" Nullable="true" MaxLength="255" DefaultValue="@{env.User.Id}" />
+        <Property Name="lastUpdatedDate" Type="Edm.DateTime" Nullable="true" DefaultValue="@{env.Now}" m:FC_TargetPath="SyndicationUpdated" m:FC_CcontentKind="text" m:FC_KeepInContent="false" />
+        <Property Name="createdBy" Type="Edm.String" Nullable="true" MaxLength="255" DefaultValue="@{env.User.Id}" />
+        <Property Name="createdDate" Type="Edm.DateTime" Nullable="true" DefaultValue="@{env.Now}" />
+      </EntityType>
+      <EntityType Name="EmailTemplate">
+        <Key>
+          <PropertyRef Name="id" />
+        </Key>
+        <Property Name="id" Type="Edm.Guid" Nullable="false" />
+        <Property Name="name" Type="Edm.String" Nullable="true" MaxLength="255" m:FC_TargetPath="SyndicationTitle" m:FC_CcontentKind="text" m:FC_KeepInContent="false" />
+        <Property Name="recordId" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="title" Type="Edm.String" Nullable="false" MaxLength="255" />
+        <Property Name="sender" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="receiver" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="receiverCopy" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="receiverSecret" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="content" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="createdTime" Type="Edm.DateTime" Nullable="true" DefaultValue="@{env.Now}" />
+        <Property Name="modifiedTime" Type="Edm.DateTime" Nullable="true" DefaultValue="@{env.Now}" />
+        <Property Name="createdBy" Type="Edm.Guid" Nullable="true" DefaultValue="@{env.User.Id}" />
+        <Property Name="modifiedBy" Type="Edm.Guid" Nullable="true" DefaultValue="@{env.User.Id}" />
+        <Property Name="signatureId" Type="Edm.Guid" Nullable="true" />
+        <NavigationProperty Name="User1" Relationship="Default.EmailTemplate_User" FromRole="EmailTemplate" ToRole="UserUser1" />
+        <NavigationProperty Name="User" Relationship="Default.EmailTemplate_User" FromRole="EmailTemplate" ToRole="UserUser" />
+        <NavigationProperty Name="SignTemplate" Relationship="Default.EmailTemplate_SignTemplate" FromRole="EmailTemplate" ToRole="SignTemplateSignTemplate" />
+      </EntityType>
+      <EntityType Name="User">
+        <Key>
+          <PropertyRef Name="id" />
+        </Key>
+        <Property Name="id" Type="Edm.Guid" Nullable="false" />
+        <Property Name="orgId" Type="Edm.String" Nullable="true" MaxLength="50" />
+        <Property Name="name" Type="Edm.String" Nullable="false" MaxLength="64" m:FC_TargetPath="SyndicationTitle" m:FC_CcontentKind="text" m:FC_KeepInContent="false" />
+        <Property Name="namePinYin" Type="Edm.String" Nullable="true" MaxLength="500" />
+        <Property Name="namePY" Type="Edm.String" Nullable="true" MaxLength="500" />
+        <Property Name="password" Type="Edm.String" Nullable="true" MaxLength="100" />
+        <Property Name="loginId" Type="Edm.String" Nullable="false" MaxLength="50" />
+        <Property Name="type" Type="Edm.Int16" Nullable="true" DefaultValue="0" />
+        <Property Name="sex" Type="Edm.Int16" Nullable="true" DefaultValue="0" />
+        <Property Name="email" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="mobile" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="mobile2" Type="Edm.String" Nullable="true" MaxLength="500" />
+        <Property Name="mobile3" Type="Edm.String" Nullable="true" MaxLength="500" />
+        <Property Name="telephone" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="homeTelephone" Type="Edm.String" Nullable="true" MaxLength="500" />
+        <Property Name="diskQuota" Type="Edm.String" Nullable="true" MaxLength="500" />
+        <Property Name="picture" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="birthday" Type="Edm.DateTime" Nullable="true" />
+        <Property Name="orderNo" Type="Edm.Int32" Nullable="true" />
+        <Property Name="description" Type="Edm.String" Nullable="true" MaxLength="65535" m:FC_TargetPath="SyndicationSummary" m:FC_CcontentKind="text" m:FC_KeepInContent="false" />
+        <Property Name="userType" Type="Edm.String" Nullable="false" MaxLength="8" />
+        <NavigationProperty Name="Roles" Relationship="Default.User_Role" FromRole="User" ToRole="RoleRoles" />
+        <NavigationProperty Name="负责前期的商机" Relationship="Default.User_Opportunity" FromRole="User" ToRole="Opportunity负责前期的商机" />
+      </EntityType>
+      <EntityType Name="QuotationItem">
+        <Key>
+          <PropertyRef Name="id" />
+        </Key>
+        <Property Name="id" Type="Edm.Guid" Nullable="false" />
+        <Property Name="quotationId" Type="Edm.Guid" Nullable="true" />
+        <Property Name="name" Type="Edm.String" Nullable="false" MaxLength="255" m:FC_TargetPath="SyndicationTitle" m:FC_CcontentKind="text" m:FC_KeepInContent="false" />
+        <Property Name="price" Type="Edm.Decimal" Nullable="true" Precision="19" Scale="19" />
+        <Property Name="description" Type="Edm.String" Nullable="true" MaxLength="1000" m:FC_TargetPath="SyndicationSummary" m:FC_CcontentKind="text" m:FC_KeepInContent="false" />
+        <NavigationProperty Name="Quotation" Relationship="Default.QuotationItem_Quotation" FromRole="QuotationItem" ToRole="QuotationQuotation" />
+      </EntityType>
+      <EntityType Name="PartnerOrganization">
+        <Key>
+          <PropertyRef Name="id" />
+        </Key>
+        <Property Name="id" Type="Edm.Guid" Nullable="false" />
+        <Property Name="orgName" Type="Edm.String" Nullable="true" MaxLength="128" />
+        <Property Name="name" Type="Edm.String" Nullable="false" MaxLength="64" m:FC_TargetPath="SyndicationTitle" m:FC_CcontentKind="text" m:FC_KeepInContent="false" />
+        <Property Name="fullName" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="parentId" Type="Edm.Guid" Nullable="true" />
+        <Property Name="code" Type="Edm.String" Nullable="true" MaxLength="1000" />
+        <Property Name="level" Type="Edm.Int32" Nullable="true" />
+        <Property Name="status" Type="Edm.Int16" Nullable="false" DefaultValue="1" />
+        <Property Name="description" Type="Edm.String" Nullable="true" MaxLength="1000" m:FC_TargetPath="SyndicationSummary" m:FC_CcontentKind="text" m:FC_KeepInContent="false" />
+        <Property Name="icode" Type="Edm.Int32" Nullable="true" />
+        <Property Name="createdDate" Type="Edm.DateTime" Nullable="true" DefaultValue="@{env.Now}" />
+        <Property Name="lastUpdatedDate" Type="Edm.DateTime" Nullable="true" DefaultValue="@{env.Now}" m:FC_TargetPath="SyndicationUpdated" m:FC_CcontentKind="text" m:FC_KeepInContent="false" />
+        <Property Name="createdBy" Type="Edm.String" Nullable="true" MaxLength="500" DefaultValue="@{env.User.Id}" />
+        <Property Name="lastUpdatedBy" Type="Edm.String" Nullable="true" MaxLength="500" DefaultValue="@{env.User.Id}" />
+        <NavigationProperty Name="PartnerOrganization" Relationship="Default.PartnerOrganization_PartnerOrganization" FromRole="PartnerOrganization" ToRole="PartnerOrganizationPartnerOrganization" />
+        <NavigationProperty Name="PartnerUser" Relationship="Default.PartnerUser_PartnerOrganization" FromRole="PartnerOrganizationPartnerOrganization" ToRole="PartnerUser" />
+      </EntityType>
+      <EntityType Name="MarketingList">
+        <Key>
+          <PropertyRef Name="id" />
+        </Key>
+        <Property Name="id" Type="Edm.Guid" Nullable="false" />
+        <Property Name="title" Type="Edm.String" Nullable="true" MaxLength="255" m:FC_TargetPath="SyndicationTitle" m:FC_CcontentKind="text" m:FC_KeepInContent="false" />
+        <Property Name="description" Type="Edm.String" Nullable="true" MaxLength="255" m:FC_TargetPath="SyndicationSummary" m:FC_CcontentKind="text" m:FC_KeepInContent="false" />
+        <Property Name="leadedDepartment" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="createdTime" Type="Edm.DateTime" Nullable="true" DefaultValue="@{env.Now}" />
+        <Property Name="modifiedTime" Type="Edm.DateTime" Nullable="true" DefaultValue="@{env.Now}" />
+        <Property Name="createdBy" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="modifiedBy" Type="Edm.String" Nullable="true" MaxLength="255" />
+        <Property Name="leadedBy" Type="Edm.Guid" Nullable="true" DefaultValue="@{env.User.Id}" />
+        <NavigationProperty Name="User" Relationship="Default.MarketingList_User" FromRole="MarketingList" ToRole="UserUser" />
+        <NavigationProperty Name="Customer" Relationship="Default.Customer_MarketingList" FromRole="MarketingListMarketingList" ToRole="Customer" />
+        <NavigationProperty Name="CustomerPotential" Relationship="Default.CustomerPotential_MarketingList" FromRole="MarketingListMarketingList" ToRole="CustomerPotential" />
+        <NavigationProperty Name="MarketingActivity" Relationship="Default.MarketingActivity_MarketingList" FromRole="MarketingListMarketingList" ToRole="MarketingActivity" />
+      </EntityType>
+      <Association Name="Organization_Organization">
+        <End Role="Organization" Type="Default.Organization" Multiplicity="*" />
+        <End Role="OrganizationOrganization" Type="Default.Organization" Multiplicity="0..1" />
+      </Association>
+      <Association Name="StakeholderRole_User">
+        <End Role="StakeholderRole" Type="Default.StakeholderRole" Multiplicity="*" />
+        <End Role="UserUser1" Type="Default.User" Multiplicity="0..1" />
+      </Association>
+      <Association Name="EmailTemplate_SignTemplate">
+        <End Role="EmailTemplate" Type="Default.EmailTemplate" Multiplicity="*" />
+        <End Role="SignTemplateSignTemplate" Type="Default.SignTemplate" Multiplicity="0..1" />
+      </Association>
+      <Association Name="Opportunity_User">
+        <End Role="Opportunity" Type="Default.Opportunity" Multiplicity="*" />
+        <End Role="UserChannelManager" Type="Default.User" Multiplicity="0..1" />
+      </Association>
+      <Association Name="User_Role">
+        <End Role="User" Type="Default.User" Multiplicity="*" />
+        <End Role="RoleRoles" Type="Default.Role" Multiplicity="*" />
+      </Association>
+      <Association Name="MarketingActivity_MarketingList">
+        <End Role="MarketingActivity" Type="Default.MarketingActivity" Multiplicity="*" />
+        <End Role="MarketingListMarketingList" Type="Default.MarketingList" Multiplicity="*" />
+      </Association>
+      <Association Name="OpportunityPossible_User">
+        <End Role="OpportunityPossible" Type="Default.OpportunityPossible" Multiplicity="*" />
+        <End Role="UserCreateBy" Type="Default.User" Multiplicity="0..1" />
+      </Association>
+      <Association Name="UamExternalUser_UamUser">
+        <End Role="UamExternalUser" Type="Default.UamExternalUser" Multiplicity="*" />
+        <End Role="UamUserChannelManager" Type="Default.UamUser" Multiplicity="0..1" />
+      </Association>
+      <Association Name="MarketingList_User">
+        <End Role="MarketingList" Type="Default.MarketingList" Multiplicity="*" />
+        <End Role="UserUser" Type="Default.User" Multiplicity="0..1" />
+      </Association>
+      <Association Name="OpportunityPossible_User">
+        <End Role="OpportunityPossible" Type="Default.OpportunityPossible" Multiplicity="*" />
+        <End Role="UserModifiedBy" Type="Default.User" Multiplicity="0..1" />
+      </Association>
+      <Association Name="Stakeholder_Opportunity">
+        <End Role="Stakeholder" Type="Default.Stakeholder" Multiplicity="*" />
+        <End Role="OpportunityOpportunity" Type="Default.Opportunity" Multiplicity="0..1" />
+      </Association>
+      <Association Name="Contact_CustomerPotential">
+        <End Role="Contact" Type="Default.Contact" Multiplicity="*" />
+        <End Role="CustomerPotentialCustomerPotential" Type="Default.CustomerPotential" Multiplicity="0..1" />
+      </Association>
+      <Association Name="UserRole_Role">
+        <End Role="UserRole" Type="Default.UserRole" Multiplicity="*" />
+        <End Role="RoleRole" Type="Default.Role" Multiplicity="0..1" />
+      </Association>
+      <Association Name="UserRole_User">
+        <End Role="UserRole" Type="Default.UserRole" Multiplicity="*" />
+        <End Role="UserUser" Type="Default.User" Multiplicity="0..1" />
+      </Association>
+      <Association Name="PartnerOrganization_PartnerOrganization">
+        <End Role="PartnerOrganization" Type="Default.PartnerOrganization" Multiplicity="*" />
+        <End Role="PartnerOrganizationPartnerOrganization" Type="Default.PartnerOrganization" Multiplicity="0..1" />
+      </Association>
+      <Association Name="UamExternalOrganization_UamExternalOrganization">
+        <End Role="UamExternalOrganization" Type="Default.UamExternalOrganization" Multiplicity="*" />
+        <End Role="UamExternalOrganizationUamExternalOrganization" Type="Default.UamExternalOrganization" Multiplicity="0..1" />
+      </Association>
+      <Association Name="Opportunity_Customer">
+        <End Role="Opportunity" Type="Default.Opportunity" Multiplicity="*" />
+        <End Role="CustomerCustomer" Type="Default.Customer" Multiplicity="1" />
+      </Association>
+      <Association Name="User_Opportunity">
+        <End Role="User" Type="Default.User" Multiplicity="*" />
+        <End Role="Opportunity负责前期的商机" Type="Default.Opportunity" Multiplicity="*" />
+      </Association>
+      <Association Name="Opportunity_MarketingActivity">
+        <End Role="Opportunity" Type="Default.Opportunity" Multiplicity="*" />
+        <End Role="MarketingActivityMarketingActivity" Type="Default.MarketingActivity" Multiplicity="0..1" />
+      </Association>
+      <Association Name="ActivityItem_User">
+        <End Role="ActivityItem" Type="Default.ActivityItem" Multiplicity="*" />
+        <End Role="UserUser1" Type="Default.User" Multiplicity="0..1" />
+      </Association>
+      <Association Name="Contract_Quotation">
+        <End Role="Contract" Type="Default.Contract" Multiplicity="*" />
+        <End Role="QuotationQuotation" Type="Default.Quotation" Multiplicity="0..1" />
+      </Association>
+      <Association Name="PortalMenu_PortalMenu">
+        <End Role="PortalMenu" Type="Default.PortalMenu" Multiplicity="*" />
+        <End Role="PortalMenuParentId" Type="Default.PortalMenu" Multiplicity="0..1" />
+      </Association>
+      <Association Name="Quotation_CustomerPotential">
+        <End Role="Quotation" Type="Default.Quotation" Multiplicity="*" />
+        <End Role="CustomerPotentialCustomerPotential" Type="Default.CustomerPotential" Multiplicity="0..1" />
+      </Association>
+      <Association Name="OpportunityType_User">
+        <End Role="OpportunityType" Type="Default.OpportunityType" Multiplicity="*" />
+        <End Role="UserUser" Type="Default.User" Multiplicity="0..1" />
+      </Association>
+      <Association Name="Area_City">
+        <End Role="Area" Type="Default.Area" Multiplicity="*" />
+        <End Role="CityCity" Type="Default.City" Multiplicity="0..1" />
+      </Association>
+      <Association Name="Contact_User">
+        <End Role="Contact" Type="Default.Contact" Multiplicity="*" />
+        <End Role="UserUser" Type="Default.User" Multiplicity="0..1" />
+      </Association>
+      <Association Name="Share_User">
+        <End Role="Share" Type="Default.Share" Multiplicity="*" />
+        <End Role="UserUser" Type="Default.User" Multiplicity="0..1" />
+      </Association>
+      <Association Name="Contract_User">
+        <End Role="Contract" Type="Default.Contract" Multiplicity="*" />
+        <End Role="UserUser2" Type="Default.User" Multiplicity="0..1" />
+      </Association>
+      <Association Name="Contract_User">
+        <End Role="Contract" Type="Default.Contract" Multiplicity="*" />
+        <End Role="UserUser1" Type="Default.User" Multiplicity="0..1" />
+      </Association>
+      <Association Name="PartnerUser_PartnerOrganization">
+        <End Role="PartnerUser" Type="Default.PartnerUser" Multiplicity="*" />
+        <End Role="PartnerOrganizationPartnerOrganization" Type="Default.PartnerOrganization" Multiplicity="0..1" />
+      </Association>
+      <Association Name="Customer_Customer">
+        <End Role="Customer" Type="Default.Customer" Multiplicity="*" />
+        <End Role="CustomerCustomer" Type="Default.Customer" Multiplicity="0..1" />
+      </Association>
+      <Association Name="Opportunity_User">
+        <End Role="Opportunity" Type="Default.Opportunity" Multiplicity="*" />
+        <End Role="UserUser2" Type="Default.User" Multiplicity="0..1" />
+      </Association>
+      <Association Name="MarketingActivity_User">
+        <End Role="MarketingActivity" Type="Default.MarketingActivity" Multiplicity="*" />
+        <End Role="UserUser2" Type="Default.User" Multiplicity="0..1" />
+      </Association>
+      <Association Name="ActivityResponse_User">
+        <End Role="ActivityResponse" Type="Default.ActivityResponse" Multiplicity="*" />
+        <End Role="UserUser_73553_65661673553" Type="Default.User" Multiplicity="0..1" />
+      </Association>
+      <Association Name="MarketingActivity_User">
+        <End Role="MarketingActivity" Type="Default.MarketingActivity" Multiplicity="*" />
+        <End Role="UserUser1" Type="Default.User" Multiplicity="0..1" />
+      </Association>
+      <Association Name="SignTemplate_User">
+        <End Role="SignTemplate" Type="Default.SignTemplate" Multiplicity="*" />
+        <End Role="UserUser" Type="Default.User" Multiplicity="0..1" />
+      </Association>
+      <Association Name="Competitor_User">
+        <End Role="Competitor" Type="Default.Competitor" Multiplicity="*" />
+        <End Role="UserUser1" Type="Default.User" Multiplicity="0..1" />
+      </Association>
+      <Association Name="Opportunity_User">
+        <End Role="Opportunity" Type="Default.Opportunity" Multiplicity="*" />
+        <End Role="UserUser1" Type="Default.User" Multiplicity="0..1" />
+      </Association>
+      <Association Name="Customer_User">
+        <End Role="Customer" Type="Default.Customer" Multiplicity="*" />
+        <End Role="UserUser" Type="Default.User" Multiplicity="0..1" />
+      </Association>
+      <Association Name="CustomerPotential_User">
+        <End Role="CustomerPotential" Type="Default.CustomerPotential" Multiplicity="*" />
+        <End Role="UserUser1" Type="Default.User" Multiplicity="0..1" />
+      </Association>
+      <Association Name="CustomerPotential_User">
+        <End Role="CustomerPotential" Type="Default.CustomerPotential" Multiplicity="*" />
+        <End Role="UserUser2" Type="Default.User" Multiplicity="0..1" />
+      </Association>
+      <Association Name="QuotationItem_Quotation">
+        <End Role="QuotationItem" Type="Default.QuotationItem" Multiplicity="*" />
+        <End Role="QuotationQuotation" Type="Default.Quotation" Multiplicity="0..1" />
+      </Association>
+      <Association Name="Contract_User">
+        <End Role="Contract" Type="Default.Contract" Multiplicity="*" />
+        <End Role="UserUser" Type="Default.User" Multiplicity="0..1" />
+      </Association>
+      <Association Name="ActivityItem_User">
+        <End Role="ActivityItem" Type="Default.ActivityItem" Multiplicity="*" />
+        <End Role="UserUser" Type="Default.User" Multiplicity="0..1" />
+      </Association>
+      <Association Name="StakeholderRole_User">
+        <End Role="StakeholderRole" Type="Default.StakeholderRole" Multiplicity="*" />
+        <End Role="UserUser" Type="Default.User" Multiplicity="0..1" />
+      </Association>
+      <Association Name="Stakeholder_Contact">
+        <End Role="Stakeholder" Type="Default.Stakeholder" Multiplicity="*" />
+        <End Role="ContactContact" Type="Default.Contact" Multiplicity="0..1" />
+      </Association>
+      <Association Name="CustomerPotential_User">
+        <End Role="CustomerPotential" Type="Default.CustomerPotential" Multiplicity="*" />
+        <End Role="UserUser" Type="Default.User" Multiplicity="0..1" />
+      </Association>
+      <Association Name="UamUser_UamOrganization">
+        <End Role="UamUser" Type="Default.UamUser" Multiplicity="*" />
+        <End Role="UamOrganizationUamOrganization" Type="Default.UamOrganization" Multiplicity="0..1" />
+      </Association>
+      <Association Name="Customer_User">
+        <End Role="Customer" Type="Default.Customer" Multiplicity="*" />
+        <End Role="UserUser1" Type="Default.User" Multiplicity="0..1" />
+      </Association>
+      <Association Name="ActivityResponse_MarketingActivity">
+        <End Role="ActivityResponse" Type="Default.ActivityResponse" Multiplicity="*" />
+        <End Role="MarketingActivityMarketingA_65663177955" Type="Default.MarketingActivity" Multiplicity="0..1" />
+      </Association>
+      <Association Name="Opportunity_User">
+        <End Role="Opportunity" Type="Default.Opportunity" Multiplicity="*" />
+        <End Role="UserPreSale" Type="Default.User" Multiplicity="*" />
+      </Association>
+      <Association Name="Customer_User">
+        <End Role="Customer" Type="Default.Customer" Multiplicity="*" />
+        <End Role="UserUser2" Type="Default.User" Multiplicity="0..1" />
+      </Association>
+      <Association Name="Contract_Customer">
+        <End Role="Contract" Type="Default.Contract" Multiplicity="*" />
+        <End Role="CustomerCustomer" Type="Default.Customer" Multiplicity="0..1" />
+      </Association>
+      <Association Name="ActivityResponse_User">
+        <End Role="ActivityResponse" Type="Default.ActivityResponse" Multiplicity="*" />
+        <End Role="UserUser_06821_65663206821" Type="Default.User" Multiplicity="0..1" />
+      </Association>
+      <Association Name="UamGroup_User">
+        <End Role="UamGroup" Type="Default.UamGroup" Multiplicity="*" />
+        <End Role="UserUser" Type="Default.User" Multiplicity="0..1" />
+      </Association>
+      <Association Name="Opportunity_Organization">
+        <End Role="Opportunity" Type="Default.Opportunity" Multiplicity="*" />
+        <End Role="OrganizationImplementDepartment" Type="Default.Organization" Multiplicity="*" />
+      </Association>
+      <Association Name="Quotation_User">
+        <End Role="Quotation" Type="Default.Quotation" Multiplicity="*" />
+        <End Role="UserUser" Type="Default.User" Multiplicity="0..1" />
+      </Association>
+      <Association Name="Attachment_User">
+        <End Role="Attachment" Type="Default.Attachment" Multiplicity="*" />
+        <End Role="UserUser" Type="Default.User" Multiplicity="0..1" />
+      </Association>
+      <Association Name="UamExternalUser_UamExternalOrganization">
+        <End Role="UamExternalUser" Type="Default.UamExternalUser" Multiplicity="*" />
+        <End Role="UamExternalOrganizationUamExternalOrganization" Type="Default.UamExternalOrganization" Multiplicity="0..1" />
+      </Association>
+      <Association Name="CustomerPotential_MarketingActivity">
+        <End Role="CustomerPotential" Type="Default.CustomerPotential" Multiplicity="*" />
+        <End Role="MarketingActivityMarketingActivity" Type="Default.MarketingActivity" Multiplicity="0..1" />
+      </Association>
+      <Association Name="Opportunity_User">
+        <End Role="Opportunity" Type="Default.Opportunity" Multiplicity="*" />
+        <End Role="UserUser" Type="Default.User" Multiplicity="0..1" />
+      </Association>
+      <Association Name="Customer_CustomerPotential">
+        <End Role="Customer" Type="Default.Customer" Multiplicity="*" />
+        <End Role="CustomerPotentialCustomerPotential" Type="Default.CustomerPotential" Multiplicity="0..1" />
+      </Association>
+      <Association Name="City_Province">
+        <End Role="City" Type="Default.City" Multiplicity="*" />
+        <End Role="ProvinceProvince" Type="Default.Province" Multiplicity="0..1" />
+      </Association>
+      <Association Name="Contact_User">
+        <End Role="Contact" Type="Default.Contact" Multiplicity="*" />
+        <End Role="UserUser1" Type="Default.User" Multiplicity="0..1" />
+      </Association>
+      <Association Name="Customer_MarketingList">
+        <End Role="Customer" Type="Default.Customer" Multiplicity="*" />
+        <End Role="MarketingListMarketingList" Type="Default.MarketingList" Multiplicity="*" />
+      </Association>
+      <Association Name="DataChangeLogItem_DataChangeLog">
+        <End Role="DataChangeLogItem" Type="Default.DataChangeLogItem" Multiplicity="*" />
+        <End Role="DataChangeLogLogId" Type="Default.DataChangeLog" Multiplicity="0..1" />
+      </Association>
+      <Association Name="MarketingActivity_User">
+        <End Role="MarketingActivity" Type="Default.MarketingActivity" Multiplicity="*" />
+        <End Role="UserUser" Type="Default.User" Multiplicity="0..1" />
+      </Association>
+      <Association Name="EmailTemplate_User">
+        <End Role="EmailTemplate" Type="Default.EmailTemplate" Multiplicity="*" />
+        <End Role="UserUser" Type="Default.User" Multiplicity="0..1" />
+      </Association>
+      <Association Name="Quotation_User">
+        <End Role="Quotation" Type="Default.Quotation" Multiplicity="*" />
+        <End Role="UserUser1" Type="Default.User" Multiplicity="0..1" />
+      </Association>
+      <Association Name="Quotation_User">
+        <End Role="Quotation" Type="Default.Quotation" Multiplicity="*" />
+        <End Role="UserUser2" Type="Default.User" Multiplicity="0..1" />
+      </Association>
+      <Association Name="Quotation_Customer">
+        <End Role="Quotation" Type="Default.Quotation" Multiplicity="*" />
+        <End Role="CustomerCustomer" Type="Default.Customer" Multiplicity="0..1" />
+      </Association>
+      <Association Name="Attachment_User">
+        <End Role="Attachment" Type="Default.Attachment" Multiplicity="*" />
+        <End Role="UserUser1" Type="Default.User" Multiplicity="0..1" />
+      </Association>
+      <Association Name="Opportunity_Competitor">
+        <End Role="Opportunity" Type="Default.Opportunity" Multiplicity="*" />
+        <End Role="CompetitorCompetitor" Type="Default.Competitor" Multiplicity="*" />
+      </Association>
+      <Association Name="Contact_Customer">
+        <End Role="Contact" Type="Default.Contact" Multiplicity="*" />
+        <End Role="CustomerCustomer" Type="Default.Customer" Multiplicity="0..1" />
+      </Association>
+      <Association Name="Competitor_User">
+        <End Role="Competitor" Type="Default.Competitor" Multiplicity="*" />
+        <End Role="UserUser" Type="Default.User" Multiplicity="0..1" />
+      </Association>
+      <Association Name="UamOrganization_UamOrganization">
+        <End Role="UamOrganization" Type="Default.UamOrganization" Multiplicity="*" />
+        <End Role="UamOrganizationFK_Reference_12" Type="Default.UamOrganization" Multiplicity="0..1" />
+      </Association>
+      <Association Name="ActivityResponse_User">
+        <End Role="ActivityResponse" Type="Default.ActivityResponse" Multiplicity="*" />
+        <End Role="UserUser_76422_65661676422" Type="Default.User" Multiplicity="0..1" />
+      </Association>
+      <Association Name="SignTemplate_User">
+        <End Role="SignTemplate" Type="Default.SignTemplate" Multiplicity="*" />
+        <End Role="UserUser1" Type="Default.User" Multiplicity="0..1" />
+      </Association>
+      <Association Name="EmailTemplate_User">
+        <End Role="EmailTemplate" Type="Default.EmailTemplate" Multiplicity="*" />
+        <End Role="UserUser1" Type="Default.User" Multiplicity="0..1" />
+      </Association>
+      <Association Name="CustomerPotential_MarketingList">
+        <End Role="CustomerPotential" Type="Default.CustomerPotential" Multiplicity="*" />
+        <End Role="MarketingListMarketingList" Type="Default.MarketingList" Multiplicity="*" />
+      </Association>
+      <Association Name="Opportunity_CustomerPotential">
+        <End Role="Opportunity" Type="Default.Opportunity" Multiplicity="*" />
+        <End Role="CustomerPotentialCustomerPotential" Type="Default.CustomerPotential" Multiplicity="0..1" />
+      </Association>
+      <Association Name="Province_Country">
+        <End Role="Province" Type="Default.Province" Multiplicity="*" />
+        <End Role="CountryCountry" Type="Default.Country" Multiplicity="0..1" />
+      </Association>
+      <Association Name="OpportunityType_User">
+        <End Role="OpportunityType" Type="Default.OpportunityType" Multiplicity="*" />
+        <End Role="UserUser2" Type="Default.User" Multiplicity="0..1" />
+      </Association>
+      <Association Name="PartnerUser_UamUser">
+        <End Role="PartnerUser" Type="Default.PartnerUser" Multiplicity="*" />
+        <End Role="UamUserChannelManager" Type="Default.UamUser" Multiplicity="0..1" />
+      </Association>
+      <Association Name="OpportunityPossible_OpportunityType">
+        <End Role="OpportunityPossible" Type="Default.OpportunityPossible" Multiplicity="*" />
+        <End Role="OpportunityTypeOpportunityType" Type="Default.OpportunityType" Multiplicity="0..1" />
+      </Association>
+      <Association Name="ActivityResponse_Customer">
+        <End Role="ActivityResponse" Type="Default.ActivityResponse" Multiplicity="*" />
+        <End Role="CustomerCustomer_4_65663251584" Type="Default.Customer" Multiplicity="0..1" />
+      </Association>
+      <EntityContainer Name="ODataService" m:IsDefaultEntityContainer="true">
+        <EntitySet Name="Quotation" EntityType="Default.Quotation" />
+        <EntitySet Name="OpportunityType" EntityType="Default.OpportunityType" />
+        <EntitySet Name="OpportunityPossible" EntityType="Default.OpportunityPossible" />
+        <EntitySet Name="QuotationItem" EntityType="Default.QuotationItem" />
+        <EntitySet Name="EmailTemplate" EntityType="Default.EmailTemplate" />
+        <EntitySet Name="SignTemplate" EntityType="Default.SignTemplate" />
+        <EntitySet Name="Attachment" EntityType="Default.Attachment" />
+        <EntitySet Name="Contract" EntityType="Default.Contract" />
+        <EntitySet Name="Customer" EntityType="Default.Customer" />
+        <EntitySet Name="ActivityResponse" EntityType="Default.ActivityResponse" />
+        <EntitySet Name="Contact" EntityType="Default.Contact" />
+        <EntitySet Name="CustomerPotential" EntityType="Default.CustomerPotential" />
+        <EntitySet Name="Opportunity" EntityType="Default.Opportunity" />
+        <EntitySet Name="Stakeholder" EntityType="Default.Stakeholder" />
+        <EntitySet Name="StakeholderRole" EntityType="Default.StakeholderRole" />
+        <EntitySet Name="MarketingActivity" EntityType="Default.MarketingActivity" />
+        <EntitySet Name="ActivityEmail" EntityType="Default.ActivityEmail" />
+        <EntitySet Name="ActivityAppointment" EntityType="Default.ActivityAppointment" />
+        <EntitySet Name="ActivityTask" EntityType="Default.ActivityTask" />
+        <EntitySet Name="ActivityComment" EntityType="Default.ActivityComment" />
+        <EntitySet Name="MarketingList" EntityType="Default.MarketingList" />
+        <EntitySet Name="ActivityItem" EntityType="Default.ActivityItem" />
+        <EntitySet Name="PartnerUser" EntityType="Default.PartnerUser" />
+        <EntitySet Name="PartnerOrganization" EntityType="Default.PartnerOrganization" />
+        <EntitySet Name="Competitor" EntityType="Default.Competitor" />
+        <EntitySet Name="Share" EntityType="Default.Share" />
+        <EntitySet Name="Country" EntityType="Default.Country" />
+        <EntitySet Name="Area" EntityType="Default.Area" />
+        <EntitySet Name="Province" EntityType="Default.Province" />
+        <EntitySet Name="City" EntityType="Default.City" />
+        <EntitySet Name="MetauiTemplate" EntityType="Default.MetauiTemplate" />
+        <EntitySet Name="MetaAppconfig" EntityType="Default.MetaAppconfig" />
+        <EntitySet Name="DataChangeLog" EntityType="Default.DataChangeLog" />
+        <EntitySet Name="DataChangeLogItem" EntityType="Default.DataChangeLogItem" />
+        <EntitySet Name="PortalMenu" EntityType="Default.PortalMenu" />
+        <EntitySet Name="DefaultFields" EntityType="Default.DefaultFields" />
+        <EntitySet Name="MetauiOperation" EntityType="Default.MetauiOperation" />
+        <EntitySet Name="ScriptLib" EntityType="Default.ScriptLib" />
+        <EntitySet Name="User" EntityType="Default.User" />
+        <EntitySet Name="Organization" EntityType="Default.Organization" />
+        <EntitySet Name="Role" EntityType="Default.Role" />
+        <EntitySet Name="ResourcePermission" EntityType="Default.ResourcePermission" />
+        <EntitySet Name="Permission" EntityType="Default.Permission" />
+        <EntitySet Name="RolePermission" EntityType="Default.RolePermission" />
+        <EntitySet Name="PermissionRule" EntityType="Default.PermissionRule" />
+        <EntitySet Name="RoleInheritance" EntityType="Default.RoleInheritance" />
+        <EntitySet Name="UserRole" EntityType="Default.UserRole" />
+        <EntitySet Name="UamUser" EntityType="Default.UamUser" />
+        <EntitySet Name="UamOrganization" EntityType="Default.UamOrganization" />
+        <EntitySet Name="UamExternalUser" EntityType="Default.UamExternalUser" />
+        <EntitySet Name="UamExternalOrganization" EntityType="Default.UamExternalOrganization" />
+        <EntitySet Name="UamSnsGroup" EntityType="Default.UamSnsGroup" />
+        <EntitySet Name="UamSnsGroupType" EntityType="Default.UamSnsGroupType" />
+        <EntitySet Name="UamSnsGroupUser" EntityType="Default.UamSnsGroupUser" />
+        <EntitySet Name="UamGroup" EntityType="Default.UamGroup" />
+        <EntitySet Name="MktListCustomer" EntityType="Default.MktListCustomer" />
+        <EntitySet Name="UserOpportunity" EntityType="Default.UserOpportunity" />
+        <EntitySet Name="MktActivityMktList" EntityType="Default.MktActivityMktList" />
+        <EntitySet Name="OrgOpportunity" EntityType="Default.OrgOpportunity" />
+        <EntitySet Name="MktListCustomerPotential" EntityType="Default.MktListCustomerPotential" />
+        <EntitySet Name="CompetitorOpportunity" EntityType="Default.CompetitorOpportunity" />
+        <AssociationSet Name="Quotation_CustomerPotential" Association="Default.Quotation_CustomerPotential">
+          <End Role="Quotation" EntitySet="Quotation" />
+          <End Role="CustomerPotentialCustomerPotential" EntitySet="CustomerPotential" />
+        </AssociationSet>
+        <AssociationSet Name="Quotation_Customer" Association="Default.Quotation_Customer">
+          <End Role="Quotation" EntitySet="Quotation" />
+          <End Role="CustomerCustomer" EntitySet="Customer" />
+        </AssociationSet>
+        <AssociationSet Name="Quotation_User" Association="Default.Quotation_User">
+          <End Role="Quotation" EntitySet="Quotation" />
+          <End Role="UserUser1" EntitySet="User" />
+        </AssociationSet>
+        <AssociationSet Name="Quotation_User" Association="Default.Quotation_User">
+          <End Role="Quotation" EntitySet="Quotation" />
+          <End Role="UserUser" EntitySet="User" />
+        </AssociationSet>
+        <AssociationSet Name="Quotation_User" Association="Default.Quotation_User">
+          <End Role="Quotation" EntitySet="Quotation" />
+          <End Role="UserUser2" EntitySet="User" />
+        </AssociationSet>
+        <AssociationSet Name="OpportunityType_User" Association="Default.OpportunityType_User">
+          <End Role="OpportunityType" EntitySet="OpportunityType" />
+          <End Role="UserUser" EntitySet="User" />
+        </AssociationSet>
+        <AssociationSet Name="OpportunityType_User" Association="Default.OpportunityType_User">
+          <End Role="OpportunityType" EntitySet="OpportunityType" />
+          <End Role="UserUser2" EntitySet="User" />
+        </AssociationSet>
+        <AssociationSet Name="OpportunityPossible_User" Association="Default.OpportunityPossible_User">
+          <End Role="OpportunityPossible" EntitySet="OpportunityPossible" />
+          <End Role="UserCreateBy" EntitySet="User" />
+        </AssociationSet>
+        <AssociationSet Name="OpportunityPossible_User" Association="Default.OpportunityPossible_User">
+          <End Role="OpportunityPossible" EntitySet="OpportunityPossible" />
+          <End Role="UserModifiedBy" EntitySet="User" />
+        </AssociationSet>
+        <AssociationSet Name="OpportunityPossible_OpportunityType" Association="Default.OpportunityPossible_OpportunityType">
+          <End Role="OpportunityPossible" EntitySet="OpportunityPossible" />
+          <End Role="OpportunityTypeOpportunityType" EntitySet="OpportunityType" />
+        </AssociationSet>
+        <AssociationSet Name="QuotationItem_Quotation" Association="Default.QuotationItem_Quotation">
+          <End Role="QuotationItem" EntitySet="QuotationItem" />
+          <End Role="QuotationQuotation" EntitySet="Quotation" />
+        </AssociationSet>
+        <AssociationSet Name="EmailTemplate_User" Association="Default.EmailTemplate_User">
+          <End Role="EmailTemplate" EntitySet="EmailTemplate" />
+          <End Role="UserUser1" EntitySet="User" />
+        </AssociationSet>
+        <AssociationSet Name="EmailTemplate_User" Association="Default.EmailTemplate_User">
+          <End Role="EmailTemplate" EntitySet="EmailTemplate" />
+          <End Role="UserUser" EntitySet="User" />
+        </AssociationSet>
+        <AssociationSet Name="EmailTemplate_SignTemplate" Association="Default.EmailTemplate_SignTemplate">
+          <End Role="EmailTemplate" EntitySet="EmailTemplate" />
+          <End Role="SignTemplateSignTemplate" EntitySet="SignTemplate" />
+        </AssociationSet>
+        <AssociationSet Name="SignTemplate_User" Association="Default.SignTemplate_User">
+          <End Role="SignTemplate" EntitySet="SignTemplate" />
+          <End Role="UserUser1" EntitySet="User" />
+        </AssociationSet>
+        <AssociationSet Name="SignTemplate_User" Association="Default.SignTemplate_User">
+          <End Role="SignTemplate" EntitySet="SignTemplate" />
+          <End Role="UserUser" EntitySet="User" />
+        </AssociationSet>
+        <AssociationSet Name="Attachment_User" Association="Default.Attachment_User">
+          <End Role="Attachment" EntitySet="Attachment" />
+          <End Role="UserUser1" EntitySet="User" />
+        </AssociationSet>
+        <AssociationSet Name="Attachment_User" Association="Default.Attachment_User">
+          <End Role="Attachment" EntitySet="Attachment" />
+          <End Role="UserUser" EntitySet="User" />
+        </AssociationSet>
+        <AssociationSet Name="Contract_Customer" Association="Default.Contract_Customer">
+          <End Role="Contract" EntitySet="Contract" />
+          <End Role="CustomerCustomer" EntitySet="Customer" />
+        </AssociationSet>
+        <AssociationSet Name="Contract_Quotation" Association="Default.Contract_Quotation">
+          <End Role="Contract" EntitySet="Contract" />
+          <End Role="QuotationQuotation" EntitySet="Quotation" />
+        </AssociationSet>
+        <AssociationSet Name="Contract_User" Association="Default.Contract_User">
+          <End Role="Contract" EntitySet="Contract" />
+          <End Role="UserUser1" EntitySet="User" />
+        </AssociationSet>
+        <AssociationSet Name="Contract_User" Association="Default.Contract_User">
+          <End Role="Contract" EntitySet="Contract" />
+          <End Role="UserUser" EntitySet="User" />
+        </AssociationSet>
+        <AssociationSet Name="Contract_User" Association="Default.Contract_User">
+          <End Role="Contract" EntitySet="Contract" />
+          <End Role="UserUser2" EntitySet="User" />
+        </AssociationSet>
+        <AssociationSet Name="Customer_Customer" Association="Default.Customer_Customer">
+          <End Role="Customer" EntitySet="Customer" />
+          <End Role="CustomerCustomer" EntitySet="Customer" />
+        </AssociationSet>
+        <AssociationSet Name="Customer_User" Association="Default.Customer_User">
+          <End Role="Customer" EntitySet="Customer" />
+          <End Role="UserUser" EntitySet="User" />
+        </AssociationSet>
+        <AssociationSet Name="Customer_User" Association="Default.Customer_User">
+          <End Role="Customer" EntitySet="Customer" />
+          <End Role="UserUser1" EntitySet="User" />
+        </AssociationSet>
+        <AssociationSet Name="Customer_CustomerPotential" Association="Default.Customer_CustomerPotential">
+          <End Role="Customer" EntitySet="Customer" />
+          <End Role="CustomerPotentialCustomerPotential" EntitySet="CustomerPotential" />
+        </AssociationSet>
+        <AssociationSet Name="Customer_User" Association="Default.Customer_User">
+          <End Role="Customer" EntitySet="Customer" />
+          <End Role="UserUser2" EntitySet="User" />
+        </AssociationSet>
+        <AssociationSet Name="ActivityResponse_Customer" Association="Default.ActivityResponse_Customer">
+          <End Role="ActivityResponse" EntitySet="ActivityResponse" />
+          <End Role="CustomerCustomer_4_65663251584" EntitySet="Customer" />
+        </AssociationSet>
+        <AssociationSet Name="ActivityResponse_MarketingActivity" Association="Default.ActivityResponse_MarketingActivity">
+          <End Role="ActivityResponse" EntitySet="ActivityResponse" />
+          <End Role="MarketingActivityMarketingA_65663177955" EntitySet="MarketingActivity" />
+        </AssociationSet>
+        <AssociationSet Name="ActivityResponse_User" Association="Default.ActivityResponse_User">
+          <End Role="ActivityResponse" EntitySet="ActivityResponse" />
+          <End Role="UserUser_06821_65663206821" EntitySet="User" />
+        </AssociationSet>
+        <AssociationSet Name="ActivityResponse_User" Association="Default.ActivityResponse_User">
+          <End Role="ActivityResponse" EntitySet="ActivityResponse" />
+          <End Role="UserUser_76422_65661676422" EntitySet="User" />
+        </AssociationSet>
+        <AssociationSet Name="ActivityResponse_User" Association="Default.ActivityResponse_User">
+          <End Role="ActivityResponse" EntitySet="ActivityResponse" />
+          <End Role="UserUser_73553_65661673553" EntitySet="User" />
+        </AssociationSet>
+        <AssociationSet Name="Contact_User" Association="Default.Contact_User">
+          <End Role="Contact" EntitySet="Contact" />
+          <End Role="UserUser1" EntitySet="User" />
+        </AssociationSet>
+        <AssociationSet Name="Contact_User" Association="Default.Contact_User">
+          <End Role="Contact" EntitySet="Contact" />
+          <End Role="UserUser" EntitySet="User" />
+        </AssociationSet>
+        <AssociationSet Name="Contact_Customer" Association="Default.Contact_Customer">
+          <End Role="Contact" EntitySet="Contact" />
+          <End Role="CustomerCustomer" EntitySet="Customer" />
+        </AssociationSet>
+        <AssociationSet Name="Contact_CustomerPotential" Association="Default.Contact_CustomerPotential">
+          <End Role="Contact" EntitySet="Contact" />
+          <End Role="CustomerPotentialCustomerPotential" EntitySet="CustomerPotential" />
+        </AssociationSet>
+        <AssociationSet Name="CustomerPotential_User" Association="Default.CustomerPotential_User">
+          <End Role="CustomerPotential" EntitySet="CustomerPotential" />
+          <End Role="UserUser2" EntitySet="User" />
+        </AssociationSet>
+        <AssociationSet Name="CustomerPotential_User" Association="Default.CustomerPotential_User">
+          <End Role="CustomerPotential" EntitySet="CustomerPotential" />
+          <End Role="UserUser1" EntitySet="User" />
+        </AssociationSet>
+        <AssociationSet Name="CustomerPotential_User" Association="Default.CustomerPotential_User">
+          <End Role="CustomerPotential" EntitySet="CustomerPotential" />
+          <End Role="UserUser" EntitySet="User" />
+        </AssociationSet>
+        <AssociationSet Name="CustomerPotential_MarketingActivity" Association="Default.CustomerPotential_MarketingActivity">
+          <End Role="CustomerPotential" EntitySet="CustomerPotential" />
+          <End Role="MarketingActivityMarketingActivity" EntitySet="MarketingActivity" />
+        </AssociationSet>
+        <AssociationSet Name="Opportunity_User" Association="Default.Opportunity_User">
+          <End Role="Opportunity" EntitySet="Opportunity" />
+          <End Role="UserUser1" EntitySet="User" />
+        </AssociationSet>
+        <AssociationSet Name="Opportunity_MarketingActivity" Association="Default.Opportunity_MarketingActivity">
+          <End Role="Opportunity" EntitySet="Opportunity" />
+          <End Role="MarketingActivityMarketingActivity" EntitySet="MarketingActivity" />
+        </AssociationSet>
+        <AssociationSet Name="Opportunity_CustomerPotential" Association="Default.Opportunity_CustomerPotential">
+          <End Role="Opportunity" EntitySet="Opportunity" />
+          <End Role="CustomerPotentialCustomerPotential" EntitySet="CustomerPotential" />
+        </AssociationSet>
+        <AssociationSet Name="Opportunity_Customer" Association="Default.Opportunity_Customer">
+          <End Role="Opportunity" EntitySet="Opportunity" />
+          <End Role="CustomerCustomer" EntitySet="Customer" />
+        </AssociationSet>
+        <AssociationSet Name="Opportunity_User" Association="Default.Opportunity_User">
+          <End Role="Opportunity" EntitySet="Opportunity" />
+          <End Role="UserUser2" EntitySet="User" />
+        </AssociationSet>
+        <AssociationSet Name="Opportunity_User" Association="Default.Opportunity_User">
+          <End Role="Opportunity" EntitySet="Opportunity" />
+          <End Role="UserUser" EntitySet="User" />
+        </AssociationSet>
+        <AssociationSet Name="Opportunity_User" Association="Default.Opportunity_User">
+          <End Role="Opportunity" EntitySet="Opportunity" />
+          <End Role="UserChannelManager" EntitySet="User" />
+        </AssociationSet>
+        <AssociationSet Name="Stakeholder_Opportunity" Association="Default.Stakeholder_Opportunity">
+          <End Role="Stakeholder" EntitySet="Stakeholder" />
+          <End Role="OpportunityOpportunity" EntitySet="Opportunity" />
+        </AssociationSet>
+        <AssociationSet Name="Stakeholder_Contact" Association="Default.Stakeholder_Contact">
+          <End Role="Stakeholder" EntitySet="Stakeholder" />
+          <End Role="ContactContact" EntitySet="Contact" />
+        </AssociationSet>
+        <AssociationSet Name="StakeholderRole_User" Association="Default.StakeholderRole_User">
+          <End Role="StakeholderRole" EntitySet="StakeholderRole" />
+          <End Role="UserUser" EntitySet="User" />
+        </AssociationSet>
+        <AssociationSet Name="StakeholderRole_User" Association="Default.StakeholderRole_User">
+          <End Role="StakeholderRole" EntitySet="StakeholderRole" />
+          <End Role="UserUser1" EntitySet="User" />
+        </AssociationSet>
+        <AssociationSet Name="MarketingActivity_User" Association="Default.MarketingActivity_User">
+          <End Role="MarketingActivity" EntitySet="MarketingActivity" />
+          <End Role="UserUser1" EntitySet="User" />
+        </AssociationSet>
+        <AssociationSet Name="MarketingActivity_User" Association="Default.MarketingActivity_User">
+          <End Role="MarketingActivity" EntitySet="MarketingActivity" />
+          <End Role="UserUser" EntitySet="User" />
+        </AssociationSet>
+        <AssociationSet Name="MarketingActivity_User" Association="Default.MarketingActivity_User">
+          <End Role="MarketingActivity" EntitySet="MarketingActivity" />
+          <End Role="UserUser2" EntitySet="User" />
+        </AssociationSet>
+        <AssociationSet Name="MarketingList_User" Association="Default.MarketingList_User">
+          <End Role="MarketingList" EntitySet="MarketingList" />
+          <End Role="UserUser" EntitySet="User" />
+        </AssociationSet>
+        <AssociationSet Name="ActivityItem_User" Association="Default.ActivityItem_User">
+          <End Role="ActivityItem" EntitySet="ActivityItem" />
+          <End Role="UserUser" EntitySet="User" />
+        </AssociationSet>
+        <AssociationSet Name="ActivityItem_User" Association="Default.ActivityItem_User">
+          <End Role="ActivityItem" EntitySet="ActivityItem" />
+          <End Role="UserUser1" EntitySet="User" />
+        </AssociationSet>
+        <AssociationSet Name="PartnerUser_PartnerOrganization" Association="Default.PartnerUser_PartnerOrganization">
+          <End Role="PartnerUser" EntitySet="PartnerUser" />
+          <End Role="PartnerOrganizationPartnerOrganization" EntitySet="PartnerOrganization" />
+        </AssociationSet>
+        <AssociationSet Name="PartnerUser_UamUser" Association="Default.PartnerUser_UamUser">
+          <End Role="PartnerUser" EntitySet="PartnerUser" />
+          <End Role="UamUserChannelManager" EntitySet="UamUser" />
+        </AssociationSet>
+        <AssociationSet Name="PartnerOrganization_PartnerOrganization" Association="Default.PartnerOrganization_PartnerOrganization">
+          <End Role="PartnerOrganization" EntitySet="PartnerOrganization" />
+          <End Role="PartnerOrganizationPartnerOrganization" EntitySet="PartnerOrganization" />
+        </AssociationSet>
+        <AssociationSet Name="Competitor_User" Association="Default.Competitor_User">
+          <End Role="Competitor" EntitySet="Competitor" />
+          <End Role="UserUser" EntitySet="User" />
+        </AssociationSet>
+        <AssociationSet Name="Competitor_User" Association="Default.Competitor_User">
+          <End Role="Competitor" EntitySet="Competitor" />
+          <End Role="UserUser1" EntitySet="User" />
+        </AssociationSet>
+        <AssociationSet Name="Share_User" Association="Default.Share_User">
+          <End Role="Share" EntitySet="Share" />
+          <End Role="UserUser" EntitySet="User" />
+        </AssociationSet>
+        <AssociationSet Name="Area_City" Association="Default.Area_City">
+          <End Role="Area" EntitySet="Area" />
+          <End Role="CityCity" EntitySet="City" />
+        </AssociationSet>
+        <AssociationSet Name="Province_Country" Association="Default.Province_Country">
+          <End Role="Province" EntitySet="Province" />
+          <End Role="CountryCountry" EntitySet="Country" />
+        </AssociationSet>
+        <AssociationSet Name="City_Province" Association="Default.City_Province">
+          <End Role="City" EntitySet="City" />
+          <End Role="ProvinceProvince" EntitySet="Province" />
+        </AssociationSet>
+        <AssociationSet Name="DataChangeLogItem_DataChangeLog" Association="Default.DataChangeLogItem_DataChangeLog">
+          <End Role="DataChangeLogItem" EntitySet="DataChangeLogItem" />
+          <End Role="DataChangeLogLogId" EntitySet="DataChangeLog" />
+        </AssociationSet>
+        <AssociationSet Name="PortalMenu_PortalMenu" Association="Default.PortalMenu_PortalMenu">
+          <End Role="PortalMenu" EntitySet="PortalMenu" />
+          <End Role="PortalMenuParentId" EntitySet="PortalMenu" />
+        </AssociationSet>
+        <AssociationSet Name="Organization_Organization" Association="Default.Organization_Organization">
+          <End Role="Organization" EntitySet="Organization" />
+          <End Role="OrganizationOrganization" EntitySet="Organization" />
+        </AssociationSet>
+        <AssociationSet Name="UserRole_User" Association="Default.UserRole_User">
+          <End Role="UserRole" EntitySet="UserRole" />
+          <End Role="UserUser" EntitySet="User" />
+        </AssociationSet>
+        <AssociationSet Name="UserRole_Role" Association="Default.UserRole_Role">
+          <End Role="UserRole" EntitySet="UserRole" />
+          <End Role="RoleRole" EntitySet="Role" />
+        </AssociationSet>
+        <AssociationSet Name="UamUser_UamOrganization" Association="Default.UamUser_UamOrganization">
+          <End Role="UamUser" EntitySet="UamUser" />
+          <End Role="UamOrganizationUamOrganization" EntitySet="UamOrganization" />
+        </AssociationSet>
+        <AssociationSet Name="UamOrganization_UamOrganization" Association="Default.UamOrganization_UamOrganization">
+          <End Role="UamOrganization" EntitySet="UamOrganization" />
+          <End Role="UamOrganizationFK_Reference_12" EntitySet="UamOrganization" />
+        </AssociationSet>
+        <AssociationSet Name="UamExternalUser_UamExternalOrganization" Association="Default.UamExternalUser_UamExternalOrganization">
+          <End Role="UamExternalUser" EntitySet="UamExternalUser" />
+          <End Role="UamExternalOrganizationUamExternalOrganization" EntitySet="UamExternalOrganization" />
+        </AssociationSet>
+        <AssociationSet Name="UamExternalUser_UamUser" Association="Default.UamExternalUser_UamUser">
+          <End Role="UamExternalUser" EntitySet="UamExternalUser" />
+          <End Role="UamUserChannelManager" EntitySet="UamUser" />
+        </AssociationSet>
+        <AssociationSet Name="UamExternalOrganization_UamExternalOrganization" Association="Default.UamExternalOrganization_UamExternalOrganization">
+          <End Role="UamExternalOrganization" EntitySet="UamExternalOrganization" />
+          <End Role="UamExternalOrganizationUamExternalOrganization" EntitySet="UamExternalOrganization" />
+        </AssociationSet>
+        <AssociationSet Name="UamGroup_User" Association="Default.UamGroup_User">
+          <End Role="UamGroup" EntitySet="UamGroup" />
+          <End Role="UserUser" EntitySet="User" />
+        </AssociationSet>
+        <AssociationSet Name="Customer_MarketingList" Association="Default.Customer_MarketingList">
+          <End Role="Customer" EntitySet="Customer" />
+          <End Role="MarketingListMarketingList" EntitySet="MarketingList" />
+        </AssociationSet>
+        <AssociationSet Name="CustomerPotential_MarketingList" Association="Default.CustomerPotential_MarketingList">
+          <End Role="CustomerPotential" EntitySet="CustomerPotential" />
+          <End Role="MarketingListMarketingList" EntitySet="MarketingList" />
+        </AssociationSet>
+        <AssociationSet Name="Opportunity_User" Association="Default.Opportunity_User">
+          <End Role="Opportunity" EntitySet="Opportunity" />
+          <End Role="UserPreSale" EntitySet="User" />
+        </AssociationSet>
+        <AssociationSet Name="Opportunity_Organization" Association="Default.Opportunity_Organization">
+          <End Role="Opportunity" EntitySet="Opportunity" />
+          <End Role="OrganizationImplementDepartment" EntitySet="Organization" />
+        </AssociationSet>
+        <AssociationSet Name="Opportunity_Competitor" Association="Default.Opportunity_Competitor">
+          <End Role="Opportunity" EntitySet="Opportunity" />
+          <End Role="CompetitorCompetitor" EntitySet="Competitor" />
+        </AssociationSet>
+        <AssociationSet Name="MarketingActivity_MarketingList" Association="Default.MarketingActivity_MarketingList">
+          <End Role="MarketingActivity" EntitySet="MarketingActivity" />
+          <End Role="MarketingListMarketingList" EntitySet="MarketingList" />
+        </AssociationSet>
+        <AssociationSet Name="User_Role" Association="Default.User_Role">
+          <End Role="User" EntitySet="User" />
+          <End Role="RoleRoles" EntitySet="Role" />
+        </AssociationSet>
+        <AssociationSet Name="User_Opportunity" Association="Default.User_Opportunity">
+          <End Role="User" EntitySet="User" />
+          <End Role="Opportunity负责前期的商机" EntitySet="Opportunity" />
+        </AssociationSet>
+        <FunctionImport Name="commentOpp" m:HttpMethod="POST" ReturnType="Edm.String">
+          <Parameter Name="oppId" Type="Edm.String" Mode="In" />
+          <Parameter Name="content" Type="Edm.String" Mode="In" />
+          <Parameter Name="parentId" Type="Edm.String" Mode="In" />
+        </FunctionImport>
+        <FunctionImport Name="followOpp" m:HttpMethod="POST" ReturnType="Edm.String">
+          <Parameter Name="oppId" Type="Edm.String" Mode="In" />
+          <Parameter Name="oppTitle" Type="Edm.String" Mode="In" />
+        </FunctionImport>
+        <FunctionImport Name="cancelFollow" m:HttpMethod="POST" ReturnType="Edm.String">
+          <Parameter Name="oppId" Type="Edm.String" Mode="In" />
+        </FunctionImport>
+        <FunctionImport Name="verifyFollow" m:HttpMethod="POST" ReturnType="Edm.String">
+          <Parameter Name="oppId" Type="Edm.String" Mode="In" />
+          <Parameter Name="userId" Type="Edm.String" Mode="In" />
+          <Parameter Name="isAgree" Type="Edm.Boolean" Mode="In" />
+        </FunctionImport>
+      </EntityContainer>
+    </Schema>
+  </edmx:DataServices>
+</edmx:Edmx>

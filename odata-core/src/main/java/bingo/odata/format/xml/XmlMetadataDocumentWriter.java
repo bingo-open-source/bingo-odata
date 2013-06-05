@@ -142,8 +142,11 @@ public class XmlMetadataDocumentWriter extends ODataXmlWriter<ODataServices> {
 				      .attribute("Name", navProp.getName())
 				      .attribute("Relationship", fullQualifiedName(schema, navProp.getRelationship()))
 				      .attribute("FromRole", navProp.getFromRole().getRole())
-				      .attribute("ToRole", navProp.getToRole().getRole())
-				      .endElement();
+				      .attribute("ToRole", navProp.getToRole().getRole());
+				
+				writeDocument(writer,navProp);
+				
+				writer.endElement();
 			}
 
 			writer.endElement();
@@ -196,7 +199,7 @@ public class XmlMetadataDocumentWriter extends ODataXmlWriter<ODataServices> {
 				writer.attribute("Precision", Integer.toString(prop.getPrecision()));
 				
 				if(EdmSimpleType.hasScaleFacet(type)){
-					writer.attribute("Scale", Integer.toString(prop.getPrecision()));	
+					writer.attribute("Scale", Integer.toString(prop.getScale()));	
 				}
 			}
 			
