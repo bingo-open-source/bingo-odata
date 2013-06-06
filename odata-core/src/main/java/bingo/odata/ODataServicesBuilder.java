@@ -198,6 +198,8 @@ public class ODataServicesBuilder {
 				throw new ODataException("relation '" + fqName.getFqName() + "' not found");
 			}
 			
+			navProperty.setRelationship(relationship);
+			
 			if(relationship.getEnd1().getRole().equals(navProperty.getFromRoleName())){
 				navProperty.setFromRole(relationship.getEnd1());
 				navProperty.setToRole(relationship.getEnd2());
