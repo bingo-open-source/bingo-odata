@@ -15,6 +15,9 @@
  */
 package bingo.odata;
 
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,14 +26,42 @@ import bingo.lang.Enumerables;
 import bingo.lang.Named;
 import bingo.lang.Strings;
 import bingo.lang.http.HttpMethods;
+import bingo.lang.io.IO;
 import bingo.meta.edm.EdmEntityContainer;
 import bingo.meta.edm.EdmEntitySet;
 import bingo.meta.edm.EdmEntityType;
 import bingo.meta.edm.EdmEntityTypeRef;
 import bingo.meta.edm.EdmFunctionImport;
 import bingo.meta.edm.EdmSchema;
+import bingo.odata.format.xml.XmlMetadataDocumentReader;
 
 public class ODataServices implements Named,ODataObject {
+	
+	private static final ODataReaderContext        PARSER_CONTEXT = new ODataContextImpl();
+	private static final XmlMetadataDocumentReader PARSER         = new XmlMetadataDocumentReader();
+	
+	public static ODataServices parse(InputStream in){
+		return parse(new InputStreamReader(in),true);
+	}
+	
+	public static ODataServices parse(Reader reader) {
+		return parse(reader,true);
+	}
+	
+	public static ODataServices parse(Reader reader,boolean close) {
+		try {
+	        return PARSER.read(PARSER_CONTEXT,reader);
+        } catch (Throwable e) {
+        	if(e instanceof RuntimeException){
+        		throw (RuntimeException)e;
+        	}
+        	throw new ODataException("error parsing service metadata document",e);
+        }finally{
+        	if(close){
+        		IO.close(reader);
+        	}
+        }
+	}
 	
 	private final String name;
 	
