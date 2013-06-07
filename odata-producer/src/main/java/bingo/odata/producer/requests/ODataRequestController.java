@@ -77,10 +77,6 @@ public class ODataRequestController {
 			format  = ODataRequestUtils.dataServiceFormat(request, version, producer.config().isAutoDetectFormat()); //may be null
 			version = ODataRequestUtils.getAndCheckVersion(protocol,request);
 			
-			if(format == null){
-				format = producer.config().getDefaultFormat();
-			}
-			
 	        context = new ODataProducerContext(request,producer,protocol,version,format,urlInfo);
 
 	        handler = router.route(context, request, response);
