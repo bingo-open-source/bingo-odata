@@ -54,6 +54,10 @@ public class ODataProducerAdapter implements ODataProducer {
 				public boolean isPrintStackTrace() {
 					return true;
 				}
+
+				public boolean isAutoDetectFormat() {
+	                return true;
+                }
 			};
 		}
 		return config;

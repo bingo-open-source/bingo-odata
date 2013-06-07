@@ -74,8 +74,12 @@ public class ODataRequestController {
 		
 		try{
 			urlInfo = ODataRequestUtils.createUrlInfo(request);
-			format  = ODataRequestUtils.dataServiceFormat(request, version); //may be null
+			format  = ODataRequestUtils.dataServiceFormat(request, version, producer.config().isAutoDetectFormat()); //may be null
 			version = ODataRequestUtils.getAndCheckVersion(protocol,request);
+			
+			if(format == null){
+				format = producer.config().getDefaultFormat();
+			}
 			
 	        context = new ODataProducerContext(request,producer,protocol,version,format,urlInfo);
 

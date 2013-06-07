@@ -23,6 +23,7 @@ public class ODataProducerConfigImpl implements ODataProducerConfig {
 	protected ODataProtocol protocol;
 	protected ODataFormat   defaultFormat;
 	protected boolean		printStackTrace;
+	protected boolean       autoDetectFormat;
 	
 	public ODataProtocol getProtocol() {
 		return protocol;
@@ -46,5 +47,13 @@ public class ODataProducerConfigImpl implements ODataProducerConfig {
 
 	public void setPrintStackTrace(boolean printStackTrace) {
 		this.printStackTrace = printStackTrace;
+	}
+
+	public boolean isAutoDetectFormat() {
+		return autoDetectFormat;
+	}
+
+	public void setAutoDetectFormat(boolean autoDetectFormat) {
+		this.autoDetectFormat = autoDetectFormat;
 	}
 }

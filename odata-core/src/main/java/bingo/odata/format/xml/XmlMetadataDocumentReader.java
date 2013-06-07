@@ -33,6 +33,7 @@ import bingo.meta.edm.EdmSchema;
 import bingo.meta.edm.EdmSchemaBuilder;
 import bingo.meta.edm.EdmSimpleType;
 import bingo.meta.edm.EdmType;
+import bingo.meta.edm.EdmUtils;
 import bingo.odata.ODataException;
 import bingo.odata.ODataReaderContext;
 import bingo.odata.ODataServices;
@@ -116,6 +117,7 @@ public class XmlMetadataDocumentReader extends ODataXmlReader<ODataServices> {
 		EdmEntityTypeBuilder entityType = new EdmEntityTypeBuilder();
 		
 		entityType.setName(reader.requiredGetAttributeValue("Name"));
+		entityType.setFullQualifiedName(EdmUtils.fullQualifiedName(schema, entityType.getName()));
 		entityType.setAbstract(reader.getAttributeValueForBool("Abstract", false));
 		entityType.setHasStream(reader.getAttributeValueForBool("HasStream", false));
 		entityType.setOpenType(reader.getAttributeValueForBool("OpenType", false));

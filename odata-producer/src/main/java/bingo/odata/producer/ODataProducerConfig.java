@@ -25,4 +25,6 @@ public interface ODataProducerConfig {
 	ODataFormat getDefaultFormat();
 	
 	boolean isPrintStackTrace();
+	
+	boolean isAutoDetectFormat();
 }

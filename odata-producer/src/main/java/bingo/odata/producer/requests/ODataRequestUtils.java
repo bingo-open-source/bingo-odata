@@ -74,12 +74,12 @@ public class ODataRequestUtils {
 		return dataServiceVersion(request,Headers.MAX_DATA_SERVICE_VERSION);
 	}
 
-	public static ODataFormat dataServiceFormat(ODataRequest request,ODataVersion version) throws ODataError {
+	public static ODataFormat dataServiceFormat(ODataRequest request,ODataVersion version,boolean autoDetect) throws ODataError {
 		String format = request.getParameter(QueryOptions.FORMAT);
 		
 		if(!Strings.isEmpty(format)){
 			return parseFormatFromQuery(format);
-		}else{
+		}else if(autoDetect){
 			String accept = request.getHeader(HttpHeaders.ACCEPT);
 			
 			if(!Strings.isEmpty(accept)){
