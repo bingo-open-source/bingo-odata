@@ -1,7 +1,7 @@
 /**
  * created at 2013-3-4
  */
-package bingo.odata.producer.query;
+package bingo.odata.producer.sql;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -10,26 +10,26 @@ import bingo.lang.Arrays;
 import bingo.lang.Collections;
 import bingo.meta.edm.EdmEntityType;
 
-public class QueryInfo implements QuerySelected {
+public class SqlQueryInfo implements SqlSelected {
 	
 	private EdmEntityType     entityType;
 	private boolean		      queryTotal;
-	private QueryPage			  page;
+	private SqlPage			  page;
 	private Set<String>       selects = new LinkedHashSet<String>();
-	private Set<QueryExpand> expands = new LinkedHashSet<QueryExpand>();
+	private Set<SqlExpand> expands = new LinkedHashSet<SqlExpand>();
 	private String		      where;
 	private Object[]          params;
 	private String		      orderBy;
 	
-	public QueryInfo(EdmEntityType entityType){
+	public SqlQueryInfo(EdmEntityType entityType){
 		this.entityType = entityType;
 	}
 	
-	public QueryPage getPage() {
+	public SqlPage getPage() {
 		return page;
 	}
 
-	public void setPage(QueryPage page) {
+	public void setPage(SqlPage page) {
 		this.page = page;
 	}
 
@@ -45,12 +45,12 @@ public class QueryInfo implements QuerySelected {
 		Collections.addAll(this.selects, fields);
 	}
 	
-	public Set<QueryExpand> getExpands() {
+	public Set<SqlExpand> getExpands() {
 		return expands;
 	}
 	
-	public QueryExpand findExpand(String name){
-		for(QueryExpand expand : expands){
+	public SqlExpand findExpand(String name){
+		for(SqlExpand expand : expands){
 			if(expand.getName().equalsIgnoreCase(name)){
 				return expand;
 			}
@@ -58,11 +58,11 @@ public class QueryInfo implements QuerySelected {
 		return null;
 	}
 
-	public void addExpands(QueryExpand... expands){
+	public void addExpands(SqlExpand... expands){
 		Collections.addAll(this.expands, expands);
 	}
 	
-	public void addExpands(Iterable<QueryExpand> expands){
+	public void addExpands(Iterable<SqlExpand> expands){
 		Collections.addAll(this.expands, expands);
 	}
 	

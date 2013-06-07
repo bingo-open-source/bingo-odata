@@ -3,17 +3,17 @@
  *
  * Copyright (c) 2002-2012 Bingosoft, Inc. All rights reserved.
  */
-package bingo.odata.producer.query;
+package bingo.odata.producer.sql;
 
-public class QueryPage {
+public class SqlPage {
 
     private int index;
     private int size;
     private int start;
     private int end;
     
-    public static QueryPage ofStartAndSize(int start,int size){
-    	QueryPage page = new QueryPage();
+    public static SqlPage ofStartAndSize(int start,int size){
+    	SqlPage page = new SqlPage();
     	
     	page.start = start;
     	page.size  = size;
@@ -23,7 +23,7 @@ public class QueryPage {
     	return page;
     }
     
-    protected QueryPage(){
+    protected SqlPage(){
     	
     }
     
@@ -31,7 +31,7 @@ public class QueryPage {
      * @param index page index,start from 1
      * @param size page size,start from 1
      */
-    public QueryPage(int index,int size){
+    public SqlPage(int index,int size){
         this.index = index;
         this.size  = size;
         this.start = (index - 1) * size + 1;

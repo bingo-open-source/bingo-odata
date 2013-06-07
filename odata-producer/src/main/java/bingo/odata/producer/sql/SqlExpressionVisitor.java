@@ -46,11 +46,26 @@ import bingo.odata.expression.SubstringOfMethodCallExpression;
 import bingo.odata.expression.TimeLiteral;
 
 public class SqlExpressionVisitor extends ExpressionVisitorBase {
+	
+	private final SqlMapping EMPTY_MAPPING = new SqlMapping() {
+		public String column(String property) {
+			return property;
+		}
+	};
 
 	private final StringBuilder sb	        = new StringBuilder();
 	private final Stack<String>	stack       = new Stack<String>();
 	private final List<Object>  paramValues = new ArrayList<Object>();
 	private final List<Integer> paramTypes  = new ArrayList<Integer>();
+	private final SqlMapping    mapping;
+	
+	public SqlExpressionVisitor(){
+		this.mapping = EMPTY_MAPPING;
+	}
+	
+	public SqlExpressionVisitor(SqlMapping mapping){
+		this.mapping = null == mapping ? EMPTY_MAPPING : mapping;
+	}
 	
 	public String getText(){
 		return sb.toString();
@@ -105,7 +120,7 @@ public class SqlExpressionVisitor extends ExpressionVisitorBase {
 
 	@Override
 	public boolean visit(EntitySimpleProperty expr) {
-		sb.append(expr.getName());
+		sb.append(mapping.column(expr.getName()));
 		return true;
 	}
 

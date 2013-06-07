@@ -1,10 +1,10 @@
 /**
  * created at 2013-3-4
  */
-package bingo.odata.producer.query;
+package bingo.odata.producer.sql;
 
 
-public interface QuerySelected {
+public interface SqlSelected {
 
 	boolean isSelectedField(String name);
 	

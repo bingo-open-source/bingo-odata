@@ -1,7 +1,7 @@
 /**
  * created at 2013-3-4
  */
-package bingo.odata.producer.query;
+package bingo.odata.producer.sql;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -11,14 +11,14 @@ import bingo.lang.Collections;
 import bingo.meta.edm.EdmEntityType;
 import bingo.meta.edm.EdmNavigationProperty;
 
-public class QueryExpand implements QuerySelected {
+public class SqlExpand implements SqlSelected {
 
 	protected String 				alias;
 	protected EdmEntityType 		targetType;
 	protected EdmNavigationProperty navProperty;
 	protected Set<String>   		selects = new LinkedHashSet<String>();
 	
-	public QueryExpand(EdmNavigationProperty navProperty,EdmEntityType targetType){
+	public SqlExpand(EdmNavigationProperty navProperty,EdmEntityType targetType){
 		this.navProperty = navProperty;
 		this.targetType = targetType;
 	}

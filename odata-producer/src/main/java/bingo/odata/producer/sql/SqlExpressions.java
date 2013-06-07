@@ -31,4 +31,11 @@ public class SqlExpressions {
 		return new SqlExpression(v.getText(),v.getParamValues().toArray(),v.getParamTypes().toArray(new Integer[]{}));
 	}
 
+	public static SqlExpression filter(Expression odataExpression,SqlMapping mapping){
+		SqlExpressionVisitor v = new SqlExpressionVisitor(mapping);
+		
+		odataExpression.visit(v);
+		
+		return new SqlExpression(v.getText(),v.getParamValues().toArray(),v.getParamTypes().toArray(new Integer[]{}));
+	}
 }
