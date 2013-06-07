@@ -121,6 +121,7 @@ public class XmlMetadataDocumentReader extends ODataXmlReader<ODataServices> {
 		entityType.setAbstract(reader.getAttributeValueForBool("Abstract", false));
 		entityType.setHasStream(reader.getAttributeValueForBool("HasStream", false));
 		entityType.setOpenType(reader.getAttributeValueForBool("OpenType", false));
+		entityType.setTitle(reader.getAttributeValue(EXTEND_METADATA_QN_TITLE));
 		
 		String baseType = reader.getAttributeValue("BaseType");
 		if(!Strings.isEmpty(baseType)){
@@ -189,6 +190,7 @@ public class XmlMetadataDocumentReader extends ODataXmlReader<ODataServices> {
 		EdmPropertyBuilder prop = new EdmPropertyBuilder();
 		
 		prop.setName(reader.requiredGetAttributeValue("Name"));
+		prop.setTitle(reader.getAttributeValue(EXTEND_METADATA_QN_TITLE));
 		prop.setType(readEdmType(reader.requiredGetAttributeValue("Type")));
 		prop.setNullable(reader.getAttributeValueForBool("Nullable",false));
 		prop.setMaxLength(reader.getAttributeValueForInt("MaxLength", -1));
@@ -280,6 +282,7 @@ public class XmlMetadataDocumentReader extends ODataXmlReader<ODataServices> {
 		EdmEnumTypeBuilder enumType = new EdmEnumTypeBuilder();
 
 		enumType.setName(reader.requiredGetAttributeValue("Name"));
+		enumType.setTitle(reader.getAttributeValue(EXTEND_METADATA_QN_TITLE));
 		enumType.setFlags(reader.getAttributeValueForBool("IsFlags",false));
 		enumType.setUnderlyingType((EdmSimpleType)readEdmType(reader.requiredGetAttributeValue("UnderlyingType")));
 		
@@ -330,6 +333,7 @@ public class XmlMetadataDocumentReader extends ODataXmlReader<ODataServices> {
 		EdmEntitySetBuilder entitySet = new EdmEntitySetBuilder();
 		
 		entitySet.setName(reader.requiredGetAttributeValue("Name"));
+		entitySet.setTitle(reader.getAttributeValue(EXTEND_METADATA_QN_TITLE));
 		entitySet.setEntityType(toEntityTypeRef(reader.requiredGetAttributeValue("EntityType")));
 		
 		while(reader.nextIfElementNotEnd("EntitySet")){
@@ -384,6 +388,7 @@ public class XmlMetadataDocumentReader extends ODataXmlReader<ODataServices> {
 		EdmFunctionImportBuilder func = new EdmFunctionImportBuilder();
 		
 		func.setName(reader.requiredGetAttributeValue("Name"));
+		func.setTitle(reader.getAttributeValue(EXTEND_METADATA_QN_TITLE));
 		func.setEntitySet(reader.getAttributeValue("EntitySet"));
 		func.setHttpMethod(reader.getAttributeValue("HttpMethod"));
 		

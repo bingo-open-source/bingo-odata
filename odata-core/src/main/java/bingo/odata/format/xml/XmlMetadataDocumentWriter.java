@@ -64,7 +64,8 @@ public class XmlMetadataDocumentWriter extends ODataXmlWriter<ODataServices> {
 		writer.startElement(EDMX_NS,"DataServices")
 		      .attribute(METADATA_PREFIX,METADATA_NS,"DataServiceVersion",context.getVersion().getValue())
 		      .namespace(DATASERVICES_PREFIX,DATASERVICES_NS)
-		      .namespace(METADATA_PREFIX,METADATA_NS);
+		      .namespace(METADATA_PREFIX,METADATA_NS)
+		      .namespace(EXTEND_METADATA_PREFIX, EXTEND_METADATA_NS);
 
 		//Schemas
 		for(EdmSchema schema : services.getSchemas()){
@@ -115,9 +116,13 @@ public class XmlMetadataDocumentWriter extends ODataXmlWriter<ODataServices> {
 					writer.attribute("OpenType","true");
 				}
 			}
-
+			
 			//key
 			if(null == entityType.getBaseType()){
+				if(!Strings.isEmpty(entityType.getTitle())){
+					writer.attribute(EXTEND_METADATA_NS,"Title",entityType.getTitle());
+				}
+				
 				writeDocument(writer, entityType);
 				
 				writer.startElement("Key");
@@ -131,6 +136,10 @@ public class XmlMetadataDocumentWriter extends ODataXmlWriter<ODataServices> {
 				writer.endElement();
 			}else{
 				writer.attribute("BaseType", fullQualifiedName(schema,(EdmType)entityType.getBaseType()));
+				
+				if(!Strings.isEmpty(entityType.getTitle())){
+					writer.attribute(EXTEND_METADATA_NS,"Title",entityType.getTitle());
+				}				
 				
 				writeDocument(writer, entityType);
 			}
@@ -184,6 +193,7 @@ public class XmlMetadataDocumentWriter extends ODataXmlWriter<ODataServices> {
 			writer.startElement("Property");
 
 			writer.attribute("Name",  prop.getName());
+			
 			writer.attribute("Type",  fullQualifiedName(schema,type));
 			writer.attribute("Nullable", Boolean.toString(prop.isNullable()));
 
@@ -206,6 +216,10 @@ public class XmlMetadataDocumentWriter extends ODataXmlWriter<ODataServices> {
 			if(EdmSimpleType.hasFixedLengthFacet(type) && prop.isFixedLength()){
 				writer.attribute("FixedLength", Boolean.toString(prop.isFixedLength()));
 			}
+			
+			if(!Strings.isEmpty(prop.getTitle())){
+				writer.attribute(EXTEND_METADATA_NS,"Title",prop.getTitle());
+			}			
 			
 			//feed customerization attributes
 			if(!Strings.isEmpty(prop.getFcTargetPath())){
@@ -311,8 +325,9 @@ public class XmlMetadataDocumentWriter extends ODataXmlWriter<ODataServices> {
 	
 	private static void writeFunctionImport(ODataWriterContext context,XmlWriter writer,EdmSchema schema,EdmFunctionImport func) {
 		writer.startElement("FunctionImport")
-		  .attribute("Name", func.getName())
-		  .attributeOptional("EntitySet", func.getEntitySet());
+		      .attribute("Name", func.getName());
+		  
+		writer.attributeOptional("EntitySet", func.getEntitySet());
 		
 		if(!(Strings.isEmpty(func.getHttpMethod()) || Strings.equals(HttpMethods.ALL, func.getHttpMethod()))){
 			writer.attribute(METADATA_NS,"HttpMethod", func.getHttpMethod());
@@ -332,6 +347,10 @@ public class XmlMetadataDocumentWriter extends ODataXmlWriter<ODataServices> {
 			writer.attribute("IsSideEffecting","false");
 		}
 		
+		if(!Strings.isEmpty(func.getTitle())){
+			writer.attribute(EXTEND_METADATA_NS,"Title",func.getTitle());
+		}
+		
 		/*
 		if(!func.getParameters().isEmpty()){
 			writer.attribute("IsBindable", "true");
@@ -340,8 +359,13 @@ public class XmlMetadataDocumentWriter extends ODataXmlWriter<ODataServices> {
 		  
 		for(EdmParameter param : func.getParameters()){
 			writer.startElement("Parameter")
-			      .attribute("Name", param.getName())
-			      .attribute("Type", fullQualifiedName(schema, param.getType()))
+			      .attribute("Name", param.getName());
+			
+			if(!Strings.isEmpty(param.getTitle())){
+				writer.attribute(EXTEND_METADATA_NS,"Title",param.getTitle());
+			}
+			
+			writer.attribute("Type", fullQualifiedName(schema, param.getType()))
 			      .attribute("Mode", param.getMode().toString())
 			      .endElement();
 		}
