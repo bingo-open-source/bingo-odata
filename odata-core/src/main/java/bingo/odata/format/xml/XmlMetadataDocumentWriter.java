@@ -63,6 +63,7 @@ public class XmlMetadataDocumentWriter extends ODataXmlWriter<ODataServices> {
 		//DataServides
 		writer.startElement(EDMX_NS,"DataServices")
 		      .attribute(METADATA_PREFIX,METADATA_NS,"DataServiceVersion",context.getVersion().getValue())
+		      .attribute(METADATA_PREFIX,METADATA_NS,"MaxDataServiceVersion",ODataVersion.MAX.getValue())
 		      .namespace(DATASERVICES_PREFIX,DATASERVICES_NS)
 		      .namespace(METADATA_PREFIX,METADATA_NS)
 		      .namespace(EXTEND_METADATA_PREFIX, EXTEND_METADATA_NS);
@@ -299,6 +300,14 @@ public class XmlMetadataDocumentWriter extends ODataXmlWriter<ODataServices> {
 		for(EdmComplexType complexType : schema.getComplexTypes()){
 			writer.startElement("ComplexType")
 			      .attribute("Name", complexType.getName());
+			
+			if(complexType.isAbstract()){
+				writer.attribute("Abstract", "true");
+			}		
+			
+			if(null != complexType.getBaseType()){
+				writer.attribute("BaseType", fullQualifiedName(schema,complexType.getBaseType()));
+			}
 			
 			writeProperties(writer, schema, complexType.getDeclaredProperties());
 			

@@ -11,6 +11,8 @@ import java.util.Map;
 import bingo.lang.Enumerables;
 import bingo.lang.Strings;
 import bingo.meta.edm.EdmAssociation;
+import bingo.meta.edm.EdmComplexType;
+import bingo.meta.edm.EdmComplexTypeBuilder;
 import bingo.meta.edm.EdmEntityType;
 import bingo.meta.edm.EdmEntityTypeBuilder;
 import bingo.meta.edm.EdmFullQualifiedName;
@@ -23,8 +25,9 @@ public class ODataServicesBuilder {
 	protected String                                                       name                 = ODataConstants.Defaults.DATA_SERVICE_NAME;
 	protected ODataVersion                                                 version;
 	protected List<EdmSchemaBuilder>                                       schemas              = new ArrayList<EdmSchemaBuilder>();
-	protected Map<EdmEntityTypeBuilder,EdmFullQualifiedName>               baseTypes            = new HashMap<EdmEntityTypeBuilder, EdmFullQualifiedName>();
+	protected Map<Object,EdmFullQualifiedName>                             baseTypes            = new HashMap<Object, EdmFullQualifiedName>();
 	protected Map<EdmSchemaBuilder,List<EdmEntityTypeBuilder>> 			   entityTypes 		    = new HashMap<EdmSchemaBuilder, List<EdmEntityTypeBuilder>>();
+	protected Map<EdmSchemaBuilder,List<EdmComplexTypeBuilder>> 		   complexTypes 		= new HashMap<EdmSchemaBuilder, List<EdmComplexTypeBuilder>>();
 	protected Map<EdmEntityTypeBuilder,List<EdmNavigationPropertyBuilder>> navigationProperties = new HashMap<EdmEntityTypeBuilder, List<EdmNavigationPropertyBuilder>>();
 	
 	public ODataServicesBuilder(){
@@ -58,12 +61,12 @@ public class ODataServicesBuilder {
 		return this;
 	}
 	
-	public Map<EdmEntityTypeBuilder,EdmFullQualifiedName> getBaseTypes() {
+	public Map<Object,EdmFullQualifiedName> getBaseTypes() {
 		return baseTypes;
 	}
 
-	public ODataServicesBuilder addBaseType(EdmEntityTypeBuilder entityType,String baseTypeName){
-		baseTypes.put(entityType,new EdmFullQualifiedName(baseTypeName));
+	public ODataServicesBuilder addBaseType(Object type,String baseTypeName){
+		baseTypes.put(type,new EdmFullQualifiedName(baseTypeName));
 		return this;
 	}
 	
@@ -86,6 +89,26 @@ public class ODataServicesBuilder {
 		getSchemaEntityTypes(schema).add(entityType);
 		return this;
 	}
+	
+	public Map<EdmSchemaBuilder,List<EdmComplexTypeBuilder>> getComplexTypes() {
+		return complexTypes;
+	}
+
+	public List<EdmComplexTypeBuilder> getSchemaComplexTypes(EdmSchemaBuilder schema){
+		List<EdmComplexTypeBuilder> list = complexTypes.get(schema);
+		
+		if(null == list){
+			list = new ArrayList<EdmComplexTypeBuilder>();
+			complexTypes.put(schema,list);
+		}
+		
+		return list;
+	}
+	
+	public ODataServicesBuilder addComplexType(EdmSchemaBuilder schema,EdmComplexTypeBuilder complexType){
+		getSchemaComplexTypes(schema).add(complexType);
+		return this;
+	}	
 	
 	public Map<EdmEntityTypeBuilder, List<EdmNavigationPropertyBuilder>> getNavigationProperties() {
 		return navigationProperties;
@@ -118,6 +141,10 @@ public class ODataServicesBuilder {
 			}
 		}
 		
+		if(Strings.isEmpty(namespace) && schemas.size() == 1){
+			return schemas.get(0);
+		}
+		
 		return null;
 	}
 	
@@ -130,6 +157,11 @@ public class ODataServicesBuilder {
 		EdmSchemaBuilder schema = findSchema(fqName.getNamespace());
 		return null == schema ? null : schema.findEntityType(fqName.getName());
 	}
+	
+	public EdmComplexType findComplexType(EdmFullQualifiedName fqName){
+		EdmSchemaBuilder schema = findSchema(fqName.getNamespace());
+		return null == schema ? null : schema.findComplexType(fqName.getName());
+	}	
 
 	public ODataServices build(){
 		List<EdmSchema> buildedSchemas = new ArrayList<EdmSchema>();
@@ -142,6 +174,47 @@ public class ODataServicesBuilder {
 	}
 	
 	protected EdmSchema build(EdmSchemaBuilder schema){
+		//complex types
+		List<EdmComplexTypeBuilder> delayedComplexTypes = new ArrayList<EdmComplexTypeBuilder>();
+		
+		for(EdmComplexTypeBuilder complexType : getSchemaComplexTypes(schema)){
+			if(baseTypes.containsKey(complexType)){
+				delayedComplexTypes.add(complexType);
+			}else{
+				schema.addComplexType(complexType.build());
+			}
+		}
+		
+		if(!delayedComplexTypes.isEmpty()){
+			while(true){
+				EdmComplexTypeBuilder remove = null;
+				
+				for(EdmComplexTypeBuilder complexType : delayedComplexTypes){
+					EdmFullQualifiedName baseTypeName = baseTypes.get(complexType);
+					EdmComplexType baseType = findComplexType(baseTypeName);
+
+					if(null != baseType){
+						complexType.setBaseType(baseType);
+						remove = complexType;
+						
+						schema.addComplexType(complexType.build());
+						
+						break;
+					}
+				}
+				
+				if(null == remove){
+					throw new ODataException("invalid odata services metadata, some base types may be incorrect");
+				}
+				
+				delayedComplexTypes.remove(remove);
+				
+				if(delayedComplexTypes.isEmpty()){
+					break;
+				}
+			}
+		}
+		
 		//entity types
 		
 		List<EdmEntityTypeBuilder> delayedEntityTypes = new ArrayList<EdmEntityTypeBuilder>();

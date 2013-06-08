@@ -18,10 +18,12 @@ package bingo.odata;
 import bingo.lang.Valued;
 
 public enum ODataVersion implements Valued<String> {
-
+	
 	V1(1,0),
 	V2(2,0),
 	V3(3,0);
+	
+	public static final ODataVersion MAX = ODataVersion.V3;
 	
 	private final int    major;
 	private final int    minor;

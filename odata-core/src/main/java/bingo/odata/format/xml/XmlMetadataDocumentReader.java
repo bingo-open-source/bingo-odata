@@ -261,6 +261,12 @@ public class XmlMetadataDocumentReader extends ODataXmlReader<ODataServices> {
 		EdmComplexTypeBuilder complexType = new EdmComplexTypeBuilder();
 		
 		complexType.setName(reader.requiredGetAttributeValue("Name"));
+		complexType.setAbstract(reader.getAttributeValueForBool("Abstract",false));
+		
+		String baseType = reader.getAttributeValue("BaseType");
+		if(!Strings.isEmpty(baseType)){
+			dataServices.addBaseType(complexType, baseType);
+		}		
 		
 		while(reader.nextIfElementNotEnd("ComplexType")){
 			if(readDocument(reader, complexType)){
@@ -273,7 +279,7 @@ public class XmlMetadataDocumentReader extends ODataXmlReader<ODataServices> {
 			}
 		}
 		
-		schema.addComplexType(complexType.build());
+		dataServices.addComplexType(schema, complexType);
 	}
 	
 	protected void readComplexTypeProperty(ODataReaderContext context,XmlReader reader,ODataServicesBuilder dataServices,EdmSchemaBuilder schema,EdmComplexTypeBuilder complexType) throws Throwable {
@@ -429,8 +435,13 @@ public class XmlMetadataDocumentReader extends ODataXmlReader<ODataServices> {
 			return EdmSimpleType.of(fqName.substring(4));
 		}
 		
+		EdmSimpleType type = EdmSimpleType.of(fqName);
+		if(null != type){
+			return type;
+		}
+		
 		if(fqName.startsWith("Collection(")){
-			String elementTypeName = fqName.substring(12,fqName.length()-1);
+			String elementTypeName = fqName.substring(11,fqName.length()-1);
 			return new EdmCollectionType(readEdmType(elementTypeName));
 		}
 		
