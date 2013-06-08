@@ -102,17 +102,29 @@ public class ODataRequestController {
 					log.info("[{}] -> Error on request '{}' : {}","None",request.getResourcePath(),error.getMessage());
 				}
 			}
+			if(null != error.getCause()){
+				logError(handler,request,error.getCause());
+			}
 			error(error,context,version,format,urlInfo,request,response);
 		}catch(Throwable e){
-			if(log.isWarnEnabled()){
-				if(null != handler){
-					log.warn("[{}] -> Error on request '{}' : {}",handler.getClass().getSimpleName(),request.getResourcePath(),e.getMessage(),e);
-				}else{
-					log.warn("[{}] -> Error on request '{}' : {}","None",request.getResourcePath(),e.getMessage(),e);
-				}
+			logError(handler,request,e);
+			
+			if(e.getCause() != null && e.getCause() instanceof ODataError){
+				error((ODataError)e.getCause(),context,version,format,urlInfo,request,response);
+			}else{
+				error(ODataErrors.internalServerError(errorMessage(e)),context,version,format,urlInfo,request,response);	
 			}
-			error(ODataErrors.internalServerError(errorMessage(e)),context,version,format,urlInfo,request,response);
 		}
+	}
+	
+	protected void logError(ODataRequestHandler handler,ODataRequest request,Throwable e){
+		if(log.isWarnEnabled()){
+			if(null != handler){
+				log.warn("[{}] -> Error on request '{}' : {}",handler.getClass().getSimpleName(),request.getResourcePath(),e.getMessage(),e);
+			}else{
+				log.warn("[{}] -> Error on request '{}' : {}","None",request.getResourcePath(),e.getMessage(),e);
+			}
+		}		
 	}
 	
 	protected void endResponse(ODataRequest request, ODataResponse response, ODataContext context) throws Throwable {
@@ -143,7 +155,11 @@ public class ODataRequestController {
 		}
 		
 		if(null == format){
-			format = ODataFormat.Default;
+			format = producer.config().getDefaultFormat();
+			
+			if(null == format){
+				format = ODataFormat.Default;
+			}
 		}
 		
 		if(null == context){
