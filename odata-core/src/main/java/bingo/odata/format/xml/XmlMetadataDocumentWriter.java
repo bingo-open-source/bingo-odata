@@ -57,22 +57,22 @@ public class XmlMetadataDocumentWriter extends ODataXmlWriter<ODataServices> {
 		
 		//Edmx
 		writer.startElement(EDMX_PREFIX, EDMX_NS, "Edmx")
-			  .namespace(EDMX_PREFIX,EDMX_NS)
-			  .attribute("Version", "1.0");
+			  .attribute("Version", "1.0")
+			  .namespace(EDMX_PREFIX,EDMX_NS);
 
 		//DataServides
 		writer.startElement(EDMX_NS,"DataServices")
 		      .attribute(METADATA_PREFIX,METADATA_NS,"DataServiceVersion",context.getVersion().getValue())
-		      .attribute(METADATA_PREFIX,METADATA_NS,"MaxDataServiceVersion",ODataVersion.MAX.getValue())
-		      .namespace(DATASERVICES_PREFIX,DATASERVICES_NS)
+		      .attribute(METADATA_PREFIX,METADATA_NS,"MaxDataServiceVersion",context.getProtocol().getMaxSupportedVersion().getValue())
 		      .namespace(METADATA_PREFIX,METADATA_NS)
-		      .namespace(EXTEND_METADATA_PREFIX, EXTEND_METADATA_NS);
+		      .namespace(EXTEND_METADATA_PREFIX,EXTEND_METADATA_NS);
 
 		//Schemas
 		for(EdmSchema schema : services.getSchemas()){
 			writer.startElement("Schema")
-				  .namespace(EDM2007_NS)
-				  .attributeOptional("Namespace", schema.getNamespaceName());
+				  .attributeOptional("Namespace", schema.getNamespaceName())
+				  .attributeOptional("Alias", schema.getAlias())
+				  .namespace(context.getVersion().getEdmNamespace());
 
 			writeDocument(writer, schema);
 
@@ -383,7 +383,7 @@ public class XmlMetadataDocumentWriter extends ODataXmlWriter<ODataServices> {
 			      .attribute("Mode", param.getMode().toString());
 			
 			if(null != param.getNullable()){
-				writer.attribute(EXTEND_METADATA_QN_NULLABLE,param.getNullable() ? "true" : "false");	
+				writer.attribute("Nullable",param.getNullable() ? "true" : "false");	
 			}
 			
 			if(!Strings.isEmpty(param.getTitle())){

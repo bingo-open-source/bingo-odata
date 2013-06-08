@@ -21,6 +21,8 @@ import bingo.meta.edm.EdmFunctionImport;
 import bingo.odata.model.ODataKey;
 
 public interface ODataContext {
+	
+	ODataProtocol getProtocol();
 
 	ODataVersion getVersion();
 

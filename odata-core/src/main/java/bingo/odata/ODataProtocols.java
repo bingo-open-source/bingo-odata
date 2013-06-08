@@ -39,12 +39,19 @@ import static bingo.odata.ODataObjectKind.*;
 
 public class ODataProtocols {
 	
-	public static final ODataProtocol V3      = v3();
-	public static final ODataProtocol DEFAULT = V3;
+	public static final ODataProtocol LE_V3   = leV3();
+	public static final ODataProtocol GE_V3   = geV3();
+	public static final ODataProtocol DEFAULT = LE_V3;
 	
-	private static ODataProtocol v3(){
-		ODataProtocolBuilder v3builder = new ODataProtocolBuilder(ODataVersion.V1, ODataVersion.V3, ODataVersion.V2, ODataFormat.Json);
-		
+	private static ODataProtocol leV3(){
+		return create(new ODataProtocolBuilder(ODataVersion.V1, ODataVersion.V3, ODataVersion.V2, ODataFormat.Json));
+	}
+	
+	private static ODataProtocol geV3(){
+		return create(new ODataProtocolBuilder(ODataVersion.V3, ODataVersion.MAX, ODataVersion.V3, ODataFormat.Json));
+	}
+	
+	private static ODataProtocol create(ODataProtocolBuilder v3builder){
 		//supported format
 		v3builder.addSupportedFormats(ODataFormat.Atom,ODataFormat.Json);
 		

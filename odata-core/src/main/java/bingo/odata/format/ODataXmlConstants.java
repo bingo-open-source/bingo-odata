@@ -47,7 +47,7 @@ public class ODataXmlConstants {
 	public static final QName		METADATA_QN_FC_KEEPIN_CONTENT = new QName(METADATA_NS, "FC_KeepInContent");	
 
 	public static final String		EDM_PREFIX	                  = "edm";
-	public static final String		EDM2006_NS	                  = "http://schemas.microsoft.com/ado/2006/04/edm";
+	public static final String		EDM2006_NS	                  = "http://schemas.microsoft.com/ado/2006/04/edm"; // edm 1.0
 	public static final QName		EDM2006_QN_SCHEMA	          = new QName(EDM2006_NS, "Schema");
 	public static final QName		EDM2006_QN_ENTITY_TYPE	      = new QName(EDM2006_NS, "EntityType");
 	public static final QName		EDM2006_QN_ASSOCIATION	      = new QName(EDM2006_NS, "Association");
@@ -62,7 +62,7 @@ public class ODataXmlConstants {
 	public static final QName		EDM2006_QN_PROPERTY	          = new QName(EDM2006_NS, "Property");
 	public static final QName		EDM2006_QN_NAV_PROPERTY	      = new QName(EDM2006_NS, "NavigationProperty");
 
-	public static final String		EDM2007_NS	                  = "http://schemas.microsoft.com/ado/2007/05/edm";	              
+	public static final String		EDM2007_NS	                  = "http://schemas.microsoft.com/ado/2007/05/edm";	// edm 1.1              
 	public static final QName		EDM2007_QN_SCHEMA	          = new QName(EDM2007_NS, "Schema");
 	public static final QName		EDM2007_QN_ENTITY_TYPE	      = new QName(EDM2007_NS, "EntityType");
 	public static final QName		EDM2007_QN_ASSOCIATION	      = new QName(EDM2007_NS, "Association");
@@ -77,7 +77,7 @@ public class ODataXmlConstants {
 	public static final QName		EDM2007_QN_PROPERTY	          = new QName(EDM2007_NS, "Property");
 	public static final QName		EDM2007_QN_NAV_PROPERTY	      = new QName(EDM2007_NS, "NavigationProperty");
 
-	public static final String		EDM2008_1_NS	              = "http://schemas.microsoft.com/ado/2008/01/edm";	              
+	public static final String		EDM2008_1_NS	              = "http://schemas.microsoft.com/ado/2008/01/edm";	// edm 1.2           
 	public static final QName		EDM2008_1_QN_SCHEMA	          = new QName(EDM2008_1_NS, "Schema");
 	public static final QName		EDM2008_1_QN_ENTITY_TYPE	  = new QName(EDM2008_1_NS, "EntityType");
 	public static final QName		EDM2008_1_QN_ASSOCIATION	  = new QName(EDM2008_1_NS, "Association");
@@ -92,7 +92,7 @@ public class ODataXmlConstants {
 	public static final QName		EDM2008_1_QN_PROPERTY	      = new QName(EDM2008_1_NS, "Property");
 	public static final QName		EDM2008_1_QN_NAV_PROPERTY     = new QName(EDM2008_1_NS, "NavigationProperty");
 
-	public static final String		EDM2008_9_NS	              = "http://schemas.microsoft.com/ado/2008/09/edm";	              
+	public static final String		EDM2008_9_NS	              = "http://schemas.microsoft.com/ado/2008/09/edm";	// edm 2.0              
 	public static final QName		EDM2008_9_QN_SCHEMA	          = new QName(EDM2008_9_NS, "Schema");
 	public static final QName		EDM2008_9_QN_ENTITY_TYPE	  = new QName(EDM2008_9_NS, "EntityType");
 	public static final QName		EDM2008_9_QN_ASSOCIATION	  = new QName(EDM2008_9_NS, "Association");
@@ -107,20 +107,35 @@ public class ODataXmlConstants {
 	public static final QName		EDM2008_9_QN_PROPERTY	      = new QName(EDM2008_9_NS, "Property");
 	public static final QName		EDM2008_9_QN_NAV_PROPERTY	  = new QName(EDM2008_9_NS, "NavigationProperty");
 
-	public static final String		EDM2009_NS	                  = "http://schemas.microsoft.com/ado/2009/08/edm";	              	
-	public static final QName		EDM2009_QN_SCHEMA	          = new QName(EDM2009_NS, "Schema");
-	public static final QName		EDM2009_QN_ENTITY_TYPE	      = new QName(EDM2009_NS, "EntityType");
-	public static final QName		EDM2009_QN_ASSOCIATION	      = new QName(EDM2009_NS, "Association");
-	public static final QName		EDM2009_QN_COMPLEX_TYPE	      = new QName(EDM2009_NS, "ComplexType");
-	public static final QName		EDM2009_QN_ENTITY_CONTAINER	  = new QName(EDM2009_NS, "EntityContainer");
-	public static final QName		EDM2009_QN_ENTITY_SET	      = new QName(EDM2009_NS, "EntitySet");
-	public static final QName		EDM2009_QN_ASSOCIATION_SET	  = new QName(EDM2009_NS, "AssociationSet");
-	public static final QName		EDM2009_QN_FUNCTION_IMPORT	  = new QName(EDM2009_NS, "FunctionImport");
-	public static final QName		EDM2009_QN_PARAMETER	      = new QName(EDM2009_NS, "Parameter");
-	public static final QName		EDM2009_QN_END	              = new QName(EDM2009_NS, "End");
-	public static final QName		EDM2009_QN_PROPERTY_REF	      = new QName(EDM2009_NS, "PropertyRef");
-	public static final QName		EDM2009_QN_PROPERTY	          = new QName(EDM2009_NS, "Property");
-	public static final QName		EDM2009_QN_NAV_PROPERTY	      = new QName(EDM2009_NS, "NavigationProperty");
+	public static final String		EDM2009_8_NS	              = "http://schemas.microsoft.com/ado/2009/08/edm";	// edm 2.1              	
+	public static final QName		EDM2009_8_QN_SCHEMA	          = new QName(EDM2009_8_NS, "Schema");
+	public static final QName		EDM2009_8_QN_ENTITY_TYPE	  = new QName(EDM2009_8_NS, "EntityType");
+	public static final QName		EDM2009_8_QN_ASSOCIATION	  = new QName(EDM2009_8_NS, "Association");
+	public static final QName		EDM2009_8_QN_COMPLEX_TYPE	  = new QName(EDM2009_8_NS, "ComplexType");
+	public static final QName		EDM2009_8_QN_ENTITY_CONTAINER = new QName(EDM2009_8_NS, "EntityContainer");
+	public static final QName		EDM2009_8_QN_ENTITY_SET	      = new QName(EDM2009_8_NS, "EntitySet");
+	public static final QName		EDM2009_8_QN_ASSOCIATION_SET  = new QName(EDM2009_8_NS, "AssociationSet");
+	public static final QName		EDM2009_8_QN_FUNCTION_IMPORT  = new QName(EDM2009_8_NS, "FunctionImport");
+	public static final QName		EDM2009_8_QN_PARAMETER	      = new QName(EDM2009_8_NS, "Parameter");
+	public static final QName		EDM2009_8_QN_END	          = new QName(EDM2009_8_NS, "End");
+	public static final QName		EDM2009_8_QN_PROPERTY_REF	  = new QName(EDM2009_8_NS, "PropertyRef");
+	public static final QName		EDM2009_8_QN_PROPERTY	      = new QName(EDM2009_8_NS, "Property");
+	public static final QName		EDM2009_8_QN_NAV_PROPERTY	  = new QName(EDM2009_8_NS, "NavigationProperty");
+	
+	public static final String		EDM2009_11_NS	               = "http://schemas.microsoft.com/ado/2009/11/edm";	// edm 3.0             	
+	public static final QName		EDM2009_11_QN_SCHEMA	       = new QName(EDM2009_11_NS, "Schema");
+	public static final QName		EDM2009_11_QN_ENTITY_TYPE	   = new QName(EDM2009_11_NS, "EntityType");
+	public static final QName		EDM2009_11_QN_ASSOCIATION	   = new QName(EDM2009_11_NS, "Association");
+	public static final QName		EDM2009_11_QN_COMPLEX_TYPE	   = new QName(EDM2009_11_NS, "ComplexType");
+	public static final QName		EDM2009_11_QN_ENTITY_CONTAINER = new QName(EDM2009_11_NS, "EntityContainer");
+	public static final QName		EDM2009_11_QN_ENTITY_SET	   = new QName(EDM2009_11_NS, "EntitySet");
+	public static final QName		EDM2009_11_QN_ASSOCIATION_SET  = new QName(EDM2009_11_NS, "AssociationSet");
+	public static final QName		EDM2009_11_QN_FUNCTION_IMPORT  = new QName(EDM2009_11_NS, "FunctionImport");
+	public static final QName		EDM2009_11_QN_PARAMETER	       = new QName(EDM2009_11_NS, "Parameter");
+	public static final QName		EDM2009_11_QN_END	           = new QName(EDM2009_11_NS, "End");
+	public static final QName		EDM2009_11_QN_PROPERTY_REF	   = new QName(EDM2009_11_NS, "PropertyRef");
+	public static final QName		EDM2009_11_QN_PROPERTY	       = new QName(EDM2009_11_NS, "Property");
+	public static final QName		EDM2009_11_QN_NAV_PROPERTY	   = new QName(EDM2009_11_NS, "NavigationProperty");	
 
 	public static final String		ATOM_PREFIX	                  = "atom";
 	public static final String		ATOM_NS	                      = "http://www.w3.org/2005/Atom";

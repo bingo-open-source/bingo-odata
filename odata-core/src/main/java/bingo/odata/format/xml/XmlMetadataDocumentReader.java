@@ -34,6 +34,7 @@ import bingo.meta.edm.EdmSchemaBuilder;
 import bingo.meta.edm.EdmSimpleType;
 import bingo.meta.edm.EdmType;
 import bingo.meta.edm.EdmUtils;
+import bingo.odata.ODataErrors;
 import bingo.odata.ODataException;
 import bingo.odata.ODataReaderContext;
 import bingo.odata.ODataServices;
@@ -192,7 +193,7 @@ public class XmlMetadataDocumentReader extends ODataXmlReader<ODataServices> {
 		prop.setName(reader.requiredGetAttributeValue("Name"));
 		prop.setTitle(reader.getAttributeValue(EXTEND_METADATA_QN_TITLE));
 		prop.setType(readEdmType(reader.requiredGetAttributeValue("Type")));
-		prop.setNullable(reader.getAttributeValueForBool("Nullable",false));
+		prop.setNullable(reader.getAttributeValueForBool("Nullable",true));
 		prop.setMaxLength(reader.getAttributeValueForInt("MaxLength", -1));
 		prop.setDefaultValue(reader.getAttributeValue("DefaultValue"));
 		prop.setPrecision(reader.getAttributeValueForInt("Precision", -1));
@@ -417,11 +418,17 @@ public class XmlMetadataDocumentReader extends ODataXmlReader<ODataServices> {
 				
 				p.setName(reader.requiredGetAttributeValue("Name"));
 				p.setType(readEdmType(reader.requiredGetAttributeValue("Type")));
-				p.setMode(EdmParameterMode.valueOf(reader.requiredGetAttributeValue("Mode")));
 				p.setTitle(reader.getAttributeValue(EXTEND_METADATA_QN_TITLE));
 				p.setSerializeFormat(reader.getAttributeValue(EXTEND_METADATA_QN_SERIALIZE_FORMAT));
 				p.setSerializeType(reader.getAttributeValue(EXTEND_METADATA_QN_SERIALIZE_TYPE));
 				p.setNullable(reader.getAttributeValueForBool(EXTEND_METADATA_QN_NULLABLE));
+				
+				String mode = reader.getAttributeValue("Mode");
+				if(!Strings.isEmpty(mode)){
+					p.setMode(EdmParameterMode.valueOf(mode));
+				}else{
+					p.setMode(EdmParameterMode.In);
+				}
 				
 				func.addParameter(p.build());
 			}
@@ -432,7 +439,11 @@ public class XmlMetadataDocumentReader extends ODataXmlReader<ODataServices> {
 	
 	protected EdmType readEdmType(String fqName){
 		if(fqName.startsWith("Edm.")){
-			return EdmSimpleType.of(fqName.substring(4));
+			EdmSimpleType type = EdmSimpleType.of(fqName.substring(4));
+			if(null == type){
+				throw ODataErrors.notImplemented("type '" + fqName + "' not supported");
+			}
+			return type;
 		}
 		
 		EdmSimpleType type = EdmSimpleType.of(fqName);

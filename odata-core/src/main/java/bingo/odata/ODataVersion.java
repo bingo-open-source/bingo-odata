@@ -16,23 +16,26 @@
 package bingo.odata;
 
 import bingo.lang.Valued;
+import bingo.odata.format.ODataXmlConstants;
 
 public enum ODataVersion implements Valued<String> {
 	
-	V1(1,0),
-	V2(2,0),
-	V3(3,0);
+	V1(1,0,ODataXmlConstants.EDM2006_NS),
+	V2(2,0,ODataXmlConstants.EDM2007_NS),
+	V3(3,0,ODataXmlConstants.EDM2009_11_NS);
 	
 	public static final ODataVersion MAX = ODataVersion.V3;
 	
 	private final int    major;
 	private final int    minor;
 	private final String value;
+	private final String edmNamespace;
 	
-	ODataVersion(int major,int minor){
+	ODataVersion(int major,int minor,String edmNamespace){
 		this.major = major;
 		this.minor = minor;
 		this.value = major + "." + minor;
+		this.edmNamespace = edmNamespace;
 	}
 	
 	public int getMajor() {
@@ -46,6 +49,10 @@ public enum ODataVersion implements Valued<String> {
 	public String getValue() {
 	    return value;
     }
+	
+	public String getEdmNamespace() {
+		return edmNamespace;
+	}
 
 	@Override
     public String toString() {

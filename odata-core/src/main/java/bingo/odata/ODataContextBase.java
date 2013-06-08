@@ -10,6 +10,7 @@ import bingo.odata.model.ODataKey;
 
 public abstract class ODataContextBase implements ODataContext {
 
+	protected ODataProtocol     protocol = ODataProtocols.DEFAULT;
 	protected ODataVersion      version;
 	protected ODataFormat       format;
 	protected ODataUrlInfo      urlInfo;
@@ -18,6 +19,14 @@ public abstract class ODataContextBase implements ODataContext {
 	protected EdmEntityType     entityType;
 	protected ODataKey          entityKey;
 	protected EdmFunctionImport functionImport;
+	
+	public ODataProtocol getProtocol() {
+		return protocol;
+	}
+
+	public void setProtocol(ODataProtocol protocol) {
+		this.protocol = protocol;
+	}
 
 	public ODataVersion getVersion() {
 		return version;
