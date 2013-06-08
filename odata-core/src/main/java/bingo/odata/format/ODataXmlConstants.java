@@ -31,6 +31,9 @@ public class ODataXmlConstants {
 	public static final String      EXTEND_METADATA_PREFIX        = "em";
 	public static final String      EXTEND_METADATA_NS            = "http://schemas.bingosoft.net/odata/metadata/1.0";
 	public static final QName       EXTEND_METADATA_QN_TITLE      = new QName(EXTEND_METADATA_NS,"Title");
+	public static final QName       EXTEND_METADATA_QN_NULLABLE   = new QName(EXTEND_METADATA_NS,"Nullable");
+	public static final QName       EXTEND_METADATA_QN_SERIALIZE_FORMAT = new QName(EXTEND_METADATA_NS,"SerializeFormat");
+	public static final QName       EXTEND_METADATA_QN_SERIALIZE_TYPE   = new QName(EXTEND_METADATA_NS,"SerializeType");
 	
 	public static final String		METADATA_PREFIX	              = "m";
 	public static final String		METADATA_NS	                  = "http://schemas.microsoft.com/ado/2007/08/dataservices/metadata";

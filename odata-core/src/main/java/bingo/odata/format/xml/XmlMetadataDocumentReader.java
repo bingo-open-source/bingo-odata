@@ -201,6 +201,8 @@ public class XmlMetadataDocumentReader extends ODataXmlReader<ODataServices> {
 		prop.setFcTargetPath(reader.getAttributeValue("FC_TargetPath"));
 		prop.setFcContentKind(reader.getAttributeValue("FC_CcontentKind"));
 		prop.setFcKeepInContent(reader.getAttributeValueForBool("FC_KeepInContent", false));
+		prop.setSerializeFormat(reader.getAttributeValue(EXTEND_METADATA_QN_SERIALIZE_FORMAT));
+		prop.setSerializeType(reader.getAttributeValue(EXTEND_METADATA_QN_SERIALIZE_TYPE));
 		
 		while(reader.nextIfElementNotEnd("Property")){
 			readDocument(reader, prop);
@@ -410,6 +412,10 @@ public class XmlMetadataDocumentReader extends ODataXmlReader<ODataServices> {
 				p.setName(reader.requiredGetAttributeValue("Name"));
 				p.setType(readEdmType(reader.requiredGetAttributeValue("Type")));
 				p.setMode(EdmParameterMode.valueOf(reader.requiredGetAttributeValue("Mode")));
+				p.setTitle(reader.getAttributeValue(EXTEND_METADATA_QN_TITLE));
+				p.setSerializeFormat(reader.getAttributeValue(EXTEND_METADATA_QN_SERIALIZE_FORMAT));
+				p.setSerializeType(reader.getAttributeValue(EXTEND_METADATA_QN_SERIALIZE_TYPE));
+				p.setNullable(reader.getAttributeValueForBool(EXTEND_METADATA_QN_NULLABLE));
 				
 				func.addParameter(p.build());
 			}

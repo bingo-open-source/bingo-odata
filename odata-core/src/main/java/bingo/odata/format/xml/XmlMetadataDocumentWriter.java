@@ -218,7 +218,15 @@ public class XmlMetadataDocumentWriter extends ODataXmlWriter<ODataServices> {
 			}
 			
 			if(!Strings.isEmpty(prop.getTitle())){
-				writer.attribute(EXTEND_METADATA_NS,"Title",prop.getTitle());
+				writer.attribute(EXTEND_METADATA_QN_TITLE,prop.getTitle());
+			}	
+			
+			if(!Strings.isEmpty(prop.getSerializeFormat())){
+				writer.attribute(EXTEND_METADATA_QN_SERIALIZE_FORMAT,prop.getSerializeFormat());
+			}
+			
+			if(!Strings.isEmpty(prop.getSerializeType())){
+				writer.attribute(EXTEND_METADATA_QN_SERIALIZE_TYPE,prop.getSerializeType());
 			}			
 			
 			//feed customerization attributes
@@ -361,13 +369,27 @@ public class XmlMetadataDocumentWriter extends ODataXmlWriter<ODataServices> {
 			writer.startElement("Parameter")
 			      .attribute("Name", param.getName());
 			
+			
+			writer.attribute("Type", fullQualifiedName(schema, param.getType()))
+			      .attribute("Mode", param.getMode().toString());
+			
+			if(null != param.getNullable()){
+				writer.attribute(EXTEND_METADATA_QN_NULLABLE,param.getNullable() ? "true" : "false");	
+			}
+			
 			if(!Strings.isEmpty(param.getTitle())){
 				writer.attribute(EXTEND_METADATA_NS,"Title",param.getTitle());
 			}
 			
-			writer.attribute("Type", fullQualifiedName(schema, param.getType()))
-			      .attribute("Mode", param.getMode().toString())
-			      .endElement();
+			if(!Strings.isEmpty(param.getSerializeFormat())){
+				writer.attribute(EXTEND_METADATA_QN_SERIALIZE_FORMAT,param.getSerializeFormat());
+			}
+			
+			if(!Strings.isEmpty(param.getSerializeType())){
+				writer.attribute(EXTEND_METADATA_QN_SERIALIZE_TYPE,param.getSerializeType());
+			}
+			
+			writer.endElement();
 		}
 		
 		writer.endElement();
