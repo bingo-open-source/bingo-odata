@@ -122,7 +122,7 @@ public abstract class ODataRequestHandlerBase implements ODataRequestHandler {
 		ODataReader<T> reader = context.getProtocol().getReader(context.getVersion(),format, kind);
 		
 		if(null == reader){
-			throw ODataErrors.unsupportedDataServiceFormat(context.getFormat().getValue());	
+			throw ODataErrors.unsupportedDataServiceFormat(context.getFormatOrDefault().getValue());	
 		}
 		
 		return reader;

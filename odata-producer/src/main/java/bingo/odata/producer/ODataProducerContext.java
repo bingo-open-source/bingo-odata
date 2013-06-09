@@ -86,7 +86,7 @@ public class ODataProducerContext implements ODataWriterContext,ODataReaderConte
     }
 	
 	public ODataFormat getFormatOrDefault(){
-		return null == format ? ODataFormat.Default : format;
+		return null == format ? (null == producer.config().getDefaultFormat()  ? ODataFormat.Default : producer.config().getDefaultFormat() ): format;
 	}
 
 	public ODataUrlInfo getUrlInfo() {
