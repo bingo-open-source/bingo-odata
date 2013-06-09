@@ -112,9 +112,16 @@ public class ODataRequestController {
 			if(e.getCause() != null && e.getCause() instanceof ODataError){
 				error((ODataError)e.getCause(),context,version,format,urlInfo,request,response);
 			}else{
-				error(ODataErrors.internalServerError(errorMessage(e)),context,version,format,urlInfo,request,response);	
+				error(createError(context,e),context,version,format,urlInfo,request,response);	
 			}
 		}
+	}
+	
+	protected ODataError createError(ODataProducerContext context, Throwable cause){
+		if(cause instanceof IllegalArgumentException){
+			return ODataErrors.badRequest(errorMessage(context,cause));
+		}
+		return ODataErrors.internalServerError(errorMessage(context,cause));
 	}
 	
 	protected void logError(ODataRequestHandler handler,ODataRequest request,Throwable e){
@@ -136,8 +143,8 @@ public class ODataRequestController {
         }	
 	}
 	
-	protected String errorMessage(Throwable e){
-		if(!producer.config().isPrintStackTrace()){
+	protected String errorMessage(ODataProducerContext context, Throwable e){
+		if(!context.isPrintStackTrace()){
 			return e.getMessage();
 		}
 		

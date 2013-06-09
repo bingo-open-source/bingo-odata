@@ -30,6 +30,8 @@ import bingo.odata.ODataWriterContext;
 import bingo.odata.model.ODataKey;
 
 public class ODataProducerContext implements ODataWriterContext,ODataReaderContext {
+	
+	private static final String PRINT_STACK_TRACE_OPTION = "x$printStackTrace";
 
 	private final ODataRequest  request;
 	private final ODataProducer	producer;
@@ -39,6 +41,7 @@ public class ODataProducerContext implements ODataWriterContext,ODataReaderConte
 	private final ODataUrlInfo	urlInfo;
 	private final ODataServices	services;
 	private final boolean		minimal;
+	private final boolean       printStackTrace;
 	
 	private EdmEntitySet	    entitySet;
 	private EdmEntityType	    entityType;
@@ -54,6 +57,12 @@ public class ODataProducerContext implements ODataWriterContext,ODataReaderConte
 		this.format   = format;
 		this.urlInfo  = urlInfo;
 		this.minimal  = null == urlInfo ? false : urlInfo.getQueryOptions().isXMinimal();
+		
+		if("1".equals(urlInfo.getQueryOptions().getOption(PRINT_STACK_TRACE_OPTION))){
+			this.printStackTrace = true;
+		}else{
+			this.printStackTrace = producer.config().isPrintStackTrace();
+		}
 	}
 	
 	public ODataRequest getRequest() {
@@ -135,4 +144,8 @@ public class ODataProducerContext implements ODataWriterContext,ODataReaderConte
 	public boolean isMinimal() {
 	    return minimal;
     }
+
+	public boolean isPrintStackTrace() {
+		return printStackTrace;
+	}
 }

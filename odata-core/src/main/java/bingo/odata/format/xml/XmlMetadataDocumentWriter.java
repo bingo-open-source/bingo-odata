@@ -346,10 +346,6 @@ public class XmlMetadataDocumentWriter extends ODataXmlWriter<ODataServices> {
 		  
 		writer.attributeOptional("EntitySet", func.getEntitySet());
 		
-		if(!(Strings.isEmpty(func.getHttpMethod()) || Strings.equals(HttpMethods.ALL, func.getHttpMethod()))){
-			writer.attribute(METADATA_NS,"HttpMethod", func.getHttpMethod());
-		}
-		
 		if(func.getReturnType() != null){
 			writer.attribute("ReturnType",fullQualifiedName(schema, func.getReturnType()));
 			
@@ -367,6 +363,10 @@ public class XmlMetadataDocumentWriter extends ODataXmlWriter<ODataServices> {
 		if(!Strings.isEmpty(func.getTitle())){
 			writer.attribute(EXTEND_METADATA_NS,"Title",func.getTitle());
 		}
+		
+		if(!(Strings.isEmpty(func.getHttpMethod()) || Strings.equals(HttpMethods.ALL, func.getHttpMethod()))){
+			writer.attribute(METADATA_NS,"HttpMethod", func.getHttpMethod());
+		}		
 		
 		/*
 		if(!func.getParameters().isEmpty()){

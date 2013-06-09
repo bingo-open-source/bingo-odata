@@ -3,8 +3,6 @@
  */
 package bingo.odata.format.xml;
 
-import java.util.List;
-
 import bingo.lang.Strings;
 import bingo.lang.xml.XmlReader;
 import bingo.meta.edm.EdmAssociation;
@@ -15,7 +13,6 @@ import bingo.meta.edm.EdmAssociationSetEnd;
 import bingo.meta.edm.EdmBuilderWithDocumentation;
 import bingo.meta.edm.EdmCollectionType;
 import bingo.meta.edm.EdmComplexTypeBuilder;
-import bingo.meta.edm.EdmComplexTypeRef;
 import bingo.meta.edm.EdmEntityContainerBuilder;
 import bingo.meta.edm.EdmEntitySetBuilder;
 import bingo.meta.edm.EdmEntityTypeBuilder;
@@ -27,12 +24,11 @@ import bingo.meta.edm.EdmMultiplicity;
 import bingo.meta.edm.EdmNavigationPropertyBuilder;
 import bingo.meta.edm.EdmParameterBuilder;
 import bingo.meta.edm.EdmParameterMode;
-import bingo.meta.edm.EdmProperty;
 import bingo.meta.edm.EdmPropertyBuilder;
-import bingo.meta.edm.EdmSchema;
 import bingo.meta.edm.EdmSchemaBuilder;
 import bingo.meta.edm.EdmSimpleType;
 import bingo.meta.edm.EdmType;
+import bingo.meta.edm.EdmUnresolvedTypeRef;
 import bingo.meta.edm.EdmUtils;
 import bingo.odata.ODataErrors;
 import bingo.odata.ODataException;
@@ -70,10 +66,6 @@ public class XmlMetadataDocumentReader extends ODataXmlReader<ODataServices> {
 		
 	    return dataServices;
     }
-	
-	protected List<EdmSchema> buildSchemas(List<EdmSchemaBuilder> schemas){
-		return null;
-	}
 	
 	protected void readSchema(ODataReaderContext context,XmlReader reader, ODataServicesBuilder dataServices) throws Throwable {
 		EdmSchemaBuilder schema = new EdmSchemaBuilder();
@@ -129,6 +121,8 @@ public class XmlMetadataDocumentReader extends ODataXmlReader<ODataServices> {
 			dataServices.addBaseType(entityType, baseType);
 		}
 		
+		dataServices.addEntityType(schema, entityType);
+		
 		while(reader.nextIfElementNotEnd("EntityType")){
 			if(readDocument(reader,entityType)){
 				continue;
@@ -149,8 +143,6 @@ public class XmlMetadataDocumentReader extends ODataXmlReader<ODataServices> {
 				continue;
 			}
 		}
-		
-		dataServices.addEntityType(schema, entityType);
 	}
 	
 	protected boolean readDocument(XmlReader reader,EdmBuilderWithDocumentation item) throws Throwable{
@@ -184,10 +176,10 @@ public class XmlMetadataDocumentReader extends ODataXmlReader<ODataServices> {
 	}
 	
 	protected void readEntityTypeProperty(ODataReaderContext context,XmlReader reader,ODataServicesBuilder dataServices,EdmSchemaBuilder schema,EdmEntityTypeBuilder entityType) throws Throwable {
-		entityType.addProperty(readProperty(reader));
+		dataServices.addProperty(entityType, readProperty(reader));
 	}
 	
-	protected EdmProperty readProperty(XmlReader reader) throws Throwable {
+	protected EdmPropertyBuilder readProperty(XmlReader reader) throws Throwable {
 		EdmPropertyBuilder prop = new EdmPropertyBuilder();
 		
 		prop.setName(reader.requiredGetAttributeValue("Name"));
@@ -209,7 +201,7 @@ public class XmlMetadataDocumentReader extends ODataXmlReader<ODataServices> {
 			readDocument(reader, prop);
 		}
 		
-		return prop.build();
+		return prop;
 	}
 	
 	protected void readEntityTypeNavProperty(ODataReaderContext context,XmlReader reader,ODataServicesBuilder dataServices,EdmSchemaBuilder schema,EdmEntityTypeBuilder entityType) throws Throwable {
@@ -269,6 +261,8 @@ public class XmlMetadataDocumentReader extends ODataXmlReader<ODataServices> {
 			dataServices.addBaseType(complexType, baseType);
 		}		
 		
+		dataServices.addComplexType(schema, complexType);
+		
 		while(reader.nextIfElementNotEnd("ComplexType")){
 			if(readDocument(reader, complexType)){
 				continue;
@@ -279,12 +273,10 @@ public class XmlMetadataDocumentReader extends ODataXmlReader<ODataServices> {
 				continue;
 			}
 		}
-		
-		dataServices.addComplexType(schema, complexType);
 	}
 	
 	protected void readComplexTypeProperty(ODataReaderContext context,XmlReader reader,ODataServicesBuilder dataServices,EdmSchemaBuilder schema,EdmComplexTypeBuilder complexType) throws Throwable {
-		complexType.addProperty(readProperty(reader));
+		dataServices.addProperty(complexType, readProperty(reader));
 	}
 	
 	protected void readEnumType(ODataReaderContext context,XmlReader reader,ODataServicesBuilder dataServices,EdmSchemaBuilder schema) throws Throwable {
@@ -318,6 +310,8 @@ public class XmlMetadataDocumentReader extends ODataXmlReader<ODataServices> {
 		container.setName(reader.getAttributeValue("Name"));
 		container.setDefault(reader.getAttributeValueForBool("IsDefaultEntityContainer",false));
 		
+		dataServices.addEntityContainer(schema, container);
+		
 		while(reader.nextIfElementNotEnd("EntityContainer")){
 			if(reader.isStartElement("EntitySet")){
 				readEntitySet(context, reader, dataServices, schema, container);
@@ -334,8 +328,6 @@ public class XmlMetadataDocumentReader extends ODataXmlReader<ODataServices> {
 				continue;
 			}
 		}
-		
-		schema.addEntityContainer(container.build());
 	}
 	
 	protected void readEntitySet(ODataReaderContext context,XmlReader reader,ODataServicesBuilder dataServices,EdmSchemaBuilder schema,EdmEntityContainerBuilder container) throws Throwable {
@@ -408,6 +400,8 @@ public class XmlMetadataDocumentReader extends ODataXmlReader<ODataServices> {
 
 		func.setSideEffecting(reader.getAttributeValueForBool("IsSideEffecting",true));
 		
+		dataServices.addFunctionImport(container, func);
+		
 		while(reader.nextIfElementNotEnd("FunctionImport")){
 			if(readDocument(reader, func)){
 				continue;
@@ -418,10 +412,10 @@ public class XmlMetadataDocumentReader extends ODataXmlReader<ODataServices> {
 				
 				p.setName(reader.requiredGetAttributeValue("Name"));
 				p.setType(readEdmType(reader.requiredGetAttributeValue("Type")));
+				p.setNullable(reader.getAttributeValueForBool("Nullable"));
 				p.setTitle(reader.getAttributeValue(EXTEND_METADATA_QN_TITLE));
 				p.setSerializeFormat(reader.getAttributeValue(EXTEND_METADATA_QN_SERIALIZE_FORMAT));
 				p.setSerializeType(reader.getAttributeValue(EXTEND_METADATA_QN_SERIALIZE_TYPE));
-				p.setNullable(reader.getAttributeValueForBool(EXTEND_METADATA_QN_NULLABLE));
 				
 				String mode = reader.getAttributeValue("Mode");
 				if(!Strings.isEmpty(mode)){
@@ -430,12 +424,10 @@ public class XmlMetadataDocumentReader extends ODataXmlReader<ODataServices> {
 					p.setMode(EdmParameterMode.In);
 				}
 				
-				func.addParameter(p.build());
+				dataServices.addParameter(func, p);
 			}
 		}
-		
-		container.addFunctionImport(func.build());
-	}	
+	}
 	
 	protected EdmType readEdmType(String fqName){
 		if(fqName.startsWith("Edm.")){
@@ -459,9 +451,9 @@ public class XmlMetadataDocumentReader extends ODataXmlReader<ODataServices> {
 		int lastDotIndex = fqName.lastIndexOf(".");
 		if(lastDotIndex > 0){
 			String name = fqName.substring(lastDotIndex+1);
-			return new EdmComplexTypeRef(name,fqName);
+			return new EdmUnresolvedTypeRef(name,fqName);
 		}else{
-			return new EdmComplexTypeRef(fqName,fqName);
+			return new EdmUnresolvedTypeRef(fqName,fqName);
 		}
 	}
 	
