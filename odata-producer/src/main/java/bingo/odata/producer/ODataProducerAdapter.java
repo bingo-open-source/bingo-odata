@@ -58,6 +58,10 @@ public class ODataProducerAdapter implements ODataProducer {
 				public boolean isAutoDetectFormat() {
 	                return true;
                 }
+
+				public int getMaxResults() {
+	                return 100;
+                }
 			};
 		}
 		return config;

@@ -27,4 +27,6 @@ public interface ODataProducerConfig {
 	boolean isPrintStackTrace();
 	
 	boolean isAutoDetectFormat();
+	
+	int getMaxResults();
 }

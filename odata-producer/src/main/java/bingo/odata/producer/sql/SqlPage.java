@@ -18,7 +18,7 @@ public class SqlPage {
     	page.start = start;
     	page.size  = size;
     	page.end   = start + size - 1;
-    	page.index = start < size ? 1 : start / size;
+    	page.index = start < size ? 1 : page.end / size;
     	
     	return page;
     }

@@ -24,6 +24,7 @@ public class ODataProducerConfigImpl implements ODataProducerConfig {
 	protected ODataFormat   defaultFormat;
 	protected boolean		printStackTrace;
 	protected boolean       autoDetectFormat;
+	protected int			maxResults;
 	
 	public ODataProtocol getProtocol() {
 		return protocol;
@@ -55,5 +56,13 @@ public class ODataProducerConfigImpl implements ODataProducerConfig {
 
 	public void setAutoDetectFormat(boolean autoDetectFormat) {
 		this.autoDetectFormat = autoDetectFormat;
+	}
+
+	public int getMaxResults() {
+		return maxResults;
+	}
+
+	public void setMaxResults(int maxResults) {
+		this.maxResults = maxResults;
 	}
 }

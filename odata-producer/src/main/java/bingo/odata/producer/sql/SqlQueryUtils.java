@@ -16,6 +16,7 @@ import bingo.odata.ODataErrors;
 import bingo.odata.ODataQueryInfo;
 import bingo.odata.ODataUtils;
 import bingo.odata.expression.EntitySimpleProperty;
+import bingo.odata.expression.OrderByExpression;
 import bingo.odata.model.ODataKey;
 import bingo.odata.producer.ODataProducerContext;
 
@@ -59,7 +60,7 @@ public class SqlQueryUtils {
 			parseInlineCount(query, queryInfo);
 			
 			//$skip,skiptoken,top
-			parsePagedQuery(query,queryInfo);
+			parsePagedQuery(context,query,queryInfo);
 			
 			//$expand
 			parseExpand(context, entityType, query, queryInfo);
@@ -71,10 +72,7 @@ public class SqlQueryUtils {
 			parseFilter(query,queryInfo,mapping);
 			
 			//orderby
-			String orderBy = context.getQueryOptions().getOrderBy();
-			if(!Strings.isEmpty(orderBy)){
-				query.setOrderBy(orderBy);
-			}
+			parseOrderBy(query,queryInfo,mapping);
 		}
 		
 		return query;
@@ -86,7 +84,7 @@ public class SqlQueryUtils {
 		}
 	}
 	
-	private static void parsePagedQuery(SqlQueryInfo query,ODataQueryInfo queryInfo){
+	private static void parsePagedQuery(ODataProducerContext context, SqlQueryInfo query,ODataQueryInfo queryInfo){
 		//skiptoken , top , skip
 		String skiptoken = queryInfo.getSkipToken();
 		if(!Strings.isEmpty(skiptoken)){
@@ -104,12 +102,18 @@ public class SqlQueryUtils {
 			//paged query
 			if(queryInfo.getSkip() != null){
 				int start = queryInfo.getSkip() + 1;
-				int size  = queryInfo.getTop() == null ? 100 : queryInfo.getTop(); //TODO : HARD CODE MAX SIZE
+				int size  = queryInfo.getTop() == null ? context.getProducer().config().getMaxResults() : queryInfo.getTop();
 				
 				query.setPage(SqlPage.ofStartAndSize(start, size));
 			}else if(queryInfo.getTop() != null){
 				query.setPage(new SqlPage(1, queryInfo.getTop()));
+			}else{
+				query.setPage(new SqlPage(1, context.getProducer().config().getMaxResults()));
 			}
+		}
+		
+		if(query.getPage().size() > context.getProducer().config().getMaxResults()){
+			throw ODataErrors.badRequest("results size can not exceed " + context.getProducer().config().getMaxResults());
 		}
 	}
 	
@@ -164,6 +168,32 @@ public class SqlQueryUtils {
 			query.setParams(whereExpression.getParamValues());
 		}
 	}
+	
+	private static void parseOrderBy(SqlQueryInfo query,ODataQueryInfo queryInfo,SqlMapping mapping){
+		//$orderby
+		List<OrderByExpression> orderByExpressions = queryInfo.getOrderBy();
+		if(null != orderByExpressions && !orderByExpressions.isEmpty()){
+			StringBuilder orderBy = new StringBuilder();
+			
+			for(int i=0;i<orderByExpressions.size();i++){
+				OrderByExpression orderByExpression = orderByExpressions.get(i);
+				
+				if(i > 0){
+					orderBy.append(",");
+				}
+				
+				EntitySimpleProperty property = (EntitySimpleProperty)orderByExpression.getExpression();
+				orderBy.append(null == mapping ? property.getName() : mapping.column(property.getName()));
+				
+				if(null != orderByExpression.getDirection()){
+					orderBy.append(" ");
+					orderBy.append(orderByExpression.getDirection().equals(OrderByExpression.Direction.ASCENDING) ? "asc" : "desc");
+				}
+			}
+			
+			query.setOrderBy(orderBy.toString());
+		}
+	}	
 	
 	private static void parseExpand(ODataProducerContext context,EdmEntityType entityType, SqlQueryInfo query,ODataQueryInfo queryInfo){
 		Set<SqlExpand> list = new LinkedHashSet<SqlExpand>();
