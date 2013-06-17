@@ -57,7 +57,7 @@ public abstract class EntitySetRequestHandlerBase extends ODataRequestHandlerBas
 		}
 		
 		if(null == entitySet){
-			throw ODataErrors.notFound("EntitySet or Function '{0} not found",entitySetName);
+			throw ODataErrors.notFound("EntitySet or Function '{0}' with http method '{1}' not found",entitySetName,request.getMethod());
 		}
 		
 		EdmEntityType entityType = services.findEntityType(entitySet.getEntityType().getName());
