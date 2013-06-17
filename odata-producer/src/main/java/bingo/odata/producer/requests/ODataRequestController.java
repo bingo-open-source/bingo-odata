@@ -58,6 +58,7 @@ public class ODataRequestController {
 	
 	public void setProducer(ODataProducer producer) {
     	this.producer = producer;
+		this.protocol = producer.config().getProtocol();
     }
 
 	public void setRouter(ODataRequestRouter router) {
