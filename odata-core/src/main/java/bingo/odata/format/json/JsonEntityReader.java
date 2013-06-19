@@ -18,6 +18,7 @@ package bingo.odata.format.json;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import bingo.lang.Collections;
 import bingo.lang.json.JSONObject;
 import bingo.meta.edm.EdmEntityType;
 import bingo.meta.edm.EdmNavigationProperty;
@@ -28,6 +29,7 @@ import bingo.odata.ODataReaderContext;
 import bingo.odata.format.ODataJsonReader;
 import bingo.odata.model.ODataEntity;
 import bingo.odata.model.ODataEntityBuilder;
+import bingo.odata.model.ODataKeyImpl;
 
 public class JsonEntityReader extends ODataJsonReader<ODataEntity> {
 
@@ -41,6 +43,10 @@ public class JsonEntityReader extends ODataJsonReader<ODataEntity> {
 		EdmEntityType entityType = context.getEntityType();
 		
 		Map<String,Object> map = json.map();
+		
+		if(map.entrySet().size() == 1 && map.keySet().iterator().next().equals("d")) {
+			map = (Map<String,Object>)map.get("d");
+		}
 		
 		for(Entry<String, Object> entry : map.entrySet()){
 			String name = entry.getKey();
@@ -58,7 +64,9 @@ public class JsonEntityReader extends ODataJsonReader<ODataEntity> {
 				
 				EdmType type = p.getType();
 				if(type.isSimple()){
-					builder.addProperty(name,JsonReaderUtils.readValue(type.asSimple(),value));
+					if(entityType.getKeys().toSet().contains(name)) {
+						builder.setKey(new ODataKeyImpl(value));
+					} else builder.addProperty(name,JsonReaderUtils.readValue(type.asSimple(),value));
 				}else{
 					throw ODataErrors.notImplemented("complex type not implemented");
 				}
