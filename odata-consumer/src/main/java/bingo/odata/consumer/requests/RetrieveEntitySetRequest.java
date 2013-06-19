@@ -29,7 +29,7 @@ public class RetrieveEntitySetRequest extends Request{
 
 	@Override
 	protected GenericUrl genUrl() {
-		String string = this.serviceRoot + URL_FRAGMENT_DIVIDER + entitySet;
+		String string = this.serviceRoot + entitySet;
 		string = addQueryString(string);
 		GenericUrl url = new GenericUrl(string);
 		return url;

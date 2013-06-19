@@ -19,6 +19,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Map;
 
+import bingo.lang.Strings;
 import bingo.lang.http.HttpHeaders;
 import bingo.lang.logging.Log;
 import bingo.lang.logging.LogFactory;
@@ -55,6 +56,9 @@ public class ODataConsumerImpl extends ODataConsumerAdapter {
 	private ODataServices services;
 
 	public ODataConsumerImpl(String serviceRoot) {
+		if(!Strings.endsWith(serviceRoot, "/")) {
+			serviceRoot += "/";
+		}
 		this.serviceRoot = serviceRoot;
 		services = retrieveServiceMetadata();
 	}

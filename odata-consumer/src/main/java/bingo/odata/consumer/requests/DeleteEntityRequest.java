@@ -49,7 +49,7 @@ public class DeleteEntityRequest extends Request {
 
 	@Override
 	public String getResourcePath() {
-		return URL_FRAGMENT_DIVIDER + entitySet + "('" + id + "')";
+		return entitySet + "('" + id + "')";
 	}
 	
 }

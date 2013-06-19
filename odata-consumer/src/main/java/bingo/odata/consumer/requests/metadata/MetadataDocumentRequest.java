@@ -31,7 +31,7 @@ public class MetadataDocumentRequest extends Request{
 
 	@Override
 	protected GenericUrl genUrl() {
-		String str = serviceRoot + URL_FRAGMENT_DIVIDER + METADATA_DOCUMENT;
+		String str = serviceRoot + METADATA_DOCUMENT;
 		GenericUrl url = new GenericUrl(str);
 		return url;
 	}

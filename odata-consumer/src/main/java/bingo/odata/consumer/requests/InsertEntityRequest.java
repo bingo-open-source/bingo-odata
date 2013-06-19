@@ -62,7 +62,7 @@ public class InsertEntityRequest extends Request {
 
 	@Override
 	protected GenericUrl genUrl() {
-		String string = serviceRoot + URL_FRAGMENT_DIVIDER + entityType;
+		String string = serviceRoot + entityType;
 		string = addQueryString(string);
 		GenericUrl url = new GenericUrl(string);
 		return url;

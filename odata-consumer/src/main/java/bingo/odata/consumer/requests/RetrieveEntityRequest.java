@@ -34,7 +34,7 @@ public class RetrieveEntityRequest extends Request {
 
 	@Override
 	protected GenericUrl genUrl() {// TODO change to override just resourcePath.
-		String string = this.serviceRoot + URL_FRAGMENT_DIVIDER + entitySet + "('" + id.toString() + "')";
+		String string = this.serviceRoot + entitySet + "('" + id.toString() + "')";
 		String queryString = getQueryString();
 		if(Strings.isNotBlank(queryString)) {
 			string += "?" + queryString;
