@@ -65,7 +65,7 @@ public class UpdateEntityRequest extends Request {
 	@Override
 	protected HttpContent genContent() {
 		String json = JSON.encode(fields);
-		HttpContent content = ByteArrayContent.fromString(contentType, json);
+		HttpContent content = ByteArrayContent.fromString(accept, json);
 		return content;
 	}
 

@@ -1,11 +1,12 @@
 package bingo.odata.consumer.requests;
 
 import java.io.IOException;
-import java.io.OutputStream;
-import java.io.Reader;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+
+import bingo.lang.Strings;
+import bingo.lang.logging.Log;
+import bingo.lang.logging.LogFactory;
 
 import com.google.api.client.http.GenericUrl;
 import com.google.api.client.http.HttpContent;
@@ -13,14 +14,8 @@ import com.google.api.client.http.HttpHeaders;
 import com.google.api.client.http.HttpMethods;
 import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpRequestFactory;
-import com.google.api.client.http.HttpResponse;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
-import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream;
-
-import bingo.lang.Strings;
-import bingo.lang.logging.Log;
-import bingo.lang.logging.LogFactory;
 
 public class Request {
 
@@ -28,7 +23,7 @@ public class Request {
 	
 	protected static final String URL_FRAGMENT_DIVIDER = "/";
 	
-	protected String contentType;
+	protected String accept;
 	protected Map<String, String> headers = new HashMap<String, String>();
 	protected Map<String, String> parameters = new HashMap<String, String>();
 	protected String method = HttpMethods.GET;
@@ -42,12 +37,12 @@ public class Request {
 		this.resourcePath = resourcePath;
 	}
 
-	public String getContentType() {
-		return contentType;
+	public String getAccept() {
+		return accept;
 	}
 
-	public Request setContentType(String contentType) {
-		this.contentType = contentType;
+	public Request setAccept(String accept) {
+		this.accept = accept;
 		return this;
 	}
 
@@ -145,7 +140,6 @@ public class Request {
 			req = requestFactory.buildRequest(getMethod(), new GenericUrl(), null);
 			req.setUrl(genUrl());
 			req.setHeaders(genHeaders());
-			req.getHeaders().setContentType(contentType);
 			req.setContent(genContent());
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -156,6 +150,7 @@ public class Request {
 	protected HttpHeaders genHeaders() {
 		HttpHeaders httpHeaders = new HttpHeaders();
 		httpHeaders.putAll(headers);
+		httpHeaders.setAccept(accept);
 		return httpHeaders; 
 	}
 

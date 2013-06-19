@@ -24,17 +24,14 @@ public class ODataConsumerContext extends ODataContextBase implements ODataWrite
 	
 	private ODataFormat format = ODataFormat.Json;
 	
-	@Override
 	public boolean isConsumer() {
 		return true;
 	}
 
-	@Override
 	public boolean isProducer() {
 		return false;
 	}
 
-	@Override
 	public boolean isMinimal() {
 		return false;
 	}

@@ -56,7 +56,7 @@ public class InsertEntityRequest extends Request {
 	@Override
 	protected HttpContent genContent() {
 		String json = JSON.encode(entity, true);
-		HttpContent content = ByteArrayContent.fromString(contentType, json);
+		HttpContent content = ByteArrayContent.fromString(accept, json);
 		return content;
 	}
 

@@ -14,7 +14,6 @@ public class OAuthAuthenticationBehavior implements ClientBehavior {
     this.accessToken = accessToken;
   }
 
-  @Override
   public HttpRequest transform(HttpRequest request) {
 	  HttpHeaders headers = request.getHeaders();
 	  headers.put("Authorization", HEADER_PREFIX + accessToken);

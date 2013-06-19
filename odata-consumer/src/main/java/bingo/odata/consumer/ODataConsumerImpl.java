@@ -15,26 +15,19 @@
  */
 package bingo.odata.consumer;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Map;
 
+import bingo.lang.http.HttpHeaders;
 import bingo.lang.logging.Log;
 import bingo.lang.logging.LogFactory;
-import bingo.meta.edm.EdmEntitySet;
-import bingo.meta.edm.EdmEntitySetBuilder;
 import bingo.meta.edm.EdmEntityType;
 import bingo.meta.edm.EdmProperty;
 import bingo.odata.ODataConstants;
-import bingo.odata.ODataContext;
-import bingo.odata.ODataFormat;
 import bingo.odata.ODataObjectKind;
-import bingo.odata.ODataProtocols;
-import bingo.odata.ODataQueryOptions;
 import bingo.odata.ODataReader;
 import bingo.odata.ODataReaderContext;
-import bingo.odata.ODataRequest;
 import bingo.odata.ODataResponseStatus;
 import bingo.odata.ODataServices;
 import bingo.odata.ODataVersion;
@@ -48,7 +41,6 @@ import bingo.odata.consumer.requests.UpdateEntityRequest;
 import bingo.odata.consumer.requests.metadata.MetadataDocumentRequest;
 import bingo.odata.model.ODataEntity;
 import bingo.odata.model.ODataEntitySet;
-import bingo.odata.model.ODataKey;
 import bingo.odata.model.ODataKeyImpl;
 
 public class ODataConsumerImpl extends ODataConsumerAdapter {
@@ -196,13 +188,14 @@ public class ODataConsumerImpl extends ODataConsumerAdapter {
 	private void addDefaultHeaders(Request request, ODataConsumerContext context) {
 		addDefaultHeaders(request, context, false);
 	}
-	private void addDefaultHeaders(Request request, ODataConsumerContext context, boolean ignoreContentType) {
+	private void addDefaultHeaders(Request request, ODataConsumerContext context, boolean ignoreAccept) {
 		request.addHeader(ODataConstants.Headers.DATA_SERVICE_VERSION, odataVersion.getValue());
 		request.addHeader(ODataConstants.Headers.MAX_DATA_SERVICE_VERSION, odataVersion.getValue());
 		request.addHeader(ODataConstants.Headers.MIN_DATA_SERVICE_VERSION, odataVersion.getValue());
-		if(!ignoreContentType) {
-			request.setContentType(context.getFormat().getContentType())
-				.addParameter(ODataConstants.QueryOptions.FORMAT, context.getFormat().getValue());
+		if(!ignoreAccept) {
+//			request.addHeader(HttpHeaders.ACCEPT, context.getFormat().getContentType());
+			request.setAccept(context.getFormat().getContentType());
+			request.addParameter(ODataConstants.QueryOptions.FORMAT, context.getFormat().getValue());
 		}
 	}
 

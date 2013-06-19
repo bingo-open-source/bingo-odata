@@ -1,22 +1,14 @@
 package bingo.odata.consumer;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.junit.Test;
 
-import com.sun.xml.internal.ws.model.FieldSignature;
-
-import bingo.lang.Collections;
 import bingo.odata.ODataServices;
-import bingo.odata.consumer.ODataConsumer;
-import bingo.odata.consumer.ODataConsumerImpl;
-import bingo.odata.consumer.requests.DeleteEntityRequest;
-import bingo.odata.consumer.requests.Request;
-import bingo.odata.consumer.requests.builders.Filter;
 import bingo.odata.model.ODataEntity;
 import bingo.odata.model.ODataEntitySet;
 
@@ -64,7 +56,7 @@ public class UsageDemo {
 //		assertTrue(Collections.isEmpty(list));
 //	}
 	
-	@Test
+//	@Test
 	public void retrieveEntitySet() {
 		// TODO Json entity reader.
 		ODataEntitySet entitySet = consumer.retrieveEntitySet("Products");

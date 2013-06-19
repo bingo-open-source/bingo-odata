@@ -21,7 +21,6 @@ public class ClientBehaviors {
    */
   public static ClientBehavior rateLimit(final long millis) {
     return new ClientBehavior() {
-      @Override
       public HttpRequest transform(HttpRequest request) {
         try {
           Thread.sleep(millis);
