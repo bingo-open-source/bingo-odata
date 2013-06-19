@@ -91,4 +91,10 @@ public class ODataEntityImpl implements ODataEntity {
 		
 	    return map;
     }
+	
+	public String toString() {
+		return "EntitySet:" + entitySet.getName() + 
+				";  EntityType:" + entityType.getName() + 
+				";  Properties:" + toMap();
+	}
 }

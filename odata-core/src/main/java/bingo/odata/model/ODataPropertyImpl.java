@@ -53,4 +53,8 @@ public class ODataPropertyImpl implements ODataProperty {
 	public Object setValue(Object value) {
 		throw new ReadonlyException();
     }
+	
+	public String toString() {
+		return metadata.getName() + " = " + value;
+	}
 }
