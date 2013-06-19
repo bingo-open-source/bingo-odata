@@ -23,5 +23,6 @@
 	<modules>
 		<module>odata-core</module>
 		<module>odata-producer</module>
+		<module>odata-consumer</module>
 	</modules>
 </project>
