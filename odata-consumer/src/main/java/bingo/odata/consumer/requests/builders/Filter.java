@@ -1,4 +1,5 @@
-package bingo.odata.consumer.requests;
+package bingo.odata.consumer.requests.builders;
+
 
 public class Filter implements QueryFilter{
 	

@@ -13,35 +13,43 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.odata.consumer.requests.builders.retrieve;
+package bingo.odata.consumer.requests;
 
-import com.google.api.client.http.GenericUrl;
-
-import bingo.odata.consumer.requests.Request;
+import bingo.lang.http.HttpMethods;
 
 
-public class RetrieveEntitySetRequest extends Request{
+public class DeleteEntityRequest extends Request {
 	
 	private String entitySet;
+	private Object id;
 	
-	public RetrieveEntitySetRequest(String serviceRoot) {
+	public DeleteEntityRequest(String serviceRoot) {
 		this.serviceRoot = serviceRoot;
 	}
-
-	@Override
-	protected GenericUrl genUrl() {
-		String string = this.serviceRoot + URL_FRAGMENT_DIVIDER + entitySet;
-		GenericUrl url = new GenericUrl(string);
-		return url;
+	
+	public Object getId() {
+		return id;
 	}
-
+	public DeleteEntityRequest setId(Object id) {
+		this.id = id;
+		return this;
+	}
 	public String getEntitySet() {
 		return entitySet;
 	}
-
-	public RetrieveEntitySetRequest setEntitySet(String entitySet) {
+	public DeleteEntityRequest setEntitySet(String entitySet) {
 		this.entitySet = entitySet;
 		return this;
+	}
+
+	@Override
+	public String getMethod() {
+		return HttpMethods.DELETE;
+	}
+
+	@Override
+	public String getResourcePath() {
+		return URL_FRAGMENT_DIVIDER + entitySet + "('" + id + "')";
 	}
 	
 }

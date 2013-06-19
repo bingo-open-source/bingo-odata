@@ -3,12 +3,14 @@ package bingo.odata.consumer.requests;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Reader;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
 import com.google.api.client.http.GenericUrl;
 import com.google.api.client.http.HttpContent;
 import com.google.api.client.http.HttpHeaders;
+import com.google.api.client.http.HttpMethods;
 import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpRequestFactory;
 import com.google.api.client.http.HttpResponse;
@@ -29,10 +31,9 @@ public class Request {
 	protected String contentType;
 	protected Map<String, String> headers = new HashMap<String, String>();
 	protected Map<String, String> parameters = new HashMap<String, String>();
-	protected String method;
+	protected String method = HttpMethods.GET;
 	protected String serviceRoot;
 	protected String resourcePath;
-	protected String queryString;
 	
 	public Request() {}
 	
@@ -45,8 +46,9 @@ public class Request {
 		return contentType;
 	}
 
-	public void setContentType(String contentType) {
+	public Request setContentType(String contentType) {
 		this.contentType = contentType;
+		return this;
 	}
 
 	public Map<String, String> getHeaders() {
@@ -61,8 +63,14 @@ public class Request {
 		return parameters;
 	}
 
-	public void setParameters(Map<String, String> parameters) {
+	public Request setParameters(Map<String, String> parameters) {
 		this.parameters = parameters;
+		return this;
+	}
+	
+	public Request addParameter(String name, String value) {
+		parameters.put(name, value);
+		return this;
 	}
 
 	public String getMethod() {
@@ -90,11 +98,12 @@ public class Request {
 	}
 
 	public String getQueryString() {
-		return queryString;
-	}
-
-	public void setQueryString(String queryString) {
-		this.queryString = queryString;
+		Object[] keys = parameters.keySet().toArray();
+		StringBuilder builder = new StringBuilder();
+		for (Object key : keys) {
+			builder.append(key).append("=").append(parameters.get(key)).append("&");
+		}
+		return builder.substring(0, builder.length() - 1);
 	}
 
 	public String getHeader(String name) {
@@ -109,7 +118,7 @@ public class Request {
 		return parameters.get(name);
 	}
 	
-	public Response send() throws IOException {
+	public Response send() {
 		final HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
 		
 		HttpRequestFactory requestFactory = HTTP_TRANSPORT.createRequestFactory();
@@ -119,14 +128,21 @@ public class Request {
 //		if(log.isDebugEnabled())  // TODO open after complete
 			report(req);
 		
-		return new Response(req.execute());
+		try {
+			Response response = new Response(req.execute());
+			log.info("Received Response:" + response);
+			return response;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw new RuntimeException(e.getMessage());
+		}
 	}
 
 	protected HttpRequest buildRequest(HttpRequestFactory requestFactory) {
 		HttpRequest req = null;
-		if(Strings.isBlank(method)) method = "GET";
 		try {
-			req = requestFactory.buildRequest(method, new GenericUrl(), null);
+			req = requestFactory.buildRequest(getMethod(), new GenericUrl(), null);
 			req.setUrl(genUrl());
 			req.setHeaders(genHeaders());
 			req.getHeaders().setContentType(contentType);
@@ -148,18 +164,32 @@ public class Request {
 	}
 
 	protected GenericUrl genUrl() {
-		String str = serviceRoot + resourcePath + "?" + queryString;
+		String str = serviceRoot + getResourcePath() + "?" + getQueryString();
 		GenericUrl url = new GenericUrl(str);
 		return url;
 	}
 
 	private void report(HttpRequest req) {
 		String blank = " ", nextLine = "\n", tab = "\t", nt = nextLine + tab;
-		String str = nextLine + 
+		String str = "Send Request: " + 
+					nextLine + 
 					nt + req.getRequestMethod() + blank + req.getUrl().toString() +
 					nt + req.getHeaders().toString() + 
 					nextLine;
 		// TODO add content
 		log.info(str);
+	}
+	
+	protected String addQueryString(String url) {
+		String queryString = getQueryString();
+		if(Strings.isNotBlank(queryString)) {
+			if(!Strings.contains(url, "?")) {
+				url += "?";
+			} else {
+				url += "&";
+			}
+			url += queryString;
+		}
+		return url;
 	}
 }

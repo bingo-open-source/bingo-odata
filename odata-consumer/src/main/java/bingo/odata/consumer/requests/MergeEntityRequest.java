@@ -13,17 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.odata.consumer.requests.builders.update;
+package bingo.odata.consumer.requests;
 
 import bingo.odata.consumer.requests.builders.RequestBuilder;
 import bingo.odata.consumer.requests.builders.RequestBuilderBase;
 
-public class UpdateEntityBuilder extends RequestBuilderBase {
-
-	@Override
-	public RequestBuilder entity(String entityToOperate) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+public class MergeEntityRequest extends Request {
 
 }

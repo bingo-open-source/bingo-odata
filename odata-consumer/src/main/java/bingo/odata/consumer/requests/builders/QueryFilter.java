@@ -1,4 +1,4 @@
-package bingo.odata.consumer.requests;
+package bingo.odata.consumer.requests.builders;
 
 public interface QueryFilter {
 	/**

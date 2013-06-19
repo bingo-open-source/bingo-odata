@@ -31,8 +31,8 @@ import bingo.odata.model.ODataParameters;
 import bingo.odata.model.ODataValue;
 import bingo.odata.producer.ODataProducerConfig;
 import bingo.odata.consumer.ext.ODataContent;
-import bingo.odata.consumer.requests.QueryBuilder;
-import bingo.odata.consumer.requests.QueryFilter;
+import bingo.odata.consumer.requests.builders.QueryBuilder;
+import bingo.odata.consumer.requests.builders.QueryFilter;
 
 public interface ODataConsumer {
 
@@ -42,7 +42,10 @@ public interface ODataConsumer {
 	 * @param object can be POJO with proper annotation or {@link Map} or {@link ODataEntity}.
 	 * @return
 	 */
-	int insertEntity(Object object);
+	
+	int insertEntity(String entityType, ODataEntity entity);
+	
+	int insertEntity(String entityType, Map<String, Object> object);
 	
 	int deleteEntity(Object objectWithIdField);
 	
@@ -65,7 +68,10 @@ public interface ODataConsumer {
 	ODataEntitySet retrieveEntitySet(String entitySet);
 	
 	long retrieveCount(EdmEntityType entityType,ODataQueryInfo queryInfo);
+	
 	ODataEntity retrieveEntity(EdmEntityType entityType,ODataKey key,ODataQueryInfo queryInfo);
+	
+	ODataEntity retrieveEntity(String entityType, Object key);
 	
 	ODataValue retrieveProperty(EdmEntityType entitType,ODataKey key,EdmProperty property);
 	

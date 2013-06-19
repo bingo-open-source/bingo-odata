@@ -38,7 +38,7 @@ public class MetadataDocumentRequest extends Request{
 
 	@Override
 	protected HttpHeaders genHeaders() {
-		HttpHeaders headers = new HttpHeaders();
+		HttpHeaders headers = super.genHeaders();
 		headers.setAccept("application/xml");
 		return headers;
 	}

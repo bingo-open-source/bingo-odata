@@ -13,23 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.odata.consumer.requests.builders;
+package bingo.odata.consumer.requests;
 
+import bingo.odata.consumer.requests.builders.RequestBuilder;
+import bingo.odata.consumer.requests.builders.RequestBuilderBase;
 
-public class DeleteEntityBuilder extends RequestBuilderBase implements IdRequired{
-	private Object id;
-	private String entity;
+public class RetrievePropertyRequest extends Request {
 
-	@Override
-	public DeleteEntityBuilder id(Object id) {
-		this.id = id;
-		return this;
-	}
-
-	@Override
-	public DeleteEntityBuilder entity(String entityToOperate) {
-		this.entity = entityToOperate;
-		return this;
-	}
-	
 }

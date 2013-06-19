@@ -13,15 +13,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.odata.consumer.requests.builders;
+package bingo.odata.consumer.requests;
+
+import com.google.api.client.http.GenericUrl;
 
 
-public class InsertEntityBuilder extends RequestBuilderBase {
 
-	@Override
-	public RequestBuilder entity(String entityToOperate) {
-		// TODO Auto-generated method stub
-		return null;
+public class RetrieveEntitySetRequest extends Request{
+	
+	private String entitySet;
+	
+	public RetrieveEntitySetRequest(String serviceRoot) {
+		this.serviceRoot = serviceRoot;
 	}
 
+	@Override
+	protected GenericUrl genUrl() {
+		String string = this.serviceRoot + URL_FRAGMENT_DIVIDER + entitySet;
+		string = addQueryString(string);
+		GenericUrl url = new GenericUrl(string);
+		return url;
+	}
+
+	public String getEntitySet() {
+		return entitySet;
+	}
+
+	public RetrieveEntitySetRequest setEntitySet(String entitySet) {
+		this.entitySet = entitySet;
+		return this;
+	}
+	
 }

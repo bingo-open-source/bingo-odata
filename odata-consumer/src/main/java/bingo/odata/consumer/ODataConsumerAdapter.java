@@ -33,16 +33,11 @@ import bingo.odata.model.ODataKey;
 import bingo.odata.model.ODataParameters;
 import bingo.odata.model.ODataValue;
 import bingo.odata.consumer.ext.ODataContent;
-import bingo.odata.consumer.requests.QueryBuilder;
-import bingo.odata.consumer.requests.QueryFilter;
+import bingo.odata.consumer.requests.builders.QueryBuilder;
+import bingo.odata.consumer.requests.builders.QueryFilter;
 
 public class ODataConsumerAdapter implements ODataConsumer {
 
-	@Override
-	public int insertEntity(Object object) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
 
 	@Override
 	public int deleteEntity(Object objectWithIdField) {
@@ -177,6 +172,24 @@ public class ODataConsumerAdapter implements ODataConsumer {
 	public ODataEntitySet retrieveEntitySet(String entitySet) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public ODataEntity retrieveEntity(String entityType, Object key) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int insertEntity(String entityType, ODataEntity entity) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int insertEntity(String entityType, Map<String, Object> object) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 	
 }

@@ -82,7 +82,7 @@ public class DemoODataProducer extends ODataProducerAdapter implements ODataProd
 		
 		if(entityType.getName().equalsIgnoreCase("Product")){
 			builder.addEntity(builder.newEntity()
-									 .setKey(new ODataKeyImpl(UUID.randomUUID().toString()))
+									 .setKey(new ODataKeyImpl("123456"))
 									 .addProperty("ID",0)
 									 .addProperty("Name","Bread")
 									 .addProperty("Description","Whole grain bread")									 
