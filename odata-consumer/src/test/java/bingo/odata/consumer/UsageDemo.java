@@ -12,8 +12,9 @@ import bingo.odata.ODataServices;
 import bingo.odata.model.ODataEntity;
 import bingo.odata.model.ODataEntitySet;
 
-public class UsageDemo {
-	
+
+public class UsageDemo extends ServerTestBase{
+
 	private static final String ODATA_V3_SAMPLE_SERVICE = "http://services.odata.org/V3/OData/OData.svc/";
 	
 	private static final String LOCALHOST_SERVICE = "http://localhost:8080/demo";
@@ -56,9 +57,8 @@ public class UsageDemo {
 //		assertTrue(Collections.isEmpty(list));
 //	}
 	
-//	@Test
+//	@Test // TODO Json entity reader.
 	public void retrieveEntitySet() {
-		// TODO Json entity reader.
 		ODataEntitySet entitySet = consumer.retrieveEntitySet("Products");
 		assertNotNull(entitySet);
 	}

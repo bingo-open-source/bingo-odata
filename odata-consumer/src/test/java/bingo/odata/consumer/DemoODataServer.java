@@ -21,7 +21,7 @@ import bingo.odata.producer.requests.ODataRequestController;
 import bingo.odata.producer.server.ODataHttpHandler;
 import bingo.odata.producer.server.ODataHttpServer;
 
-public class DemoODataServer {
+public class DemoODataServer extends Thread {
 	
 	private static final String SERVICE_ROOT_PATH = "/demo";
 	
@@ -31,8 +31,14 @@ public class DemoODataServer {
 		controller.setProducer(new DemoODataProducer());
 	}
 	
-	public static void main(String[] args) throws Throwable {
-		new ODataHttpServer(new Handler()).start().join();
+	public void run() {
+		ODataHttpServer server = new ODataHttpServer(new Handler());
+		try {
+			server.start().join();
+		} catch (Throwable e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	private static final class Handler extends ODataHttpHandler {
