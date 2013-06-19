@@ -13,7 +13,12 @@ import bingo.odata.model.ODataEntity;
 import bingo.odata.model.ODataEntitySet;
 
 
-public class UsageDemo extends ServerTestBase{
+/**
+ * run TestSuite instead, or manually start server before run this test class.
+ * @author CalvinChen
+ *
+ */
+public class UsageDemo {
 
 	private static final String ODATA_V3_SAMPLE_SERVICE = "http://services.odata.org/V3/OData/OData.svc/";
 	
