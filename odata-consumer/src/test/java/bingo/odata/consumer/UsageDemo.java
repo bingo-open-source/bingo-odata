@@ -28,41 +28,41 @@ public class UsageDemo {
 
 	ODataConsumer consumer = new ODataConsumerImpl(LOCALHOST_SERVICE);
 
-	@Test
-	public void testInsert() throws Throwable {
-		Map<String, Object> user = new HashMap<String, Object>();
-		user.put("username", "admin");
-		user.put("password", "111111");
-		
-		ODataConsumer consumer = new ODataConsumerImpl("http://172.58.102.7/odata/");
-		
-		// insert
-		assertEquals(1, consumer.insertEntity("User", user));
-		
-		List<Map<String, Object>> list = consumer.queryEntity("user")
-				.filter(new Filter().eq("username", "admin"))
-				.listMap();
-		assertEquals(1, list.size());
-		assertEquals("111111", list.get(0).get("password"));
-		
-		//modify
-		user.put("password", "222222");
-		consumer.updateEntity(user);
-
-		list = consumer.queryEntity("user")
-				.filter(new Filter().eq("username", "admin"))
-				.listMap();
-		assertEquals(1, list.size());
-		assertEquals("222222", list.get(0).get("password"));
-		
-		// delete
-		consumer.deleteEntity("user", list.get(0).get("id"));
-		
-		list = consumer.queryEntity("user")
-				.filter(new Filter().eq("username", "admin"))
-				.listMap();
-		assertTrue(Collections.isEmpty(list));
-	}
+//	@Test
+//	public void testInsert() throws Throwable {
+//		Map<String, Object> user = new HashMap<String, Object>();
+//		user.put("username", "admin");
+//		user.put("password", "111111");
+//		
+//		ODataConsumer consumer = new ODataConsumerImpl("http://172.58.102.7/odata/");
+//		
+//		// insert
+//		assertEquals(1, consumer.insertEntity("User", user));
+//		
+//		List<Map<String, Object>> list = consumer.queryEntity("user")
+//				.filter(new Filter().eq("username", "admin"))
+//				.listMap();
+//		assertEquals(1, list.size());
+//		assertEquals("111111", list.get(0).get("password"));
+//		
+//		//modify
+//		user.put("password", "222222");
+//		consumer.updateEntity(user);
+//
+//		list = consumer.queryEntity("user")
+//				.filter(new Filter().eq("username", "admin"))
+//				.listMap();
+//		assertEquals(1, list.size());
+//		assertEquals("222222", list.get(0).get("password"));
+//		
+//		// delete
+//		consumer.deleteEntity("user", list.get(0).get("id"));
+//		
+//		list = consumer.queryEntity("user")
+//				.filter(new Filter().eq("username", "admin"))
+//				.listMap();
+//		assertTrue(Collections.isEmpty(list));
+//	}
 	
 	@Test
 	public void retrieveEntitySet() {
