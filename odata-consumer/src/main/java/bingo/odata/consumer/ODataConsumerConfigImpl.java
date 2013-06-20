@@ -17,14 +17,18 @@ package bingo.odata.consumer;
 
 import bingo.odata.ODataFormat;
 import bingo.odata.ODataProtocol;
+import bingo.odata.ODataProtocols;
+import bingo.odata.ODataVersion;
 
 public class ODataConsumerConfigImpl implements ODataConsumerConfig {
 
-	protected ODataProtocol protocol;
-	protected ODataFormat   defaultFormat;
-	protected boolean		printStackTrace;
-	protected boolean       autoDetectFormat;
-	protected int			maxResults;
+	protected ODataProtocol protocol = ODataProtocols.DEFAULT;
+	protected ODataFormat   defaultFormat = ODataFormat.Json;
+	protected ODataVersion  version = ODataVersion.V3;
+	protected boolean		printStackTrace = true;
+	protected boolean       autoDetectFormat = false;
+	protected boolean		verifyMetadata = true;
+	protected int			maxResults = 10;
 	
 	public ODataProtocol getProtocol() {
 		return protocol;
@@ -64,5 +68,21 @@ public class ODataConsumerConfigImpl implements ODataConsumerConfig {
 
 	public void setMaxResults(int maxResults) {
 		this.maxResults = maxResults;
+	}
+
+	public ODataVersion getVersion() {
+		return version;
+	}
+
+	public void setVersion(ODataVersion version) {
+		this.version = version;
+	}
+
+	public boolean isVerifyMetadata() {
+		return verifyMetadata;
+	}
+
+	public void setVerifyMetadata(boolean verifyMetadata) {
+		this.verifyMetadata = verifyMetadata;
 	}
 }

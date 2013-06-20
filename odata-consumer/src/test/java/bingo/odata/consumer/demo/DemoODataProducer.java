@@ -39,6 +39,10 @@ import bingo.meta.edm.EdmParameter;
 import bingo.meta.edm.EdmParameterMode;
 import bingo.meta.edm.EdmSchemaBuilder;
 import bingo.meta.edm.EdmSimpleType;
+import bingo.meta.edm.EdmType;
+import bingo.meta.edm.EdmTypes;
+import bingo.odata.ODataObject;
+import bingo.odata.ODataObjectKind;
 import bingo.odata.ODataQueryInfo;
 import bingo.odata.ODataServices;
 import bingo.odata.exceptions.ODataBadRequestException;
@@ -49,13 +53,16 @@ import bingo.odata.model.ODataEntitySetBuilder;
 import bingo.odata.model.ODataKey;
 import bingo.odata.model.ODataKeyImpl;
 import bingo.odata.model.ODataParameters;
+import bingo.odata.model.ODataRawValueImpl;
 import bingo.odata.model.ODataValue;
+import bingo.odata.model.ODataValueImpl;
 import bingo.odata.producer.ODataProducer;
 import bingo.odata.producer.ODataProducerAdapter;
 import bingo.odata.producer.ODataProducerContext;
 
 public class DemoODataProducer extends ODataProducerAdapter implements ODataProducer {
 	
+	public static final Object INVOKED_FUNCTION = "invoke function successfully!";
 	private final ODataServices metadata;
 	
 	public DemoODataProducer(){
@@ -194,7 +201,7 @@ public class DemoODataProducer extends ODataProducerAdapter implements ODataProd
 			}
 		}
 		
-	    return null;
+	    return new ODataValueImpl(ODataObjectKind.Raw, new ODataRawValueImpl(EdmSimpleType.STRING, INVOKED_FUNCTION));
     }
 
 	private ODataServices loadDemoMetadata(){

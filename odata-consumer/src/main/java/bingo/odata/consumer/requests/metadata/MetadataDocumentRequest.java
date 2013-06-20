@@ -15,9 +15,14 @@
  */
 package bingo.odata.consumer.requests.metadata;
 
+import static bingo.odata.ODataConstants.Headers.DATA_SERVICE_VERSION;
+import static bingo.odata.ODataConstants.Headers.MAX_DATA_SERVICE_VERSION;
+import static bingo.odata.ODataConstants.Headers.MIN_DATA_SERVICE_VERSION;
+
 import com.google.api.client.http.GenericUrl;
 import com.google.api.client.http.HttpHeaders;
 
+import bingo.odata.consumer.ODataConsumerContext;
 import bingo.odata.consumer.requests.Request;
 
 
@@ -25,8 +30,8 @@ public class MetadataDocumentRequest extends Request{
 	
 	private static final String METADATA_DOCUMENT = "$metadata";
 
-	public MetadataDocumentRequest(String serviceRoot) {
-		this.serviceRoot = serviceRoot;
+	public MetadataDocumentRequest(ODataConsumerContext context, String serviceRoot) {
+		super(context, serviceRoot);
 	}
 
 	@Override
@@ -41,6 +46,21 @@ public class MetadataDocumentRequest extends Request{
 		HttpHeaders headers = super.genHeaders();
 		headers.setAccept("application/xml");
 		return headers;
+	}
+
+	/**
+	 * no need to set json format
+	 */
+	@Override
+	protected void setDefaultHeaders() {
+		this.addHeader(DATA_SERVICE_VERSION, context.getVersion().getValue());
+		this.addHeader(MAX_DATA_SERVICE_VERSION, context.getVersion().getValue());
+		this.addHeader(MIN_DATA_SERVICE_VERSION, context.getVersion().getValue());
+	}
+
+	@Override
+	protected void setDefaultParameters() {
+		// empty
 	}
 	
 	

@@ -24,12 +24,13 @@ import com.google.api.client.http.HttpMethods;
 import com.google.api.client.http.UrlEncodedContent;
 
 import bingo.lang.json.JSON;
+import bingo.odata.consumer.ODataConsumerContext;
 
 
 public class InsertEntityRequest extends Request {
 	
-	public InsertEntityRequest(String serviceRoot) {
-		this.serviceRoot = serviceRoot;
+	public InsertEntityRequest(ODataConsumerContext context, String serviceRoot) {
+		super(context, serviceRoot);
 	}
 
 	private String entityType;

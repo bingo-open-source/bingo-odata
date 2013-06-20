@@ -1,7 +1,9 @@
-package bingo.odata.consumer;
+package bingo.odata.consumer.base;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+
+import bingo.odata.consumer.demo.DemoODataServer;
 
 public class ServerTestBase {
 

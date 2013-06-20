@@ -15,7 +15,13 @@
  */
 package bingo.odata.consumer.requests;
 
+import bingo.odata.consumer.ODataConsumerContext;
+
 
 public class RetrieveCountRequest extends Request {
+
+	public RetrieveCountRequest(ODataConsumerContext context, String serviceRoot) {
+		super(context, serviceRoot);
+	}
 
 }

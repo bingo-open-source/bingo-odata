@@ -18,11 +18,21 @@ package bingo.odata.consumer;
 import bingo.odata.ODataContextBase;
 import bingo.odata.ODataFormat;
 import bingo.odata.ODataReaderContext;
+import bingo.odata.ODataVersion;
 import bingo.odata.ODataWriterContext;
 
 public class ODataConsumerContext extends ODataContextBase implements ODataWriterContext,ODataReaderContext {
 	
-	private ODataFormat format = ODataFormat.Json;
+	private ODataFormat format;
+	private ODataVersion version;
+	private int maxResults;
+	
+	public ODataConsumerContext(ODataConsumerConfig config) {
+		this.setProtocol(config.getProtocol());
+		this.setVersion(config.getVersion());
+		this.setFormat(config.getDefaultFormat());
+		this.setMaxResults(config.getMaxResults());
+	}
 	
 	public boolean isConsumer() {
 		return true;
@@ -43,6 +53,27 @@ public class ODataConsumerContext extends ODataContextBase implements ODataWrite
 	@Override
 	public ODataFormat getFormat() {
 		return this.format;
+	}
+
+	@Override
+	public ODataVersion getVersion() {
+		return this.version;
+	}
+
+	public void setFormat(ODataFormat format) {
+		this.format = format;
+	}
+
+	public void setVersion(ODataVersion version) {
+		this.version = version;
+	}
+
+	public int getMaxResults() {
+		return maxResults;
+	}
+
+	public void setMaxResults(int maxResults) {
+		this.maxResults = maxResults;
 	}
 	
 }

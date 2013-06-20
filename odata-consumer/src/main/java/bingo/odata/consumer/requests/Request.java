@@ -1,5 +1,9 @@
 package bingo.odata.consumer.requests;
 
+import static bingo.odata.ODataConstants.Headers.DATA_SERVICE_VERSION;
+import static bingo.odata.ODataConstants.Headers.MAX_DATA_SERVICE_VERSION;
+import static bingo.odata.ODataConstants.Headers.MIN_DATA_SERVICE_VERSION;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -7,6 +11,8 @@ import java.util.Map;
 import bingo.lang.Strings;
 import bingo.lang.logging.Log;
 import bingo.lang.logging.LogFactory;
+import bingo.odata.ODataConstants;
+import bingo.odata.consumer.ODataConsumerContext;
 
 import com.google.api.client.http.GenericUrl;
 import com.google.api.client.http.HttpContent;
@@ -25,16 +31,21 @@ public class Request {
 	
 	protected String accept;
 	protected Map<String, String> headers = new HashMap<String, String>();
-	protected Map<String, String> parameters = new HashMap<String, String>();
+	protected Map<String, Object> parameters = new HashMap<String, Object>();
 	protected String method = HttpMethods.GET;
 	protected String serviceRoot;
 	protected String resourcePath;
+	protected ODataConsumerContext context;
 	
-	public Request() {}
+	public Request(ODataConsumerContext context, String serviceRoot) {
+		this.serviceRoot = serviceRoot;
+		this.context = context;
+	}
 	
-	public Request(String serviceRoot, String resourcePath) {
+	public Request(ODataConsumerContext context, String serviceRoot, String resourcePath) {
 		this.serviceRoot = serviceRoot;
 		this.resourcePath = resourcePath;
+		this.context = context;
 	}
 
 	public String getAccept() {
@@ -54,17 +65,22 @@ public class Request {
 		this.headers = headers;
 	}
 
-	public Map<String, String> getParameters() {
+	public Map<String, Object> getParameters() {
 		return parameters;
 	}
 
-	public Request setParameters(Map<String, String> parameters) {
+	public Request setParameters(Map<String, Object> parameters) {
 		this.parameters = parameters;
 		return this;
 	}
 	
 	public Request addParameter(String name, String value) {
 		parameters.put(name, value);
+		return this;
+	}
+	
+	public Request addParameters(Map<String, Object> parameters) {
+		this.parameters.putAll(parameters);
 		return this;
 	}
 
@@ -109,7 +125,7 @@ public class Request {
 		headers.put(name, value);
 	}
 
-	public String getParameter(String name) {
+	public Object getParameter(String name) {
 		return parameters.get(name);
 	}
 	
@@ -117,6 +133,10 @@ public class Request {
 		final HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
 		
 		HttpRequestFactory requestFactory = HTTP_TRANSPORT.createRequestFactory();
+		
+		this.setDefaultHeaders();
+		
+		this.setDefaultParameters();
 		
 		HttpRequest req = buildRequest(requestFactory);
 		
@@ -186,5 +206,16 @@ public class Request {
 			url += queryString;
 		}
 		return url;
+	}
+
+	protected void setDefaultHeaders() {
+		this.addHeader(DATA_SERVICE_VERSION, context.getVersion().getValue());
+		this.addHeader(MAX_DATA_SERVICE_VERSION, context.getVersion().getValue());
+		this.addHeader(MIN_DATA_SERVICE_VERSION, context.getVersion().getValue());
+		this.setAccept(context.getFormat().getContentType());
+	}
+	
+	protected void setDefaultParameters() {
+		this.addParameter(ODataConstants.QueryOptions.FORMAT, context.getFormat().getValue());
 	}
 }

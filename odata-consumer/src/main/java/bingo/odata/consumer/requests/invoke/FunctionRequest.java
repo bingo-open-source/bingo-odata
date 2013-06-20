@@ -15,7 +15,60 @@
  */
 package bingo.odata.consumer.requests.invoke;
 
+import java.util.Map;
 
-public class FunctionRequest {
+import bingo.lang.Strings;
+import bingo.odata.consumer.ODataConsumerContext;
+import bingo.odata.consumer.requests.Request;
+
+
+public class FunctionRequest extends Request{
+	
+	private String entitySet = "";
+	private String function;
+	private Map<String, Object> params;
+
+	public FunctionRequest(ODataConsumerContext context, String serviceRoot) {
+		super(context, serviceRoot);
+	}
+	
+
+	@Override
+	public String getResourcePath() {
+		return entitySet + URL_FRAGMENT_DIVIDER + function;
+	}
+
+
+	public String getFunction() {
+		return function;
+	}
+
+
+	public FunctionRequest setFunction(String function) {
+		this.function = function;
+		return this;
+	}
+
+
+	public Map<String, Object> getParams() {
+		return params;
+	}
+
+	public FunctionRequest setParams(Map<String, Object> params) {
+		this.params = params;
+		this.addParameters(params);
+		return this;
+	}
+
+
+	public String getEntitySet() {
+		return entitySet;
+	}
+
+
+	public FunctionRequest setEntitySet(String entitySet) {
+		if(Strings.isNotBlank(entitySet)) this.entitySet = entitySet;
+		return this;
+	}
 	
 }

@@ -20,6 +20,7 @@ import java.net.URL;
 import com.google.api.client.http.GenericUrl;
 
 import bingo.lang.Strings;
+import bingo.odata.consumer.ODataConsumerContext;
 import bingo.odata.consumer.requests.builders.RequestBuilder;
 import bingo.odata.consumer.requests.builders.RequestBuilderBase;
 
@@ -28,8 +29,8 @@ public class RetrieveEntityRequest extends Request {
 	private String entitySet;
 	private Object id;
 	
-	public RetrieveEntityRequest(String serviceRoot) {
-		this.serviceRoot = serviceRoot;
+	public RetrieveEntityRequest(ODataConsumerContext context, String serviceRoot) {
+		super(context, serviceRoot);
 	}
 
 	@Override

@@ -15,9 +15,14 @@
  */
 package bingo.odata.consumer.requests;
 
+import bingo.odata.consumer.ODataConsumerContext;
 import bingo.odata.consumer.requests.builders.RequestBuilder;
 import bingo.odata.consumer.requests.builders.RequestBuilderBase;
 
 public class MergeEntityRequest extends Request {
+
+	public MergeEntityRequest(ODataConsumerContext context, String serviceRoot) {
+		super(context, serviceRoot);
+	}
 
 }

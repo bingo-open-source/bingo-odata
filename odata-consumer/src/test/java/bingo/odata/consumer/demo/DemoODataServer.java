@@ -13,10 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.odata.consumer;
+package bingo.odata.consumer.demo;
 import javax.servlet.http.HttpServletRequest;
 
-import bingo.odata.consumer.demo.DemoODataProducer;
+import org.junit.Test;
+
 import bingo.odata.producer.requests.ODataRequestController;
 import bingo.odata.producer.server.ODataHttpHandler;
 import bingo.odata.producer.server.ODataHttpServer;
@@ -29,6 +30,10 @@ public class DemoODataServer extends Thread {
 	
 	static {
 		controller.setProducer(new DemoODataProducer());
+	}
+	
+	public static void main(String[] args) {
+		new DemoODataServer().run();
 	}
 	
 	public void run() {

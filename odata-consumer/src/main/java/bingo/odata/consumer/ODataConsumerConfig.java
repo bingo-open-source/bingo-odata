@@ -17,12 +17,17 @@ package bingo.odata.consumer;
 
 import bingo.odata.ODataFormat;
 import bingo.odata.ODataProtocol;
+import bingo.odata.ODataVersion;
 
 public interface ODataConsumerConfig {
 
 	ODataProtocol getProtocol();
 	
+	ODataVersion getVersion();
+	
 	ODataFormat getDefaultFormat();
+	
+	boolean isVerifyMetadata();
 	
 	boolean isPrintStackTrace();
 	

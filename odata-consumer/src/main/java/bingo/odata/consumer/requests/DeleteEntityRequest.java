@@ -16,6 +16,7 @@
 package bingo.odata.consumer.requests;
 
 import bingo.lang.http.HttpMethods;
+import bingo.odata.consumer.ODataConsumerContext;
 
 
 public class DeleteEntityRequest extends Request {
@@ -23,8 +24,8 @@ public class DeleteEntityRequest extends Request {
 	private String entitySet;
 	private Object id;
 	
-	public DeleteEntityRequest(String serviceRoot) {
-		this.serviceRoot = serviceRoot;
+	public DeleteEntityRequest(ODataConsumerContext context, String serviceRoot) {
+		super(context, serviceRoot);
 	}
 	
 	public Object getId() {

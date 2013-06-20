@@ -22,6 +22,7 @@ import com.google.api.client.http.HttpContent;
 
 import bingo.lang.http.HttpMethods;
 import bingo.lang.json.JSON;
+import bingo.odata.consumer.ODataConsumerContext;
 import bingo.odata.consumer.requests.builders.RequestBuilder;
 import bingo.odata.consumer.requests.builders.RequestBuilderBase;
 
@@ -29,8 +30,8 @@ public class UpdateEntityRequest extends Request {
 	private Object id;
 	private String entitySet;
 	private Map<String, Object> fields;
-	public UpdateEntityRequest(String serviceRoot) {
-		this.serviceRoot = serviceRoot;
+	public UpdateEntityRequest(ODataConsumerContext context, String serviceRoot) {
+		super(context, serviceRoot);
 	}
 	public Object getId() {
 		return id;

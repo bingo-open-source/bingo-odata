@@ -37,23 +37,16 @@ import bingo.odata.consumer.requests.builders.QueryFilter;
 public interface ODataConsumer {
 
 	ODataConsumerConfig config();
-	/**
-	 * insert entity.
-	 * @param object can be POJO with proper annotation or {@link Map} or {@link ODataEntity}.
-	 * @return
-	 */
+	
+	ODataServices services();
 	
 	int insertEntity(String entityType, ODataEntity entity);
 	
-	int insertEntity(String entityType, Map<String, Object> object);
-	
-	int deleteEntity(Object objectWithIdField);
+	int insertEntity(String entityType, Map<String, Object> fields);
 	
 	int deleteEntity(String entityName, Object id);
 	
 //	int deleteEntity(String entityName, QueryOptions queryOptions);
-	
-	int updateEntity(Object objectWithIdField);
 	
 	int updateEntity(String entityName, Object id, Map<String, Object> updateFields);
 	
@@ -77,15 +70,17 @@ public interface ODataConsumer {
 	
 	ODataValue retrieveNavigationProperty(EdmEntityType entitType,ODataKey key,EdmNavigationProperty property);
 	
-	ODataEntity insertEntity(EdmEntityType entityType,ODataEntity entity);
+	int insertEntity(EdmEntityType entityType,ODataEntity entity);
 	
-	ODataEntity updateEntity(EdmEntityType entityType,ODataKey key,ODataEntity entity);
+	int updateEntity(EdmEntityType entityType,ODataKey key,ODataEntity entity);
 	
-	ODataEntity mergeEntity(EdmEntityType entityType,ODataKey key, ODataEntity entity);
+	int mergeEntity(EdmEntityType entityType,ODataKey key, ODataEntity entity);
 	
 	void deleteEntity(EdmEntityType entityType,ODataKey key);
 	
-	ODataValue invokeFunction(EdmFunctionImport func,ODataParameters parameters);
+	String invokeFunction(EdmFunctionImport func,ODataParameters parameters);
+	
+	String invodeFunction(String entitySet, String funcName, Map<String, Object> parameters);
 	
 	ODataContent query(ODataQueryInfo queryInfo);
 	

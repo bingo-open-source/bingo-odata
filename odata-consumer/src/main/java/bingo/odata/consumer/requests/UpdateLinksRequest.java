@@ -15,8 +15,14 @@
  */
 package bingo.odata.consumer.requests;
 
+import bingo.odata.consumer.ODataConsumerContext;
+
 
 public class UpdateLinksRequest extends Request{
+
+	public UpdateLinksRequest(ODataConsumerContext context, String serviceRoot) {
+		super(context, serviceRoot);
+	}
 
 
 }

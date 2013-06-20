@@ -15,6 +15,8 @@
  */
 package bingo.odata.consumer.requests;
 
+import bingo.odata.consumer.ODataConsumerContext;
+
 import com.google.api.client.http.GenericUrl;
 
 
@@ -23,8 +25,8 @@ public class RetrieveEntitySetRequest extends Request{
 	
 	private String entitySet;
 	
-	public RetrieveEntitySetRequest(String serviceRoot) {
-		this.serviceRoot = serviceRoot;
+	public RetrieveEntitySetRequest(ODataConsumerContext context, String serviceRoot) {
+		super(context, serviceRoot);
 	}
 
 	@Override
