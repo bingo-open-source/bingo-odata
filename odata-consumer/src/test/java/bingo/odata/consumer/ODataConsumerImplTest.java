@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import bingo.odata.ODataServices;
 import bingo.odata.consumer.demo.DemoODataProducer;
+import bingo.odata.consumer.exceptions.ConnectFailedException;
 import bingo.odata.model.ODataEntity;
 import bingo.odata.model.ODataEntitySet;
 
@@ -17,23 +18,31 @@ public class ODataConsumerImplTest {
 	private static final String LOCALHOST_SERVICE = "http://localhost:8080/demo";
 
 	ODataConsumer consumer = new ODataConsumerImpl(LOCALHOST_SERVICE);
+	
+	public static void main(String[] args) {
+		new ODataConsumerImplTest().testRetrieveServiceMetadata();
+	}
 
 	@Test
 	public void testRetrieveServiceMetadata() {
-		ODataServices service = consumer.retrieveServiceMetadata();
-		assertNotNull(service);
+		try {
+			ODataServices service = consumer.retrieveServiceMetadata();
+			assertNotNull(service);
+		} catch (Throwable e) {
+			System.out.println("failed");
+		}
 	}
 
 	@Test
 	public void testRetrieveEntitySetString() {
 		fail("Not yet implemented");
-		ODataEntitySet entitySet = consumer.retrieveEntitySet("Products");
+		ODataEntitySet entitySet = consumer.findEntitySet("Products");
 		assertNotNull(entitySet);
 	}
 
 	@Test
 	public void testRetrieveEntityStringObject() {
-		ODataEntity entity = consumer.retrieveEntity("Product", "123456");
+		ODataEntity entity = consumer.findEntity("Product", "123456");
 		assertNotNull(entity);
 		System.out.println(entity);
 	}

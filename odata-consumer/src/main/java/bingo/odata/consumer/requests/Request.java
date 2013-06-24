@@ -5,6 +5,7 @@ import static bingo.odata.ODataConstants.Headers.MAX_DATA_SERVICE_VERSION;
 import static bingo.odata.ODataConstants.Headers.MIN_DATA_SERVICE_VERSION;
 
 import java.io.IOException;
+import java.net.ConnectException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,6 +14,7 @@ import bingo.lang.logging.Log;
 import bingo.lang.logging.LogFactory;
 import bingo.odata.ODataConstants;
 import bingo.odata.consumer.ODataConsumerContext;
+import bingo.odata.consumer.exceptions.ConnectFailedException;
 
 import com.google.api.client.http.GenericUrl;
 import com.google.api.client.http.HttpContent;
@@ -129,7 +131,7 @@ public class Request {
 		return parameters.get(name);
 	}
 	
-	public Response send() {
+	public Response send() throws ConnectFailedException {
 		final HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
 		
 		HttpRequestFactory requestFactory = HTTP_TRANSPORT.createRequestFactory();
@@ -148,9 +150,7 @@ public class Request {
 			log.info("Received Response:" + response);
 			return response;
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			throw new RuntimeException(e.getMessage());
+			throw new ConnectFailedException(req.getUrl().toString());
 		}
 	}
 

@@ -15,30 +15,27 @@
  */
 package bingo.odata.consumer;
 
+import static bingo.odata.consumer.util.ODataConsumerContextHelper.initEntitySetContext;
+import static bingo.odata.consumer.util.ODataConsumerContextHelper.initEntityTypeContext;
+
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Map;
 
-import com.sun.java_cup.internal.internal_error;
-
-import bingo.lang.Assert;
 import bingo.lang.Strings;
-import bingo.lang.http.HttpHeaders;
 import bingo.lang.logging.Log;
 import bingo.lang.logging.LogFactory;
 import bingo.meta.edm.EdmEntityType;
 import bingo.meta.edm.EdmFunctionImport;
 import bingo.meta.edm.EdmNavigationProperty;
 import bingo.meta.edm.EdmProperty;
-import bingo.odata.ODataConstants;
-import bingo.odata.ODataObject;
 import bingo.odata.ODataObjectKind;
 import bingo.odata.ODataQueryInfo;
 import bingo.odata.ODataReader;
 import bingo.odata.ODataReaderContext;
 import bingo.odata.ODataResponseStatus;
 import bingo.odata.ODataServices;
-import bingo.odata.ODataVersion;
+import bingo.odata.consumer.exceptions.ConnectFailedException;
 import bingo.odata.consumer.ext.ODataContent;
 import bingo.odata.consumer.requests.DeleteEntityRequest;
 import bingo.odata.consumer.requests.InsertEntityRequest;
@@ -51,18 +48,13 @@ import bingo.odata.consumer.requests.builders.QueryBuilder;
 import bingo.odata.consumer.requests.builders.QueryFilter;
 import bingo.odata.consumer.requests.invoke.FunctionRequest;
 import bingo.odata.consumer.requests.metadata.MetadataDocumentRequest;
-import static bingo.odata.consumer.util.ODataConsumerContextHelper.*;
 import bingo.odata.consumer.util.ODataMetadataVerifier;
 import bingo.odata.exceptions.ODataNotImplementedException;
 import bingo.odata.model.ODataEntity;
 import bingo.odata.model.ODataEntitySet;
 import bingo.odata.model.ODataKey;
-import bingo.odata.model.ODataKeyImpl;
 import bingo.odata.model.ODataParameters;
 import bingo.odata.model.ODataValue;
-import bingo.odata.model.ODataValueImpl;
-
-import static bingo.odata.ODataConstants.Headers.*;
 
 public class ODataConsumerImpl implements ODataConsumer {
 	private static final Log log = LogFactory.get(ODataConsumerImpl.class);
@@ -118,7 +110,7 @@ public class ODataConsumerImpl implements ODataConsumer {
 	 * 
 	 * {@link ODataServices} represents the Metadata Document.
 	 */
-	public ODataServices retrieveServiceMetadata() {
+	public ODataServices retrieveServiceMetadata() throws ConnectFailedException{
 		ODataConsumerContext context = new ODataConsumerContext(config);
 		
 		Request request = new MetadataDocumentRequest(context, this.serviceRoot);
@@ -135,7 +127,7 @@ public class ODataConsumerImpl implements ODataConsumer {
 	/**
 	 * get the entity set from producer.
 	 */
-	public ODataEntitySet retrieveEntitySet(String entitySet) {
+	public ODataEntitySet findEntitySet(String entitySet) {
 		ODataConsumerContext context = initEntitySetContext(this, entitySet);
 		
 		Request request = new RetrieveEntitySetRequest(context, serviceRoot).setEntitySet(entitySet);
@@ -155,7 +147,7 @@ public class ODataConsumerImpl implements ODataConsumer {
 	/**
 	 * get a single entity by key from producer.
 	 */
-	public ODataEntity retrieveEntity(String entityType, Object key) {
+	public ODataEntity findEntity(String entityType, Object key) {
 		if(config.isVerifyMetadata()) verifier.hasEntityType(entityType);
 		
 		ODataConsumerContext context = initEntityTypeContext(this, entityType, key);
@@ -200,7 +192,7 @@ public class ODataConsumerImpl implements ODataConsumer {
 		}
 	}
 
-	private InputStream getResponseInputStream(Request request) {
+	private InputStream getResponseInputStream(Request request) throws ConnectFailedException{
 		Response resp = request.send();
 		if(resp.getStatus() == 200) {
 			return resp.getInputStream();
@@ -254,26 +246,26 @@ public class ODataConsumerImpl implements ODataConsumer {
 		return null;
 	}
 
-	public ODataEntitySet retrieveEntitySet(EdmEntityType entityType,
+	public ODataEntitySet findEntitySet(EdmEntityType entityType,
 			ODataQueryInfo queryInfo) {
 		throw new ODataNotImplementedException("");
 	}
 
-	public long retrieveCount(EdmEntityType entityType, ODataQueryInfo queryInfo) {
+	public long count(EdmEntityType entityType, ODataQueryInfo queryInfo) {
 		throw new ODataNotImplementedException("");
 	}
 
-	public ODataEntity retrieveEntity(EdmEntityType entityType, ODataKey key,
+	public ODataEntity findEntity(EdmEntityType entityType, ODataKey key,
 			ODataQueryInfo queryInfo) {
 		throw new ODataNotImplementedException("");
 	}
 
-	public ODataValue retrieveProperty(EdmEntityType entitType, ODataKey key,
+	public ODataValue findProperty(EdmEntityType entitType, ODataKey key,
 			EdmProperty property) {
 		throw new ODataNotImplementedException("");
 	}
 
-	public ODataValue retrieveNavigationProperty(EdmEntityType entitType,
+	public ODataValue findNavigationProperty(EdmEntityType entitType,
 			ODataKey key, EdmNavigationProperty property) {
 		throw new ODataNotImplementedException("");
 	}
