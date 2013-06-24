@@ -23,6 +23,7 @@ import bingo.meta.edm.EdmNavigationProperty;
 import bingo.meta.edm.EdmProperty;
 import bingo.odata.ODataQueryInfo;
 import bingo.odata.ODataServices;
+import bingo.odata.consumer.exceptions.ConnectFailedException;
 import bingo.odata.consumer.ext.ODataContents;
 import bingo.odata.model.ODataEntity;
 import bingo.odata.model.ODataEntitySet;
@@ -40,7 +41,7 @@ public interface ODataConsumer {
 	
 	ODataServices services();
 	
-	int insertEntity(String entityType, ODataEntity entity);
+	int insertEntity(String entityType, ODataEntity entity) throws ConnectFailedException;
 	
 	int insertEntity(String entityType, Map<String, Object> fields);
 	
@@ -54,21 +55,21 @@ public interface ODataConsumer {
 	
 	QueryBuilder queryEntity(String entityName);
 	
-	ODataServices retrieveServiceMetadata();
+	ODataServices retrieveServiceMetadata() throws ConnectFailedException;
 
-	ODataEntitySet retrieveEntitySet(EdmEntityType entityType,ODataQueryInfo queryInfo);
+	ODataEntitySet findEntitySet(EdmEntityType entityType,ODataQueryInfo queryInfo);
 	
-	ODataEntitySet retrieveEntitySet(String entitySet);
+	ODataEntitySet findEntitySet(String entitySet);
 	
-	long retrieveCount(EdmEntityType entityType,ODataQueryInfo queryInfo);
+	long count(EdmEntityType entityType,ODataQueryInfo queryInfo);
 	
-	ODataEntity retrieveEntity(EdmEntityType entityType,ODataKey key,ODataQueryInfo queryInfo);
+	ODataEntity findEntity(EdmEntityType entityType,ODataKey key,ODataQueryInfo queryInfo);
 	
-	ODataEntity retrieveEntity(String entityType, Object key);
+	ODataEntity findEntity(String entityType, Object key);
 	
-	ODataValue retrieveProperty(EdmEntityType entitType,ODataKey key,EdmProperty property);
+	ODataValue findProperty(EdmEntityType entitType,ODataKey key,EdmProperty property);
 	
-	ODataValue retrieveNavigationProperty(EdmEntityType entitType,ODataKey key,EdmNavigationProperty property);
+	ODataValue findNavigationProperty(EdmEntityType entitType,ODataKey key,EdmNavigationProperty property);
 	
 	int insertEntity(EdmEntityType entityType,ODataEntity entity);
 	
