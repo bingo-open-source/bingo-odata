@@ -16,7 +16,7 @@ public class OAuthAuthenticationBehavior implements ClientBehavior {
 
   public HttpRequest transform(HttpRequest request) {
 	  HttpHeaders headers = request.getHeaders();
-	  headers.put("Authorization", HEADER_PREFIX + accessToken);
+	  headers.setAuthorization(HEADER_PREFIX + accessToken);
 	  request.setHeaders(headers);
     return request;
   }

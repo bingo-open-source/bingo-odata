@@ -15,23 +15,29 @@
  */
 package bingo.odata.consumer;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import bingo.odata.ODataContextBase;
 import bingo.odata.ODataFormat;
 import bingo.odata.ODataReaderContext;
 import bingo.odata.ODataVersion;
 import bingo.odata.ODataWriterContext;
+import bingo.odata.consumer.requests.behaviors.ClientBehavior;
 
 public class ODataConsumerContext extends ODataContextBase implements ODataWriterContext,ODataReaderContext {
 	
 	private ODataFormat format;
 	private ODataVersion version;
 	private int maxResults;
+	private List<ClientBehavior> behaviors;
 	
 	public ODataConsumerContext(ODataConsumerConfig config) {
 		this.setProtocol(config.getProtocol());
 		this.setVersion(config.getVersion());
 		this.setFormat(config.getDefaultFormat());
 		this.setMaxResults(config.getMaxResults());
+		this.setBehaviors(config.getClientBehaviors());
 	}
 	
 	public boolean isConsumer() {
@@ -74,6 +80,14 @@ public class ODataConsumerContext extends ODataContextBase implements ODataWrite
 
 	public void setMaxResults(int maxResults) {
 		this.maxResults = maxResults;
+	}
+
+	public List<ClientBehavior> getBehaviors() {
+		return behaviors;
+	}
+
+	public void setBehaviors(List<ClientBehavior> behaviors) {
+		this.behaviors = behaviors;
 	}
 	
 }

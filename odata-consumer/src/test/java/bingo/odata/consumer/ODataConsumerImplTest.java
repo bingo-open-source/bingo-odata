@@ -7,9 +7,12 @@ import java.util.Map;
 
 import org.junit.Test;
 
+import bingo.lang.New;
 import bingo.odata.ODataServices;
 import bingo.odata.consumer.demo.DemoODataProducer;
 import bingo.odata.consumer.exceptions.ConnectFailedException;
+import bingo.odata.consumer.requests.behaviors.ClientBehavior;
+import bingo.odata.consumer.requests.behaviors.OAuthAuthenticationBehavior;
 import bingo.odata.model.ODataEntity;
 import bingo.odata.model.ODataEntitySet;
 
@@ -17,7 +20,7 @@ public class ODataConsumerImplTest {
 	
 	private static final String LOCALHOST_SERVICE = "http://localhost:8080/demo";
 
-	ODataConsumer consumer = new ODataConsumerImpl(LOCALHOST_SERVICE);
+	ODataConsumer consumer = new ODataConsumerImpl(LOCALHOST_SERVICE, new OAuthAuthenticationBehavior("123"));
 	
 	public static void main(String[] args) {
 		new ODataConsumerImplTest().testRetrieveServiceMetadata();
@@ -149,5 +152,4 @@ public class ODataConsumerImplTest {
 	public void testFindFunctionImport() {
 		fail("Not yet implemented");
 	}
-
 }

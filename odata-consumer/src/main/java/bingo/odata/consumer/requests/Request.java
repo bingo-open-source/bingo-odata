@@ -7,14 +7,17 @@ import static bingo.odata.ODataConstants.Headers.MIN_DATA_SERVICE_VERSION;
 import java.io.IOException;
 import java.net.ConnectException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import bingo.lang.Collections;
 import bingo.lang.Strings;
 import bingo.lang.logging.Log;
 import bingo.lang.logging.LogFactory;
 import bingo.odata.ODataConstants;
 import bingo.odata.consumer.ODataConsumerContext;
 import bingo.odata.consumer.exceptions.ConnectFailedException;
+import bingo.odata.consumer.requests.behaviors.ClientBehavior;
 
 import com.google.api.client.http.GenericUrl;
 import com.google.api.client.http.HttpContent;
@@ -142,15 +145,26 @@ public class Request {
 		
 		HttpRequest req = buildRequest(requestFactory);
 		
+		handleBehaviors(req);
+
 //		if(log.isDebugEnabled())  // TODO open after complete
 			report(req);
-		
+			
 		try {
 			Response response = new Response(req.execute());
 			log.info("Received Response:" + response);
 			return response;
 		} catch (IOException e) {
 			throw new ConnectFailedException(req.getUrl().toString());
+		}
+	}
+
+	private void handleBehaviors(HttpRequest req) {
+		List<ClientBehavior> behaviors = context.getBehaviors();
+		if(!Collections.isEmpty(behaviors)) {
+			for (ClientBehavior behavior : behaviors) {
+				req = behavior.transform(req);
+			}
 		}
 	}
 

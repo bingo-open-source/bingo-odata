@@ -15,10 +15,14 @@
  */
 package bingo.odata.consumer;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import bingo.odata.ODataFormat;
 import bingo.odata.ODataProtocol;
 import bingo.odata.ODataProtocols;
 import bingo.odata.ODataVersion;
+import bingo.odata.consumer.requests.behaviors.ClientBehavior;
 
 public class ODataConsumerConfigImpl implements ODataConsumerConfig {
 
@@ -29,6 +33,7 @@ public class ODataConsumerConfigImpl implements ODataConsumerConfig {
 	protected boolean       autoDetectFormat = false;
 	protected boolean		verifyMetadata = true;
 	protected int			maxResults = 10;
+	private List<ClientBehavior> behaviors = new ArrayList<ClientBehavior>();
 	
 	public ODataProtocol getProtocol() {
 		return protocol;
@@ -85,4 +90,19 @@ public class ODataConsumerConfigImpl implements ODataConsumerConfig {
 	public void setVerifyMetadata(boolean verifyMetadata) {
 		this.verifyMetadata = verifyMetadata;
 	}
+
+	public List<ClientBehavior> getClientBehaviors() {
+		return behaviors;
+	}
+
+	public ODataConsumerConfig addClientBehavior(ClientBehavior behavior) {
+		behaviors.add(behavior);
+		return this;
+	}
+
+	public ODataConsumerConfig setClientBehaviors(List<ClientBehavior> behaviors) {
+		this.behaviors = behaviors;
+		return this;
+	}
+	
 }

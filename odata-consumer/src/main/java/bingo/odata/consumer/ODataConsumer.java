@@ -15,6 +15,7 @@
  */
 package bingo.odata.consumer;
 
+import java.util.List;
 import java.util.Map;
 
 import bingo.meta.edm.EdmEntityType;
@@ -32,6 +33,7 @@ import bingo.odata.model.ODataParameters;
 import bingo.odata.model.ODataValue;
 import bingo.odata.producer.ODataProducerConfig;
 import bingo.odata.consumer.ext.ODataContent;
+import bingo.odata.consumer.requests.behaviors.ClientBehavior;
 import bingo.odata.consumer.requests.builders.QueryBuilder;
 import bingo.odata.consumer.requests.builders.QueryFilter;
 
@@ -86,4 +88,5 @@ public interface ODataConsumer {
 	ODataContent query(ODataQueryInfo queryInfo);
 	
 	EdmFunctionImport findFunctionImport(String entitySetName,String functionName);
+	
 }
