@@ -26,6 +26,7 @@ public class FunctionRequest extends Request{
 	
 	private String entitySet = "";
 	private String function;
+	private String httpMethod;
 	private Map<String, Object> params;
 
 	public FunctionRequest(ODataConsumerContext context, String serviceRoot) {
@@ -69,6 +70,22 @@ public class FunctionRequest extends Request{
 	public FunctionRequest setEntitySet(String entitySet) {
 		if(Strings.isNotBlank(entitySet)) this.entitySet = entitySet;
 		return this;
+	}
+
+	public String getHttpMethod() {
+		return httpMethod;
+	}
+
+	public FunctionRequest setHttpMethod(String httpMethod) {
+		this.httpMethod = httpMethod;
+		return this;
+	}
+
+	@Override
+	public String getMethod() {
+		if(Strings.isBlank(httpMethod)) {
+			return super.getMethod();
+		} else return httpMethod;
 	}
 	
 }

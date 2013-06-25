@@ -33,6 +33,7 @@ import bingo.odata.model.ODataKey;
 import bingo.odata.model.ODataParameters;
 import bingo.odata.model.ODataValue;
 import bingo.odata.producer.ODataProducerConfig;
+import bingo.odata.producer.ODataProducerContext;
 import bingo.odata.consumer.ext.ODataContent;
 import bingo.odata.consumer.requests.behaviors.ClientBehavior;
 import bingo.odata.consumer.requests.builders.QueryBuilder;
@@ -88,9 +89,11 @@ public interface ODataConsumer {
 	
 	void deleteEntity(EdmEntityType entityType,ODataKey key);
 	
-	String invokeFunction(EdmFunctionImport func,ODataParameters parameters);
+	ODataValue invokeFunction(EdmFunctionImport func,ODataParameters parameters);
 	
 	String invodeFunction(String entitySet, String funcName, Map<String, Object> parameters);
+	
+	String invodeFunction(String entitySet, String funcName, Map<String, Object> parameters, String httpMethod);
 	
 	ODataContent query(ODataQueryInfo queryInfo);
 	

@@ -320,16 +320,23 @@ public class ODataConsumerImpl implements ODataConsumer {
 		deleteEntity(entityType.getName(), id);
 	}
 
-	public String invokeFunction(EdmFunctionImport func, ODataParameters parameters) {
-		return invodeFunction(func.getEntitySet(), func.getName(), parameters.getParametersMap());
+	public ODataValue invokeFunction(EdmFunctionImport func, ODataParameters parameters) {
+		String valueString = invodeFunction(func.getEntitySet(), func.getName(), parameters.getParametersMap());
+		
+		// TODO convert valueString to ODataValue using type defined in func.
+		throw new ODataNotImplementedException("");
 	}
 	
 	public String invodeFunction(String entitySet, String funcName, Map<String, Object> parameters) {
+		return invodeFunction(entitySet, funcName, parameters, null);
+	}
+	
+	public String invodeFunction(String entitySet, String funcName, Map<String, Object> parameters, String httpMethod) {
 		if(config.isVerifyMetadata()) verifier.hasFunction(entitySet, funcName);
 		
 		ODataConsumerContext context = new ODataConsumerContext(config);
 		
-		Request request = new FunctionRequest(context, serviceRoot)
+		Request request = new FunctionRequest(context, serviceRoot).setHttpMethod(httpMethod)
 					.setEntitySet(entitySet).setFunction(funcName).setParams(parameters);
 		
 		Response response = request.send();

@@ -8,9 +8,11 @@ import java.util.Map;
 import org.junit.Test;
 
 import bingo.lang.New;
+import bingo.lang.http.HttpMethod;
 import bingo.meta.edm.EdmEntitySet;
 import bingo.meta.edm.EdmEntityType;
 import bingo.meta.edm.EdmEntityTypeRef;
+import bingo.meta.edm.EdmFunctionImport;
 import bingo.odata.ODataServices;
 import bingo.odata.consumer.demo.DemoODataProducer;
 import bingo.odata.consumer.exceptions.ConnectFailedException;
@@ -151,8 +153,15 @@ public class ODataConsumerImplTest {
 	public void testInvokeFunction() {
 		Map<String, Object> paramsMap = new HashMap<String, Object>();
 		paramsMap.put("rating", 22);
-		String responseString = consumer.invodeFunction("Products", "GetProductsByRating", paramsMap);
+		String responseString = consumer.invodeFunction("Products", "GetProductsByRating", paramsMap, HttpMethod.GET.getValue());
 		assertEquals("\"" + DemoODataProducer.INVOKED_FUNCTION + "\"", responseString);
+	}
+	
+	@Test
+	public void testInvokeFunctionWithReturnType() {
+		fail("Not yet implemented");
+		EdmFunctionImport function = consumer.findFunctionImport("Products", "getAll");
+//		function.getReturnType().getTypeKind()
 	}
 
 	@Test
