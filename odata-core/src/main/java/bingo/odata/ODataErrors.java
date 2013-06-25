@@ -73,6 +73,18 @@ public class ODataErrors extends HttpStatus {
 		return new ODataError(SC_NOT_IMPLEMENTED,EC_NOT_IMPLEMENTED,Strings.format(template, args));
 	}
 	
+	public static ODataError notAuthorized(){
+		return err(SC_UNAUTHORIZED,EC_NOT_AUTHORIZED);
+	}
+	
+	public static ODataError notAuthorized(String message){
+		return err(SC_UNAUTHORIZED,EC_NOT_AUTHORIZED,message);
+	}	
+	
+	public static ODataError notAuthorized(String template,Object... args){
+		return err(SC_UNAUTHORIZED,EC_NOT_AUTHORIZED,Strings.format(template, args));
+	}
+	
 	public static ODataError notFound(){
 		return new ODataError(SC_NOT_FOUND, EC_NOT_FOUND, "");
 	}
