@@ -17,6 +17,9 @@ package bingo.odata.producer.requests;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 import bingo.lang.StopWatch;
 import bingo.lang.http.HttpStatus;
@@ -47,6 +50,8 @@ public class ODataRequestController {
 	
 	protected ODataRequestRouter router = new ODataRequestRouter();
 	
+	protected List<ODataRequestPlugin> plugins = new ArrayList<ODataRequestPlugin>();
+	
 	public ODataRequestController(){
 		
 	}
@@ -64,6 +69,14 @@ public class ODataRequestController {
 	public void setRouter(ODataRequestRouter router) {
     	this.router = router;
     }
+
+	public void addPlugin(ODataRequestPlugin plugin){
+		this.plugins.add(plugin);
+	}
+	
+	public void addPlugins(Collection<ODataRequestPlugin> plugins){
+		this.plugins.addAll(plugins);
+	}
 	
 	public void execute(ODataRequest request, ODataResponse response) {
 		ODataVersion version = null;
@@ -73,12 +86,22 @@ public class ODataRequestController {
 		ODataProducerContext context = null;
 		ODataRequestHandler handler = null;
 		
+		boolean handled = false;
+		
 		try{
 			urlInfo = ODataRequestUtils.createUrlInfo(request);
 			format  = ODataRequestUtils.dataServiceFormat(request, version, producer.config().isAutoDetectFormat()); //may be null
 			version = ODataRequestUtils.getAndCheckVersion(protocol,request);
 			
 	        context = new ODataProducerContext(request,producer,protocol,version,format,urlInfo);
+	        
+	        for(int i=0;i<plugins.size();i++){
+	        	ODataRequestPlugin plugin = plugins.get(i);
+	        	if(plugin.preHandle(context, request, response)){
+	        		endResponse(request,response,context);
+	        		return;
+	        	}
+	        }
 
 	        handler = router.route(context, request, response);
 	        
@@ -89,6 +112,13 @@ public class ODataRequestController {
 	        	
 	        	if(log.isDebugEnabled()){
 	        		log.debug("Found handler '{}', execute used {}ms",handler.getClass().getSimpleName(),sw.stop().getElapsedMilliseconds());
+	        	}
+	        	
+	        	handled = true;
+	        	
+		        for(int i=0;i<plugins.size();i++){
+		        	ODataRequestPlugin plugin = plugins.get(i);
+	        		plugin.postHandle(context, request, response);
 	        	}
 	        	
 	        	endResponse(request,response,context);
@@ -115,6 +145,15 @@ public class ODataRequestController {
 			}else{
 				error(createError(context,e),context,version,format,urlInfo,request,response);	
 			}
+		}finally{
+	        for(int i=0;i<plugins.size();i++){
+	        	ODataRequestPlugin plugin = plugins.get(i);
+        		try {
+	                plugin.doFinally(context, request, response,handled);
+                } catch (Throwable e) {
+                	log.error("error invoke doFinally of plugin : " + plugin.getClass().getName(),e);
+                }
+        	}			
 		}
 	}
 	
