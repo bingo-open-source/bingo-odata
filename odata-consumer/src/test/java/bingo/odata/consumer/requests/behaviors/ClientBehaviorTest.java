@@ -2,10 +2,19 @@ package bingo.odata.consumer.requests.behaviors;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import org.junit.Test;
 
 import com.google.api.client.http.HttpRequest;
 
+import bingo.lang.Arrays;
+import bingo.lang.Collections;
+import bingo.lang.Strings;
+import bingo.lang.enumerable.ArrayEnumerable;
 import bingo.odata.consumer.ODataConsumer;
 import bingo.odata.consumer.ODataConsumerImpl;
 import bingo.odata.consumer.TestResource;
@@ -43,5 +52,4 @@ public class ClientBehaviorTest {
 			}
 		});
 	}
-
 }

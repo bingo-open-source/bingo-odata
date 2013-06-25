@@ -35,11 +35,15 @@ import bingo.meta.edm.EdmEntityTypeBuilder;
 import bingo.meta.edm.EdmEntityTypeRef;
 import bingo.meta.edm.EdmFunctionImport;
 import bingo.meta.edm.EdmMultiplicity;
+import bingo.meta.edm.EdmNavigationProperty;
 import bingo.meta.edm.EdmParameter;
 import bingo.meta.edm.EdmParameterMode;
+import bingo.meta.edm.EdmProperty;
+import bingo.meta.edm.EdmPropertyBuilder;
 import bingo.meta.edm.EdmSchemaBuilder;
 import bingo.meta.edm.EdmSimpleType;
 import bingo.meta.edm.EdmType;
+import bingo.meta.edm.EdmTypeKind;
 import bingo.meta.edm.EdmTypes;
 import bingo.odata.ODataObject;
 import bingo.odata.ODataObjectKind;
@@ -53,6 +57,7 @@ import bingo.odata.model.ODataEntitySetBuilder;
 import bingo.odata.model.ODataKey;
 import bingo.odata.model.ODataKeyImpl;
 import bingo.odata.model.ODataParameters;
+import bingo.odata.model.ODataPropertyImpl;
 import bingo.odata.model.ODataRawValueImpl;
 import bingo.odata.model.ODataValue;
 import bingo.odata.model.ODataValueImpl;
@@ -294,6 +299,27 @@ public class DemoODataProducer extends ODataProducerAdapter implements ODataProd
 	      	  .addEntityContainer(demoService.build());
 		
 		return new ODataServices(Enumerables.of(schema.build()));
+	}
+
+	@Override
+	public ODataValue retrieveProperty(ODataProducerContext context,
+			EdmEntityType entitType, ODataKey key, EdmProperty property) {
+		EdmType edmType = new EdmType() {
+			@Override
+			public EdmTypeKind getTypeKind() {
+				return EdmTypeKind.Simple;
+			}
+		};
+		
+	    return new ODataValueImpl(ODataObjectKind.Property, 
+	    		new ODataPropertyImpl(new EdmPropertyBuilder("name").setType(edmType).build(), INVOKED_FUNCTION));
+	}
+
+	@Override
+	public ODataValue retrieveNavigationProperty(ODataProducerContext context,
+			EdmEntityType entitType, ODataKey key,
+			EdmNavigationProperty property) {
+	    return null;
 	}
 	
 	

@@ -46,6 +46,7 @@ import bingo.odata.consumer.exceptions.ConnectFailedException;
 import bingo.odata.consumer.ext.ODataContent;
 import bingo.odata.consumer.requests.DeleteEntityRequest;
 import bingo.odata.consumer.requests.InsertEntityRequest;
+import bingo.odata.consumer.requests.MergeEntityRequest;
 import bingo.odata.consumer.requests.Request;
 import bingo.odata.consumer.requests.Response;
 import bingo.odata.consumer.requests.RetrieveCountRequest;
@@ -189,15 +190,9 @@ public class ODataConsumerImpl implements ODataConsumer {
 		}
 	}
 
-	public int inserEntity(EdmEntityType entityType, ODataEntity entity) {
+	public int insertEntity(EdmEntityType entityType, ODataEntity entity) {
 		return insertEntity(entityType.getName(), entity.toMap());
 	}
-
-	
-	public int insertEntity(String entityType, ODataEntity entity) {
-		return insertEntity(entityType, entity.toMap());
-	}
-
 	
 	public int insertEntity(String entityType, Map<String, Object> object) {
 		if(config.isVerifyMetadata()) verifier.hasFields(entityType, object);
@@ -224,7 +219,7 @@ public class ODataConsumerImpl implements ODataConsumer {
 	/**
 	 * send a delete certain id entity command to producer. 
 	 */
-	public int deleteEntity(String entityType, Object id) {
+	public int deleteEntityByKey(String entityType, Object id) {
 		if(config.isVerifyMetadata()) verifier.hasEntityType(entityType);
 		
 		ODataConsumerContext context = initEntityTypeContext(this, entityType);
@@ -241,7 +236,7 @@ public class ODataConsumerImpl implements ODataConsumer {
 		}
 	}
 
-	public int updateEntity(String entityType, Object id, Map<String, Object> updateFields) {
+	public int updateEntityByKey(String entityType, Object id, Map<String, Object> updateFields) {
 		if(config.isVerifyMetadata()) verifier.hasFields(entityType, updateFields);
 		
 		ODataConsumerContext context = initEntityTypeContext(this, entityType);
@@ -296,9 +291,6 @@ public class ODataConsumerImpl implements ODataConsumer {
 		throw new ODataNotImplementedException("");
 	}
 
-	public int insertEntity(EdmEntityType entityType, ODataEntity entity) {
-		return insertEntity(entityType.getName(), entity);
-	}
 
 	public int updateEntity(EdmEntityType entityType, ODataKey key,
 			ODataEntity entity) {
@@ -310,14 +302,15 @@ public class ODataConsumerImpl implements ODataConsumer {
 		throw new ODataNotImplementedException("");
 	}
 
-	public void deleteEntity(EdmEntityType entityType, ODataKey key) {
+	public int deleteEntity(EdmEntityType entityType, ODataKey key) {
 		Object id = null;
 		if(key.isPrimitiveValue()) {
 			id = key.getPrimitiveValue();
 		} else if(key.isNamedValues()) {
 			id = key.getNamedValues();
 		} else throw new RuntimeException("invalid key.");
-		deleteEntity(entityType.getName(), id);
+		deleteEntityByKey(entityType.getName(), id);
+		return 1;
 	}
 
 	public ODataValue invokeFunction(EdmFunctionImport func, ODataParameters parameters) {
@@ -348,14 +341,6 @@ public class ODataConsumerImpl implements ODataConsumer {
 		}
 	}
 
-	public ODataContent query(ODataQueryInfo queryInfo) {
-		throw new ODataNotImplementedException("");
-	}
-
-	public EdmFunctionImport findFunctionImport(String entitySetName,
-			String functionName) {
-		throw new ODataNotImplementedException("");
-	}
 	public long count(EdmEntitySet edmEntitySet) {
 		String entitySet = edmEntitySet.getName();
 		return count(entitySet);
@@ -379,5 +364,94 @@ public class ODataConsumerImpl implements ODataConsumer {
 		} else {
 			throw new RuntimeException("Count Failed!");//TODO
 		}
+	}
+
+	public int deleteEntity(String entityType, String queryString) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public int deleteEntity(EdmEntityType entityType, ODataQueryInfo queryInfo) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public int updateEntity(String entityName, String queryString,
+			Map<String, Object> updateFields) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public int mergeEntityByKey(String entityType, Object id,
+			Map<String, Object> updateFields) {
+		if(config.isVerifyMetadata()) verifier.hasFields(entityType, updateFields);
+		
+		ODataConsumerContext context = initEntityTypeContext(this, entityType);
+		
+		Request request = new MergeEntityRequest(context, serviceRoot)
+					.setEntitySet(context.getEntitySet().getName()).setId(id).setFields(updateFields);
+		
+		Response response = request.send();
+		
+		if(response.getStatus() == ODataResponseStatus.NoContent) {
+			return 1;
+		} else {
+			throw new RuntimeException("Create Failed!");//TODO
+		}
+	}
+
+	public int mergeEntity(String entityName, String queryString,
+			Map<String, Object> updateFields) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public int updateEntity(EdmEntityType entityType, ODataQueryInfo queryInfo,
+			ODataEntity entity) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public int mergeEntity(EdmEntityType entityType, ODataQueryInfo queryInfo,
+			ODataEntity entity) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public ODataEntitySet findEntitySet(String entitySet, String queryString) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public ODataEntitySet findEntitySet(EdmEntityType entityType) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List<Map<String, Object>> findEntitySetAsList(String entitySet,
+			String queryString) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public ODataEntity findEntity(EdmEntityType entityType, ODataKey key) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public ODataValue findProperty(String entitType, Object key, String property) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public ODataValue findNavigationProperty(String entitType, Object key,
+			String property) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public long count(String entityType, String queryString) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 }

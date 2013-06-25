@@ -41,62 +41,84 @@ import bingo.odata.consumer.requests.builders.QueryFilter;
 
 public interface ODataConsumer {
 
-	ODataConsumerConfig config();
+	ODataConsumerConfig 		config();
 	
-	ODataServices services();
+	ODataServices 				services();
 	
-	int insertEntity(String entityType, ODataEntity entity) throws ConnectFailedException;
+	// meta
+	ODataServices 				retrieveServiceMetadata();
 	
-	int insertEntity(String entityType, Map<String, Object> fields);
+	// create	
+	int 						insertEntity(String entityType, Map<String, Object> fields);
 	
-	int deleteEntity(String entityName, Object id);
+	int 						insertEntity(EdmEntityType entityType, ODataEntity entity);
 	
-//	int deleteEntity(String entityName, QueryOptions queryOptions);
+	// delete
+	int 						deleteEntityByKey(String entityType, Object key);
 	
-	int updateEntity(String entityName, Object id, Map<String, Object> updateFields);
-	
-	QueryBuilder queryEntity(String	entityName, QueryFilter filter);
-	
-	QueryBuilder queryEntity(String entityName);
-	
-	ODataServices retrieveServiceMetadata() throws ConnectFailedException;
+	int 						deleteEntity(String entityType, String queryString);
 
-	ODataEntitySet findEntitySet(EdmEntityType entityType,ODataQueryInfo queryInfo);
+	int 						deleteEntity(EdmEntityType entityType, ODataKey key);
 	
-	ODataEntitySet findEntitySet(String entitySet);
+	int 						deleteEntity(EdmEntityType entityType, ODataQueryInfo queryInfo);
 	
-	List<Map<String, Object>> findEntitySetAsList(String entitySet);
+	// update
+	int 						updateEntityByKey(String entityName, Object key, Map<String, Object> updateFields);
+	
+	int 						updateEntity(String entityName, String queryString, Map<String, Object> updateFields);
+	
+	int 						updateEntity(EdmEntityType entityType, ODataKey key, ODataEntity entity);
+	
+	int 						updateEntity(EdmEntityType entityType, ODataQueryInfo queryInfo, ODataEntity entity);
+	
+//	int 						mergeEntityByKey(String entityName, Object key, Map<String, Object> updateFields);
+//
+//	int 						mergeEntity(String entityName, String queryString, Map<String, Object> updateFields);
+//
+//	int 						mergeEntity(EdmEntityType entityType, ODataKey key, ODataEntity entity);
+//
+//	int 						mergeEntity(EdmEntityType entityType, ODataQueryInfo queryInfo, ODataEntity entity);
+	
+	// query - entitySet
+	ODataEntitySet 				findEntitySet(String entitySet);
+	
+	ODataEntitySet 				findEntitySet(String entitySet, String queryString);
+	
+	ODataEntitySet 				findEntitySet(EdmEntityType entityType);
+	
+	ODataEntitySet 				findEntitySet(EdmEntityType entityType, ODataQueryInfo queryInfo);
+	
+	List<Map<String, Object>> 	findEntitySetAsList(String entitySet);
+	
+	List<Map<String, Object>> 	findEntitySetAsList(String entitySet, String queryString);
+	
+	// query - entity
+	ODataEntity 				findEntity(String entityType, Object key);
+	
+	ODataEntity 				findEntity(EdmEntityType entityType, ODataKey key);
+	
+	// query - property	
+	ODataValue 					findProperty(String entitType, Object key, String property);
+	
+	ODataValue 					findProperty(EdmEntityType entitType, ODataKey key, EdmProperty property);
+	
+	ODataValue 					findNavigationProperty(String entitType, Object key, String property);
+	
+	ODataValue 					findNavigationProperty(EdmEntityType entitType, ODataKey key, EdmNavigationProperty property);
 
-	long count(EdmEntityType entityType,ODataQueryInfo queryInfo);
+	// query - count
+	long 						count(String entityType, String queryString);
 	
-	long count(EdmEntitySet entitySet);
+	long 						count(EdmEntityType entityType, ODataQueryInfo queryInfo);
+
+	long 						count(String entitySet);
 	
-	long count(String entitySet);
+	long 						count(EdmEntitySet entitySet);
 	
-	ODataEntity findEntity(EdmEntityType entityType,ODataKey key,ODataQueryInfo queryInfo);
+	// function invoke.	
+	String 						invodeFunction(String entitySet, String funcName, Map<String, Object> parameters);
 	
-	ODataEntity findEntity(String entityType, Object key);
-	
-	ODataValue findProperty(EdmEntityType entitType,ODataKey key,EdmProperty property);
-	
-	ODataValue findNavigationProperty(EdmEntityType entitType,ODataKey key,EdmNavigationProperty property);
-	
-	int insertEntity(EdmEntityType entityType,ODataEntity entity);
-	
-	int updateEntity(EdmEntityType entityType,ODataKey key,ODataEntity entity);
-	
-	int mergeEntity(EdmEntityType entityType,ODataKey key, ODataEntity entity);
-	
-	void deleteEntity(EdmEntityType entityType,ODataKey key);
-	
-	ODataValue invokeFunction(EdmFunctionImport func,ODataParameters parameters);
-	
-	String invodeFunction(String entitySet, String funcName, Map<String, Object> parameters);
-	
-	String invodeFunction(String entitySet, String funcName, Map<String, Object> parameters, String httpMethod);
-	
-	ODataContent query(ODataQueryInfo queryInfo);
-	
-	EdmFunctionImport findFunctionImport(String entitySetName,String functionName);
-	
+	String 						invodeFunction(String entitySet, String funcName, Map<String, Object> parameters, String httpMethod);
+
+	ODataValue 					invokeFunction(EdmFunctionImport func,ODataParameters parameters);
 }
