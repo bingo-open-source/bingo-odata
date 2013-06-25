@@ -15,11 +15,17 @@
  */
 package bingo.odata;
 
+import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
+import bingo.lang.Collections;
 import bingo.lang.Enums;
 import bingo.lang.Strings;
+import bingo.lang.TypesTest.TypesTestGeneric.This;
 import bingo.odata.expression.BoolExpression;
 import bingo.odata.expression.Expression;
 import bingo.odata.expression.EntitySimpleProperty;
@@ -56,6 +62,14 @@ public class ODataQueryInfoParser {
 		return Strings.isEmpty(value) ? null : Enums.valueOf(ODataInlineCount.class, value);
 	}
 	
+	public static String toInlineCountString(ODataInlineCount inlineCount) {
+		if(null == inlineCount) return null;
+		String valueString = inlineCount.getValue();
+		if(Strings.isNotBlank(valueString)) {
+			return ODataConstants.QueryOptions.INLINE_COUNT + "=" + valueString;
+		} else return null;
+	}
+	
 	public static BoolExpression parseFilter(String value){
 		Expression expr = Strings.isEmpty(value) ? null : ExpressionParser.parse(value);
 		
@@ -66,23 +80,104 @@ public class ODataQueryInfoParser {
 		return (BoolExpression)expr;
 	}
 	
+	public static String toFilterString(BoolExpression filter) {
+		if(null == filter) return null;
+		// TODO resolve filter expression.
+		return null;
+	}
+	
 	public static List<OrderByExpression> parseOrderBy(String value){
 		return Strings.isEmpty(value) ? new ArrayList<OrderByExpression>() : ExpressionParser.parseOrderBy(value);
+	}
+
+	public static String toOrderByString(List<OrderByExpression> orderBy) {
+		if(!Collections.isEmpty(orderBy)) {
+			StringBuilder builder = new StringBuilder(ODataConstants.QueryOptions.ORDER_BY);
+			builder.append("=");
+			for (OrderByExpression item : orderBy) {
+				builder.append("").append(" ").append(item.getDirection()).append(",");// TODO how to get property name?
+			}
+			return builder.substring(0, builder.length() - 1);
+		} else return null;
 	}
 	
 	public static Integer parseTop(String value){
 		return Strings.isEmpty(value) ? null : Integer.parseInt(value);
 	}
 	
+	public static String toTopString(Integer top) {
+		if(null == top) return null;
+		return ODataConstants.QueryOptions.TOP + "=" + top;
+	}
+	
 	public static Integer parseSkip(String value){
 		return Strings.isEmpty(value) ? null : Integer.parseInt(value);
+	}
+	
+	public static String toSkipString(Integer skip) {
+		if(null == skip) return null;
+		return ODataConstants.QueryOptions.SKIP + "=" + skip;
+	}
+	
+	public static String toSkipTokenString(String skipToken) {
+		if(Strings.isNotBlank(skipToken)) {
+			return ODataConstants.QueryOptions.SKIP_TOKEN + "=" + skipToken;
+		} else return null;
 	}
 	
 	public static List<EntitySimpleProperty> parseExpand(String value){
 		return Strings.isEmpty(value) ? new ArrayList<EntitySimpleProperty>() : ExpressionParser.parseExpand(value);
 	}
 	
+	public static String toExpandString(List<EntitySimpleProperty> expand) {
+		if(!Collections.isEmpty(expand)) {
+			StringBuilder builder = new StringBuilder(ODataConstants.QueryOptions.EXPAND);
+			builder.append("=");
+			for (EntitySimpleProperty property : expand) {
+				builder.append(property.getName()).append(",");
+			}
+			return builder.substring(0, builder.length() - 1);
+		} else return null;
+	}
+	
 	public static List<EntitySimpleProperty> parseSelect(String value){
 		return Strings.isEmpty(value) ? new ArrayList<EntitySimpleProperty>() : ExpressionParser.parseExpand(value);
+	}
+
+	public static String toSelectString(List<EntitySimpleProperty> select) {
+		if(!Collections.isEmpty(select)) {
+			StringBuilder builder = new StringBuilder(ODataConstants.QueryOptions.SELECT);
+			builder.append("=");
+			for (EntitySimpleProperty property : select) {
+				builder.append(property.getName()).append(",");
+			}
+			return builder.substring(0, builder.length() - 1);
+		} else return null;
+	}
+	
+	public static String toParamsString(Map<String, String> paramMap) {
+		if(null == paramMap || paramMap.size() == 0) return null;
+		StringBuilder str = new StringBuilder();
+		for (String key : paramMap.keySet()) {
+			String value = paramMap.get(key);
+			str.append(key + "=" + value + "&");
+		}
+		return str.substring(0, str.length() - 1);
+	}
+	
+	public static String toQueryString(ODataQueryInfo queryInfo) {
+		if(null == queryInfo) return null;
+		Set<String> set = new HashSet<String>();
+//		set.add(toFilterString(queryInfo.getFilter()));
+//		set.add(toInlineCountString(queryInfo.getInlineCount()));
+//		set.add(toSkipString(queryInfo.getSkip()));
+//		set.add(toSelectString(queryInfo.getSelect()));
+//		set.add(toExpandString(queryInfo.getExpand()));
+//		set.add(toOrderByString(queryInfo.getOrderBy()));
+//		set.add(toSkipTokenString(queryInfo.getSkipToken()));
+//		set.add(toTopString(queryInfo.getTop()));
+		set.add(toParamsString(queryInfo.getParams()));
+		set.remove(null);
+		return Strings.join(set, "&");
 	}
 }
