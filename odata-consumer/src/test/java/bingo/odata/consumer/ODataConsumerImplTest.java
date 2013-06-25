@@ -18,9 +18,7 @@ import bingo.odata.model.ODataEntitySet;
 
 public class ODataConsumerImplTest {
 	
-	private static final String LOCALHOST_SERVICE = "http://localhost:8080/demo";
-
-	ODataConsumer consumer = new ODataConsumerImpl(LOCALHOST_SERVICE, new OAuthAuthenticationBehavior("123"));
+	ODataConsumer consumer = new ODataConsumerImpl(TestResource.serviceUrls.get("local"));
 	
 	public static void main(String[] args) {
 		new ODataConsumerImplTest().testRetrieveServiceMetadata();
