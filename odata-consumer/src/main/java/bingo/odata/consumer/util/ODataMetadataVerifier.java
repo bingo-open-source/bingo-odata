@@ -5,6 +5,7 @@ import java.util.Map;
 import bingo.lang.Assert;
 import bingo.lang.Collections;
 import bingo.lang.Strings;
+import bingo.meta.edm.EdmEntitySet;
 import bingo.meta.edm.EdmEntityType;
 import bingo.meta.edm.EdmFunctionImport;
 import bingo.meta.edm.EdmProperty;
@@ -30,6 +31,13 @@ public class ODataMetadataVerifier {
 		EdmEntityType type = services.findEntityType(entityType);
 		if(null == type) throw new ODataVerifiedFailException("Entity Type", entityType);
 		return type;
+	}
+	
+	public EdmEntitySet hasEntitySet(String entitySet) {
+		Assert.notBlank(entitySet);
+		EdmEntitySet set = services.findEntitySet(entitySet);
+		if(null == set) throw new ODataVerifiedFailException("Entity Set", entitySet);
+		return set;
 	}
 	
 	public void hasFields(String entityType, Map<String, Object> fields) {

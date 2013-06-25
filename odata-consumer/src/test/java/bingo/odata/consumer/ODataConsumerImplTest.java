@@ -8,12 +8,16 @@ import java.util.Map;
 import org.junit.Test;
 
 import bingo.lang.New;
+import bingo.meta.edm.EdmEntitySet;
+import bingo.meta.edm.EdmEntityType;
+import bingo.meta.edm.EdmEntityTypeRef;
 import bingo.odata.ODataServices;
 import bingo.odata.consumer.demo.DemoODataProducer;
 import bingo.odata.consumer.exceptions.ConnectFailedException;
 import bingo.odata.consumer.requests.behaviors.ClientBehavior;
 import bingo.odata.consumer.requests.behaviors.OAuthAuthenticationBehavior;
 import bingo.odata.model.ODataEntity;
+import bingo.odata.model.ODataEntityBuilder;
 import bingo.odata.model.ODataEntitySet;
 
 public class ODataConsumerImplTest {
@@ -36,9 +40,9 @@ public class ODataConsumerImplTest {
 
 	@Test
 	public void testRetrieveEntitySetString() {
-		fail("Not yet implemented");
 		ODataEntitySet entitySet = consumer.findEntitySet("Products");
 		assertNotNull(entitySet);
+		assertEquals(3, entitySet.getEntities().size());
 	}
 
 	@Test
@@ -50,7 +54,16 @@ public class ODataConsumerImplTest {
 
 	@Test
 	public void testInsertEntityStringODataEntity() {
-		fail("Not yet implemented");
+		Map<String, Object> product = new HashMap<String, Object>();
+		product.put("ID", "987654321");
+		product.put("name", "chenkai");
+		product.put("description", "postbychenkai");
+		
+		EdmEntitySet entitySet = consumer.services().findEntitySet("Products");
+		EdmEntityType entityType = consumer.services().findEntityType("Product");
+		ODataEntity obj = new ODataEntityBuilder(entitySet, entityType).addProperties(product).build();
+		int result = consumer.insertEntity("Product", obj);
+		assertEquals(1, result);
 	}
 
 	@Test
@@ -95,7 +108,8 @@ public class ODataConsumerImplTest {
 
 	@Test
 	public void testRetrieveCount() {
-		fail("Not yet implemented");
+		long result = consumer.count("Products");
+		assertEquals(3, result);
 	}
 
 	@Test

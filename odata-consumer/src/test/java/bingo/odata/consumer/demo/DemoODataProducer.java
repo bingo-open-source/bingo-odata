@@ -131,7 +131,7 @@ public class DemoODataProducer extends ODataProducerAdapter implements ODataProd
 	}
 
 	public long retrieveCount(ODataProducerContext context, EdmEntityType entityType, ODataQueryInfo queryInfo) {
-	    return 0;
+	    return 3;
     }
 
 	public ODataEntity retrieveEntity(ODataProducerContext context,EdmEntityType entityType, ODataKey key, ODataQueryInfo queryInfo) {
@@ -295,4 +295,6 @@ public class DemoODataProducer extends ODataProducerAdapter implements ODataProd
 		
 		return new ODataServices(Enumerables.of(schema.build()));
 	}
+	
+	
 }

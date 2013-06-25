@@ -1,6 +1,7 @@
 package bingo.odata.consumer.util;
 
 import bingo.lang.Strings;
+import bingo.meta.edm.EdmEntityType;
 import bingo.odata.consumer.ODataConsumer;
 import bingo.odata.consumer.ODataConsumerContext;
 import bingo.odata.model.ODataKeyImpl;
@@ -10,6 +11,7 @@ public class ODataConsumerContextHelper {
 	public static ODataConsumerContext initEntitySetContext(ODataConsumer consumer, String entitySet) {
 		ODataConsumerContext context = new ODataConsumerContext(consumer.config());
 		context.setEntitySet(consumer.services().findEntitySet(entitySet));
+		context.setEntityType(consumer.services().findEntityType(context.getEntitySet().getEntityType().getName()));
 		return context;
 	}
 	

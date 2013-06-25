@@ -27,8 +27,11 @@ import java.util.Map;
 import bingo.lang.Collections;
 import bingo.lang.New;
 import bingo.lang.Strings;
+import bingo.lang.convert.NumberConverters;
+import bingo.lang.convert.NumberConverters.IntegerConverter;
 import bingo.lang.logging.Log;
 import bingo.lang.logging.LogFactory;
+import bingo.meta.edm.EdmEntitySet;
 import bingo.meta.edm.EdmEntityType;
 import bingo.meta.edm.EdmFunctionImport;
 import bingo.meta.edm.EdmNavigationProperty;
@@ -45,6 +48,7 @@ import bingo.odata.consumer.requests.DeleteEntityRequest;
 import bingo.odata.consumer.requests.InsertEntityRequest;
 import bingo.odata.consumer.requests.Request;
 import bingo.odata.consumer.requests.Response;
+import bingo.odata.consumer.requests.RetrieveCountRequest;
 import bingo.odata.consumer.requests.RetrieveEntityRequest;
 import bingo.odata.consumer.requests.RetrieveEntitySetRequest;
 import bingo.odata.consumer.requests.UpdateEntityRequest;
@@ -134,6 +138,8 @@ public class ODataConsumerImpl implements ODataConsumer {
 	 * get the entity set from producer.
 	 */
 	public ODataEntitySet findEntitySet(String entitySet) {
+		if(config.isVerifyMetadata()) verifier.hasEntitySet(entitySet);
+		
 		ODataConsumerContext context = initEntitySetContext(this, entitySet);
 		
 		Request request = new RetrieveEntitySetRequest(context, serviceRoot).setEntitySet(entitySet);
@@ -258,7 +264,11 @@ public class ODataConsumerImpl implements ODataConsumer {
 	}
 
 	public long count(EdmEntityType entityType, ODataQueryInfo queryInfo) {
-		throw new ODataNotImplementedException("");
+		EdmEntitySet entitySet = services.findEntitySet(entityType);
+		if(null == queryInfo) return count(entitySet);
+		else {
+			throw new ODataNotImplementedException("");
+		}
 	}
 
 	public ODataEntity findEntity(EdmEntityType entityType, ODataKey key,
@@ -328,5 +338,29 @@ public class ODataConsumerImpl implements ODataConsumer {
 	public EdmFunctionImport findFunctionImport(String entitySetName,
 			String functionName) {
 		throw new ODataNotImplementedException("");
+	}
+	public long count(EdmEntitySet edmEntitySet) {
+		String entitySet = edmEntitySet.getName();
+		return count(entitySet);
+	}
+
+	public long count(String entitySet) {
+		
+		if(config.isVerifyMetadata()) verifier.hasEntitySet(entitySet);
+		
+		ODataConsumerContext context = initEntitySetContext(this, entitySet);
+		
+		Request request = new RetrieveCountRequest(context, serviceRoot).setEntitySet(entitySet);
+		
+		Response resp = request.send();
+		
+		if(resp.getStatus() == ODataResponseStatus.OK) {
+			String result = resp.getString();
+			if(Strings.isNumber(result)) {
+				return Long.parseLong(result);
+			} else throw new RuntimeException("OData producer response invalid content");
+		} else {
+			throw new RuntimeException("Count Failed!");//TODO
+		}
 	}	
 }

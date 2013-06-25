@@ -18,6 +18,7 @@ package bingo.odata.consumer;
 import java.util.List;
 import java.util.Map;
 
+import bingo.meta.edm.EdmEntitySet;
 import bingo.meta.edm.EdmEntityType;
 import bingo.meta.edm.EdmFunctionImport;
 import bingo.meta.edm.EdmNavigationProperty;
@@ -62,8 +63,12 @@ public interface ODataConsumer {
 	ODataEntitySet findEntitySet(EdmEntityType entityType,ODataQueryInfo queryInfo);
 	
 	ODataEntitySet findEntitySet(String entitySet);
-	
+
 	long count(EdmEntityType entityType,ODataQueryInfo queryInfo);
+	
+	long count(EdmEntitySet entitySet);
+	
+	long count(String entitySet);
 	
 	ODataEntity findEntity(EdmEntityType entityType,ODataKey key,ODataQueryInfo queryInfo);
 	
