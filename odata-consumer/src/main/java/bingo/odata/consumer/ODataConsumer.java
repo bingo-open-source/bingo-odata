@@ -63,6 +63,8 @@ public interface ODataConsumer {
 	ODataEntitySet findEntitySet(EdmEntityType entityType,ODataQueryInfo queryInfo);
 	
 	ODataEntitySet findEntitySet(String entitySet);
+	
+	List<Map<String, Object>> findEntitySetAsList(String entitySet);
 
 	long count(EdmEntityType entityType,ODataQueryInfo queryInfo);
 	

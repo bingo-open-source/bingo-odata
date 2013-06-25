@@ -9,6 +9,6 @@ import bingo.odata.consumer.requests.behaviors.ClientBehaviorTest;
 
 @RunWith(Suite.class)
 @SuiteClasses({ODataConsumerImplTest.class, ClientBehaviorTest.class})
-public class TestSuite extends ServerTestBase{
+public class TestAll extends ServerTestBase{
 
 }

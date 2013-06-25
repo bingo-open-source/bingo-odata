@@ -155,6 +155,16 @@ public class ODataConsumerImpl implements ODataConsumer {
 			throw new RuntimeException(e.getMessage());
 		}
 	}
+
+	public List<Map<String, Object>> findEntitySetAsList(String entitySetName) {
+		ODataEntitySet entitySet = findEntitySet(entitySetName);
+		List<ODataEntity> entities = entitySet.getEntities().toList();
+		List<Map<String, Object>> list = new ArrayList<Map<String,Object>>();
+		for (ODataEntity entity : entities) {
+			list.add(entity.toMap());
+		}
+		return list;
+	}
 	
 	/**
 	 * get a single entity by key from producer.
@@ -362,5 +372,5 @@ public class ODataConsumerImpl implements ODataConsumer {
 		} else {
 			throw new RuntimeException("Count Failed!");//TODO
 		}
-	}	
+	}
 }
