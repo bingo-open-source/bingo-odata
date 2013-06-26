@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import bingo.lang.Assert;
 import bingo.lang.Collections;
 import bingo.lang.New;
 import bingo.lang.Strings;
@@ -312,19 +313,12 @@ public class ODataConsumerImpl implements ODataConsumer {
 		deleteEntityByKey(entityType.getName(), id);
 		return 1;
 	}
-
-	public ODataValue invokeFunction(EdmFunctionImport func, ODataParameters parameters) {
-		String valueString = invodeFunction(func.getEntitySet(), func.getName(), parameters.getParametersMap());
-		
-		// TODO convert valueString to ODataValue using type defined in func.
-		throw new ODataNotImplementedException("");
+	
+	public String invokeFunction(String entitySet, String funcName, Map<String, Object> parameters) {
+		return invokeFunction(entitySet, funcName, parameters, (String)null);
 	}
 	
-	public String invodeFunction(String entitySet, String funcName, Map<String, Object> parameters) {
-		return invodeFunction(entitySet, funcName, parameters, null);
-	}
-	
-	public String invodeFunction(String entitySet, String funcName, Map<String, Object> parameters, String httpMethod) {
+	public String invokeFunction(String entitySet, String funcName, Map<String, Object> parameters, String httpMethod) {
 		if(config.isVerifyMetadata()) verifier.hasFunction(entitySet, funcName);
 		
 		ODataConsumerContext context = new ODataConsumerContext(config);
@@ -453,5 +447,83 @@ public class ODataConsumerImpl implements ODataConsumer {
 	public long count(String entityType, String queryString) {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+
+	public <T> T invokeFunction(String entitySet, String funcName, Map<String, Object> parameters, Class<T> clazz) {
+		EdmFunctionImport func = null;
+
+		if(config.isVerifyMetadata()) func = verifier.hasFunction(entitySet, funcName);
+		
+		ODataConsumerContext context = new ODataConsumerContext(config);
+
+		context.setEntitySet(services.findEntitySet(entitySet));
+		
+		context.setEntityType(services.findEntityType(context.getEntitySet().getEntityType()));
+		
+		Request request = new FunctionRequest(context, serviceRoot).setHttpMethod(func.getHttpMethod())
+					.setEntitySet(entitySet).setFunction(funcName).setParams(parameters);
+		
+		Response response = request.send();
+		
+		if(response.getStatus() == ODataResponseStatus.OK) {
+			T t = response.convertToObject(clazz, func.getReturnType(), context);
+			return t;
+		} else {
+			throw new RuntimeException("Create Failed!");//TODO
+		}
+	}
+
+	public <T> T invokeFunction(String entitySet, String funcName,
+			Map<String, Object> parameters, String httpMethod, Class<T> t) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public <T> T invokeFunction(EdmFunctionImport func,
+			ODataParameters parameters, Class<T> t) {
+		return invokeFunction(func.getEntitySet(), func.getName(), parameters.getParametersMap(), t);
+	}
+
+	public ODataValue invokeFunctionForODataValue(String entitySet,
+			String funcName, Map<String, Object> parameters) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public ODataValue invokeFunctionForODataValue(String entitySet,
+			String funcName, Map<String, Object> parameters, String httpMethod) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public ODataValue invokeFunctionForODataValue(EdmFunctionImport func,
+			ODataParameters parameters) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public <T> List<T> invokeFunctionForList(String entitySet, String funcName,
+			Map<String, Object> parameters, Class<T> listClass) {
+		EdmFunctionImport func = null;
+
+		if(config.isVerifyMetadata()) func = verifier.hasFunction(entitySet, funcName);
+		
+		ODataConsumerContext context = new ODataConsumerContext(config);
+
+		context.setEntitySet(services.findEntitySet(entitySet));
+		
+		context.setEntityType(services.findEntityType(context.getEntitySet().getEntityType()));
+		
+		Request request = new FunctionRequest(context, serviceRoot).setHttpMethod(func.getHttpMethod())
+					.setEntitySet(entitySet).setFunction(funcName).setParams(parameters);
+		
+		Response response = request.send();
+		
+		if(response.getStatus() == ODataResponseStatus.OK) {
+			List<T> list = response.convertToObjectList(listClass, func.getReturnType(), context);
+			return list;
+		} else {
+			throw new RuntimeException("Create Failed!");//TODO
+		}
 	}
 }

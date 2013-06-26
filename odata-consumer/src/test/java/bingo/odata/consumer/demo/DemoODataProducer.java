@@ -60,6 +60,7 @@ import bingo.odata.model.ODataParameters;
 import bingo.odata.model.ODataPropertyImpl;
 import bingo.odata.model.ODataRawValueImpl;
 import bingo.odata.model.ODataValue;
+import bingo.odata.model.ODataValueBuilder;
 import bingo.odata.model.ODataValueImpl;
 import bingo.odata.producer.ODataProducer;
 import bingo.odata.producer.ODataProducerAdapter;
@@ -200,27 +201,8 @@ public class DemoODataProducer extends ODataProducerAdapter implements ODataProd
     }
 	
 	public ODataValue invokeFunction(ODataProducerContext context, EdmFunctionImport func, ODataParameters parameters) {
-		for(EdmParameter param : func.getParameters()){
-			if(null == parameters.getParameter(param.getName())){
-				throw new ODataBadRequestException(Strings.format("parameter '{0}' required",param.getName()));
-			}
-		}
-		
-	    return new ODataValueImpl(ODataObjectKind.Raw, new ODataRawValueImpl(EdmSimpleType.STRING, INVOKED_FUNCTION));
-    }
-
-	private ODataServices loadDemoMetadata(){
 		EdmSchemaBuilder schema = EdmBuilders.schema("ODataDemo","Self");
-		
-		//complex types
-		EdmComplexType address = EdmBuilders.complexType("Address")
-										    .addProperty("Street", EdmSimpleType.STRING, true)
-										    .addProperty("City",EdmSimpleType.STRING,true)
-										    .addProperty("State",EdmSimpleType.STRING,true)
-										    .addProperty("ZipCode",EdmSimpleType.STRING,true)
-										    .addProperty("Country",EdmSimpleType.STRING,true)
-										    .build();		
-		//entity types
+
 		EdmEntityTypeBuilder product = EdmBuilders.entityType("Product",fullQualifiedName(schema, "Product"))
 										  .addKeyProperty("ID", EdmSimpleType.INT32)
 										  .addPropertyForSyndicationTitle("Name",EdmSimpleType.STRING,true)
@@ -228,16 +210,98 @@ public class DemoODataProducer extends ODataProducerAdapter implements ODataProd
 										  .addProperty("ReleaseDate", EdmSimpleType.DATETIME, false)
 										  .addProperty("DiscontinuedDate",EdmSimpleType.DATETIME,false)
 										  .addProperty("Rating",EdmSimpleType.INT32,false)
-										  .addProperty("Price",EdmSimpleType.DECIMAL,false);		
+										  .addProperty("Price",EdmSimpleType.DECIMAL,false);	
+		EdmEntityType entityType = product.build();
+		EdmEntitySet entitySet = new EdmEntitySet("Products", product.buildRef(schema));
 		
-		EdmEntityTypeBuilder category = EdmBuilders.entityType("Category",fullQualifiedName(schema, "Category"))
-										    .addKeyProperty("ID", EdmSimpleType.INT32)
-											.addPropertyForSyndicationTitle("Name", EdmSimpleType.STRING, true,true);
+		String funcName = func.getName();
+		if(Strings.equals(funcName, "getEntity")) {
+			
+			
+			ODataEntityBuilder builder = new ODataEntityBuilder(entitySet, entityType);
+			builder.addProperty("ID",0)
+			 .setKey(new ODataKeyImpl(UUID.randomUUID().toString()))
+					 .addProperty("Name","Bread")
+					 .addProperty("Description","Whole grain bread")									 
+					 .addProperty("ReleaseDate",Dates.parse("1992-01-01"))
+					 .addProperty("DiscontinuedDate",Dates.parse("1999-10-01"))
+					 .addProperty("Rating",4)
+					 .addProperty("Price",2.5);
+			ODataEntity entity = builder.build();
+			return new ODataValueBuilder().entity(entity).build();
+		} else if(Strings.equals(funcName, "getEntitySet")) {
+			ODataEntitySetBuilder builder = new ODataEntitySetBuilder(context.getEntitySet(),entityType);
+			
+			if(entityType.getName().equalsIgnoreCase("Category")){
+				
+				builder.addEntity(builder.newEntity()
+						 .setKey(new ODataKeyImpl(UUID.randomUUID().toString()))
+									     .addProperty("ID",0)
+									     .addProperty("Name","Food")
+									     .build());
+				
+			}
+			
+			if(entityType.getName().equalsIgnoreCase("Product")){
+				builder.addEntity(builder.newEntity()
+										 .setKey(new ODataKeyImpl("123456"))
+										 .addProperty("ID",0)
+										 .addProperty("Name","Bread")
+										 .addProperty("Description","Whole grain bread")									 
+										 .addProperty("ReleaseDate",Dates.parse("1992-01-01"))
+										 .addProperty("DiscontinuedDate",Dates.parse("1999-10-01"))
+										 .addProperty("Rating",4)
+										 .addProperty("Price",2.5)
+										 .build());
+				
+				builder.addEntity(builder.newEntity()
+						 .setKey(new ODataKeyImpl(UUID.randomUUID().toString()))
+						 .addProperty("ID",1)
+						 .addProperty("Name","Milk")
+						 .addProperty("Description","Low fat milk")								 
+						 .addProperty("ReleaseDate",Dates.parse("1995-01-01"))
+						 .addProperty("DiscontinuedDate",Dates.parse("1999-10-01"))
+						 .addProperty("Rating",3)
+						 .addProperty("Price",3.5)
+						 .build());
+
+				
+				builder.addEntity(builder.newEntity()
+						 .setKey(new ODataKeyImpl(UUID.randomUUID().toString()))
+						 .addProperty("ID",2)
+						 .addProperty("Name","Vint soda")
+						 .addProperty("Description","Americana Variety - Mix of 6 flavors")						 
+						 .addProperty("ReleaseDate",Dates.parse("2000-10-01"))
+						 .addProperty("DiscontinuedDate",Dates.parse("1999-10-01"))
+						 .addProperty("Rating",3)
+						 .addProperty("Price",20.9)
+						 .build());
+			}
+			ODataEntitySet entitySet2 = builder.build();
+			return new ODataValueBuilder().entitySet(entitySet2).build();
+		} else if(Strings.equals(funcName, "getString")) {
+			for(EdmParameter param : func.getParameters()){
+				if(null == parameters.getParameter(param.getName())){
+					throw new ODataBadRequestException(Strings.format("parameter '{0}' required",param.getName()));
+				}
+			}
+			
+		    return new ODataValueImpl(ODataObjectKind.Raw, new ODataRawValueImpl(EdmSimpleType.STRING, INVOKED_FUNCTION));
+		}
+		return null;
+    }
+
+	private ODataServices loadDemoMetadata(){
+		EdmSchemaBuilder schema = DemoModelAndData.edmSchemaBuilder();
 		
-		EdmEntityTypeBuilder supplier = EdmBuilders.entityType("Supplier",fullQualifiedName(schema, "Supplier"))
-											.addKeyProperty("ID", EdmSimpleType.INT32)
-											.addPropertyForSyndicationTitle("Name", EdmSimpleType.STRING, true,true)
-											.addProperty("Address", address, false);
+		//complex types
+		EdmComplexType address = DemoModelAndData.edmComplexTypes().get(0);	
+		//entity types
+		EdmEntityTypeBuilder product = DemoModelAndData.edmEntityTypeBuilders().get(0);		
+		
+		EdmEntityTypeBuilder category = DemoModelAndData.edmEntityTypeBuilders().get(1);
+		
+		EdmEntityTypeBuilder supplier = DemoModelAndData.edmEntityTypeBuilders().get(2);
 		
 		//entity type ref
 		EdmEntityTypeRef productRef  = product.buildRef(schema);
@@ -287,11 +351,21 @@ public class DemoODataProducer extends ODataProducerAdapter implements ODataProd
 												 .setEnd2("Supplier_Products",suppliers.getName())
 												 .build());
 		
-		demoService.addFunctionImport(EdmBuilders.functionImport("GetProductsByRating")
+		demoService.addFunctionImport(EdmBuilders.functionImport("getString")
 												 .setEntitySet(products.getName())
 												 .setReturnType(EdmCollectionType.of(productRef))
 												 .addParameter("rating", EdmSimpleType.INT32, EdmParameterMode.In)
 												 .build());
+		demoService.addFunctionImport(EdmBuilders.functionImport("getEntity")
+				.setEntitySet(products.getName())
+				.setReturnType(EdmCollectionType.of(productRef))
+				.addParameter("rating", EdmSimpleType.INT32, EdmParameterMode.In)
+				.build());
+		demoService.addFunctionImport(EdmBuilders.functionImport("getEntitySet")
+				.setEntitySet(products.getName())
+				.setReturnType(EdmCollectionType.of(productRef))
+				.addParameter("rating", EdmSimpleType.INT32, EdmParameterMode.In)
+				.build());
 		
 		schema.addEntityTypes(product.build(),category.build(),supplier.build())
 		      .addComplexTypes(address)
@@ -312,7 +386,10 @@ public class DemoODataProducer extends ODataProducerAdapter implements ODataProd
 		};
 		
 	    return new ODataValueImpl(ODataObjectKind.Property, 
-	    		new ODataPropertyImpl(new EdmPropertyBuilder("name").setType(edmType).build(), INVOKED_FUNCTION));
+	    		new ODataPropertyImpl(
+	    				new EdmProperty("name","name", EdmSimpleType.STRING, true, null, false, 9999,
+	    				0, 0, null, null, false, null, null)
+	    			, INVOKED_FUNCTION));
 	}
 
 	@Override
@@ -321,6 +398,5 @@ public class DemoODataProducer extends ODataProducerAdapter implements ODataProd
 			EdmNavigationProperty property) {
 	    return null;
 	}
-	
 	
 }

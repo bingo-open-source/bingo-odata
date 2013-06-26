@@ -115,10 +115,25 @@ public interface ODataConsumer {
 	
 	long 						count(EdmEntitySet entitySet);
 	
-	// function invoke.	
-	String 						invodeFunction(String entitySet, String funcName, Map<String, Object> parameters);
+	// function invoke
+	String 						invokeFunction(String entitySet, String funcName, Map<String, Object> parameters);
 	
-	String 						invodeFunction(String entitySet, String funcName, Map<String, Object> parameters, String httpMethod);
+	String 						invokeFunction(String entitySet, String funcName, Map<String, Object> parameters, String httpMethod);
 
-	ODataValue 					invokeFunction(EdmFunctionImport func,ODataParameters parameters);
+	<T> T	 					invokeFunction(String entitySet, String funcName, Map<String, Object> parameters, Class<T> t);
+	
+	<T> List<T>					invokeFunctionForList(String entitySet, String funcName, Map<String, Object> parameters, Class<T> listClass);
+	
+	<T> T	 					invokeFunction(String entitySet, String funcName, Map<String, Object> parameters, String httpMethod, Class<T> t);
+	
+	<T> T	 					invokeFunction(EdmFunctionImport func,ODataParameters parameters, Class<T> t);
+	
+	ODataValue					invokeFunctionForODataValue(String entitySet, String funcName, Map<String, Object> parameters);
+	
+	ODataValue					invokeFunctionForODataValue(String entitySet, String funcName, Map<String, Object> parameters, String httpMethod);
+
+	ODataValue 					invokeFunctionForODataValue(EdmFunctionImport func,ODataParameters parameters);
+	
+	// action invoke
+	// TODO
 }

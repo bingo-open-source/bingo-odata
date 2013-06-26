@@ -1,23 +1,21 @@
 package bingo.odata.consumer;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.junit.Test;
 
-import bingo.lang.New;
-import bingo.lang.http.HttpMethod;
+import bingo.lang.Converts;
 import bingo.meta.edm.EdmEntitySet;
 import bingo.meta.edm.EdmEntityType;
-import bingo.meta.edm.EdmEntityTypeRef;
-import bingo.meta.edm.EdmFunctionImport;
 import bingo.odata.ODataServices;
 import bingo.odata.consumer.demo.DemoODataProducer;
-import bingo.odata.consumer.exceptions.ConnectFailedException;
-import bingo.odata.consumer.requests.behaviors.ClientBehavior;
-import bingo.odata.consumer.requests.behaviors.OAuthAuthenticationBehavior;
 import bingo.odata.model.ODataEntity;
 import bingo.odata.model.ODataEntityBuilder;
 import bingo.odata.model.ODataEntitySet;
@@ -110,10 +108,83 @@ public class ODataConsumerImplTest {
 	}
 
 	@Test
-	public void testInvokeFunction() {
+	public void testInvokeFunction_simgleGetString() {
 		Map<String, Object> paramsMap = new HashMap<String, Object>();
 		paramsMap.put("rating", 22);
-		String responseString = consumer.invodeFunction("Products", "GetProductsByRating", paramsMap, HttpMethod.GET.getValue());
+		String responseString = consumer.invokeFunction("Products", "getString", paramsMap);
 		assertEquals("\"" + DemoODataProducer.INVOKED_FUNCTION + "\"", responseString);
+	}
+	
+	@Test
+	public void testInvokeFunction_returnObject() {
+		Map<String, Object> paramsMap = new HashMap<String, Object>();
+		paramsMap.put("rating", 2);
+		Product product = consumer.invokeFunction("Products", "getEntity", paramsMap, Product.class);
+		assertNotNull(product);
+	}
+
+	@Test
+	public void testInvokeFunction_returnListObject() {
+		Map<String, Object> paramsMap = new HashMap<String, Object>();
+		paramsMap.put("rating", 2);
+		List<Product> product = consumer.invokeFunctionForList("Products", "getEntitySet", paramsMap, Product.class);
+		assertNotNull(product);
+	}
+	
+	public class Product {
+		private int id;
+		private String name;
+		private String description;
+		private Date releaseDate;
+		private Date discontinuedDate;
+		private int rate;
+		private double price;
+		public int getId() {
+			return id;
+		}
+		public void setId(int id) {
+			this.id = id;
+		}
+		public String getName() {
+			return name;
+		}
+		public void setName(String name) {
+			this.name = name;
+		}
+		public String getDescription() {
+			return description;
+		}
+		public void setDescription(String description) {
+			this.description = description;
+		}
+		public Date getReleaseDate() {
+			return releaseDate;
+		}
+		public void setReleaseDate(Date releaseDate) {
+			this.releaseDate = releaseDate;
+		}
+		public Date getDiscontinuedDate() {
+			return discontinuedDate;
+		}
+		public void setDiscontinuedDate(Date discontinuedDate) {
+			this.discontinuedDate = discontinuedDate;
+		}
+		public int getRate() {
+			return rate;
+		}
+		public void setRate(int rate) {
+			this.rate = rate;
+		}
+		public double getPrice() {
+			return price;
+		}
+		public void setPrice(double price) {
+			this.price = price;
+		}
+		@Override
+		public String toString() {
+			return Converts.convert(this, Map.class).toString();
+		}
+		
 	}
 }

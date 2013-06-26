@@ -57,15 +57,15 @@ public class ODataMetadataVerifier {
 		return funcs;
 	}
 	
-	public void hasFunction(String entitySet, String funcName) {
+	public EdmFunctionImport hasFunction(String entitySet, String funcName) {
 		EdmFunctionImport[] funcs = hasFunction(funcName);
 		if(Strings.isNotBlank(entitySet)) {
 			for (EdmFunctionImport func : funcs) {
 				String enSet = func.getEntitySet();
-				if(Strings.equalsIgnoreCase(entitySet, enSet)) return;
+				if(Strings.equalsIgnoreCase(entitySet, enSet)) return func;
 			}
-			throw new ODataVerifiedFailException("Function belong to Entity Set " + entitySet, funcName);
 		}
+		throw new ODataVerifiedFailException("Function belong to Entity Set " + entitySet, funcName);
 	}
 	
 
