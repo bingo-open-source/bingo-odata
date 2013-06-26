@@ -22,7 +22,7 @@ import bingo.odata.model.ODataEntitySet;
 
 public class ODataConsumerImplTest {
 	
-	ODataConsumer consumer = new ODataConsumerImpl(TestResource.serviceUrls.get("local"));
+	ODataConsumer consumer = new ODataConsumerImpl(TestResource.serviceUrls.get("local"), false);
 	
 	public static void main(String[] args) {
 		new ODataConsumerImplTest().testRetrieveServiceMetadata();
@@ -44,7 +44,7 @@ public class ODataConsumerImplTest {
 		product.put("ID", "987654321");
 		product.put("name", "chenkai");
 		product.put("description", "postbychenkai");
-		
+		consumer.retrieveServiceMetadata();
 		EdmEntitySet entitySet = consumer.services().findEntitySet("Products");
 		EdmEntityType entityType = consumer.services().findEntityType("Product");
 		ODataEntity obj = new ODataEntityBuilder(entitySet, entityType).addProperties(product).build();

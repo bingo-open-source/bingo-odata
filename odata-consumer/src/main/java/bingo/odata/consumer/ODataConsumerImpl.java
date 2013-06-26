@@ -85,13 +85,18 @@ public class ODataConsumerImpl implements ODataConsumer {
 	 * @param serviceRoot
 	 */
 	public ODataConsumerImpl(String serviceRoot, Behavior... behaviors) {
+		this(serviceRoot, true, behaviors);
+	}
+	
+	public ODataConsumerImpl(String serviceRoot, boolean retrieveMetadataImmediately, Behavior... behaviors) {
 		this.config.setClientBehaviors(Collections.listOf(behaviors));
 		if(!Strings.endsWith(serviceRoot, "/")) {
 			serviceRoot += "/";
 		}
 		this.serviceRoot = serviceRoot;
-		services = retrieveServiceMetadata();
-		verifier = new ODataMetadataVerifier(services);
+		if(retrieveMetadataImmediately) {
+			ensureMetadata();
+		}
 	}
 
 	/**
@@ -129,7 +134,10 @@ public class ODataConsumerImpl implements ODataConsumer {
 		
 		ODataServices services = ODataServices.parse(getResponseInputStream(request));
 		
-		if(null != services) this.services = services;
+		if(null != services) {
+			this.services = services;
+			this.verifier = new ODataMetadataVerifier(services);
+		}
 		
 		log.info("Retrieve Metadata Document successfully!");
 		
@@ -140,6 +148,8 @@ public class ODataConsumerImpl implements ODataConsumer {
 	 * get the entity set from producer.
 	 */
 	public ODataEntitySet findEntitySet(String entitySet) {
+		ensureMetadata();
+		
 		if(config.isVerifyMetadata()) verifier.hasEntitySet(entitySet);
 		
 		ODataConsumerContext context = initEntitySetContext(this, entitySet);
@@ -158,6 +168,13 @@ public class ODataConsumerImpl implements ODataConsumer {
 		}
 	}
 
+	private void ensureMetadata() {
+		if(null == services) {
+			services = retrieveServiceMetadata();
+			verifier = new ODataMetadataVerifier(services);
+		}
+	}
+
 	public List<Map<String, Object>> findEntitySetAsList(String entitySetName) {
 		ODataEntitySet entitySet = findEntitySet(entitySetName);
 		List<ODataEntity> entities = entitySet.getEntities().toList();
@@ -172,6 +189,8 @@ public class ODataConsumerImpl implements ODataConsumer {
 	 * get a single entity by key from producer.
 	 */
 	public ODataEntity findEntity(String entityType, Object key) {
+		ensureMetadata();
+		
 		if(config.isVerifyMetadata()) verifier.hasEntityType(entityType);
 		
 		ODataConsumerContext context = initEntityTypeContext(this, entityType, key);
@@ -196,6 +215,8 @@ public class ODataConsumerImpl implements ODataConsumer {
 	}
 	
 	public int insertEntity(String entityType, Map<String, Object> object) {
+		ensureMetadata();
+		
 		if(config.isVerifyMetadata()) verifier.hasFields(entityType, object);
 		
 		ODataConsumerContext context = initEntityTypeContext(this, entityType);
@@ -221,6 +242,8 @@ public class ODataConsumerImpl implements ODataConsumer {
 	 * send a delete certain id entity command to producer. 
 	 */
 	public int deleteEntityByKey(String entityType, Object id) {
+		ensureMetadata();
+		
 		if(config.isVerifyMetadata()) verifier.hasEntityType(entityType);
 		
 		ODataConsumerContext context = initEntityTypeContext(this, entityType);
@@ -238,6 +261,8 @@ public class ODataConsumerImpl implements ODataConsumer {
 	}
 
 	public int updateEntityByKey(String entityType, Object id, Map<String, Object> updateFields) {
+		ensureMetadata();
+		
 		if(config.isVerifyMetadata()) verifier.hasFields(entityType, updateFields);
 		
 		ODataConsumerContext context = initEntityTypeContext(this, entityType);
@@ -319,6 +344,8 @@ public class ODataConsumerImpl implements ODataConsumer {
 	}
 	
 	public String invokeFunction(String entitySet, String funcName, Map<String, Object> parameters, String httpMethod) {
+		ensureMetadata();
+		
 		if(config.isVerifyMetadata()) verifier.hasFunction(entitySet, funcName);
 		
 		ODataConsumerContext context = new ODataConsumerContext(config);
@@ -341,6 +368,7 @@ public class ODataConsumerImpl implements ODataConsumer {
 	}
 
 	public long count(String entitySet) {
+		ensureMetadata();
 		
 		if(config.isVerifyMetadata()) verifier.hasEntitySet(entitySet);
 		
@@ -378,6 +406,8 @@ public class ODataConsumerImpl implements ODataConsumer {
 
 	public int mergeEntityByKey(String entityType, Object id,
 			Map<String, Object> updateFields) {
+		ensureMetadata();
+		
 		if(config.isVerifyMetadata()) verifier.hasFields(entityType, updateFields);
 		
 		ODataConsumerContext context = initEntityTypeContext(this, entityType);
@@ -450,6 +480,8 @@ public class ODataConsumerImpl implements ODataConsumer {
 	}
 
 	public <T> T invokeFunction(String entitySet, String funcName, Map<String, Object> parameters, Class<T> clazz) {
+		ensureMetadata();
+		
 		EdmFunctionImport func = null;
 
 		if(config.isVerifyMetadata()) func = verifier.hasFunction(entitySet, funcName);
@@ -504,6 +536,8 @@ public class ODataConsumerImpl implements ODataConsumer {
 
 	public <T> List<T> invokeFunctionForList(String entitySet, String funcName,
 			Map<String, Object> parameters, Class<T> listClass) {
+		ensureMetadata();
+		
 		EdmFunctionImport func = null;
 
 		if(config.isVerifyMetadata()) func = verifier.hasFunction(entitySet, funcName);
