@@ -25,7 +25,6 @@ import java.util.Set;
 import bingo.lang.Collections;
 import bingo.lang.Enums;
 import bingo.lang.Strings;
-import bingo.lang.TypesTest.TypesTestGeneric.This;
 import bingo.odata.expression.BoolExpression;
 import bingo.odata.expression.Expression;
 import bingo.odata.expression.EntitySimpleProperty;
