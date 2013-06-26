@@ -35,7 +35,7 @@ import bingo.odata.model.ODataValue;
 import bingo.odata.producer.ODataProducerConfig;
 import bingo.odata.producer.ODataProducerContext;
 import bingo.odata.consumer.ext.ODataContent;
-import bingo.odata.consumer.requests.behaviors.ClientBehavior;
+import bingo.odata.consumer.requests.behaviors.Behavior;
 import bingo.odata.consumer.requests.builders.QueryBuilder;
 import bingo.odata.consumer.requests.builders.QueryFilter;
 

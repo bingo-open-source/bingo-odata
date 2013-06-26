@@ -19,13 +19,13 @@ import bingo.odata.consumer.ODataConsumer;
 import bingo.odata.consumer.ODataConsumerImpl;
 import bingo.odata.consumer.TestResource;
 
-public class ClientBehaviorTest {
+public class BehaviorTest {
 	
 	static boolean execute;
 	@Test
 	public void testBehaviorDoExecute() {
 		execute = false;
-		ODataConsumer consumer = new ODataConsumerImpl(TestResource.serviceUrls.get("local"), new ClientBehavior() {
+		ODataConsumer consumer = new ODataConsumerImpl(TestResource.serviceUrls.get("local"), new Behavior() {
 			public HttpRequest transform(HttpRequest request) {
 				execute = true;
 				return request;
@@ -38,13 +38,14 @@ public class ClientBehaviorTest {
 	@Test
 	public void testBehaviorOrder() {
 		order = 0;
-		ODataConsumer consumer = new ODataConsumerImpl(TestResource.serviceUrls.get("local"), new ClientBehavior() {
+		ODataConsumer consumer = new ODataConsumerImpl(TestResource.serviceUrls.get("local")
+		, new Behavior() {
 			public HttpRequest transform(HttpRequest request) {
 				order++;
 				assertEquals(1, order);
 				return request;
 			}
-		}, new ClientBehavior() {
+		}, new Behavior() {
 			public HttpRequest transform(HttpRequest request) {
 				order++;
 				assertEquals(2, order);

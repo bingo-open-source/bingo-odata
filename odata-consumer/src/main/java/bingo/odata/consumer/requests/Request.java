@@ -17,7 +17,7 @@ import bingo.lang.logging.LogFactory;
 import bingo.odata.ODataConstants;
 import bingo.odata.consumer.ODataConsumerContext;
 import bingo.odata.consumer.exceptions.ConnectFailedException;
-import bingo.odata.consumer.requests.behaviors.ClientBehavior;
+import bingo.odata.consumer.requests.behaviors.Behavior;
 
 import com.google.api.client.http.GenericUrl;
 import com.google.api.client.http.HttpContent;
@@ -160,9 +160,9 @@ public class Request {
 	}
 
 	private void handleBehaviors(HttpRequest req) {
-		List<ClientBehavior> behaviors = context.getBehaviors();
+		List<Behavior> behaviors = context.getBehaviors();
 		if(!Collections.isEmpty(behaviors)) {
-			for (ClientBehavior behavior : behaviors) {
+			for (Behavior behavior : behaviors) {
 				req = behavior.transform(req);
 			}
 		}

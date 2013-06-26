@@ -20,7 +20,7 @@ import java.util.List;
 import bingo.odata.ODataFormat;
 import bingo.odata.ODataProtocol;
 import bingo.odata.ODataVersion;
-import bingo.odata.consumer.requests.behaviors.ClientBehavior;
+import bingo.odata.consumer.requests.behaviors.Behavior;
 
 public interface ODataConsumerConfig {
 
@@ -30,11 +30,11 @@ public interface ODataConsumerConfig {
 	
 	ODataFormat getDefaultFormat();
 
-	List<ClientBehavior> getClientBehaviors();
+	List<Behavior> getClientBehaviors();
 	
-	ODataConsumerConfig addClientBehavior(ClientBehavior behavior);
+	ODataConsumerConfig addClientBehavior(Behavior behavior);
 	
-	ODataConsumerConfig setClientBehaviors(List<ClientBehavior> behaviors);
+	ODataConsumerConfig setClientBehaviors(List<Behavior> behaviors);
 	
 	boolean isVerifyMetadata();
 	

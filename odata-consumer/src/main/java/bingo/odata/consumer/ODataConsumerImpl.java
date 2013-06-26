@@ -54,7 +54,7 @@ import bingo.odata.consumer.requests.RetrieveCountRequest;
 import bingo.odata.consumer.requests.RetrieveEntityRequest;
 import bingo.odata.consumer.requests.RetrieveEntitySetRequest;
 import bingo.odata.consumer.requests.UpdateEntityRequest;
-import bingo.odata.consumer.requests.behaviors.ClientBehavior;
+import bingo.odata.consumer.requests.behaviors.Behavior;
 import bingo.odata.consumer.requests.builders.QueryBuilder;
 import bingo.odata.consumer.requests.builders.QueryFilter;
 import bingo.odata.consumer.requests.invoke.FunctionRequest;
@@ -84,7 +84,7 @@ public class ODataConsumerImpl implements ODataConsumer {
 	 * http://services.odata.org/V3/OData/OData.svc/
 	 * @param serviceRoot
 	 */
-	public ODataConsumerImpl(String serviceRoot, ClientBehavior... behaviors) {
+	public ODataConsumerImpl(String serviceRoot, Behavior... behaviors) {
 		this.config.setClientBehaviors(Collections.listOf(behaviors));
 		if(!Strings.endsWith(serviceRoot, "/")) {
 			serviceRoot += "/";

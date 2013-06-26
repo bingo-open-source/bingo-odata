@@ -7,7 +7,7 @@ import com.google.api.client.http.HttpRequest;
  * @author CalvinChen
  *
  */
-public class RateLimitBehavior implements ClientBehavior {
+public class RateLimitBehavior implements Behavior {
 
 	private long waitMillis;
 

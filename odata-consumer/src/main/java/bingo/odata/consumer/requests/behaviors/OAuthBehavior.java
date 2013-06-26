@@ -4,13 +4,13 @@ package bingo.odata.consumer.requests.behaviors;
 import com.google.api.client.http.HttpHeaders;
 import com.google.api.client.http.HttpRequest;
 
-public class OAuthAuthenticationBehavior implements ClientBehavior {
+public class OAuthBehavior implements Behavior {
 	
   static final String HEADER_PREFIX = "Bearer ";
   
   private String accessToken;
 
-  public OAuthAuthenticationBehavior(String accessToken) {
+  public OAuthBehavior(String accessToken) {
     this.accessToken = accessToken;
   }
 

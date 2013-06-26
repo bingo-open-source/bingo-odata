@@ -23,14 +23,14 @@ import bingo.odata.ODataFormat;
 import bingo.odata.ODataReaderContext;
 import bingo.odata.ODataVersion;
 import bingo.odata.ODataWriterContext;
-import bingo.odata.consumer.requests.behaviors.ClientBehavior;
+import bingo.odata.consumer.requests.behaviors.Behavior;
 
 public class ODataConsumerContext extends ODataContextBase implements ODataWriterContext,ODataReaderContext {
 	
 	private ODataFormat format;
 	private ODataVersion version;
 	private int maxResults;
-	private List<ClientBehavior> behaviors;
+	private List<Behavior> behaviors;
 	
 	public ODataConsumerContext(ODataConsumerConfig config) {
 		this.setProtocol(config.getProtocol());
@@ -82,11 +82,11 @@ public class ODataConsumerContext extends ODataContextBase implements ODataWrite
 		this.maxResults = maxResults;
 	}
 
-	public List<ClientBehavior> getBehaviors() {
+	public List<Behavior> getBehaviors() {
 		return behaviors;
 	}
 
-	public void setBehaviors(List<ClientBehavior> behaviors) {
+	public void setBehaviors(List<Behavior> behaviors) {
 		this.behaviors = behaviors;
 	}
 	

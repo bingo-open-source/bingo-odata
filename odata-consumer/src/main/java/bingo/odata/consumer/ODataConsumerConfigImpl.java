@@ -22,7 +22,7 @@ import bingo.odata.ODataFormat;
 import bingo.odata.ODataProtocol;
 import bingo.odata.ODataProtocols;
 import bingo.odata.ODataVersion;
-import bingo.odata.consumer.requests.behaviors.ClientBehavior;
+import bingo.odata.consumer.requests.behaviors.Behavior;
 
 public class ODataConsumerConfigImpl implements ODataConsumerConfig {
 
@@ -33,7 +33,7 @@ public class ODataConsumerConfigImpl implements ODataConsumerConfig {
 	protected boolean       autoDetectFormat = false;
 	protected boolean		verifyMetadata = true;
 	protected int			maxResults = 10;
-	private List<ClientBehavior> behaviors = new ArrayList<ClientBehavior>();
+	private List<Behavior> behaviors = new ArrayList<Behavior>();
 	
 	public ODataProtocol getProtocol() {
 		return protocol;
@@ -91,16 +91,16 @@ public class ODataConsumerConfigImpl implements ODataConsumerConfig {
 		this.verifyMetadata = verifyMetadata;
 	}
 
-	public List<ClientBehavior> getClientBehaviors() {
+	public List<Behavior> getClientBehaviors() {
 		return behaviors;
 	}
 
-	public ODataConsumerConfig addClientBehavior(ClientBehavior behavior) {
+	public ODataConsumerConfig addClientBehavior(Behavior behavior) {
 		behaviors.add(behavior);
 		return this;
 	}
 
-	public ODataConsumerConfig setClientBehaviors(List<ClientBehavior> behaviors) {
+	public ODataConsumerConfig setClientBehaviors(List<Behavior> behaviors) {
 		this.behaviors = behaviors;
 		return this;
 	}
