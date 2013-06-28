@@ -15,12 +15,17 @@ import bingo.lang.Converts;
 import bingo.meta.edm.EdmEntitySet;
 import bingo.meta.edm.EdmEntityType;
 import bingo.odata.ODataObjectKind;
+import bingo.odata.ODataQueryInfo;
+import bingo.odata.ODataQueryInfoParser;
+import bingo.odata.ODataQueryOptions;
 import bingo.odata.ODataServices;
+import bingo.odata.ODataUrlInfo;
 import bingo.odata.consumer.demo.DemoModelAndData;
 import bingo.odata.consumer.demo.DemoODataProducer;
 import bingo.odata.model.ODataEntity;
 import bingo.odata.model.ODataEntityBuilder;
 import bingo.odata.model.ODataEntitySet;
+import bingo.odata.model.ODataKeyImpl;
 import bingo.odata.model.ODataProperty;
 import bingo.odata.model.ODataValue;
 
@@ -61,15 +66,24 @@ public class ODataConsumerImplTest {
 
 	@Test
 	public void testDeleteEntity() {
-		int result = consumer.deleteEntityByKey("Product", "123456");
+		int result = consumer.deleteEntity("Product", "123456");
 		assertEquals(1, result);
 	}
 
 	@Test
+	public void testDeleteEntity_usingOdataModel() {
+		consumer.retrieveServiceMetadata();
+		EdmEntitySet entitySet = consumer.services().findEntitySet("Products");
+		EdmEntityType entityType = consumer.services().findEntityType("Product");
+		int result = consumer.deleteEntity(entityType, new ODataKeyImpl("123456"));
+		assertEquals(1, result);
+	}
+	
+	@Test
 	public void testUpdateEntity() {
 		Map<String, Object> fields = new HashMap<String, Object>();
 		fields.put("name", "new name here");
-		int result = consumer.updateEntityByKey("Product", "123456", fields);
+		int result = consumer.updateEntity("Product", "123456", fields);
 		assertEquals(1, result);
 	}
 

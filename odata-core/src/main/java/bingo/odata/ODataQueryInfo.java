@@ -26,23 +26,23 @@ import bingo.odata.expression.OrderByExpression;
 
 public class ODataQueryInfo {
 	
-	private final ODataInlineCount inlineCount;
+	private ODataInlineCount inlineCount;
 
-	private final Integer top;
+	private Integer top;
 	
-	private final Integer skip;
+	private Integer skip;
 	
-	private final String skipToken;
+	private String skipToken;
 	
-	private final BoolExpression filter;
+	private BoolExpression filter;
 	
-	private final List<OrderByExpression> orderBy;
+	private List<OrderByExpression> orderBy;
 	
-	private final List<EntitySimpleProperty> expand;
+	private List<EntitySimpleProperty> expand;
 	
-	private final List<EntitySimpleProperty> select;
+	private List<EntitySimpleProperty> select;
 	
-	private final Map<String, String> params;
+	private Map<String, String> params;
 	
 	public ODataQueryInfo(List<EntitySimpleProperty> expand,BoolExpression filter,List<OrderByExpression> orderBy,Integer skip, Integer top,String skipToken,ODataInlineCount inlineCount,List<EntitySimpleProperty> select,Map<String, String> params){
 		this.expand      = expand;
@@ -53,7 +53,7 @@ public class ODataQueryInfo {
 		this.skipToken   = skipToken;
 		this.inlineCount = inlineCount;
 		this.select      = select;
-		this.params      = Immutables.mapOf(params);
+		if(null != params) this.params      = Immutables.mapOf(params);
 	}
 	
 	public BoolExpression getFilter() {

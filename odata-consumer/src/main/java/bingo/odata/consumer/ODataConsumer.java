@@ -54,43 +54,31 @@ public interface ODataConsumer {
 	int 						insertEntity(EdmEntityType entityType, ODataEntity entity);
 	
 	// delete
-	int 						deleteEntityByKey(String entityType, Object key);
+	int 						deleteEntity(String entityType, Object key);
 	
-	int 						deleteEntity(String entityType, String queryString);
-
 	int 						deleteEntity(EdmEntityType entityType, ODataKey key);
 	
-	int 						deleteEntity(EdmEntityType entityType, ODataQueryInfo queryInfo);
-	
 	// update
-	int 						updateEntityByKey(String entityName, Object key, Map<String, Object> updateFields);
-	
-	int 						updateEntity(String entityName, String queryString, Map<String, Object> updateFields);
+	int 						updateEntity(String entityName, Object key, Map<String, Object> updateFields);
 	
 	int 						updateEntity(EdmEntityType entityType, ODataKey key, ODataEntity entity);
 	
-	int 						updateEntity(EdmEntityType entityType, ODataQueryInfo queryInfo, ODataEntity entity);
-	
-//	int 						mergeEntityByKey(String entityName, Object key, Map<String, Object> updateFields);
-//
-//	int 						mergeEntity(String entityName, String queryString, Map<String, Object> updateFields);
+//	int 						mergeEntity(String entityName, Object key, Map<String, Object> updateFields);
 //
 //	int 						mergeEntity(EdmEntityType entityType, ODataKey key, ODataEntity entity);
-//
-//	int 						mergeEntity(EdmEntityType entityType, ODataQueryInfo queryInfo, ODataEntity entity);
 	
 	// query - entitySet
 	ODataEntitySet 				findEntitySet(String entitySet);
 	
-	ODataEntitySet 				findEntitySet(String entitySet, String queryString);
+	ODataEntitySet 				findEntitySet(String entitySet, String where);
 	
-	ODataEntitySet 				findEntitySet(EdmEntityType entityType);
+	ODataEntitySet 				findEntitySet(EdmEntitySet entitySet);
 	
-	ODataEntitySet 				findEntitySet(EdmEntityType entityType, ODataQueryInfo queryInfo);
+	ODataEntitySet 				findEntitySet(EdmEntitySet entitySet, ODataQueryInfo queryInfo);
 	
 	List<Map<String, Object>> 	findEntitySetAsList(String entitySet);
 	
-	List<Map<String, Object>> 	findEntitySetAsList(String entitySet, String queryString);
+	List<Map<String, Object>> 	findEntitySetAsList(String entitySet, String where);
 	
 	// query - entity
 	ODataEntity 				findEntity(String entityType, Object key);
@@ -107,13 +95,13 @@ public interface ODataConsumer {
 	ODataNavigationProperty		findNavigationProperty(EdmEntityType entitType, ODataKey key, EdmNavigationProperty property);
 
 	// query - count
-	long 						count(String entityType, String queryString);
-	
-	long 						count(EdmEntityType entityType, ODataQueryInfo queryInfo);
-
 	long 						count(String entitySet);
 	
 	long 						count(EdmEntitySet entitySet);
+	
+	long 						count(String entitySet, String where);
+	
+	long 						count(EdmEntitySet entitySet, ODataQueryInfo queryInfo);
 	
 	// function invoke
 	String 						invokeFunction(String entitySet, String funcName, Map<String, Object> parameters);

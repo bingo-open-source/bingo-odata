@@ -167,14 +167,14 @@ public class ODataQueryInfoParser {
 	public static String toQueryString(ODataQueryInfo queryInfo) {
 		if(null == queryInfo) return null;
 		Set<String> set = new HashSet<String>();
-//		set.add(toFilterString(queryInfo.getFilter()));
-//		set.add(toInlineCountString(queryInfo.getInlineCount()));
-//		set.add(toSkipString(queryInfo.getSkip()));
-//		set.add(toSelectString(queryInfo.getSelect()));
-//		set.add(toExpandString(queryInfo.getExpand()));
-//		set.add(toOrderByString(queryInfo.getOrderBy()));
-//		set.add(toSkipTokenString(queryInfo.getSkipToken()));
-//		set.add(toTopString(queryInfo.getTop()));
+		set.add(toFilterString(queryInfo.getFilter()));
+		set.add(toInlineCountString(queryInfo.getInlineCount()));
+		set.add(toSkipString(queryInfo.getSkip()));
+		set.add(toSelectString(queryInfo.getSelect()));
+		set.add(toExpandString(queryInfo.getExpand()));
+		set.add(toOrderByString(queryInfo.getOrderBy()));
+		set.add(toSkipTokenString(queryInfo.getSkipToken()));
+		set.add(toTopString(queryInfo.getTop()));
 		set.add(toParamsString(queryInfo.getParams()));
 		set.remove(null);
 		return Strings.join(set, "&");

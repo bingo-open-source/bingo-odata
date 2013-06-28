@@ -29,4 +29,6 @@ public interface ODataKey extends ODataObject {
 	NamedValues<Object> getNamedValues();
 	
 	String toKeyString();
+	
+	String toKeyString(boolean withBrackets);
 }

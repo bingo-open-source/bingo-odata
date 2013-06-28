@@ -64,14 +64,19 @@ public class ODataKeyImpl implements ODataKey {
 	public boolean isPrimitiveValue() {
 	    return isPrimitive;
     }
-
+	
 	public String toKeyString() {
+		return toKeyString(true);
+	}
+
+	public String toKeyString(boolean withBrackets) {
 		if(null == keyString){
 			if(isPrimitive){
-				keyString = "(" + keyString(primitiveValue) + ")";
+				keyString = keyString(primitiveValue);
 			}else{
 				keyString = keyString(namedValues);
 			}
+			if(withBrackets) keyString = "(" + keyString + ")";
 		}
 		return keyString;
 	}
@@ -90,7 +95,7 @@ public class ODataKeyImpl implements ODataKey {
 		            }
 				});
 		
-		return "(" + key.toString() + ")";
+		return key.toString();
 	}
 	
 	@SuppressWarnings({"rawtypes" })

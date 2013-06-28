@@ -56,6 +56,7 @@ import bingo.odata.model.ODataEntitySet;
 import bingo.odata.model.ODataEntitySetBuilder;
 import bingo.odata.model.ODataKey;
 import bingo.odata.model.ODataKeyImpl;
+import bingo.odata.model.ODataNavigationPropertyImpl;
 import bingo.odata.model.ODataParameters;
 import bingo.odata.model.ODataPropertyImpl;
 import bingo.odata.model.ODataRawValueImpl;
