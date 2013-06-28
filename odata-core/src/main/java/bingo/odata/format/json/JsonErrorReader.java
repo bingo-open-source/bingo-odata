@@ -22,8 +22,10 @@ public class JsonErrorReader extends ODataJsonReader<ODataError> {
 		Map<String,Object> map = json.map();
 		
 		if(map.entrySet().size() == 1 && map.keySet().iterator().next().equals("error")) {
+			
 			map = (Map<String,Object>)map.get("error");
-		} else return null;
+			
+		} else throw ODataErrors.badRequest("invalid json content");
 		
 		ODataError error = new ODataError(Objects.toString(map.get("code")),
 											Objects.toString(map.get("message")));

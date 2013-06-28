@@ -20,6 +20,7 @@ import bingo.odata.consumer.exceptions.ResolveFailedException;
 import bingo.odata.model.ODataComplexObject;
 import bingo.odata.model.ODataEntity;
 import bingo.odata.model.ODataEntitySet;
+import bingo.odata.model.ODataProperty;
 import bingo.odata.model.ODataValue;
 import bingo.odata.model.ODataValueBuilder;
 
@@ -169,6 +170,18 @@ public class Response {
 					(ODataReaderContext)context, new InputStreamReader(this.getInputStream()));
 			
 			return oDataEntitySet;
+		} catch (Throwable e) {
+			throw new ResolveFailedException(e);
+		}
+	}
+	
+	public ODataProperty convertToProperty(ODataConsumerContext context) {
+		ODataReader<ODataProperty> reader = context.getProtocol().getReader(
+				context.getVersion(), context.getFormat(), ODataObjectKind.Property);
+		try {
+			
+			return reader.read((ODataReaderContext)context, new InputStreamReader(this.getInputStream()));
+			
 		} catch (Throwable e) {
 			throw new ResolveFailedException(e);
 		}

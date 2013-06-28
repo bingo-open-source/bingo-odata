@@ -16,6 +16,7 @@ import bingo.meta.edm.EdmEntitySet;
 import bingo.meta.edm.EdmEntityType;
 import bingo.odata.ODataObjectKind;
 import bingo.odata.ODataServices;
+import bingo.odata.consumer.demo.DemoModelAndData;
 import bingo.odata.consumer.demo.DemoODataProducer;
 import bingo.odata.model.ODataEntity;
 import bingo.odata.model.ODataEntityBuilder;
@@ -98,6 +99,7 @@ public class ODataConsumerImplTest {
 	public void testFindProperty() {
 		ODataProperty value = consumer.findProperty("Product", "123456", "name");
 		assertNotNull(value);
+		assertEquals(DemoODataProducer.INVOKED_FUNCTION, value.getValue().toString());
 	}
 
 	@Test

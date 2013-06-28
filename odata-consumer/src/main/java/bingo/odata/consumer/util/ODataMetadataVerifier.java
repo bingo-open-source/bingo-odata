@@ -10,6 +10,7 @@ import bingo.meta.edm.EdmEntityType;
 import bingo.meta.edm.EdmFunctionImport;
 import bingo.meta.edm.EdmProperty;
 import bingo.odata.ODataServices;
+import bingo.odata.consumer.exceptions.ODataVerifiedFailException;
 
 public class ODataMetadataVerifier {
 	private ODataServices services;
@@ -31,6 +32,14 @@ public class ODataMetadataVerifier {
 		EdmEntityType type = services.findEntityType(entityType);
 		if(null == type) throw new ODataVerifiedFailException("Entity Type", entityType);
 		return type;
+	}
+	
+	public EdmEntityType hasEntityType(String entityType, String property) {
+		EdmEntityType edmEntityType = hasEntityType(entityType);
+		Assert.notBlank(property);
+		EdmProperty edmProperty = edmEntityType.findProperty(property);
+		if(null == edmProperty) throw new ODataVerifiedFailException("Property", property);
+		return edmEntityType;
 	}
 	
 	public EdmEntitySet hasEntitySet(String entitySet) {
@@ -66,15 +75,5 @@ public class ODataMetadataVerifier {
 			}
 		}
 		throw new ODataVerifiedFailException("Function belong to Entity Set " + entitySet, funcName);
-	}
-	
-
-	public class ODataVerifiedFailException extends RuntimeException {
-
-		private static final long serialVersionUID = -1533447768593885495L;
-		
-		public ODataVerifiedFailException(String name, String value) {
-			super("No such object within metadata document: [" + name + " = " + value + "]");
-		}
 	}
 }

@@ -16,13 +16,47 @@
 package bingo.odata.consumer.requests;
 
 import bingo.odata.consumer.ODataConsumerContext;
-import bingo.odata.consumer.requests.builders.RequestBuilder;
-import bingo.odata.consumer.requests.builders.RequestBuilderBase;
 
 public class RetrievePropertyRequest extends Request {
-
+	
+	private String entitySet;
+	private Object id;
+	private String property;
+	
 	public RetrievePropertyRequest(ODataConsumerContext context, String serviceRoot) {
 		super(context, serviceRoot);
+	}
+
+	@Override
+	public String getResourcePath() {
+		return entitySet + "('" + id.toString() + "')" + URL_FRAGMENT_DIVIDER + property;
+	}
+
+	public String getEntitySet() {
+		return entitySet;
+	}
+
+	public RetrievePropertyRequest setEntitySet(String entitySet) {
+		this.entitySet = entitySet;
+		return this;
+	}
+
+	public Object getId() {
+		return id;
+	}
+
+	public RetrievePropertyRequest setId(Object id) {
+		this.id = id;
+		return this;
+	}
+
+	public String getProperty() {
+		return property;
+	}
+
+	public RetrievePropertyRequest setProperty(String property) {
+		this.property = property;
+		return this;
 	}
 
 }

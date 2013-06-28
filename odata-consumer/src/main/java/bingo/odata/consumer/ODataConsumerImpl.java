@@ -47,6 +47,7 @@ import bingo.odata.consumer.requests.Response;
 import bingo.odata.consumer.requests.RetrieveCountRequest;
 import bingo.odata.consumer.requests.RetrieveEntityRequest;
 import bingo.odata.consumer.requests.RetrieveEntitySetRequest;
+import bingo.odata.consumer.requests.RetrievePropertyRequest;
 import bingo.odata.consumer.requests.UpdateEntityRequest;
 import bingo.odata.consumer.requests.behaviors.Behavior;
 import bingo.odata.consumer.requests.invoke.FunctionRequest;
@@ -90,6 +91,13 @@ public class ODataConsumerImpl implements ODataConsumer {
 		this.serviceRoot = serviceRoot;
 		if(retrieveMetadataImmediately) {
 			ensureMetadata();
+		}
+	}
+
+	private void ensureMetadata() {
+		if(null == services) {
+			services = retrieveServiceMetadata();
+			verifier = new ODataMetadataVerifier(services);
 		}
 	}
 
@@ -338,13 +346,6 @@ public class ODataConsumerImpl implements ODataConsumer {
 		return null;
 	}
 
-	private void ensureMetadata() {
-		if(null == services) {
-			services = retrieveServiceMetadata();
-			verifier = new ODataMetadataVerifier(services);
-		}
-	}
-
 	public ODataEntitySet findEntitySet(String entitySet, String queryString) {
 		// TODO Auto-generated method stub
 		return null;
@@ -374,9 +375,23 @@ public class ODataConsumerImpl implements ODataConsumer {
 		return null;
 	}
 
-	public ODataProperty findProperty(String entitType, Object key, String property) {
-		// TODO Auto-generated method stub
-		return null;
+	public ODataProperty findProperty(String entityType, Object key, String property) {
+		ensureMetadata();
+		
+		if(config.isVerifyMetadata()) verifier.hasEntityType(entityType, property);
+		
+		ODataConsumerContext context = initEntityTypeContext(this, entityType, key);
+		
+		Request request = new RetrievePropertyRequest(context, serviceRoot)
+								.setEntitySet(context.getEntitySet().getName()).setId(key).setProperty(property);
+		
+		Response response = request.send();
+		
+		if(response.getStatus() == ODataResponseStatus.OK) {
+			
+			return response.convertToProperty(context);
+			
+		} else throw response.convertToError(context);
 	}
 
 	public ODataProperty findProperty(EdmEntityType entitType, ODataKey key,

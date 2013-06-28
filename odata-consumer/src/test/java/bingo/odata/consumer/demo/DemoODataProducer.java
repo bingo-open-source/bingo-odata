@@ -379,13 +379,6 @@ public class DemoODataProducer extends ODataProducerAdapter implements ODataProd
 	@Override
 	public ODataValue retrieveProperty(ODataProducerContext context,
 			EdmEntityType entitType, ODataKey key, EdmProperty property) {
-		EdmType edmType = new EdmType() {
-			@Override
-			public EdmTypeKind getTypeKind() {
-				return EdmTypeKind.Simple;
-			}
-		};
-		
 	    return new ODataValueImpl(ODataObjectKind.Property, 
 	    		new ODataPropertyImpl(
 	    				new EdmProperty("name","name", EdmSimpleType.STRING, true, null, false, 9999,
