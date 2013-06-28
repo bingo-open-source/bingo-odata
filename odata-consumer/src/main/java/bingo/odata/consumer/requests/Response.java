@@ -7,15 +7,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 import bingo.lang.Converts;
+import bingo.lang.Strings;
 import bingo.lang.http.HttpContentTypes;
 import bingo.meta.edm.EdmType;
+import bingo.odata.ODataError;
 import bingo.odata.ODataObjectKind;
 import bingo.odata.ODataReader;
 import bingo.odata.ODataReaderContext;
 import bingo.odata.ODataConstants.ContentTypes;
 import bingo.odata.consumer.ODataConsumerContext;
+import bingo.odata.consumer.exceptions.ResolveFailedException;
+import bingo.odata.model.ODataComplexObject;
 import bingo.odata.model.ODataEntity;
 import bingo.odata.model.ODataEntitySet;
+import bingo.odata.model.ODataValue;
+import bingo.odata.model.ODataValueBuilder;
 
 import com.google.api.client.http.HttpResponse;
 
@@ -42,9 +48,7 @@ public class Response {
 		try {
 			return httpResponse.getContent();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			throw new RuntimeException(e.getMessage());
+			throw new ResolveFailedException(e);
 		}
 	}
 	
@@ -52,9 +56,7 @@ public class Response {
 		try {
 			return httpResponse.parseAsString();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			throw new RuntimeException(e.getMessage());
+			throw new ResolveFailedException(e);
 		}
 	}
 	
@@ -85,10 +87,8 @@ public class Response {
 			ODataEntity entity = reader.read((ODataReaderContext)context, new InputStreamReader(this.getInputStream()));
 			return Converts.convert(entity.toMap(), clazz);
 		} catch (Throwable e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new ResolveFailedException(e);
 		}
-		return null;
 	}
 
 	public <T> List<T> convertToObjectList(Class<T> listClazz, EdmType edmType, ODataConsumerContext context) {
@@ -102,9 +102,84 @@ public class Response {
 			}
 			return list;
 		} catch (Throwable e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new ResolveFailedException(e);
 		}
-		return null;
+	}
+	
+	public ODataValue convertToODataValue(EdmType edmType, ODataConsumerContext context) {
+		ODataValueBuilder builder = new ODataValueBuilder();
+		try {
+			if(edmType.isCollection()) {
+				
+				builder.entitySet(this.convertToEntitySet(context));
+				
+			} else if(edmType.isEntity() || edmType.isEntityRef()) {
+				
+				builder.entity(this.convertToEntity(context));
+				
+			} else if(edmType.isComplex()) {
+				
+				// TODO 
+				
+			} else if(edmType.isSimple()) {
+				
+				// TODO
+				
+			}
+		} catch (Throwable e) {
+			throw new ResolveFailedException(e);
+		}
+		return builder.build();
+	}
+	
+	public ODataError convertToError(ODataConsumerContext context) {
+		ODataReader<ODataError> reader = context.getProtocol().getReader(
+				context.getVersion(), context.getFormat(), ODataObjectKind.Error);
+		try {
+			ODataError error = reader.read((ODataReaderContext)context, new InputStreamReader(this.getInputStream()));
+			
+			error.setStatus(this.getStatus());
+			
+			return error;
+		} catch (Throwable e) {
+			throw new ResolveFailedException(e);
+		}
+	}
+	
+	public ODataEntity convertToEntity(ODataConsumerContext context) {
+		ODataReader<ODataEntity> reader = context.getProtocol().getReader(
+				context.getVersion(), context.getFormat(), ODataObjectKind.Entity);
+		
+		try {
+			ODataEntity oDataEntity = reader.read(
+					(ODataReaderContext)context, new InputStreamReader(this.getInputStream()));
+			
+			return oDataEntity;
+		} catch (Throwable e) {
+			throw new ResolveFailedException(e);
+		}
+	}
+	
+	public ODataEntitySet convertToEntitySet(ODataConsumerContext context) {
+		ODataReader<ODataEntitySet> reader = context.getProtocol().getReader(
+				context.getVersion(), context.getFormat(), ODataObjectKind.EntitySet);
+		
+		try {
+			ODataEntitySet oDataEntitySet = reader.read(
+					(ODataReaderContext)context, new InputStreamReader(this.getInputStream()));
+			
+			return oDataEntitySet;
+		} catch (Throwable e) {
+			throw new ResolveFailedException(e);
+		}
+	}
+	
+	public long convertToLong(ODataConsumerContext context) {
+		String result = this.getString();
+		try {
+			return Long.parseLong(result);
+		} catch (NumberFormatException e) {
+			throw new ResolveFailedException(e);
+		}
 	}
 }

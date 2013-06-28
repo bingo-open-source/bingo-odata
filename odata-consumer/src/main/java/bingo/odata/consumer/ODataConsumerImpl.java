@@ -18,18 +18,13 @@ package bingo.odata.consumer;
 import static bingo.odata.consumer.util.ODataConsumerContextHelper.initEntitySetContext;
 import static bingo.odata.consumer.util.ODataConsumerContextHelper.initEntityTypeContext;
 
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import bingo.lang.Assert;
 import bingo.lang.Collections;
-import bingo.lang.New;
 import bingo.lang.Strings;
-import bingo.lang.convert.NumberConverters;
-import bingo.lang.convert.NumberConverters.IntegerConverter;
 import bingo.lang.logging.Log;
 import bingo.lang.logging.LogFactory;
 import bingo.meta.edm.EdmEntitySet;
@@ -44,7 +39,6 @@ import bingo.odata.ODataReaderContext;
 import bingo.odata.ODataResponseStatus;
 import bingo.odata.ODataServices;
 import bingo.odata.consumer.exceptions.ConnectFailedException;
-import bingo.odata.consumer.ext.ODataContent;
 import bingo.odata.consumer.requests.DeleteEntityRequest;
 import bingo.odata.consumer.requests.InsertEntityRequest;
 import bingo.odata.consumer.requests.MergeEntityRequest;
@@ -55,8 +49,6 @@ import bingo.odata.consumer.requests.RetrieveEntityRequest;
 import bingo.odata.consumer.requests.RetrieveEntitySetRequest;
 import bingo.odata.consumer.requests.UpdateEntityRequest;
 import bingo.odata.consumer.requests.behaviors.Behavior;
-import bingo.odata.consumer.requests.builders.QueryBuilder;
-import bingo.odata.consumer.requests.builders.QueryFilter;
 import bingo.odata.consumer.requests.invoke.FunctionRequest;
 import bingo.odata.consumer.requests.metadata.MetadataDocumentRequest;
 import bingo.odata.consumer.util.ODataMetadataVerifier;
@@ -64,7 +56,9 @@ import bingo.odata.exceptions.ODataNotImplementedException;
 import bingo.odata.model.ODataEntity;
 import bingo.odata.model.ODataEntitySet;
 import bingo.odata.model.ODataKey;
+import bingo.odata.model.ODataNavigationProperty;
 import bingo.odata.model.ODataParameters;
+import bingo.odata.model.ODataProperty;
 import bingo.odata.model.ODataValue;
 
 public class ODataConsumerImpl implements ODataConsumer {
@@ -132,88 +126,23 @@ public class ODataConsumerImpl implements ODataConsumer {
 		
 		Request request = new MetadataDocumentRequest(context, this.serviceRoot);
 		
-		ODataServices services = ODataServices.parse(getResponseInputStream(request));
+		Response resp = request.send();
 		
-		if(null != services) {
-			this.services = services;
-			this.verifier = new ODataMetadataVerifier(services);
-		}
-		
-		log.info("Retrieve Metadata Document successfully!");
-		
-		return services;
+		if(resp.getStatus() == 200) {
+			ODataServices services = ODataServices.parse(resp.getInputStream());
+			
+			if(null != services) {
+				this.services = services;
+				this.verifier = new ODataMetadataVerifier(services);
+			}
+			
+			log.info("Retrieve Metadata Document successfully!");
+			
+			return services;
+			
+		} else throw resp.convertToError(context);
 	}
 
-	/**
-	 * get the entity set from producer.
-	 */
-	public ODataEntitySet findEntitySet(String entitySet) {
-		ensureMetadata();
-		
-		if(config.isVerifyMetadata()) verifier.hasEntitySet(entitySet);
-		
-		ODataConsumerContext context = initEntitySetContext(this, entitySet);
-		
-		Request request = new RetrieveEntitySetRequest(context, serviceRoot).setEntitySet(entitySet);
-		
-		ODataReader<ODataEntitySet> reader = context.getProtocol().getReader(
-						context.getVersion(), context.getFormat(), ODataObjectKind.EntitySet);
-		try {
-			ODataEntitySet oDataEntitySet = reader.read(
-					(ODataReaderContext)context, new InputStreamReader(getResponseInputStream(request)));
-			return oDataEntitySet;
-		} catch (Throwable e) {
-			e.printStackTrace();
-			throw new RuntimeException(e.getMessage());
-		}
-	}
-
-	private void ensureMetadata() {
-		if(null == services) {
-			services = retrieveServiceMetadata();
-			verifier = new ODataMetadataVerifier(services);
-		}
-	}
-
-	public List<Map<String, Object>> findEntitySetAsList(String entitySetName) {
-		ODataEntitySet entitySet = findEntitySet(entitySetName);
-		List<ODataEntity> entities = entitySet.getEntities().toList();
-		List<Map<String, Object>> list = new ArrayList<Map<String,Object>>();
-		for (ODataEntity entity : entities) {
-			list.add(entity.toMap());
-		}
-		return list;
-	}
-	
-	/**
-	 * get a single entity by key from producer.
-	 */
-	public ODataEntity findEntity(String entityType, Object key) {
-		ensureMetadata();
-		
-		if(config.isVerifyMetadata()) verifier.hasEntityType(entityType);
-		
-		ODataConsumerContext context = initEntityTypeContext(this, entityType, key);
-		
-		Request request = new RetrieveEntityRequest(context, serviceRoot)
-								.setEntitySet(context.getEntitySet().getName()).setId(key);
-		
-		ODataReader<ODataEntity> reader = context.getProtocol().getReader(
-				context.getVersion(), context.getFormat(), ODataObjectKind.Entity);
-		try {
-			ODataEntity oDataEntity = reader.read(
-					(ODataReaderContext)context, new InputStreamReader(getResponseInputStream(request)));
-			return oDataEntity;
-		} catch (Throwable e) {
-			e.printStackTrace();
-			throw new RuntimeException(e.getMessage());
-		}
-	}
-
-	public int insertEntity(EdmEntityType entityType, ODataEntity entity) {
-		return insertEntity(entityType.getName(), entity.toMap());
-	}
-	
 	public int insertEntity(String entityType, Map<String, Object> object) {
 		ensureMetadata();
 		
@@ -223,19 +152,23 @@ public class ODataConsumerImpl implements ODataConsumer {
 		
 		Request request = new InsertEntityRequest(context, serviceRoot).setEntityType(context.getEntitySet().getName())
 				.setEntity(object);
+		
 		Response response = request.send();
+		
 		if(response.getStatus() == ODataResponseStatus.Created) {
 			return 1;
 		} else {
-			throw new RuntimeException("Create Failed!");//TODO
+			throw response.convertToError(context);
 		}
 	}
 
-	private InputStream getResponseInputStream(Request request) throws ConnectFailedException{
-		Response resp = request.send();
-		if(resp.getStatus() == 200) {
-			return resp.getInputStream();
-		} else throw new RuntimeException("response code error!");// TODO
+	public int insertEntity(EdmEntityType entityType, ODataEntity entity) {
+		return insertEntity(entityType.getName(), entity.toMap());
+	}
+
+	public int deleteEntity(String entityType, String queryString) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 	/**
@@ -256,8 +189,44 @@ public class ODataConsumerImpl implements ODataConsumer {
 		if(response.getStatus() == ODataResponseStatus.OK) {
 			return 1;
 		} else {
-			throw new RuntimeException("Create Failed!");//TODO
+			throw response.convertToError(context);
 		}
+	}
+
+	public int deleteEntity(EdmEntityType entityType, ODataKey key) {
+		Object id = null;
+		if(key.isPrimitiveValue()) {
+			id = key.getPrimitiveValue();
+			
+		} else if(key.isNamedValues()) {
+			id = key.getNamedValues();
+			
+		} else throw new RuntimeException("invalid key.");
+		
+		deleteEntityByKey(entityType.getName(), id);
+		return 1;
+	}
+
+	public int deleteEntity(EdmEntityType entityType, ODataQueryInfo queryInfo) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public int updateEntity(String entityName, String queryString,
+			Map<String, Object> updateFields) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public int updateEntity(EdmEntityType entityType, ODataKey key,
+			ODataEntity entity) {
+		throw new ODataNotImplementedException("");
+	}
+
+	public int updateEntity(EdmEntityType entityType, ODataQueryInfo queryInfo,
+			ODataEntity entity) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 	public int updateEntityByKey(String entityType, Object id, Map<String, Object> updateFields) {
@@ -275,133 +244,19 @@ public class ODataConsumerImpl implements ODataConsumer {
 		if(response.getStatus() == ODataResponseStatus.NoContent) {
 			return 1;
 		} else {
-			throw new RuntimeException("Create Failed!");//TODO
+			throw response.convertToError(context);
 		}
 	}
 
-	public QueryBuilder queryEntity(String entityName, QueryFilter filter) {
+	public int mergeEntity(String entityName, String queryString,
+			Map<String, Object> updateFields) {
 		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public QueryBuilder queryEntity(String entityName) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public ODataEntitySet findEntitySet(EdmEntityType entityType,
-			ODataQueryInfo queryInfo) {
-		throw new ODataNotImplementedException("");
-	}
-
-	public long count(EdmEntityType entityType, ODataQueryInfo queryInfo) {
-		EdmEntitySet entitySet = services.findEntitySet(entityType);
-		if(null == queryInfo) return count(entitySet);
-		else {
-			throw new ODataNotImplementedException("");
-		}
-	}
-
-	public ODataEntity findEntity(EdmEntityType entityType, ODataKey key,
-			ODataQueryInfo queryInfo) {
-		throw new ODataNotImplementedException("");
-	}
-
-	public ODataValue findProperty(EdmEntityType entitType, ODataKey key,
-			EdmProperty property) {
-		throw new ODataNotImplementedException("");
-	}
-
-	public ODataValue findNavigationProperty(EdmEntityType entitType,
-			ODataKey key, EdmNavigationProperty property) {
-		throw new ODataNotImplementedException("");
-	}
-
-
-	public int updateEntity(EdmEntityType entityType, ODataKey key,
-			ODataEntity entity) {
-		throw new ODataNotImplementedException("");
+		return 0;
 	}
 
 	public int mergeEntity(EdmEntityType entityType, ODataKey key,
 			ODataEntity entity) {
 		throw new ODataNotImplementedException("");
-	}
-
-	public int deleteEntity(EdmEntityType entityType, ODataKey key) {
-		Object id = null;
-		if(key.isPrimitiveValue()) {
-			id = key.getPrimitiveValue();
-		} else if(key.isNamedValues()) {
-			id = key.getNamedValues();
-		} else throw new RuntimeException("invalid key.");
-		deleteEntityByKey(entityType.getName(), id);
-		return 1;
-	}
-	
-	public String invokeFunction(String entitySet, String funcName, Map<String, Object> parameters) {
-		return invokeFunction(entitySet, funcName, parameters, (String)null);
-	}
-	
-	public String invokeFunction(String entitySet, String funcName, Map<String, Object> parameters, String httpMethod) {
-		ensureMetadata();
-		
-		if(config.isVerifyMetadata()) verifier.hasFunction(entitySet, funcName);
-		
-		ODataConsumerContext context = new ODataConsumerContext(config);
-		
-		Request request = new FunctionRequest(context, serviceRoot).setHttpMethod(httpMethod)
-					.setEntitySet(entitySet).setFunction(funcName).setParams(parameters);
-		
-		Response response = request.send();
-		
-		if(response.getStatus() == ODataResponseStatus.OK) {
-			return response.getString();
-		} else {
-			throw new RuntimeException("Create Failed!");//TODO
-		}
-	}
-
-	public long count(EdmEntitySet edmEntitySet) {
-		String entitySet = edmEntitySet.getName();
-		return count(entitySet);
-	}
-
-	public long count(String entitySet) {
-		ensureMetadata();
-		
-		if(config.isVerifyMetadata()) verifier.hasEntitySet(entitySet);
-		
-		ODataConsumerContext context = initEntitySetContext(this, entitySet);
-		
-		Request request = new RetrieveCountRequest(context, serviceRoot).setEntitySet(entitySet);
-		
-		Response resp = request.send();
-		
-		if(resp.getStatus() == ODataResponseStatus.OK) {
-			String result = resp.getString();
-			if(Strings.isNumber(result)) {
-				return Long.parseLong(result);
-			} else throw new RuntimeException("OData producer response invalid content");
-		} else {
-			throw new RuntimeException("Count Failed!");//TODO
-		}
-	}
-
-	public int deleteEntity(String entityType, String queryString) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	public int deleteEntity(EdmEntityType entityType, ODataQueryInfo queryInfo) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	public int updateEntity(String entityName, String queryString,
-			Map<String, Object> updateFields) {
-		// TODO Auto-generated method stub
-		return 0;
 	}
 
 	public int mergeEntityByKey(String entityType, Object id,
@@ -420,20 +275,8 @@ public class ODataConsumerImpl implements ODataConsumer {
 		if(response.getStatus() == ODataResponseStatus.NoContent) {
 			return 1;
 		} else {
-			throw new RuntimeException("Create Failed!");//TODO
+			throw response.convertToError(context);
 		}
-	}
-
-	public int mergeEntity(String entityName, String queryString,
-			Map<String, Object> updateFields) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	public int updateEntity(EdmEntityType entityType, ODataQueryInfo queryInfo,
-			ODataEntity entity) {
-		// TODO Auto-generated method stub
-		return 0;
 	}
 
 	public int mergeEntity(EdmEntityType entityType, ODataQueryInfo queryInfo,
@@ -442,20 +285,26 @@ public class ODataConsumerImpl implements ODataConsumer {
 		return 0;
 	}
 
-	public ODataEntitySet findEntitySet(String entitySet, String queryString) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public ODataEntitySet findEntitySet(EdmEntityType entityType) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public List<Map<String, Object>> findEntitySetAsList(String entitySet,
-			String queryString) {
-		// TODO Auto-generated method stub
-		return null;
+	/**
+	 * get a single entity by key from producer.
+	 */
+	public ODataEntity findEntity(String entityType, Object key) {
+		ensureMetadata();
+		
+		if(config.isVerifyMetadata()) verifier.hasEntityType(entityType);
+		
+		ODataConsumerContext context = initEntityTypeContext(this, entityType, key);
+		
+		Request request = new RetrieveEntityRequest(context, serviceRoot)
+								.setEntitySet(context.getEntitySet().getName()).setId(key);
+		
+		Response response = request.send();
+		
+		if(response.getStatus() == ODataResponseStatus.OK) {
+			
+			return response.convertToEntity(context);
+			
+		} else throw response.convertToError(context);
 	}
 
 	public ODataEntity findEntity(EdmEntityType entityType, ODataKey key) {
@@ -463,15 +312,111 @@ public class ODataConsumerImpl implements ODataConsumer {
 		return null;
 	}
 
-	public ODataValue findProperty(String entitType, Object key, String property) {
+	/**
+	 * get the entity set from producer.
+	 */
+	public ODataEntitySet findEntitySet(String entitySet) {
+		ensureMetadata();
+		
+		if(config.isVerifyMetadata()) verifier.hasEntitySet(entitySet);
+		
+		ODataConsumerContext context = initEntitySetContext(this, entitySet);
+		
+		Request request = new RetrieveEntitySetRequest(context, serviceRoot).setEntitySet(entitySet);
+		
+		Response response = request.send();
+
+		if(response.getStatus() == ODataResponseStatus.OK) {
+			
+			return response.convertToEntitySet(context);
+			
+		} else throw response.convertToError(context);
+	}
+
+	public ODataEntitySet findEntitySet(EdmEntityType entityType) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public ODataValue findNavigationProperty(String entitType, Object key,
+	private void ensureMetadata() {
+		if(null == services) {
+			services = retrieveServiceMetadata();
+			verifier = new ODataMetadataVerifier(services);
+		}
+	}
+
+	public ODataEntitySet findEntitySet(String entitySet, String queryString) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public ODataEntitySet findEntitySet(EdmEntityType entityType,
+			ODataQueryInfo queryInfo) {
+		throw new ODataNotImplementedException("");
+	}
+
+	public List<Map<String, Object>> findEntitySetAsList(String entitySetName) {
+		
+		ODataEntitySet entitySet = findEntitySet(entitySetName);
+		
+		List<ODataEntity> entities = entitySet.getEntities().toList();
+		
+		List<Map<String, Object>> list = new ArrayList<Map<String,Object>>();
+		for (ODataEntity entity : entities) {
+			list.add(entity.toMap());
+		}
+		return list;
+	}
+	
+	public List<Map<String, Object>> findEntitySetAsList(String entitySet,
+			String queryString) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public ODataProperty findProperty(String entitType, Object key, String property) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public ODataProperty findProperty(EdmEntityType entitType, ODataKey key,
+			EdmProperty property) {
+		throw new ODataNotImplementedException("");
+	}
+
+	public ODataNavigationProperty findNavigationProperty(String entitType, Object key,
 			String property) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	public ODataNavigationProperty findNavigationProperty(EdmEntityType entitType,
+			ODataKey key, EdmNavigationProperty property) {
+		throw new ODataNotImplementedException("");
+	}
+
+
+	public long count(EdmEntitySet edmEntitySet) {
+		String entitySet = edmEntitySet.getName();
+		return count(entitySet);
+	}
+
+	public long count(String entitySet) {
+		ensureMetadata();
+		
+		if(config.isVerifyMetadata()) verifier.hasEntitySet(entitySet);
+		
+		ODataConsumerContext context = initEntitySetContext(this, entitySet);
+		
+		Request request = new RetrieveCountRequest(context, serviceRoot).setEntitySet(entitySet);
+		
+		Response resp = request.send();
+		
+		if(resp.getStatus() == ODataResponseStatus.OK) {
+			
+			return resp.convertToLong(context);
+			
+		} else throw resp.convertToError(context);
 	}
 
 	public long count(String entityType, String queryString) {
@@ -479,15 +424,45 @@ public class ODataConsumerImpl implements ODataConsumer {
 		return 0;
 	}
 
+	public long count(EdmEntityType entityType, ODataQueryInfo queryInfo) {
+		EdmEntitySet entitySet = services.findEntitySet(entityType);
+		
+		if(null == queryInfo) return count(entitySet);
+		else {
+			throw new ODataNotImplementedException("");
+		}
+	}
+
+	public String invokeFunction(String entitySet, String funcName, Map<String, Object> parameters) {
+		ensureMetadata();
+		
+		EdmFunctionImport func = null;
+		
+		if(config.isVerifyMetadata()) func = verifier.hasFunction(entitySet, funcName);
+		
+		ODataConsumerContext context = new ODataConsumerContext(config);
+		
+		Request request = new FunctionRequest(context, serviceRoot).setHttpMethod(func.getHttpMethod())
+					.setEntitySet(entitySet).setFunction(funcName).setParams(parameters);
+		
+		Response response = request.send();
+		
+		if(response.getStatus() == ODataResponseStatus.OK) {
+			
+			return response.getString();
+			
+		} else throw response.convertToError(context);
+	}
+
 	public <T> T invokeFunction(String entitySet, String funcName, Map<String, Object> parameters, Class<T> clazz) {
 		ensureMetadata();
 		
 		EdmFunctionImport func = null;
-
+	
 		if(config.isVerifyMetadata()) func = verifier.hasFunction(entitySet, funcName);
 		
 		ODataConsumerContext context = new ODataConsumerContext(config);
-
+	
 		context.setEntitySet(services.findEntitySet(entitySet));
 		
 		context.setEntityType(services.findEntityType(context.getEntitySet().getEntityType()));
@@ -498,40 +473,10 @@ public class ODataConsumerImpl implements ODataConsumer {
 		Response response = request.send();
 		
 		if(response.getStatus() == ODataResponseStatus.OK) {
-			T t = response.convertToObject(clazz, func.getReturnType(), context);
-			return t;
-		} else {
-			throw new RuntimeException("Create Failed!");//TODO
-		}
-	}
-
-	public <T> T invokeFunction(String entitySet, String funcName,
-			Map<String, Object> parameters, String httpMethod, Class<T> t) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public <T> T invokeFunction(EdmFunctionImport func,
-			ODataParameters parameters, Class<T> t) {
-		return invokeFunction(func.getEntitySet(), func.getName(), parameters.getParametersMap(), t);
-	}
-
-	public ODataValue invokeFunctionForODataValue(String entitySet,
-			String funcName, Map<String, Object> parameters) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public ODataValue invokeFunctionForODataValue(String entitySet,
-			String funcName, Map<String, Object> parameters, String httpMethod) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public ODataValue invokeFunctionForODataValue(EdmFunctionImport func,
-			ODataParameters parameters) {
-		// TODO Auto-generated method stub
-		return null;
+			
+			return response.convertToObject(clazz, func.getReturnType(), context);
+			
+		} else throw response.convertToError(context);
 	}
 
 	public <T> List<T> invokeFunctionForList(String entitySet, String funcName,
@@ -539,14 +484,47 @@ public class ODataConsumerImpl implements ODataConsumer {
 		ensureMetadata();
 		
 		EdmFunctionImport func = null;
+	
+		if(config.isVerifyMetadata()) func = verifier.hasFunction(entitySet, funcName);
+		
+		ODataConsumerContext context = new ODataConsumerContext(config);
+		
+		if(Strings.isNotBlank(entitySet)) {
+			context.setEntitySet(services.findEntitySet(entitySet));
+			
+			context.setEntityType(services.findEntityType(context.getEntitySet().getEntityType()));
+		}
+	
+		Request request = new FunctionRequest(context, serviceRoot).setHttpMethod(func.getHttpMethod())
+					.setEntitySet(entitySet).setFunction(funcName).setParams(parameters);
+		
+		Response response = request.send();
+		
+		if(response.getStatus() == ODataResponseStatus.OK) {
+			
+			return response.convertToObjectList(listClass, func.getReturnType(), context);
+			
+		} else throw response.convertToError(context);
+	}
+
+	public <T> T invokeFunction(EdmFunctionImport func,	ODataParameters parameters, Class<T> t) {
+		return invokeFunction(func.getEntitySet(), func.getName(), parameters.getParametersMap(), t);
+	}
+
+	public ODataValue invokeFunctionForODataValue(String entitySet, String funcName, Map<String, Object> parameters) {
+		ensureMetadata();
+		
+		EdmFunctionImport func = null;
 
 		if(config.isVerifyMetadata()) func = verifier.hasFunction(entitySet, funcName);
 		
 		ODataConsumerContext context = new ODataConsumerContext(config);
 
-		context.setEntitySet(services.findEntitySet(entitySet));
-		
-		context.setEntityType(services.findEntityType(context.getEntitySet().getEntityType()));
+		if(Strings.isNotBlank(entitySet)) {
+			context.setEntitySet(services.findEntitySet(entitySet));
+			
+			context.setEntityType(services.findEntityType(context.getEntitySet().getEntityType()));
+		}
 		
 		Request request = new FunctionRequest(context, serviceRoot).setHttpMethod(func.getHttpMethod())
 					.setEntitySet(entitySet).setFunction(funcName).setParams(parameters);
@@ -554,10 +532,13 @@ public class ODataConsumerImpl implements ODataConsumer {
 		Response response = request.send();
 		
 		if(response.getStatus() == ODataResponseStatus.OK) {
-			List<T> list = response.convertToObjectList(listClass, func.getReturnType(), context);
-			return list;
-		} else {
-			throw new RuntimeException("Create Failed!");//TODO
-		}
+			
+			return response.convertToODataValue(func.getReturnType(), context);
+			
+		} else throw response.convertToError(context);
+	}
+
+	public ODataValue invokeFunctionForODataValue(EdmFunctionImport func, ODataParameters parameters) {
+		return invokeFunctionForODataValue(func.getEntitySet(), func.getName(), parameters.getParametersMap());
 	}
 }

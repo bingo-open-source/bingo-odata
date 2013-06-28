@@ -26,15 +26,15 @@ import bingo.meta.edm.EdmProperty;
 import bingo.odata.ODataQueryInfo;
 import bingo.odata.ODataServices;
 import bingo.odata.consumer.exceptions.ConnectFailedException;
-import bingo.odata.consumer.ext.ODataContents;
 import bingo.odata.model.ODataEntity;
 import bingo.odata.model.ODataEntitySet;
 import bingo.odata.model.ODataKey;
+import bingo.odata.model.ODataNavigationProperty;
 import bingo.odata.model.ODataParameters;
+import bingo.odata.model.ODataProperty;
 import bingo.odata.model.ODataValue;
 import bingo.odata.producer.ODataProducerConfig;
 import bingo.odata.producer.ODataProducerContext;
-import bingo.odata.consumer.ext.ODataContent;
 import bingo.odata.consumer.requests.behaviors.Behavior;
 import bingo.odata.consumer.requests.builders.QueryBuilder;
 import bingo.odata.consumer.requests.builders.QueryFilter;
@@ -98,13 +98,13 @@ public interface ODataConsumer {
 	ODataEntity 				findEntity(EdmEntityType entityType, ODataKey key);
 	
 	// query - property	
-	ODataValue 					findProperty(String entitType, Object key, String property);
+	ODataProperty				findProperty(String entitType, Object key, String property);
 	
-	ODataValue 					findProperty(EdmEntityType entitType, ODataKey key, EdmProperty property);
+	ODataProperty 				findProperty(EdmEntityType entitType, ODataKey key, EdmProperty property);
 	
-	ODataValue 					findNavigationProperty(String entitType, Object key, String property);
+	ODataNavigationProperty		findNavigationProperty(String entitType, Object key, String property);
 	
-	ODataValue 					findNavigationProperty(EdmEntityType entitType, ODataKey key, EdmNavigationProperty property);
+	ODataNavigationProperty		findNavigationProperty(EdmEntityType entitType, ODataKey key, EdmNavigationProperty property);
 
 	// query - count
 	long 						count(String entityType, String queryString);
@@ -118,20 +118,14 @@ public interface ODataConsumer {
 	// function invoke
 	String 						invokeFunction(String entitySet, String funcName, Map<String, Object> parameters);
 	
-	String 						invokeFunction(String entitySet, String funcName, Map<String, Object> parameters, String httpMethod);
-
 	<T> T	 					invokeFunction(String entitySet, String funcName, Map<String, Object> parameters, Class<T> t);
 	
 	<T> List<T>					invokeFunctionForList(String entitySet, String funcName, Map<String, Object> parameters, Class<T> listClass);
-	
-	<T> T	 					invokeFunction(String entitySet, String funcName, Map<String, Object> parameters, String httpMethod, Class<T> t);
 	
 	<T> T	 					invokeFunction(EdmFunctionImport func,ODataParameters parameters, Class<T> t);
 	
 	ODataValue					invokeFunctionForODataValue(String entitySet, String funcName, Map<String, Object> parameters);
 	
-	ODataValue					invokeFunctionForODataValue(String entitySet, String funcName, Map<String, Object> parameters, String httpMethod);
-
 	ODataValue 					invokeFunctionForODataValue(EdmFunctionImport func,ODataParameters parameters);
 	
 	// action invoke

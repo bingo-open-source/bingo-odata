@@ -1,6 +1,8 @@
 package bingo.odata.consumer.exceptions;
 
-public abstract class ODataConsumerException extends RuntimeException {
+import bingo.odata.ODataException;
+
+public abstract class ODataConsumerException extends ODataException {
 	/**
 	 * 
 	 */
@@ -22,4 +24,7 @@ public abstract class ODataConsumerException extends RuntimeException {
 		super(arg0, arg1);
 	}
 
+	public ODataConsumerException(String message, Object... args) {
+	    super(message, args);
+    }
 }

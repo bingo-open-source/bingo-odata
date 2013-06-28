@@ -14,11 +14,14 @@ import org.junit.Test;
 import bingo.lang.Converts;
 import bingo.meta.edm.EdmEntitySet;
 import bingo.meta.edm.EdmEntityType;
+import bingo.odata.ODataObjectKind;
 import bingo.odata.ODataServices;
 import bingo.odata.consumer.demo.DemoODataProducer;
 import bingo.odata.model.ODataEntity;
 import bingo.odata.model.ODataEntityBuilder;
 import bingo.odata.model.ODataEntitySet;
+import bingo.odata.model.ODataProperty;
+import bingo.odata.model.ODataValue;
 
 public class ODataConsumerImplTest {
 	
@@ -93,7 +96,8 @@ public class ODataConsumerImplTest {
 
 	@Test
 	public void testFindProperty() {
-		fail("Not yet implemented");
+		ODataProperty value = consumer.findProperty("Product", "123456", "name");
+		assertNotNull(value);
 	}
 
 	@Test
@@ -121,6 +125,7 @@ public class ODataConsumerImplTest {
 		paramsMap.put("rating", 2);
 		Product product = consumer.invokeFunction("Products", "getEntity", paramsMap, Product.class);
 		assertNotNull(product);
+		assertEquals("Bread", product.getName());
 	}
 
 	@Test
@@ -129,6 +134,18 @@ public class ODataConsumerImplTest {
 		paramsMap.put("rating", 2);
 		List<Product> product = consumer.invokeFunctionForList("Products", "getEntitySet", paramsMap, Product.class);
 		assertNotNull(product);
+		assertEquals(3, product.size());
+	}
+	
+	@Test
+	public void testInvokeFunction_returnODataValue() {
+		Map<String, Object> paramsMap = new HashMap<String, Object>();
+		paramsMap.put("rating", 2);
+		ODataValue product = consumer.invokeFunctionForODataValue("Products", "getEntity", paramsMap);
+		assertNotNull(product);
+		assertEquals(ODataObjectKind.Entity, product.getKind());
+		ODataEntity entity = (ODataEntity) product.getValue();
+		assertEquals("Bread", entity.getPropertyValue("Name"));
 	}
 	
 	public class Product {

@@ -358,7 +358,8 @@ public class DemoODataProducer extends ODataProducerAdapter implements ODataProd
 												 .build());
 		demoService.addFunctionImport(EdmBuilders.functionImport("getEntity")
 				.setEntitySet(products.getName())
-				.setReturnType(EdmCollectionType.of(productRef))
+//				.setReturnType(EdmCollectionType.of(productRef))
+				.setReturnType(EdmEntityTypeRef.of(schema.build(), product.build()))
 				.addParameter("rating", EdmSimpleType.INT32, EdmParameterMode.In)
 				.build());
 		demoService.addFunctionImport(EdmBuilders.functionImport("getEntitySet")
