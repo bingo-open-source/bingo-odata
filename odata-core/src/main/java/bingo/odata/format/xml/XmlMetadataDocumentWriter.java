@@ -348,11 +348,13 @@ public class XmlMetadataDocumentWriter extends ODataXmlWriter<ODataServices> {
 		
 		if(func.getReturnType() != null){
 			writer.attribute("ReturnType",fullQualifiedName(schema, func.getReturnType()));
-			
-			if(func.getReturnType().isEntity()){
-				writer.attribute("EntitySet",context.getServices().findEntitySet((EdmEntityType)func.getReturnType()).getName());
-			}else if(func.getReturnType().isEntityRef()){
-				writer.attribute("EntitySet",context.getServices().findEntitySet(((EdmEntityTypeRef)func.getReturnType()).getName()).getName());
+			if(Strings.isBlank(func.getEntitySet())) {
+				if(func.getReturnType().isEntity()){
+					writer.attribute("EntitySet",context.getServices().findEntitySet((EdmEntityType)func.getReturnType()).getName());
+				}else if(func.getReturnType().isEntityRef()){
+					EdmEntitySet entitySet = context.getServices().findEntitySet((EdmEntityTypeRef)func.getReturnType());
+					writer.attribute("EntitySet", entitySet.getName());
+				}
 			}
 		}
 		
