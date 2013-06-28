@@ -15,45 +15,48 @@
  */
 package bingo.odata.consumer.requests;
 
-import bingo.lang.Strings;
-import bingo.lang.http.HttpMethods;
 import bingo.odata.consumer.ODataConsumerContext;
 
-
-public class DeleteEntityRequest extends Request {
+public class FindPropertyRequest extends Request {
 	
 	private String entitySet;
 	private Object id;
+	private String property;
 	
-	public DeleteEntityRequest(ODataConsumerContext context, String serviceRoot) {
+	public FindPropertyRequest(ODataConsumerContext context, String serviceRoot) {
 		super(context, serviceRoot);
-	}
-	
-	public Object getId() {
-		return id;
-	}
-	public DeleteEntityRequest setId(Object id) {
-		this.id = id;
-		return this;
-	}
-	public String getEntitySet() {
-		return entitySet;
-	}
-	public DeleteEntityRequest setEntitySet(String entitySet) {
-		this.entitySet = entitySet;
-		return this;
-	}
-
-	@Override
-	public String getMethod() {
-		return HttpMethods.DELETE;
 	}
 
 	@Override
 	public String getResourcePath() {
-		if(Strings.isBlank(id)) {
-			return entitySet;
-		}else return entitySet + "(" + id + ")";
+		return entitySet + "(" + id.toString() + ")" + URL_FRAGMENT_DIVIDER + property;
 	}
-	
+
+	public String getEntitySet() {
+		return entitySet;
+	}
+
+	public FindPropertyRequest setEntitySet(String entitySet) {
+		this.entitySet = entitySet;
+		return this;
+	}
+
+	public Object getId() {
+		return id;
+	}
+
+	public FindPropertyRequest setId(Object id) {
+		this.id = id;
+		return this;
+	}
+
+	public String getProperty() {
+		return property;
+	}
+
+	public FindPropertyRequest setProperty(String property) {
+		this.property = property;
+		return this;
+	}
+
 }

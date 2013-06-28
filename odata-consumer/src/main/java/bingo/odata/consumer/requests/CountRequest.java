@@ -15,45 +15,32 @@
  */
 package bingo.odata.consumer.requests;
 
-import bingo.lang.Strings;
-import bingo.lang.http.HttpMethods;
+import bingo.lang.Assert;
+import bingo.odata.ODataConstants;
 import bingo.odata.consumer.ODataConsumerContext;
 
 
-public class DeleteEntityRequest extends Request {
+public class CountRequest extends Request {
 	
 	private String entitySet;
-	private Object id;
-	
-	public DeleteEntityRequest(ODataConsumerContext context, String serviceRoot) {
+
+	public CountRequest(ODataConsumerContext context, String serviceRoot) {
 		super(context, serviceRoot);
 	}
-	
-	public Object getId() {
-		return id;
-	}
-	public DeleteEntityRequest setId(Object id) {
-		this.id = id;
-		return this;
-	}
+
 	public String getEntitySet() {
 		return entitySet;
 	}
-	public DeleteEntityRequest setEntitySet(String entitySet) {
+
+	public CountRequest setEntitySet(String entitySet) {
 		this.entitySet = entitySet;
 		return this;
 	}
 
 	@Override
-	public String getMethod() {
-		return HttpMethods.DELETE;
+	public String getResourcePath() {
+		Assert.notBlank(entitySet);
+		return entitySet + URL_FRAGMENT_DIVIDER + "$count";
 	}
 
-	@Override
-	public String getResourcePath() {
-		if(Strings.isBlank(id)) {
-			return entitySet;
-		}else return entitySet + "(" + id + ")";
-	}
-	
 }

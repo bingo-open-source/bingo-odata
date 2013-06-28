@@ -15,45 +15,35 @@
  */
 package bingo.odata.consumer.requests;
 
-import bingo.lang.Strings;
-import bingo.lang.http.HttpMethods;
 import bingo.odata.consumer.ODataConsumerContext;
 
+import com.google.api.client.http.GenericUrl;
 
-public class DeleteEntityRequest extends Request {
+
+
+public class FindEntitySetRequest extends Request{
 	
 	private String entitySet;
-	private Object id;
 	
-	public DeleteEntityRequest(ODataConsumerContext context, String serviceRoot) {
+	public FindEntitySetRequest(ODataConsumerContext context, String serviceRoot) {
 		super(context, serviceRoot);
 	}
-	
-	public Object getId() {
-		return id;
+
+	@Override
+	protected GenericUrl genUrl() {
+		String string = this.serviceRoot + entitySet;
+		string = addQueryString(string);
+		GenericUrl url = new GenericUrl(string);
+		return url;
 	}
-	public DeleteEntityRequest setId(Object id) {
-		this.id = id;
-		return this;
-	}
+
 	public String getEntitySet() {
 		return entitySet;
 	}
-	public DeleteEntityRequest setEntitySet(String entitySet) {
+
+	public FindEntitySetRequest setEntitySet(String entitySet) {
 		this.entitySet = entitySet;
 		return this;
-	}
-
-	@Override
-	public String getMethod() {
-		return HttpMethods.DELETE;
-	}
-
-	@Override
-	public String getResourcePath() {
-		if(Strings.isBlank(id)) {
-			return entitySet;
-		}else return entitySet + "(" + id + ")";
 	}
 	
 }

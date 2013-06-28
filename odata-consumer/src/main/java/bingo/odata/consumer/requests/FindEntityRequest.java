@@ -15,28 +15,34 @@
  */
 package bingo.odata.consumer.requests;
 
-import bingo.odata.consumer.ODataConsumerContext;
+import java.net.URL;
 
-public class RetrievePropertyRequest extends Request {
+import com.google.api.client.http.GenericUrl;
+
+import bingo.lang.Strings;
+import bingo.odata.consumer.ODataConsumerContext;
+import bingo.odata.consumer.requests.builders.RequestBuilder;
+import bingo.odata.consumer.requests.builders.RequestBuilderBase;
+
+public class FindEntityRequest extends Request {
 	
 	private String entitySet;
 	private Object id;
-	private String property;
 	
-	public RetrievePropertyRequest(ODataConsumerContext context, String serviceRoot) {
+	public FindEntityRequest(ODataConsumerContext context, String serviceRoot) {
 		super(context, serviceRoot);
 	}
 
 	@Override
 	public String getResourcePath() {
-		return entitySet + "('" + id.toString() + "')" + URL_FRAGMENT_DIVIDER + property;
+		return entitySet + "(" + id.toString() + ")";
 	}
 
 	public String getEntitySet() {
 		return entitySet;
 	}
 
-	public RetrievePropertyRequest setEntitySet(String entitySet) {
+	public FindEntityRequest setEntitySet(String entitySet) {
 		this.entitySet = entitySet;
 		return this;
 	}
@@ -45,17 +51,8 @@ public class RetrievePropertyRequest extends Request {
 		return id;
 	}
 
-	public RetrievePropertyRequest setId(Object id) {
+	public FindEntityRequest setId(Object id) {
 		this.id = id;
-		return this;
-	}
-
-	public String getProperty() {
-		return property;
-	}
-
-	public RetrievePropertyRequest setProperty(String property) {
-		this.property = property;
 		return this;
 	}
 

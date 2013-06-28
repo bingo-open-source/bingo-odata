@@ -15,45 +15,15 @@
  */
 package bingo.odata.consumer.requests;
 
-import java.net.URL;
-
-import com.google.api.client.http.GenericUrl;
-
-import bingo.lang.Strings;
 import bingo.odata.consumer.ODataConsumerContext;
 import bingo.odata.consumer.requests.builders.RequestBuilder;
 import bingo.odata.consumer.requests.builders.RequestBuilderBase;
 
-public class RetrieveEntityRequest extends Request {
-	
-	private String entitySet;
-	private Object id;
-	
-	public RetrieveEntityRequest(ODataConsumerContext context, String serviceRoot) {
+public class FindPropertyValueRequest extends Request {
+
+	public FindPropertyValueRequest(ODataConsumerContext context, String serviceRoot) {
 		super(context, serviceRoot);
 	}
 
-	@Override
-	public String getResourcePath() {
-		return entitySet + "('" + id.toString() + "')";
-	}
-
-	public String getEntitySet() {
-		return entitySet;
-	}
-
-	public RetrieveEntityRequest setEntitySet(String entitySet) {
-		this.entitySet = entitySet;
-		return this;
-	}
-
-	public Object getId() {
-		return id;
-	}
-
-	public RetrieveEntityRequest setId(Object id) {
-		this.id = id;
-		return this;
-	}
 
 }

@@ -15,6 +15,7 @@
  */
 package bingo.odata.consumer.requests.invoke;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import bingo.lang.Strings;
@@ -27,7 +28,6 @@ public class FunctionRequest extends Request{
 	private String entitySet = "";
 	private String function;
 	private String httpMethod;
-	private Map<String, Object> params;
 
 	public FunctionRequest(ODataConsumerContext context, String serviceRoot) {
 		super(context, serviceRoot);
@@ -50,22 +50,23 @@ public class FunctionRequest extends Request{
 		return this;
 	}
 
-
-	public Map<String, Object> getParams() {
-		return params;
-	}
-
 	public FunctionRequest setParams(Map<String, Object> params) {
-		this.params = params;
-		this.addParameters(params);
+		Map<String, String> qualifiedParams = new LinkedHashMap<String, String>();
+		for (String key : params.keySet()) {
+			Object valueObject = params.get(key);
+			
+			// TODO maybe need to do some url-format convert for some Type, like Date.
+			String valueString = valueObject.toString();
+			
+			qualifiedParams.put(key, valueString);
+		}
+		this.addParameters(qualifiedParams);
 		return this;
 	}
-
 
 	public String getEntitySet() {
 		return entitySet;
 	}
-
 
 	public FunctionRequest setEntitySet(String entitySet) {
 		if(Strings.isNotBlank(entitySet)) this.entitySet = entitySet;

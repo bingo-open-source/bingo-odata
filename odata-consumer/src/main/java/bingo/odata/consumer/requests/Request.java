@@ -36,7 +36,8 @@ public class Request {
 	
 	protected String accept;
 	protected Map<String, String> headers = new HashMap<String, String>();
-	protected Map<String, Object> parameters = new HashMap<String, Object>();
+	protected Map<String, String> parameters = new HashMap<String, String>();
+	protected String additionalQueryString;
 	protected String method = HttpMethods.GET;
 	protected String serviceRoot;
 	protected String resourcePath;
@@ -70,11 +71,11 @@ public class Request {
 		this.headers = headers;
 	}
 
-	public Map<String, Object> getParameters() {
+	public Map<String, String> getParameters() {
 		return parameters;
 	}
 
-	public Request setParameters(Map<String, Object> parameters) {
+	public Request setParameters(Map<String, String> parameters) {
 		this.parameters = parameters;
 		return this;
 	}
@@ -84,7 +85,7 @@ public class Request {
 		return this;
 	}
 	
-	public Request addParameters(Map<String, Object> parameters) {
+	public Request addParameters(Map<String, String> parameters) {
 		this.parameters.putAll(parameters);
 		return this;
 	}
@@ -119,7 +120,13 @@ public class Request {
 		for (Object key : keys) {
 			builder.append(key).append("=").append(parameters.get(key)).append("&");
 		}
-		return builder.substring(0, builder.length() - 1);
+		String queryString = builder.substring(0, builder.length() - 1);
+		return this.addQueryString(queryString, additionalQueryString);
+	}
+	
+	public Request addAdditionalQueryString(String queryString) {
+		additionalQueryString = this.addQueryString(this.additionalQueryString, queryString);
+		return this;
 	}
 
 	public String getHeader(String name) {
@@ -134,7 +141,7 @@ public class Request {
 		return parameters.get(name);
 	}
 	
-	public Response send() throws ConnectFailedException {
+	public Response send() {
 		final HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
 		
 		HttpRequestFactory requestFactory = HTTP_TRANSPORT.createRequestFactory();
@@ -231,5 +238,12 @@ public class Request {
 	
 	protected void setDefaultParameters() {
 		this.addParameter(ODataConstants.QueryOptions.FORMAT, context.getFormat().getValue());
+	}
+	
+	protected static String addQueryString(String queryString1, String queryString2) {
+		if(Strings.isBlank(queryString1)) return queryString2;
+		if(Strings.isBlank(queryString2)) return queryString1;
+		
+		return queryString1 + "&" + queryString2;
 	}
 }

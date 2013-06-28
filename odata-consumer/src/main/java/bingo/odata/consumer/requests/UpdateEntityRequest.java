@@ -56,7 +56,7 @@ public class UpdateEntityRequest extends Request {
 	}
 	@Override
 	public String getResourcePath() {
-		return entitySet + "('" + id + "')";
+		return entitySet + "(" + id + ")";
 	}
 	
 	@Override

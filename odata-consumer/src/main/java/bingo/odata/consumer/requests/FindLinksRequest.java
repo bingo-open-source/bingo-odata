@@ -15,32 +15,13 @@
  */
 package bingo.odata.consumer.requests;
 
-import bingo.lang.Assert;
-import bingo.odata.ODataConstants;
 import bingo.odata.consumer.ODataConsumerContext;
 
 
-public class RetrieveCountRequest extends Request {
-	
-	private String entitySet;
+public class FindLinksRequest extends Request{
 
-	public RetrieveCountRequest(ODataConsumerContext context, String serviceRoot) {
+	public FindLinksRequest(ODataConsumerContext context, String serviceRoot) {
 		super(context, serviceRoot);
-	}
-
-	public String getEntitySet() {
-		return entitySet;
-	}
-
-	public RetrieveCountRequest setEntitySet(String entitySet) {
-		this.entitySet = entitySet;
-		return this;
-	}
-
-	@Override
-	public String getResourcePath() {
-		Assert.notBlank(entitySet);
-		return entitySet + URL_FRAGMENT_DIVIDER + "$count";
 	}
 
 }
