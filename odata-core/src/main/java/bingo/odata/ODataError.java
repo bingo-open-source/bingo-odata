@@ -19,9 +19,14 @@ public class ODataError extends ODataException implements ODataObject {
 
 	private static final long serialVersionUID = 2055517132583888032L;
 	
-	private final int     status;
+	private int     status;
 	private final String	code;
 	private final String	message;
+
+	public ODataError(String code, String message) {
+	    this.code    = code;
+	    this.message = message;
+    }
 	
 	public ODataError(int status,String code, String message) {
 		this.status  = status;
@@ -39,6 +44,10 @@ public class ODataError extends ODataException implements ODataObject {
 	public int getStatus() {
     	return status;
     }
+	
+	public void setStatus(int status) {
+		this.status = status;
+	}
 
 	public String getCode() {
 		return code;
