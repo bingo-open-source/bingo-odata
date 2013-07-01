@@ -35,7 +35,6 @@ import bingo.odata.expression.OrderByExpression.Direction;
 import bingo.odata.expression.PrintExpressionVisitor;
 
 public class ODataQueryInfoParser {
-	private static String blankCode = "%20";
 	
 	public static ODataQueryInfo parse(ODataQueryOptions options){
 		return new ODataQueryInfo(parseExpand(options.getExpand()), 
@@ -85,9 +84,9 @@ public class ODataQueryInfoParser {
 	
 	public static String toFilterString(BoolExpression filter) {
 		if(null == filter) return null;
-		PrintExpressionVisitor visitor = new PrintExpressionVisitor();
+		FilterExpressionVisitor visitor = new FilterExpressionVisitor();
 		filter.visit(visitor);
-		return visitor.toString();
+		return ODataConstants.QueryOptions.FILTER + "=" + visitor.toString();
 	}
 	
 	public static List<OrderByExpression> parseOrderBy(String value){
@@ -99,7 +98,7 @@ public class ODataQueryInfoParser {
 			StringBuilder builder = new StringBuilder(ODataConstants.QueryOptions.ORDER_BY);
 			builder.append("=");
 			for (OrderByExpression item : orderBy) {
-				builder.append(((EntitySimpleProperty)item.getExpression()).getName()).append(blankCode)
+				builder.append(((EntitySimpleProperty)item.getExpression()).getName()).append(" ")
 					.append(item.getDirection() == Direction.ASCENDING? "asc":"desc").append(",");
 			}
 			return builder.substring(0, builder.length() - 1);

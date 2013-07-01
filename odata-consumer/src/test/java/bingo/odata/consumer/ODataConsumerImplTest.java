@@ -113,7 +113,11 @@ public class ODataConsumerImplTest {
 	@Test
 	public void testQuery() {
 		List<Map<String, Object>> entitySet = consumer.query("Products")
-				.where("name=:name").param("name", "bread").orderBy("id", OrderByDirection.asc).exec();
+				.where("name=:name")
+				.param("name", "bread")
+				.orderBy("id", OrderByDirection.asc).orderBy("name", OrderByDirection.desc)
+				.expand("friend", "any").page(3).select("name")
+				.exec();
 		assertNotNull(entitySet);
 		assertEquals(3, entitySet.size());
 	}

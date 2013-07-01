@@ -122,7 +122,10 @@ public class Request {
 			builder.append(key).append("=").append(parameters.get(key)).append("&");
 		}
 		String queryString = builder.substring(0, builder.length() - 1);
-		return this.addQueryString(queryString, additionalQueryString);
+		queryString = this.addQueryString(queryString, additionalQueryString);
+		
+		queryString = queryString.replaceAll(" ", "%20");
+		return queryString;
 	}
 	
 	public Request addAdditionalQueryString(String queryString) {

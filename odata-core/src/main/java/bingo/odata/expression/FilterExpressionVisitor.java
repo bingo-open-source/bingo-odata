@@ -7,15 +7,15 @@ import bingo.odata.utils.InternalTypeUtils;
 public class FilterExpressionVisitor implements ExpressionVisitor {
 
 	// only literals supported, so this suffices for now
-	private String	fragment;
+	private StringBuilder	fragment = new StringBuilder();
 
 	private void push(String fragment) {
-		this.fragment = fragment;
+		this.fragment.append(fragment);
 	}
 
 	@Override
 	public String toString() {
-		return fragment;
+		return fragment.toString();
 	}
 
 	// literals
@@ -100,15 +100,15 @@ public class FilterExpressionVisitor implements ExpressionVisitor {
 	// non-literals, not supported at the moment
 
 	public void beforeDescend() {
-		throw new UnsupportedOperationException();
+		push("(");
 	}
 
 	public void afterDescend() {
-		throw new UnsupportedOperationException();
+		push(")");
 	}
 
 	public void betweenDescend() {
-		throw new UnsupportedOperationException();
+		push(",");
 	}
 
 	public void visit(String type) {
@@ -153,11 +153,17 @@ public class FilterExpressionVisitor implements ExpressionVisitor {
 	}
 
 	public boolean visit(EntitySimpleProperty expr) {
-		throw new UnsupportedOperationException();
+		push(expr.getName());
+		return true;
 	}
 
 	public boolean visit(EqExpression expr) {
-		throw new UnsupportedOperationException();
+		FilterExpressionVisitor visitorLeft = new FilterExpressionVisitor();
+		FilterExpressionVisitor visitorRight = new FilterExpressionVisitor();
+		expr.getLHS().visit(visitorLeft);
+		expr.getRHS().visit(visitorRight);
+		push(visitorLeft.toString() + " eq " + visitorRight.toString());
+		return false;
 	}
 
 	public boolean visit(GeExpression expr) {
