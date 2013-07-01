@@ -486,10 +486,13 @@ public class ODataConsumerImpl implements ODataConsumer {
 		if(config.isVerifyMetadata()) func = verifier.hasFunction(entitySet, funcName);
 		
 		ODataConsumerContext context = new ODataConsumerContext(config);
-	
-		context.setEntitySet(services.findEntitySet(entitySet));
 		
-		context.setEntityType(services.findEntityType(context.getEntitySet().getEntityType()));
+		if(Strings.isNotBlank(entitySet)) {
+			
+			context.setEntitySet(services.findEntitySet(entitySet));
+			
+			context.setEntityType(services.findEntityType(context.getEntitySet().getEntityType()));
+		}
 		
 		Request request = new FunctionRequest(context, serviceRoot).setHttpMethod(func.getHttpMethod())
 					.setEntitySet(entitySet).setFunction(funcName).setParams(parameters);

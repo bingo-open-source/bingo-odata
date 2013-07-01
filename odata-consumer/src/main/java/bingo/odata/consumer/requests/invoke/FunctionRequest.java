@@ -18,6 +18,7 @@ package bingo.odata.consumer.requests.invoke;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import bingo.lang.Objects;
 import bingo.lang.Strings;
 import bingo.odata.consumer.ODataConsumerContext;
 import bingo.odata.consumer.requests.Request;
@@ -57,7 +58,7 @@ public class FunctionRequest extends Request{
 			Object valueObject = params.get(key);
 			
 			// TODO maybe need to do some url-format convert for some Type, like Date.
-			String valueString = valueObject.toString();
+			String valueString = Objects.toString(valueObject);
 			
 			qualifiedParams.put(key, valueString);
 		}
