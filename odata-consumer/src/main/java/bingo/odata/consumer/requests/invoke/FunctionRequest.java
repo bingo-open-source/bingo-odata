@@ -18,8 +18,14 @@ package bingo.odata.consumer.requests.invoke;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import com.google.api.client.http.ByteArrayContent;
+import com.google.api.client.http.HttpContent;
+
 import bingo.lang.Objects;
 import bingo.lang.Strings;
+import bingo.lang.http.HttpMethods;
+import bingo.lang.json.JSON;
+import bingo.odata.ODataConstants.ContentTypes;
 import bingo.odata.consumer.ODataConsumerContext;
 import bingo.odata.consumer.requests.Request;
 
@@ -29,6 +35,7 @@ public class FunctionRequest extends Request{
 	private String entitySet = "";
 	private String function;
 	private String httpMethod;
+	private Map<String, Object> params;
 
 	public FunctionRequest(ODataConsumerContext context, String serviceRoot) {
 		super(context, serviceRoot);
@@ -53,16 +60,7 @@ public class FunctionRequest extends Request{
 	}
 
 	public FunctionRequest setParams(Map<String, Object> params) {
-		Map<String, String> qualifiedParams = new LinkedHashMap<String, String>();
-		for (String key : params.keySet()) {
-			Object valueObject = params.get(key);
-			
-			// TODO maybe need to do some url-format convert for some Type, like Date.
-			String valueString = Objects.toString(valueObject);
-			
-			qualifiedParams.put(key, valueString);
-		}
-		this.addParameters(qualifiedParams);
+		this.params = params;
 		return this;
 	}
 
@@ -90,5 +88,34 @@ public class FunctionRequest extends Request{
 			return super.getMethod();
 		} else return httpMethod;
 	}
-	
+
+	@Override
+	protected void beforeSend() {
+		if(getMethod() == HttpMethods.GET) {
+			prepareParams();
+		}
+	}
+
+	@Override
+	protected HttpContent genContent() {
+		if(getMethod() == HttpMethods.POST) {
+			String json = JSON.encode(params, true);
+			HttpContent content = ByteArrayContent.fromString(ContentTypes.APPLICATION_JSON, json);
+			return content;
+		}
+		return null;
+	}
+
+	private void prepareParams() {
+		Map<String, String> qualifiedParams = new LinkedHashMap<String, String>();
+		for (String key : params.keySet()) {
+			Object valueObject = params.get(key);
+			
+			// TODO maybe need to do some url-format convert for some Type, like Date.
+			String valueString = Objects.toString(valueObject);
+			
+			qualifiedParams.put(key, valueString);
+		}
+		this.addParameters(qualifiedParams);
+	}
 }

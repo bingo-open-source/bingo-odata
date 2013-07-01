@@ -143,6 +143,8 @@ public class Request {
 	}
 	
 	public Response send() {
+		beforeSend();
+		
 		final HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
 		
 		HttpRequestFactory requestFactory = HTTP_TRANSPORT.createRequestFactory();
@@ -169,6 +171,10 @@ public class Request {
 		} catch (IOException e) {
 			throw new ConnectFailedException(req.getUrl().toString());
 		}
+	}
+
+	protected void beforeSend() {
+		// nothing.
 	}
 
 	private void handleBehaviors(HttpRequest req) {

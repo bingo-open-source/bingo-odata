@@ -19,10 +19,13 @@ import static bingo.meta.edm.EdmUtils.fullQualifiedName;
 
 import java.util.UUID;
 
+import com.google.api.client.http.HttpMediaType;
+
 import bingo.lang.Assert;
 import bingo.lang.Dates;
 import bingo.lang.Enumerables;
 import bingo.lang.Strings;
+import bingo.lang.http.HttpMethods;
 import bingo.meta.edm.EdmAssociation;
 import bingo.meta.edm.EdmAssociationBuilder;
 import bingo.meta.edm.EdmBuilders;
@@ -364,7 +367,7 @@ public class DemoODataProducer extends ODataProducerAdapter implements ODataProd
 				.addParameter("rating", EdmSimpleType.INT32, EdmParameterMode.In)
 				.build());
 		demoService.addFunctionImport(EdmBuilders.functionImport("getEntitySet")
-				.setEntitySet(products.getName())
+				.setEntitySet(products.getName()).setHttpMethod(HttpMethods.POST)
 				.setReturnType(EdmCollectionType.of(productRef))
 				.addParameter("rating", EdmSimpleType.INT32, EdmParameterMode.In)
 				.build());
