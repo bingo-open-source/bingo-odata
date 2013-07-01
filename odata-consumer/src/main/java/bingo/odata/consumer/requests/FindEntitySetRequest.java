@@ -15,6 +15,11 @@
  */
 package bingo.odata.consumer.requests;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
+import org.apache.http.client.utils.URLEncodedUtils;
+
 import bingo.odata.consumer.ODataConsumerContext;
 
 import com.google.api.client.http.GenericUrl;

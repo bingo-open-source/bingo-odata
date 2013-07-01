@@ -22,6 +22,7 @@ import bingo.odata.ODataServices;
 import bingo.odata.ODataUrlInfo;
 import bingo.odata.consumer.demo.DemoModelAndData;
 import bingo.odata.consumer.demo.DemoODataProducer;
+import bingo.odata.consumer.ext.OrderByDirection;
 import bingo.odata.model.ODataEntity;
 import bingo.odata.model.ODataEntityBuilder;
 import bingo.odata.model.ODataEntitySet;
@@ -94,19 +95,34 @@ public class ODataConsumerImplTest {
 //		int result = consumer.mergeEntityByKey("Product", "123456", fields);
 //		assertEquals(1, result);
 //	}
-	
-	@Test
-	public void testFindEntitySet() {
-		ODataEntitySet entitySet = consumer.findEntitySet("Products");
-		assertNotNull(entitySet);
-		assertEquals(3, entitySet.getEntities().size());
-	}
 
 	@Test
 	public void testFindEntity() {
 		ODataEntity entity = consumer.findEntity("Product", "123456");
 		assertNotNull(entity);
 		System.out.println(entity);
+	}
+	
+	@Test
+	public void testFindEntitySet() {
+		List<Map<String, Object>> entitySet = consumer.findEntitySet("Products");
+		assertNotNull(entitySet);
+		assertEquals(3, entitySet.size());
+	}
+	
+	@Test
+	public void testQuery() {
+		List<Map<String, Object>> entitySet = consumer.query("Products")
+				.where("name=:name").param("name", "bread").orderBy("id", OrderByDirection.asc).exec();
+		assertNotNull(entitySet);
+		assertEquals(3, entitySet.size());
+	}
+	
+	@Test
+	public void testFindEntitySet_withCondition() {
+		List<Map<String, Object>> entitySet = consumer.findEntitySet("Products", "name=bread");
+		assertNotNull(entitySet);
+		assertEquals(3, entitySet.size());
 	}
 
 	@Test
@@ -131,7 +147,7 @@ public class ODataConsumerImplTest {
 	public void testInvokeFunction_simgleGetString() {
 		Map<String, Object> paramsMap = new HashMap<String, Object>();
 		paramsMap.put("rating", 22);
-		String responseString = consumer.invokeFunction("Products", "getString", paramsMap);
+		String responseString = consumer.invokeFunction("getString", paramsMap, "Products");
 		assertEquals("\"" + DemoODataProducer.INVOKED_FUNCTION + "\"", responseString);
 	}
 	
@@ -139,7 +155,7 @@ public class ODataConsumerImplTest {
 	public void testInvokeFunction_returnObject() {
 		Map<String, Object> paramsMap = new HashMap<String, Object>();
 		paramsMap.put("rating", 2);
-		Product product = consumer.invokeFunction("Products", "getEntity", paramsMap, Product.class);
+		Product product = consumer.invokeFunction("getEntity", paramsMap, "Products", Product.class);
 		assertNotNull(product);
 		assertEquals("Bread", product.getName());
 	}
@@ -148,7 +164,7 @@ public class ODataConsumerImplTest {
 	public void testInvokeFunction_returnListObject() {
 		Map<String, Object> paramsMap = new HashMap<String, Object>();
 		paramsMap.put("rating", 2);
-		List<Product> product = consumer.invokeFunctionForList("Products", "getEntitySet", paramsMap, Product.class);
+		List<Product> product = consumer.invokeFunctionForList("getEntitySet", paramsMap, "Products", Product.class);
 		assertNotNull(product);
 		assertEquals(3, product.size());
 	}
@@ -157,7 +173,7 @@ public class ODataConsumerImplTest {
 	public void testInvokeFunction_returnODataValue() {
 		Map<String, Object> paramsMap = new HashMap<String, Object>();
 		paramsMap.put("rating", 2);
-		ODataValue product = consumer.invokeFunctionForODataValue("Products", "getEntity", paramsMap);
+		ODataValue product = consumer.invokeFunctionForODataValue("getEntity", paramsMap, "Products");
 		assertNotNull(product);
 		assertEquals(ODataObjectKind.Entity, product.getKind());
 		ODataEntity entity = (ODataEntity) product.getValue();

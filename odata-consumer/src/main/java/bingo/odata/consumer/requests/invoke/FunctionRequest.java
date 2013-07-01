@@ -32,11 +32,12 @@ public class FunctionRequest extends Request{
 	public FunctionRequest(ODataConsumerContext context, String serviceRoot) {
 		super(context, serviceRoot);
 	}
-	
 
 	@Override
 	public String getResourcePath() {
-		return entitySet + URL_FRAGMENT_DIVIDER + function;
+		if(Strings.isBlank(entitySet)) {
+			return function;
+		} else return entitySet + URL_FRAGMENT_DIVIDER + function;
 	}
 
 

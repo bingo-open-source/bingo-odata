@@ -74,6 +74,6 @@ public class ODataMetadataVerifier {
 				if(Strings.equalsIgnoreCase(entitySet, enSet)) return func;
 			}
 		}
-		throw new ODataVerifiedFailException("Function belong to Entity Set " + entitySet, funcName);
+		return funcs[0];
 	}
 }

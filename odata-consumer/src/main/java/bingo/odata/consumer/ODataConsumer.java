@@ -25,7 +25,8 @@ import bingo.meta.edm.EdmNavigationProperty;
 import bingo.meta.edm.EdmProperty;
 import bingo.odata.ODataQueryInfo;
 import bingo.odata.ODataServices;
-import bingo.odata.consumer.exceptions.ConnectFailedException;
+import bingo.odata.consumer.ext.Page;
+import bingo.odata.consumer.requests.builders.QueryBuilder;
 import bingo.odata.model.ODataEntity;
 import bingo.odata.model.ODataEntitySet;
 import bingo.odata.model.ODataKey;
@@ -33,11 +34,6 @@ import bingo.odata.model.ODataNavigationProperty;
 import bingo.odata.model.ODataParameters;
 import bingo.odata.model.ODataProperty;
 import bingo.odata.model.ODataValue;
-import bingo.odata.producer.ODataProducerConfig;
-import bingo.odata.producer.ODataProducerContext;
-import bingo.odata.consumer.requests.behaviors.Behavior;
-import bingo.odata.consumer.requests.builders.QueryBuilder;
-import bingo.odata.consumer.requests.builders.QueryFilter;
 
 public interface ODataConsumer {
 
@@ -68,17 +64,25 @@ public interface ODataConsumer {
 //	int 						mergeEntity(EdmEntityType entityType, ODataKey key, ODataEntity entity);
 	
 	// query - entitySet
-	ODataEntitySet 				findEntitySet(String entitySet);
+	QueryBuilder			 	query(String entitySet);
 	
-	ODataEntitySet 				findEntitySet(String entitySet, String where);
+	List<Map<String, Object>> 	findEntitySet(String entitySet);
+	
+	List<Map<String, Object>> 	findEntitySet(String entitySet, String where);
+	
+	List<Map<String, Object>> 	findEntitySet(String entitySet, String where, Map<String, Object> params);
+	
+	List<Map<String, Object>> 	findEntitySet(String entitySet, String where, Map<String, Object> params, String orderBy);
+	
+	List<Map<String, Object>> 	findEntitySet(String entitySet, String where, Map<String, Object> params, String orderBy, String[] fields);
+	
+	List<Map<String, Object>> 	findEntitySet(String entitySet, String where, Map<String, Object> params, String orderBy, String[] fields, String[] expand);
+	
+	List<Map<String, Object>> 	findEntitySet(String entitySet, String where, Map<String, Object> params, String orderBy, String[] fields, String[] expand, Page page);
 	
 	ODataEntitySet 				findEntitySet(EdmEntitySet entitySet);
 	
 	ODataEntitySet 				findEntitySet(EdmEntitySet entitySet, ODataQueryInfo queryInfo);
-	
-	List<Map<String, Object>> 	findEntitySetAsList(String entitySet);
-	
-	List<Map<String, Object>> 	findEntitySetAsList(String entitySet, String where);
 	
 	// query - entity
 	ODataEntity 				findEntity(String entityType, Object key);
@@ -104,15 +108,23 @@ public interface ODataConsumer {
 	long 						count(EdmEntitySet entitySet, ODataQueryInfo queryInfo);
 	
 	// function invoke
-	String 						invokeFunction(String entitySet, String funcName, Map<String, Object> parameters);
+	String 						invokeFunction(String funcName, Map<String, Object> parameters);
 	
-	<T> T	 					invokeFunction(String entitySet, String funcName, Map<String, Object> parameters, Class<T> t);
+	String 						invokeFunction(String funcName, Map<String, Object> parameters, String entitySet);
 	
-	<T> List<T>					invokeFunctionForList(String entitySet, String funcName, Map<String, Object> parameters, Class<T> listClass);
+	<T> T	 					invokeFunction(String funcName, Map<String, Object> parameters, Class<T> t);
+	
+	<T> T	 					invokeFunction(String funcName, Map<String, Object> parameters, String entitySet, Class<T> t);
+	
+	<T> List<T>					invokeFunctionForList(String funcName, Map<String, Object> parameters, Class<T> listClass);
+	
+	<T> List<T>					invokeFunctionForList(String funcName, Map<String, Object> parameters, String entitySet, Class<T> listClass);
 	
 	<T> T	 					invokeFunction(EdmFunctionImport func,ODataParameters parameters, Class<T> t);
 	
-	ODataValue					invokeFunctionForODataValue(String entitySet, String funcName, Map<String, Object> parameters);
+	ODataValue					invokeFunctionForODataValue(String funcName, Map<String, Object> parameters);
+	
+	ODataValue					invokeFunctionForODataValue(String funcName, Map<String, Object> parameters, String entitySet);
 	
 	ODataValue 					invokeFunctionForODataValue(EdmFunctionImport func,ODataParameters parameters);
 	

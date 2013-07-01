@@ -40,6 +40,7 @@ import bingo.odata.ODataReaderContext;
 import bingo.odata.ODataResponseStatus;
 import bingo.odata.ODataServices;
 import bingo.odata.consumer.exceptions.ConnectFailedException;
+import bingo.odata.consumer.ext.Page;
 import bingo.odata.consumer.requests.DeleteEntityRequest;
 import bingo.odata.consumer.requests.InsertEntityRequest;
 import bingo.odata.consumer.requests.MergeEntityRequest;
@@ -51,11 +52,16 @@ import bingo.odata.consumer.requests.FindEntitySetRequest;
 import bingo.odata.consumer.requests.FindPropertyRequest;
 import bingo.odata.consumer.requests.UpdateEntityRequest;
 import bingo.odata.consumer.requests.behaviors.Behavior;
+import bingo.odata.consumer.requests.builders.QueryBuilder;
+import bingo.odata.consumer.requests.builders.QueryBuilderImpl;
 import bingo.odata.consumer.requests.invoke.FunctionRequest;
 import bingo.odata.consumer.requests.metadata.MetadataDocumentRequest;
 import bingo.odata.consumer.util.ODataMetadataVerifier;
 import bingo.odata.consumer.util.ODataQueryTranslator;
 import bingo.odata.exceptions.ODataNotImplementedException;
+import bingo.odata.expression.BoolExpression;
+import bingo.odata.expression.EntitySimpleProperty;
+import bingo.odata.expression.OrderByExpression;
 import bingo.odata.model.ODataEntity;
 import bingo.odata.model.ODataEntitySet;
 import bingo.odata.model.ODataKey;
@@ -279,51 +285,89 @@ public class ODataConsumerImpl implements ODataConsumer {
 	/**
 	 * get the entity set from producer.
 	 */
-	public ODataEntitySet findEntitySet(String entitySet) {
-		return findEntitySet(entitySet, null);
-	}
 
-	public ODataEntitySet findEntitySet(EdmEntitySet entitySet) {
-		return findEntitySet(entitySet.getName());
-	}
-
-	public ODataEntitySet findEntitySet(EdmEntitySet entitySet,	ODataQueryInfo queryInfo) {
-		return findEntitySet(entitySet.getName(), ODataQueryInfoParser.toQueryString(queryInfo), false);
-	}
-	public ODataEntitySet findEntitySet(String entitySet, String queryString) {
-		return findEntitySet(entitySet, queryString, true);
+	public QueryBuilder	query(String entitySet) {
+		return new QueryBuilderImpl(this).entitySet(entitySet);
 	}
 	
-	public List<Map<String, Object>> findEntitySetAsList(String entitySetName) {
-		return findEntitySetAsList(entitySetName, null);
+	public List<Map<String, Object>> findEntitySet(String entitySet) {
+		return findEntitySet(entitySet, null, null, null, null, null, null);
+	}
+
+	public List<Map<String, Object>> findEntitySet(String entitySet, String queryString) {
+		return findEntitySet(entitySet, queryString, null, null, null, null, null);
 	}
 	
-	public List<Map<String, Object>> findEntitySetAsList(String entitySetName, String queryString) {
-		ODataEntitySet entitySet = findEntitySet(entitySetName, queryString);
+	public List<Map<String, Object>> findEntitySet(String entitySet, String where,
+			Map<String, Object> params) {
+		return findEntitySet(entitySet, where, params, null, null, null, null);
+	}
+
+	public List<Map<String, Object>> findEntitySet(String entitySet, String where,
+			Map<String, Object> params, String orderBy) {
+		return findEntitySet(entitySet, where, params, orderBy, null, null, null);
+	}
+
+	public List<Map<String, Object>> findEntitySet(String entitySet, String where,
+			Map<String, Object> params, String orderBy, String[] fields) {
+		return findEntitySet(entitySet, where, params, orderBy, fields, null, null);
+	}
+	
+	public List<Map<String, Object>> findEntitySet(String entitySet, String where,
+			Map<String, Object> params, String orderBy, String[] fields, String[] expand) {
+		return findEntitySet(entitySet, where, params, orderBy, fields, expand, null);
+	}
+
+	public List<Map<String, Object>> findEntitySet(String entitySet, String where,
+			Map<String, Object> params, String orderBy, String[] fields, String[] expand, Page page) {
+		ensureMetadata();
 		
-		List<ODataEntity> entities = entitySet.getEntities().toList();
+		String whereParamed = Strings.isBlank(where)? 
+									null : ODataQueryTranslator.translateFilter(where, params, false);
+		
+		BoolExpression filter = Strings.isBlank(whereParamed)? 
+									null : ODataQueryInfoParser.parseFilter(whereParamed);
+		
+		List<OrderByExpression> orderByExpressions = Strings.isBlank(orderBy)?
+									null : ODataQueryInfoParser.parseOrderBy(orderBy);
+		 
+		List<EntitySimpleProperty> select = null == fields || fields.length == 0?
+									null : ODataQueryInfoParser.parseSelect(Strings.join(fields, ","));
+		
+		List<EntitySimpleProperty> expandList = null == expand || expand.length == 0?
+									null : ODataQueryInfoParser.parseExpand(Strings.join(expand, ","));
+		
+		ODataQueryInfo queryInfo = new ODataQueryInfo(expandList, filter, orderByExpressions
+				, null == page? null : page.getSkip(), null == page? null : page.getTop()
+				, null, null, select, null);
+		
+		ODataEntitySet oDataEntitySet = findEntitySet(services.findEntitySet(entitySet), queryInfo);
+		
+		List<ODataEntity> entities = oDataEntitySet.getEntities().toList();
 		
 		List<Map<String, Object>> list = new ArrayList<Map<String,Object>>();
+		
 		for (ODataEntity entity : entities) {
 			list.add(entity.toMap());
 		}
+		
 		return list;
 	}
 
-	private ODataEntitySet findEntitySet(String entitySet, String queryString, boolean resoleQueryString) {
+	public ODataEntitySet findEntitySet(EdmEntitySet entitySet) {
+		return findEntitySet(entitySet, null);
+	}
+
+	public ODataEntitySet findEntitySet(EdmEntitySet entitySet,	ODataQueryInfo queryInfo) {
 		ensureMetadata();
 		
-		if(config.isVerifyMetadata()) verifier.hasEntitySet(entitySet);
+		if(config.isVerifyMetadata()) verifier.hasEntitySet(entitySet.getName());
 		
-		ODataConsumerContext context = initEntitySetContext(this, entitySet);
+		ODataConsumerContext context = initEntitySetContext(this, entitySet.getName());
 		
-		Request request = new FindEntitySetRequest(context, serviceRoot).setEntitySet(entitySet);
+		Request request = new FindEntitySetRequest(context, serviceRoot).setEntitySet(entitySet.getName());
 		
-		if(resoleQueryString) {
-			queryString = ODataQueryTranslator.translateFilter(queryString);
-		}
-			
-		request.addAdditionalQueryString(queryString);
+		if(null != queryInfo) request.addAdditionalQueryString(ODataQueryInfoParser.toQueryString(queryInfo));
 		
 		Response response = request.send();
 
@@ -346,7 +390,7 @@ public class ODataConsumerImpl implements ODataConsumer {
 		ODataConsumerContext context = initEntityTypeContext(this, entityType, key);
 		
 		Request request = new FindPropertyRequest(context, serviceRoot)
-								.setEntitySet(context.getEntitySet().getName()).setId(qualifiedKey(key)).setProperty(property);
+			.setEntitySet(context.getEntitySet().getName()).setId(qualifiedKey(key)).setProperty(property);
 		
 		Response response = request.send();
 		
@@ -407,7 +451,10 @@ public class ODataConsumerImpl implements ODataConsumer {
 		} else throw resp.convertToError(context);
 	}
 
-	public String invokeFunction(String entitySet, String funcName, Map<String, Object> parameters) {
+	public String invokeFunction(String funcName, Map<String, Object> parameters) {
+		return invokeFunction(funcName, parameters, (String)null);
+	}
+	public String invokeFunction(String funcName, Map<String, Object> parameters, String entitySet) {
 		ensureMetadata();
 		
 		EdmFunctionImport func = null;
@@ -428,7 +475,10 @@ public class ODataConsumerImpl implements ODataConsumer {
 		} else throw response.convertToError(context);
 	}
 
-	public <T> T invokeFunction(String entitySet, String funcName, Map<String, Object> parameters, Class<T> clazz) {
+	public <T> T invokeFunction(String funcName, Map<String, Object> parameters, Class<T> clazz) {
+		return invokeFunction(funcName, parameters, null, clazz);
+	}
+	public <T> T invokeFunction(String funcName, Map<String, Object> parameters, String entitySet, Class<T> clazz) {
 		ensureMetadata();
 		
 		EdmFunctionImport func = null;
@@ -453,8 +503,12 @@ public class ODataConsumerImpl implements ODataConsumer {
 		} else throw response.convertToError(context);
 	}
 
-	public <T> List<T> invokeFunctionForList(String entitySet, String funcName,
+	public <T> List<T> invokeFunctionForList(String funcName,
 			Map<String, Object> parameters, Class<T> listClass) {
+		return invokeFunctionForList(funcName, parameters, null, listClass);
+	}
+	public <T> List<T> invokeFunctionForList(String funcName,
+			Map<String, Object> parameters, String entitySet, Class<T> listClass) {
 		ensureMetadata();
 		
 		EdmFunctionImport func = null;
@@ -482,10 +536,13 @@ public class ODataConsumerImpl implements ODataConsumer {
 	}
 
 	public <T> T invokeFunction(EdmFunctionImport func,	ODataParameters parameters, Class<T> t) {
-		return invokeFunction(func.getEntitySet(), func.getName(), parameters.getParametersMap(), t);
+		return invokeFunction(func.getName(), parameters.getParametersMap(), func.getEntitySet(), t);
 	}
 
-	public ODataValue invokeFunctionForODataValue(String entitySet, String funcName, Map<String, Object> parameters) {
+	public ODataValue invokeFunctionForODataValue(String funcName, Map<String, Object> parameters) {
+		return invokeFunctionForODataValue(funcName, parameters, null);
+	}
+	public ODataValue invokeFunctionForODataValue(String funcName, Map<String, Object> parameters, String entitySet) {
 		ensureMetadata();
 		
 		EdmFunctionImport func = null;
@@ -513,6 +570,6 @@ public class ODataConsumerImpl implements ODataConsumer {
 	}
 
 	public ODataValue invokeFunctionForODataValue(EdmFunctionImport func, ODataParameters parameters) {
-		return invokeFunctionForODataValue(func.getEntitySet(), func.getName(), parameters.getParametersMap());
+		return invokeFunctionForODataValue(func.getName(), parameters.getParametersMap(), func.getEntitySet());
 	}
 }

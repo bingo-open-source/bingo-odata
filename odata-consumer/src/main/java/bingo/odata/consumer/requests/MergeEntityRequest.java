@@ -17,15 +17,12 @@ package bingo.odata.consumer.requests;
 
 import java.util.Map;
 
-import com.google.api.client.http.ByteArrayContent;
-import com.google.api.client.http.HttpContent;
-
-import bingo.lang.http.HttpMethod;
 import bingo.lang.http.HttpMethods;
 import bingo.lang.json.JSON;
 import bingo.odata.consumer.ODataConsumerContext;
-import bingo.odata.consumer.requests.builders.RequestBuilder;
-import bingo.odata.consumer.requests.builders.RequestBuilderBase;
+
+import com.google.api.client.http.ByteArrayContent;
+import com.google.api.client.http.HttpContent;
 
 public class MergeEntityRequest extends Request {
 	private Object id;

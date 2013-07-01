@@ -16,8 +16,6 @@
 package bingo.odata.consumer.requests;
 
 import bingo.odata.consumer.ODataConsumerContext;
-import bingo.odata.consumer.requests.builders.RequestBuilder;
-import bingo.odata.consumer.requests.builders.RequestBuilderBase;
 
 public class FindPropertyValueRequest extends Request {
 

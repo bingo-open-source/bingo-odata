@@ -1,17 +1,38 @@
 package bingo.odata.consumer.requests.builders;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import bingo.odata.consumer.ODataConsumer;
+import bingo.odata.consumer.ext.OrderByDirection;
+import bingo.odata.consumer.ext.Page;
 
 public interface QueryBuilder {
-
-	QueryBuilder skip(int skip);
 	
-	QueryBuilder top(int top);
+	QueryBuilder entitySet(String entitySet);
 	
-	QueryBuilder filter(QueryFilter filter);
+	QueryBuilder where(String where);
+	
+	QueryBuilder param(String key, Object value);
+	
+	/**
+	 * these params are added to current params, not replaced them!
+	 * @param params
+	 * @return
+	 */
+	QueryBuilder params(Map<String, Object> params);
+	
+	/**
+	 * default order direction is Asc.
+	 * @param field
+	 * @return
+	 */
+	QueryBuilder orderBy(String field);
+	
+	QueryBuilder orderBy(String field, OrderByDirection direction);
+	
+	QueryBuilder orderBys(LinkedHashMap<String, OrderByDirection> orderBys);
 	
 	/**
 	 * Not calling this method or calling select("*") will select all fields.
@@ -20,16 +41,18 @@ public interface QueryBuilder {
 	 */
 	QueryBuilder select(String... fields);
 	
+	QueryBuilder expand(String... expands);
+	
+	QueryBuilder page(Page page);
+	
 	/**
-	 * e.g. 
-	 * queryBuilder.orderBy("name asc"); // normal usage
-	 * queryBuilder.orderBy("name"); // use 'asc' while omitting order direction.
-	 * queryBuilder.orderBy("name", "sex desc"); // multi order fields 
-	 *  
-	 * @param orderByFields
+	 * default page size is 10.
+	 * @param page
 	 * @return
 	 */
-	QueryBuilder orderBy(String... orderByFields);
+	QueryBuilder page(int page);
 	
-	List<Map<String, Object>> listMap();
+	QueryBuilder page(int page, int pageSize);
+	
+	List<Map<String, Object>> exec();
 }

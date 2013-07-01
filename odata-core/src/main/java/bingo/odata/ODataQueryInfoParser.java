@@ -30,8 +30,10 @@ import bingo.odata.expression.Expression;
 import bingo.odata.expression.EntitySimpleProperty;
 import bingo.odata.expression.ExpressionParser;
 import bingo.odata.expression.OrderByExpression;
+import bingo.odata.expression.OrderByExpression.Direction;
 
 public class ODataQueryInfoParser {
+	private static String blankCode = "%20";
 	
 	public static ODataQueryInfo parse(ODataQueryOptions options){
 		return new ODataQueryInfo(parseExpand(options.getExpand()), 
@@ -94,7 +96,8 @@ public class ODataQueryInfoParser {
 			StringBuilder builder = new StringBuilder(ODataConstants.QueryOptions.ORDER_BY);
 			builder.append("=");
 			for (OrderByExpression item : orderBy) {
-				builder.append("").append(" ").append(item.getDirection()).append(",");// TODO how to get property name?
+				builder.append(((EntitySimpleProperty)item.getExpression()).getName()).append(blankCode)
+					.append(item.getDirection() == Direction.ASCENDING? "asc":"desc").append(",");
 			}
 			return builder.substring(0, builder.length() - 1);
 		} else return null;

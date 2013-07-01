@@ -15,14 +15,7 @@
  */
 package bingo.odata.consumer.requests;
 
-import java.net.URL;
-
-import com.google.api.client.http.GenericUrl;
-
-import bingo.lang.Strings;
 import bingo.odata.consumer.ODataConsumerContext;
-import bingo.odata.consumer.requests.builders.RequestBuilder;
-import bingo.odata.consumer.requests.builders.RequestBuilderBase;
 
 public class FindEntityRequest extends Request {
 	
