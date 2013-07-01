@@ -3,6 +3,8 @@
  */
 package bingo.odata.format.xml;
 
+import javax.xml.namespace.QName;
+
 import bingo.lang.Strings;
 import bingo.lang.xml.XmlReader;
 import bingo.meta.edm.EdmAssociation;
@@ -391,7 +393,10 @@ public class XmlMetadataDocumentReader extends ODataXmlReader<ODataServices> {
 		func.setName(reader.requiredGetAttributeValue("Name"));
 		func.setTitle(reader.getAttributeValue(EXTEND_METADATA_QN_TITLE));
 		func.setEntitySet(reader.getAttributeValue("EntitySet"));
-		func.setHttpMethod(reader.getAttributeValue("HttpMethod"));
+		
+		String httpMethod = reader.getAttributeValue(new QName(METADATA_NS, "HttpMethod"));
+		if(Strings.isBlank(httpMethod)) httpMethod = reader.getAttributeValue("HttpMethod");
+		func.setHttpMethod(httpMethod);
 		
 		String returnType = reader.getAttributeValue("ReturnType");
 		if(!Strings.isEmpty(returnType)){
