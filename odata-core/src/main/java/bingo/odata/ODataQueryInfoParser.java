@@ -29,8 +29,10 @@ import bingo.odata.expression.BoolExpression;
 import bingo.odata.expression.Expression;
 import bingo.odata.expression.EntitySimpleProperty;
 import bingo.odata.expression.ExpressionParser;
+import bingo.odata.expression.FilterExpressionVisitor;
 import bingo.odata.expression.OrderByExpression;
 import bingo.odata.expression.OrderByExpression.Direction;
+import bingo.odata.expression.PrintExpressionVisitor;
 
 public class ODataQueryInfoParser {
 	private static String blankCode = "%20";
@@ -83,8 +85,9 @@ public class ODataQueryInfoParser {
 	
 	public static String toFilterString(BoolExpression filter) {
 		if(null == filter) return null;
-		// TODO resolve filter expression.
-		return null;
+		PrintExpressionVisitor visitor = new PrintExpressionVisitor();
+		filter.visit(visitor);
+		return visitor.toString();
 	}
 	
 	public static List<OrderByExpression> parseOrderBy(String value){

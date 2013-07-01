@@ -463,7 +463,8 @@ public class ODataConsumerImpl implements ODataConsumer {
 		
 		ODataConsumerContext context = new ODataConsumerContext(config);
 		
-		Request request = new FunctionRequest(context, serviceRoot).setHttpMethod(func.getHttpMethod())
+		Request request = new FunctionRequest(context, serviceRoot)
+					.setHttpMethod(null == func? null:func.getHttpMethod())
 					.setEntitySet(entitySet).setFunction(funcName).setParams(parameters);
 		
 		Response response = request.send();

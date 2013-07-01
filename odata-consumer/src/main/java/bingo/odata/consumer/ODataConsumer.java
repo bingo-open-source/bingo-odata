@@ -39,6 +39,8 @@ public interface ODataConsumer {
 
 	ODataConsumerConfig 		config();
 	
+	void 						config(ODataConsumerConfig config);
+	
 	ODataServices 				services();
 	
 	// meta

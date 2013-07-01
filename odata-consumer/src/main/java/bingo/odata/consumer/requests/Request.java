@@ -25,6 +25,7 @@ import com.google.api.client.http.HttpHeaders;
 import com.google.api.client.http.HttpMethods;
 import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpRequestFactory;
+import com.google.api.client.http.HttpResponseException;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 
@@ -153,6 +154,10 @@ public class Request {
 		HttpRequest req = buildRequest(requestFactory);
 		
 		handleBehaviors(req);
+		
+		// let google http client not throw exception when response code > 300
+		// treat all response as normal response here.
+		req.setThrowExceptionOnExecuteError(false);
 
 //		if(log.isDebugEnabled())  // TODO open after complete
 			report(req);
