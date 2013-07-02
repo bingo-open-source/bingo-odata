@@ -593,8 +593,7 @@ public class ODataConsumerImpl implements ODataConsumer {
 
 	public String invokeFunctionForString(String funcName,
 			Map<String, Object> parameters) {
-		// TODO Auto-generated method stub
-		return null;
+		return invokeFunctionForString(funcName, parameters, null);
 	}
 
 	public String invokeFunctionForString(String funcName, Map<String, Object> parameters, String entitySet) {
