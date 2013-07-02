@@ -28,6 +28,7 @@ import bingo.lang.json.JSONWriter;
 import bingo.lang.value.DateTimeOffset;
 import bingo.lang.value.UnsignedByte;
 import bingo.meta.edm.EdmComplexType;
+import bingo.meta.edm.EdmComplexTypeRef;
 import bingo.meta.edm.EdmProperty;
 import bingo.meta.edm.EdmSimpleType;
 import bingo.meta.edm.EdmType;
@@ -207,6 +208,16 @@ public class JsonWriterUtils {
 		
 		if(type.isComplex()){
 			writeComplexObject(context, writer,(EdmComplexType)type, value);
+			return;
+		}
+		
+		if(type instanceof EdmComplexTypeRef){
+			EdmComplexTypeRef complexTypeRef = (EdmComplexTypeRef)type;
+			EdmComplexType    complexType    = context.getServices().findComplexType(complexTypeRef);
+			if(null == complexType){
+				throw ODataErrors.internalServerError("the complex type '" + complexTypeRef.getFullQualifiedName() + "' returned by underlying service not found");
+			}
+			writeComplexObject(context, writer,complexType, value);
 			return;
 		}
 		

@@ -27,10 +27,13 @@ import bingo.lang.Named;
 import bingo.lang.Strings;
 import bingo.lang.http.HttpMethods;
 import bingo.lang.io.IO;
+import bingo.meta.edm.EdmComplexType;
+import bingo.meta.edm.EdmComplexTypeRef;
 import bingo.meta.edm.EdmEntityContainer;
 import bingo.meta.edm.EdmEntitySet;
 import bingo.meta.edm.EdmEntityType;
 import bingo.meta.edm.EdmEntityTypeRef;
+import bingo.meta.edm.EdmFullQualifiedName;
 import bingo.meta.edm.EdmFunctionImport;
 import bingo.meta.edm.EdmSchema;
 import bingo.odata.format.xml.XmlMetadataDocumentReader;
@@ -171,6 +174,30 @@ public class ODataServices implements Named,ODataObject {
 			for(EdmEntityType entityType : schema.getEntityTypes()){
 				if(entityType.getFullQualifiedName().equalsIgnoreCase(entityTypeRef.getFullQualifiedName())){
 					return entityType;
+				}
+			}
+		}
+		return null;
+	}
+	
+	public EdmComplexType findComplexType(String complexTypeName){
+		for(EdmSchema schema : schemas){
+			for(EdmComplexType complexType : schema.getComplexTypes()){
+				if(Strings.equals(complexType.getName(),complexTypeName)) {
+					return complexType;
+				}
+			}
+		}
+		return null;
+	}
+	
+	public EdmComplexType findComplexType(EdmComplexTypeRef complexTypeRef){
+		EdmFullQualifiedName fqName = new EdmFullQualifiedName(complexTypeRef.getFullQualifiedName());
+		
+		for(EdmSchema schema : schemas){
+			for(EdmComplexType complexType : schema.getComplexTypes()){
+				if(Strings.equals(fqName.getNamespace(), schema.getNamespaceName()) && Strings.equals(fqName.getName(), complexType.getName())) {
+					return complexType;
 				}
 			}
 		}
