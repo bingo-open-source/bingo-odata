@@ -8,6 +8,7 @@ import bingo.lang.Strings;
 import bingo.meta.edm.EdmEntitySet;
 import bingo.meta.edm.EdmEntityType;
 import bingo.meta.edm.EdmFunctionImport;
+import bingo.meta.edm.EdmNavigationProperty;
 import bingo.meta.edm.EdmProperty;
 import bingo.odata.ODataServices;
 import bingo.odata.consumer.exceptions.ODataVerifiedFailException;
@@ -39,6 +40,14 @@ public class ODataMetadataVerifier {
 		Assert.notBlank(property);
 		EdmProperty edmProperty = edmEntityType.findProperty(property);
 		if(null == edmProperty) throw new ODataVerifiedFailException("Property", property);
+		return edmEntityType;
+	}
+	
+	public EdmEntityType hasEntityTypeWithNavigationProp(String entityType, String naviProperty) {
+		EdmEntityType edmEntityType = hasEntityType(entityType);
+		Assert.notBlank(naviProperty);
+		EdmNavigationProperty edmProperty = edmEntityType.findNavigationProperty(naviProperty);
+		if(null == edmProperty) throw new ODataVerifiedFailException("Property", naviProperty);
 		return edmEntityType;
 	}
 	
