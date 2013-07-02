@@ -406,9 +406,23 @@ public class ODataConsumerImpl implements ODataConsumer {
 		return findNavigationProperty(entitType.getName(), key.toKeyString(false), property.getName());
 	}
 	
-	public ODataNavigationProperty findNavigationProperty(String entitType, Object key,	String property) {
-		// TODO Auto-generated method stub
-		return null;
+	public ODataNavigationProperty findNavigationProperty(String entityType, Object key, String naviProperty) {
+		ensureMetadata();
+		
+		if(config.isVerifyMetadata()) verifier.hasEntityTypeWithNavigationProp(entityType, naviProperty);
+		
+		ODataConsumerContext context = initEntityTypeContext(this, entityType, key);
+		
+		Request request = new FindPropertyRequest(context, serviceRoot)
+			.setEntitySet(context.getEntitySet().getName()).setId(qualifiedKey(key)).setProperty(naviProperty);
+		
+		Response response = request.send();
+		
+		if(response.getStatus() == ODataResponseStatus.OK) {
+			
+			return response.convertToNavigationProperty(context);
+			
+		} else throw response.convertToError(context);
 	}
 
 	public long count(EdmEntitySet edmEntitySet) {
@@ -446,15 +460,15 @@ public class ODataConsumerImpl implements ODataConsumer {
 		
 		if(resp.getStatus() == ODataResponseStatus.OK) {
 			
-			return resp.convertToLong(context);
+			return resp.convertToRawLong(context);
 			
 		} else throw resp.convertToError(context);
 	}
 
-	public String invokeFunction(String funcName, Map<String, Object> parameters) {
-		return invokeFunction(funcName, parameters, (String)null);
+	public String invokeFunctionForRawString(String funcName, Map<String, Object> parameters) {
+		return invokeFunctionForRawString(funcName, parameters, (String)null);
 	}
-	public String invokeFunction(String funcName, Map<String, Object> parameters, String entitySet) {
+	public String invokeFunctionForRawString(String funcName, Map<String, Object> parameters, String entitySet) {
 		ensureMetadata();
 		
 		EdmFunctionImport func = null;
@@ -476,10 +490,10 @@ public class ODataConsumerImpl implements ODataConsumer {
 		} else throw response.convertToError(context);
 	}
 
-	public <T> T invokeFunction(String funcName, Map<String, Object> parameters, Class<T> clazz) {
-		return invokeFunction(funcName, parameters, null, clazz);
+	public <T> T invokeFunctionForEntity(String funcName, Map<String, Object> parameters, Class<T> clazz) {
+		return invokeFunctionForEntity(funcName, parameters, null, clazz);
 	}
-	public <T> T invokeFunction(String funcName, Map<String, Object> parameters, String entitySet, Class<T> clazz) {
+	public <T> T invokeFunctionForEntity(String funcName, Map<String, Object> parameters, String entitySet, Class<T> clazz) {
 		ensureMetadata();
 		
 		EdmFunctionImport func = null;
@@ -507,11 +521,11 @@ public class ODataConsumerImpl implements ODataConsumer {
 		} else throw response.convertToError(context);
 	}
 
-	public <T> List<T> invokeFunctionForList(String funcName,
+	public <T> List<T> invokeFunctionForEntityList(String funcName,
 			Map<String, Object> parameters, Class<T> listClass) {
-		return invokeFunctionForList(funcName, parameters, null, listClass);
+		return invokeFunctionForEntityList(funcName, parameters, null, listClass);
 	}
-	public <T> List<T> invokeFunctionForList(String funcName,
+	public <T> List<T> invokeFunctionForEntityList(String funcName,
 			Map<String, Object> parameters, String entitySet, Class<T> listClass) {
 		ensureMetadata();
 		
@@ -539,8 +553,8 @@ public class ODataConsumerImpl implements ODataConsumer {
 		} else throw response.convertToError(context);
 	}
 
-	public <T> T invokeFunction(EdmFunctionImport func,	ODataParameters parameters, Class<T> t) {
-		return invokeFunction(func.getName(), parameters.getParametersMap(), func.getEntitySet(), t);
+	public <T> T invokeFunctionForEntity(EdmFunctionImport func,	ODataParameters parameters, Class<T> t) {
+		return invokeFunctionForEntity(func.getName(), parameters.getParametersMap(), func.getEntitySet(), t);
 	}
 
 	public ODataValue invokeFunctionForODataValue(String funcName, Map<String, Object> parameters) {
@@ -575,5 +589,35 @@ public class ODataConsumerImpl implements ODataConsumer {
 
 	public ODataValue invokeFunctionForODataValue(EdmFunctionImport func, ODataParameters parameters) {
 		return invokeFunctionForODataValue(func.getName(), parameters.getParametersMap(), func.getEntitySet());
+	}
+
+	public String invokeFunctionForString(String funcName,
+			Map<String, Object> parameters) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public String invokeFunctionForString(String funcName, Map<String, Object> parameters, String entitySet) {
+		ensureMetadata();
+		
+		EdmFunctionImport func = null;
+		
+		if(config.isVerifyMetadata()) func = verifier.hasFunction(entitySet, funcName);
+		
+		ODataConsumerContext context = new ODataConsumerContext(config);
+
+		context.setFunctionImport(func);
+		
+		Request request = new FunctionRequest(context, serviceRoot)
+					.setHttpMethod(null == func? null:func.getHttpMethod())
+					.setEntitySet(entitySet).setFunction(funcName).setParams(parameters);
+		
+		Response response = request.send();
+		
+		if(response.getStatus() == ODataResponseStatus.OK) {
+			
+			return response.convertToString(context);
+			
+		} else throw response.convertToError(context);
 	}
 }

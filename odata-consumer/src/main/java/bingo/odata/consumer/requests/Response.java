@@ -9,7 +9,9 @@ import java.util.List;
 import bingo.lang.Converts;
 import bingo.lang.Strings;
 import bingo.lang.http.HttpContentTypes;
+import bingo.meta.edm.EdmSimpleType;
 import bingo.meta.edm.EdmType;
+import bingo.odata.ODataConverts;
 import bingo.odata.ODataError;
 import bingo.odata.ODataObjectKind;
 import bingo.odata.ODataReader;
@@ -20,7 +22,11 @@ import bingo.odata.consumer.exceptions.ResolveFailedException;
 import bingo.odata.model.ODataComplexObject;
 import bingo.odata.model.ODataEntity;
 import bingo.odata.model.ODataEntitySet;
+import bingo.odata.model.ODataNamedValue;
+import bingo.odata.model.ODataNavigationProperty;
 import bingo.odata.model.ODataProperty;
+import bingo.odata.model.ODataRawValue;
+import bingo.odata.model.ODataRawValueImpl;
 import bingo.odata.model.ODataValue;
 import bingo.odata.model.ODataValueBuilder;
 
@@ -147,6 +153,19 @@ public class Response {
 		}
 	}
 	
+	public String convertToString(ODataConsumerContext context) {
+		ODataReader<ODataNamedValue> reader = context.getProtocol().getReader(
+				context.getVersion(), context.getFormat(), ODataObjectKind.NamedValue);
+		try {
+			ODataNamedValue namedValue = reader.read((ODataReaderContext)context, new InputStreamReader(this.getInputStream()));
+			
+			return ((ODataRawValueImpl)namedValue.getValue()).getValue().toString();
+			
+		} catch (Throwable e) {
+			throw new ResolveFailedException(e);
+		}
+	}
+	
 	public ODataEntity convertToEntity(ODataConsumerContext context) {
 		ODataReader<ODataEntity> reader = context.getProtocol().getReader(
 				context.getVersion(), context.getFormat(), ODataObjectKind.Entity);
@@ -187,7 +206,19 @@ public class Response {
 		}
 	}
 	
-	public long convertToLong(ODataConsumerContext context) {
+	public ODataNavigationProperty convertToNavigationProperty(ODataConsumerContext context) {
+		ODataReader<ODataNavigationProperty> reader = context.getProtocol().getReader(
+				context.getVersion(), context.getFormat(), ODataObjectKind.Property);
+		try {
+			
+			return reader.read((ODataReaderContext)context, new InputStreamReader(this.getInputStream()));
+			
+		} catch (Throwable e) {
+			throw new ResolveFailedException(e);
+		}
+	}
+	
+	public long convertToRawLong(ODataConsumerContext context) {
 		String result = this.getString();
 		try {
 			return Long.parseLong(result);

@@ -110,19 +110,23 @@ public interface ODataConsumer {
 	long 						count(EdmEntitySet entitySet, ODataQueryInfo queryInfo);
 	
 	// function invoke
-	String 						invokeFunction(String funcName, Map<String, Object> parameters);
+	String 						invokeFunctionForString(String funcName, Map<String, Object> parameters);
+
+	String 						invokeFunctionForString(String funcName, Map<String, Object> parameters, String entitySet);
 	
-	String 						invokeFunction(String funcName, Map<String, Object> parameters, String entitySet);
+	String 						invokeFunctionForRawString(String funcName, Map<String, Object> parameters);
 	
-	<T> T	 					invokeFunction(String funcName, Map<String, Object> parameters, Class<T> t);
+	String 						invokeFunctionForRawString(String funcName, Map<String, Object> parameters, String entitySet);
 	
-	<T> T	 					invokeFunction(String funcName, Map<String, Object> parameters, String entitySet, Class<T> t);
+	<T> T	 					invokeFunctionForEntity(String funcName, Map<String, Object> parameters, Class<T> t);
 	
-	<T> List<T>					invokeFunctionForList(String funcName, Map<String, Object> parameters, Class<T> listClass);
+	<T> T	 					invokeFunctionForEntity(String funcName, Map<String, Object> parameters, String entitySet, Class<T> t);
 	
-	<T> List<T>					invokeFunctionForList(String funcName, Map<String, Object> parameters, String entitySet, Class<T> listClass);
+	<T> List<T>					invokeFunctionForEntityList(String funcName, Map<String, Object> parameters, Class<T> listClass);
 	
-	<T> T	 					invokeFunction(EdmFunctionImport func,ODataParameters parameters, Class<T> t);
+	<T> List<T>					invokeFunctionForEntityList(String funcName, Map<String, Object> parameters, String entitySet, Class<T> listClass);
+	
+	<T> T	 					invokeFunctionForEntity(EdmFunctionImport func,ODataParameters parameters, Class<T> t);
 	
 	ODataValue					invokeFunctionForODataValue(String funcName, Map<String, Object> parameters);
 	

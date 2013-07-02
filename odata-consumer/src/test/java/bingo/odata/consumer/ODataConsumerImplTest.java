@@ -27,6 +27,7 @@ import bingo.odata.model.ODataEntity;
 import bingo.odata.model.ODataEntityBuilder;
 import bingo.odata.model.ODataEntitySet;
 import bingo.odata.model.ODataKeyImpl;
+import bingo.odata.model.ODataNavigationProperty;
 import bingo.odata.model.ODataProperty;
 import bingo.odata.model.ODataValue;
 
@@ -138,7 +139,9 @@ public class ODataConsumerImplTest {
 
 	@Test
 	public void testFindNavigationProperty() {
-		fail("Not yet implemented");
+		ODataNavigationProperty value = consumer.findNavigationProperty("Product", "123456", "name");
+		assertNotNull(value);
+		assertEquals(DemoODataProducer.INVOKED_FUNCTION, value.getRelatedEntity().getKeyString());
 	}
 
 	@Test
@@ -148,18 +151,18 @@ public class ODataConsumerImplTest {
 	}
 
 	@Test
-	public void testInvokeFunction_simgleGetString() {
+	public void testInvokeFunction_forString() {
 		Map<String, Object> paramsMap = new HashMap<String, Object>();
 		paramsMap.put("rating", 22);
-		String responseString = consumer.invokeFunction("getString", paramsMap, "Products");
-		assertEquals("\"" + DemoODataProducer.INVOKED_FUNCTION + "\"", responseString);
+		String responseString = consumer.invokeFunctionForString("getString", paramsMap, "Products");
+		assertEquals(DemoODataProducer.INVOKED_FUNCTION, responseString);
 	}
 	
 	@Test
 	public void testInvokeFunction_returnObject() {
 		Map<String, Object> paramsMap = new HashMap<String, Object>();
 		paramsMap.put("rating", 2);
-		Product product = consumer.invokeFunction("getEntity", paramsMap, "Products", Product.class);
+		Product product = consumer.invokeFunctionForEntity("getEntity", paramsMap, "Products", Product.class);
 		assertNotNull(product);
 		assertEquals("Bread", product.getName());
 	}
@@ -168,7 +171,7 @@ public class ODataConsumerImplTest {
 	public void testInvokeFunction_returnListObject() {
 		Map<String, Object> paramsMap = new HashMap<String, Object>();
 		paramsMap.put("rating", 2);
-		List<Product> product = consumer.invokeFunctionForList("getEntitySet", paramsMap, "Products", Product.class);
+		List<Product> product = consumer.invokeFunctionForEntityList("getEntitySet", paramsMap, "Products", Product.class);
 		assertNotNull(product);
 		assertEquals(3, product.size());
 	}

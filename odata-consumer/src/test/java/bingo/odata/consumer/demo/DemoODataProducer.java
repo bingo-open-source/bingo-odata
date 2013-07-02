@@ -38,6 +38,7 @@ import bingo.meta.edm.EdmEntityTypeBuilder;
 import bingo.meta.edm.EdmEntityTypeRef;
 import bingo.meta.edm.EdmFunctionImport;
 import bingo.meta.edm.EdmMultiplicity;
+import bingo.meta.edm.EdmNamedObject;
 import bingo.meta.edm.EdmNavigationProperty;
 import bingo.meta.edm.EdmParameter;
 import bingo.meta.edm.EdmParameterMode;
@@ -45,6 +46,7 @@ import bingo.meta.edm.EdmProperty;
 import bingo.meta.edm.EdmPropertyBuilder;
 import bingo.meta.edm.EdmSchemaBuilder;
 import bingo.meta.edm.EdmSimpleType;
+import bingo.meta.edm.EdmSimpleTypeKind;
 import bingo.meta.edm.EdmType;
 import bingo.meta.edm.EdmTypeKind;
 import bingo.meta.edm.EdmTypes;
@@ -59,6 +61,7 @@ import bingo.odata.model.ODataEntitySet;
 import bingo.odata.model.ODataEntitySetBuilder;
 import bingo.odata.model.ODataKey;
 import bingo.odata.model.ODataKeyImpl;
+import bingo.odata.model.ODataNamedValueImpl;
 import bingo.odata.model.ODataNavigationPropertyImpl;
 import bingo.odata.model.ODataParameters;
 import bingo.odata.model.ODataPropertyImpl;
@@ -283,14 +286,18 @@ public class DemoODataProducer extends ODataProducerAdapter implements ODataProd
 			}
 			ODataEntitySet entitySet2 = builder.build();
 			return new ODataValueBuilder().entitySet(entitySet2).build();
-		} else if(Strings.equals(funcName, "getString")) {
-			for(EdmParameter param : func.getParameters()){
-				if(null == parameters.getParameter(param.getName())){
-					throw new ODataBadRequestException(Strings.format("parameter '{0}' required",param.getName()));
-				}
-			}
 			
+		} else if(Strings.equals(funcName, "getString")) {
+		    return new ODataValueBuilder().namedRawValue(funcName, EdmSimpleType.STRING, INVOKED_FUNCTION).build();
+		    
+		} else if(Strings.equals(funcName, "getRawString")) {
 		    return new ODataValueImpl(ODataObjectKind.Raw, new ODataRawValueImpl(EdmSimpleType.STRING, INVOKED_FUNCTION));
+		    
+		} else if(Strings.equals(funcName, "getInt")) {
+		    return new ODataValueBuilder().namedRawValue(funcName, EdmSimpleType.INT32, 1024).build();
+		    
+		} else if(Strings.equals(funcName, "getRawInt")) {
+		    return new ODataValueImpl(ODataObjectKind.Raw, new ODataRawValueImpl(EdmSimpleType.INT32, 1024));
 		}
 		return null;
     }
@@ -354,12 +361,23 @@ public class DemoODataProducer extends ODataProducerAdapter implements ODataProd
 												 .setEnd1("Product_Supplier",products.getName())
 												 .setEnd2("Supplier_Products",suppliers.getName())
 												 .build());
-		
+
 		demoService.addFunctionImport(EdmBuilders.functionImport("getString")
 												 .setEntitySet(products.getName())
-												 .setReturnType(EdmCollectionType.of(productRef))
-												 .addParameter("rating", EdmSimpleType.INT32, EdmParameterMode.In)
+												 .setReturnType(EdmSimpleType.STRING)
 												 .build());
+		demoService.addFunctionImport(EdmBuilders.functionImport("getRawString")
+				 .setEntitySet(products.getName())
+				 .setReturnType(EdmSimpleType.STRING)
+				 .build());
+		demoService.addFunctionImport(EdmBuilders.functionImport("getInt")
+				.setEntitySet(products.getName())
+				.setReturnType(EdmSimpleType.INT32)
+				.build());
+		demoService.addFunctionImport(EdmBuilders.functionImport("getRawInt")
+				.setEntitySet(products.getName())
+				.setReturnType(EdmSimpleType.INT32)
+				.build());
 		demoService.addFunctionImport(EdmBuilders.functionImport("getEntity")
 				.setEntitySet(products.getName())
 //				.setReturnType(EdmCollectionType.of(productRef))
