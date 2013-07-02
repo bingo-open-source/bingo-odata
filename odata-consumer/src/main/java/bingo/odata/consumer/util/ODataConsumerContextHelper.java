@@ -1,7 +1,12 @@
 package bingo.odata.consumer.util;
 
 import bingo.lang.Strings;
+import bingo.meta.edm.EdmCollectionType;
+import bingo.meta.edm.EdmEntitySet;
 import bingo.meta.edm.EdmEntityType;
+import bingo.meta.edm.EdmFunctionImport;
+import bingo.meta.edm.EdmType;
+import bingo.odata.ODataServices;
 import bingo.odata.consumer.ODataConsumer;
 import bingo.odata.consumer.ODataConsumerContext;
 import bingo.odata.model.ODataKeyImpl;
@@ -37,5 +42,43 @@ public class ODataConsumerContextHelper {
 		}
 		
 		return context;
+	}
+	
+	public static ODataConsumerContext initFunctionContext(ODataConsumer consumer, EdmFunctionImport func, String entitySet) {
+
+		ODataConsumerContext context = new ODataConsumerContext(consumer.config());
+
+		initFunctionContext(consumer.services(), context, func, entitySet);
+		
+		return context;
+	}
+	
+	private static void initFunctionContext(ODataServices services, ODataConsumerContext context, EdmFunctionImport func, String entitySet) {
+		context.setFunctionImport(func);
+		
+		EdmEntityType edmEntityType = tryGetEntityTypeFromEdmType(func.getReturnType());
+		
+		EdmEntitySet edmEntitySet = null;
+		
+		if(null != edmEntityType) {
+			
+			edmEntitySet = services.findEntitySet(edmEntityType);
+			
+			context.setEntityType(edmEntityType);
+			context.setEntitySet(edmEntitySet);
+		}
+	}
+
+	private static EdmEntityType tryGetEntityTypeFromEdmType(EdmType returnType) {
+		if(returnType.isCollection()) {
+			EdmCollectionType collectionType = returnType.asCollection();
+			EdmType eleEdmType = collectionType.getElementType();
+			return tryGetEntityTypeFromEdmType(eleEdmType);
+		}
+		if(returnType.isEntity()) {
+			EdmEntityType entityType = returnType.asEntity();
+			return entityType;
+		}
+		return null;
 	}
 }

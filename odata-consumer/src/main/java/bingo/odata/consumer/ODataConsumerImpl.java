@@ -60,6 +60,7 @@ import bingo.odata.consumer.requests.builders.QueryBuilder;
 import bingo.odata.consumer.requests.builders.QueryBuilderImpl;
 import bingo.odata.consumer.requests.invoke.FunctionRequest;
 import bingo.odata.consumer.requests.metadata.MetadataDocumentRequest;
+import bingo.odata.consumer.util.ODataConsumerContextHelper;
 import bingo.odata.consumer.util.ODataMetadataVerifier;
 import bingo.odata.consumer.util.ODataQueryTranslator;
 import bingo.odata.exceptions.ODataNotImplementedException;
@@ -478,8 +479,8 @@ public class ODataConsumerImpl implements ODataConsumer {
 		EdmFunctionImport func = null;
 		
 		if(config.isVerifyMetadata()) func = verifier.hasFunction(entitySet, funcName);
-		
-		ODataConsumerContext context = new ODataConsumerContext(config);
+
+		ODataConsumerContext context = ODataConsumerContextHelper.initFunctionContext(this, func, entitySet);
 		
 		Request request = new FunctionRequest(context, serviceRoot)
 					.setHttpMethod(null == func? null:func.getHttpMethod())
@@ -503,24 +504,8 @@ public class ODataConsumerImpl implements ODataConsumer {
 		EdmFunctionImport func = null;
 	
 		if(config.isVerifyMetadata()) func = verifier.hasFunction(entitySet, funcName);
-		
-		ODataConsumerContext context = new ODataConsumerContext(config);
-		
-		context.setFunctionImport(func);
-		
-		EdmEntityType edmEntityType = tryGetEntityTypeFromEdmType(func.getReturnType());
-		
-		EdmEntitySet edmEntitySet = null;
-		
-		if(null == edmEntityType) {
-			edmEntitySet = services.findEntitySet(entitySet);
-			edmEntityType = services.findEntityType(edmEntitySet.getEntityType().getName());
-		} else {
-			edmEntitySet = services.findEntitySet(edmEntityType);
-		}
-		
-		context.setEntityType(edmEntityType);
-		context.setEntitySet(edmEntitySet);
+
+		ODataConsumerContext context = ODataConsumerContextHelper.initFunctionContext(this, func, entitySet);
 		
 		Request request = new FunctionRequest(context, serviceRoot).setHttpMethod(func.getHttpMethod())
 					.setEntitySet(entitySet).setFunction(funcName).setParams(parameters);
@@ -545,24 +530,8 @@ public class ODataConsumerImpl implements ODataConsumer {
 		EdmFunctionImport func = null;
 	
 		if(config.isVerifyMetadata()) func = verifier.hasFunction(entitySet, funcName);
-		
-		ODataConsumerContext context = new ODataConsumerContext(config);
-		
-		context.setFunctionImport(func);
-		
-		EdmEntityType edmEntityType = tryGetEntityTypeFromEdmType(func.getReturnType());
-		
-		EdmEntitySet edmEntitySet = null;
-		
-		if(null == edmEntityType) {
-			edmEntitySet = services.findEntitySet(entitySet);
-			edmEntityType = services.findEntityType(edmEntitySet.getEntityType().getName());
-		} else {
-			edmEntitySet = services.findEntitySet(edmEntityType);
-		}
-		
-		context.setEntityType(edmEntityType);
-		context.setEntitySet(edmEntitySet);
+
+		ODataConsumerContext context = ODataConsumerContextHelper.initFunctionContext(this, func, entitySet);
 	
 		Request request = new FunctionRequest(context, serviceRoot).setHttpMethod(func.getHttpMethod())
 					.setEntitySet(entitySet).setFunction(funcName).setParams(parameters);
@@ -589,24 +558,8 @@ public class ODataConsumerImpl implements ODataConsumer {
 		EdmFunctionImport func = null;
 
 		if(config.isVerifyMetadata()) func = verifier.hasFunction(entitySet, funcName);
-		
-		ODataConsumerContext context = new ODataConsumerContext(config);
 
-		context.setFunctionImport(func);
-		
-		EdmEntityType edmEntityType = tryGetEntityTypeFromEdmType(func.getReturnType());
-		
-		EdmEntitySet edmEntitySet = null;
-		
-		if(null == edmEntityType) {
-			edmEntitySet = services.findEntitySet(entitySet);
-			edmEntityType = services.findEntityType(edmEntitySet.getEntityType().getName());
-		} else {
-			edmEntitySet = services.findEntitySet(edmEntityType);
-		}
-		
-		context.setEntityType(edmEntityType);
-		context.setEntitySet(edmEntitySet);
+		ODataConsumerContext context = ODataConsumerContextHelper.initFunctionContext(this, func, entitySet);
 		
 		Request request = new FunctionRequest(context, serviceRoot).setHttpMethod(func.getHttpMethod())
 					.setEntitySet(entitySet).setFunction(funcName).setParams(parameters);
@@ -636,23 +589,7 @@ public class ODataConsumerImpl implements ODataConsumer {
 		
 		if(config.isVerifyMetadata()) func = verifier.hasFunction(entitySet, funcName);
 		
-		ODataConsumerContext context = new ODataConsumerContext(config);
-
-		context.setFunctionImport(func);
-		
-		EdmEntityType edmEntityType = tryGetEntityTypeFromEdmType(func.getReturnType());
-		
-		EdmEntitySet edmEntitySet = null;
-		
-		if(null == edmEntityType) {
-			edmEntitySet = services.findEntitySet(entitySet);
-			edmEntityType = services.findEntityType(edmEntitySet.getEntityType().getName());
-		} else {
-			edmEntitySet = services.findEntitySet(edmEntityType);
-		}
-		
-		context.setEntityType(edmEntityType);
-		context.setEntitySet(edmEntitySet);
+		ODataConsumerContext context = ODataConsumerContextHelper.initFunctionContext(this, func, entitySet);
 		
 		Request request = new FunctionRequest(context, serviceRoot)
 					.setHttpMethod(null == func? null:func.getHttpMethod())
@@ -665,18 +602,5 @@ public class ODataConsumerImpl implements ODataConsumer {
 			return response.convertToString(context);
 			
 		} else throw response.convertToError(context);
-	}
-
-	private EdmEntityType tryGetEntityTypeFromEdmType(EdmType returnType) {
-		if(returnType.isCollection()) {
-			EdmCollectionType collectionType = returnType.asCollection();
-			EdmType eleEdmType = collectionType.getElementType();
-			return tryGetEntityTypeFromEdmType(eleEdmType);
-		}
-		if(returnType.isEntity()) {
-			EdmEntityType entityType = returnType.asEntity();
-			return entityType;
-		}
-		return null;
 	}
 }
