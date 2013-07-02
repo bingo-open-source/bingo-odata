@@ -27,11 +27,14 @@ import bingo.lang.Collections;
 import bingo.lang.Strings;
 import bingo.lang.logging.Log;
 import bingo.lang.logging.LogFactory;
+import bingo.meta.edm.EdmCollectionType;
 import bingo.meta.edm.EdmEntitySet;
 import bingo.meta.edm.EdmEntityType;
 import bingo.meta.edm.EdmFunctionImport;
 import bingo.meta.edm.EdmNavigationProperty;
 import bingo.meta.edm.EdmProperty;
+import bingo.meta.edm.EdmSimpleType;
+import bingo.meta.edm.EdmType;
 import bingo.odata.ODataObjectKind;
 import bingo.odata.ODataQueryInfo;
 import bingo.odata.ODataQueryInfoParser;
@@ -40,6 +43,7 @@ import bingo.odata.ODataReaderContext;
 import bingo.odata.ODataResponseStatus;
 import bingo.odata.ODataServices;
 import bingo.odata.consumer.exceptions.ConnectFailedException;
+import bingo.odata.consumer.exceptions.ResolveFailedException;
 import bingo.odata.consumer.ext.Page;
 import bingo.odata.consumer.requests.DeleteEntityRequest;
 import bingo.odata.consumer.requests.InsertEntityRequest;
@@ -465,10 +469,10 @@ public class ODataConsumerImpl implements ODataConsumer {
 		} else throw resp.convertToError(context);
 	}
 
-	public String invokeFunctionForRawString(String funcName, Map<String, Object> parameters) {
-		return invokeFunctionForRawString(funcName, parameters, (String)null);
+	public String invokeFunctionForRawResult(String funcName, Map<String, Object> parameters) {
+		return invokeFunctionForRawResult(funcName, parameters, (String)null);
 	}
-	public String invokeFunctionForRawString(String funcName, Map<String, Object> parameters, String entitySet) {
+	public String invokeFunctionForRawResult(String funcName, Map<String, Object> parameters, String entitySet) {
 		ensureMetadata();
 		
 		EdmFunctionImport func = null;
@@ -502,12 +506,21 @@ public class ODataConsumerImpl implements ODataConsumer {
 		
 		ODataConsumerContext context = new ODataConsumerContext(config);
 		
-		if(Strings.isNotBlank(entitySet)) {
-			
-			context.setEntitySet(services.findEntitySet(entitySet));
-			
-			context.setEntityType(services.findEntityType(context.getEntitySet().getEntityType()));
+		context.setFunctionImport(func);
+		
+		EdmEntityType edmEntityType = tryGetEntityTypeFromEdmType(func.getReturnType());
+		
+		EdmEntitySet edmEntitySet = null;
+		
+		if(null == edmEntityType) {
+			edmEntitySet = services.findEntitySet(entitySet);
+			edmEntityType = services.findEntityType(edmEntitySet.getEntityType().getName());
+		} else {
+			edmEntitySet = services.findEntitySet(edmEntityType);
 		}
+		
+		context.setEntityType(edmEntityType);
+		context.setEntitySet(edmEntitySet);
 		
 		Request request = new FunctionRequest(context, serviceRoot).setHttpMethod(func.getHttpMethod())
 					.setEntitySet(entitySet).setFunction(funcName).setParams(parameters);
@@ -535,11 +548,21 @@ public class ODataConsumerImpl implements ODataConsumer {
 		
 		ODataConsumerContext context = new ODataConsumerContext(config);
 		
-		if(Strings.isNotBlank(entitySet)) {
-			context.setEntitySet(services.findEntitySet(entitySet));
-			
-			context.setEntityType(services.findEntityType(context.getEntitySet().getEntityType()));
+		context.setFunctionImport(func);
+		
+		EdmEntityType edmEntityType = tryGetEntityTypeFromEdmType(func.getReturnType());
+		
+		EdmEntitySet edmEntitySet = null;
+		
+		if(null == edmEntityType) {
+			edmEntitySet = services.findEntitySet(entitySet);
+			edmEntityType = services.findEntityType(edmEntitySet.getEntityType().getName());
+		} else {
+			edmEntitySet = services.findEntitySet(edmEntityType);
 		}
+		
+		context.setEntityType(edmEntityType);
+		context.setEntitySet(edmEntitySet);
 	
 		Request request = new FunctionRequest(context, serviceRoot).setHttpMethod(func.getHttpMethod())
 					.setEntitySet(entitySet).setFunction(funcName).setParams(parameters);
@@ -569,11 +592,21 @@ public class ODataConsumerImpl implements ODataConsumer {
 		
 		ODataConsumerContext context = new ODataConsumerContext(config);
 
-		if(Strings.isNotBlank(entitySet)) {
-			context.setEntitySet(services.findEntitySet(entitySet));
-			
-			context.setEntityType(services.findEntityType(context.getEntitySet().getEntityType()));
+		context.setFunctionImport(func);
+		
+		EdmEntityType edmEntityType = tryGetEntityTypeFromEdmType(func.getReturnType());
+		
+		EdmEntitySet edmEntitySet = null;
+		
+		if(null == edmEntityType) {
+			edmEntitySet = services.findEntitySet(entitySet);
+			edmEntityType = services.findEntityType(edmEntitySet.getEntityType().getName());
+		} else {
+			edmEntitySet = services.findEntitySet(edmEntityType);
 		}
+		
+		context.setEntityType(edmEntityType);
+		context.setEntitySet(edmEntitySet);
 		
 		Request request = new FunctionRequest(context, serviceRoot).setHttpMethod(func.getHttpMethod())
 					.setEntitySet(entitySet).setFunction(funcName).setParams(parameters);
@@ -607,6 +640,20 @@ public class ODataConsumerImpl implements ODataConsumer {
 
 		context.setFunctionImport(func);
 		
+		EdmEntityType edmEntityType = tryGetEntityTypeFromEdmType(func.getReturnType());
+		
+		EdmEntitySet edmEntitySet = null;
+		
+		if(null == edmEntityType) {
+			edmEntitySet = services.findEntitySet(entitySet);
+			edmEntityType = services.findEntityType(edmEntitySet.getEntityType().getName());
+		} else {
+			edmEntitySet = services.findEntitySet(edmEntityType);
+		}
+		
+		context.setEntityType(edmEntityType);
+		context.setEntitySet(edmEntitySet);
+		
 		Request request = new FunctionRequest(context, serviceRoot)
 					.setHttpMethod(null == func? null:func.getHttpMethod())
 					.setEntitySet(entitySet).setFunction(funcName).setParams(parameters);
@@ -618,5 +665,18 @@ public class ODataConsumerImpl implements ODataConsumer {
 			return response.convertToString(context);
 			
 		} else throw response.convertToError(context);
+	}
+
+	private EdmEntityType tryGetEntityTypeFromEdmType(EdmType returnType) {
+		if(returnType.isCollection()) {
+			EdmCollectionType collectionType = returnType.asCollection();
+			EdmType eleEdmType = collectionType.getElementType();
+			return tryGetEntityTypeFromEdmType(eleEdmType);
+		}
+		if(returnType.isEntity()) {
+			EdmEntityType entityType = returnType.asEntity();
+			return entityType;
+		}
+		return null;
 	}
 }

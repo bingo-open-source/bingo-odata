@@ -114,9 +114,9 @@ public interface ODataConsumer {
 
 	String 						invokeFunctionForString(String funcName, Map<String, Object> parameters, String entitySet);
 	
-	String 						invokeFunctionForRawString(String funcName, Map<String, Object> parameters);
+	String 						invokeFunctionForRawResult(String funcName, Map<String, Object> parameters);
 	
-	String 						invokeFunctionForRawString(String funcName, Map<String, Object> parameters, String entitySet);
+	String 						invokeFunctionForRawResult(String funcName, Map<String, Object> parameters, String entitySet);
 	
 	<T> T	 					invokeFunctionForEntity(String funcName, Map<String, Object> parameters, Class<T> t);
 	
