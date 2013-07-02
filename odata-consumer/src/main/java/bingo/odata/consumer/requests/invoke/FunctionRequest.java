@@ -91,14 +91,14 @@ public class FunctionRequest extends Request{
 
 	@Override
 	protected void beforeSend() {
-		if(getMethod() == HttpMethods.GET) {
+		if(getMethod().equals(HttpMethods.GET)) {
 			prepareParams();
 		}
 	}
 
 	@Override
 	protected HttpContent genContent() {
-		if(getMethod() == HttpMethods.POST) {
+		if(getMethod().equals(HttpMethods.POST)) {
 			String json = JSON.encode(params, true);
 			HttpContent content = ByteArrayContent.fromString(ContentTypes.APPLICATION_JSON, json);
 			return content;
