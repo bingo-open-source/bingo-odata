@@ -5,10 +5,14 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import bingo.lang.Converts;
 import bingo.lang.Strings;
+import bingo.lang.exceptions.NotImplementedException;
 import bingo.lang.http.HttpContentTypes;
+import bingo.lang.json.JSON;
+import bingo.lang.json.JSONObject;
 import bingo.meta.edm.EdmSimpleType;
 import bingo.meta.edm.EdmType;
 import bingo.odata.ODataConverts;
@@ -88,13 +92,31 @@ public class Response {
 	}
 	
 	public <T> T convertToObject(Class<T> clazz, EdmType edmType, ODataConsumerContext context) {
-		ODataReader<ODataEntity> reader = context.getProtocol().getReader(
-				context.getVersion(), context.getFormat(), ODataObjectKind.Entity);
-		try {
-			ODataEntity entity = reader.read((ODataReaderContext)context, new InputStreamReader(this.getInputStream()));
-			return Converts.convert(entity.toMap(), clazz);
-		} catch (Throwable e) {
-			throw new ResolveFailedException(e);
+		if(edmType.isComplex()) {
+			if(null != context.getFunctionImport()) {
+				String jsonString = this.getString(), funcName = context.getFunctionImport().getName();
+				JSONObject jsonObject = JSON.decode(jsonString);
+				if(jsonObject.isMap()) {
+					Map<String, Object> jsonMap = (Map<String, Object>) jsonObject.map().get("d");
+					if(1 == jsonMap.size() && null != jsonMap.get(funcName)) {
+						jsonMap = (Map<String, Object>) jsonMap.get(funcName);
+						return Converts.convert(jsonMap, clazz);
+					}
+				}
+				throw new ResolveFailedException("Complex Object");
+			} else {
+				// retrieve complex object not through function invoking. TODO
+				throw new NotImplementedException();
+			}
+		} else { // normal entityType.
+			ODataReader<ODataEntity> reader = context.getProtocol().getReader(
+					context.getVersion(), context.getFormat(), ODataObjectKind.Entity);
+			try {
+				ODataEntity entity = reader.read((ODataReaderContext)context, new InputStreamReader(this.getInputStream()));
+				return Converts.convert(entity.toMap(), clazz);
+			} catch (Throwable e) {
+				throw new ResolveFailedException(e);
+			}
 		}
 	}
 
