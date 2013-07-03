@@ -169,15 +169,21 @@ public class ODataServices implements Named,ODataObject {
 		return null;
 	}
 	
-	public EdmEntityType findEntityType(EdmEntityTypeRef entityTypeRef){
+	public EdmEntityType findEntityType(EdmFullQualifiedName fqName){
 		for(EdmSchema schema : schemas){
-			for(EdmEntityType entityType : schema.getEntityTypes()){
-				if(entityType.getFullQualifiedName().equalsIgnoreCase(entityTypeRef.getFullQualifiedName())){
-					return entityType;
+			if(Strings.isEmpty(fqName.getNamespace()) || Strings.equals(fqName.getNamespace(),schema.getNamespaceName())){
+				for(EdmEntityType entityType : schema.getEntityTypes()){
+					if(entityType.getName().equals(fqName.getName())){
+						return entityType;
+					}
 				}
 			}
 		}
 		return null;
+	}
+	
+	public EdmEntityType findEntityType(EdmEntityTypeRef entityTypeRef){
+		return findEntityType(new EdmFullQualifiedName(entityTypeRef.getFullQualifiedName()));
 	}
 	
 	public EdmComplexType findComplexType(String complexTypeName){
@@ -191,17 +197,21 @@ public class ODataServices implements Named,ODataObject {
 		return null;
 	}
 	
-	public EdmComplexType findComplexType(EdmComplexTypeRef complexTypeRef){
-		EdmFullQualifiedName fqName = new EdmFullQualifiedName(complexTypeRef.getFullQualifiedName());
-		
+	public EdmComplexType findComplexType(EdmFullQualifiedName fqName){
 		for(EdmSchema schema : schemas){
-			for(EdmComplexType complexType : schema.getComplexTypes()){
-				if(Strings.equals(fqName.getNamespace(), schema.getNamespaceName()) && Strings.equals(fqName.getName(), complexType.getName())) {
-					return complexType;
+			if(Strings.isEmpty(fqName.getNamespace()) || Strings.equals(fqName.getNamespace(),schema.getNamespaceName())){
+				for(EdmComplexType complexType : schema.getComplexTypes()){
+					if(complexType.getName().equals(fqName.getName())){
+						return complexType;
+					}
 				}
 			}
 		}
 		return null;
+	}
+	
+	public EdmComplexType findComplexType(EdmComplexTypeRef complexTypeRef){
+		return findComplexType(new EdmFullQualifiedName(complexTypeRef.getFullQualifiedName()));
 	}
 	
 	public EdmFunctionImport[] findFunctionImport(String functionName){

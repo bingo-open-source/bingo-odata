@@ -29,9 +29,12 @@ import bingo.lang.value.DateTimeOffset;
 import bingo.lang.value.UnsignedByte;
 import bingo.meta.edm.EdmComplexType;
 import bingo.meta.edm.EdmComplexTypeRef;
+import bingo.meta.edm.EdmEntityType;
+import bingo.meta.edm.EdmFullQualifiedName;
 import bingo.meta.edm.EdmProperty;
 import bingo.meta.edm.EdmSimpleType;
 import bingo.meta.edm.EdmType;
+import bingo.meta.edm.EdmUnresolvedTypeRef;
 import bingo.odata.ODataConverts;
 import bingo.odata.ODataErrors;
 import bingo.odata.ODataObject;
@@ -110,6 +113,18 @@ public class JsonWriterUtils {
 		writer.endObject();
 	}
 	
+	public static void writeEntity(ODataWriterContext context,JSONWriter writer,EdmEntityType entityType,Object entity){
+		writer.startObject();
+		
+		BeanModel<?> model = BeanModel.get(entity.getClass());
+		
+		writeEntityProperties(context,writer,entityType,model,entity);
+		
+		//TODO : navigationProperties
+		
+		writer.endObject();
+	}
+	
 	public static void writeEntityMetadata(ODataWriterContext context,JSONWriter writer,ODataEntity entity){
 		
 		writer.startObject("__metadata");
@@ -137,6 +152,28 @@ public class JsonWriterUtils {
 			}
 			
 			//TODO : ComplexType
+		}
+	}
+	
+	public static void writeEntityProperties(ODataWriterContext context,JSONWriter writer,EdmEntityType entityType,BeanModel<?> model,Object entity){
+		int i=0;
+		for(BeanProperty bp : model.getProperties()){
+			EdmProperty ep = entityType.findProperty(bp.getName());
+			
+			if(null != ep){
+				if(i==0){
+					i=1;
+				}else{
+					writer.separator();
+				}
+				
+				if(ep.getType().isSimple()){
+					writer.name(bp.getName());
+					writeSimpleValue(writer,(EdmSimpleType)ep.getType(),bp.getValue(entity));	
+				}
+				
+				//TODO : ComplexType
+			}
 		}
 	}
 	
@@ -201,8 +238,15 @@ public class JsonWriterUtils {
 			return;
 		}
 		
+		type = resolveType(context,type);
+		
 		if(type.isEntity()){
-			writeEntity(context, writer, (ODataEntity)value);
+			if(value instanceof ODataEntity){
+				writeEntity(context, writer, (ODataEntity)value);	
+			}else{
+				writeEntity(context, writer, (EdmEntityType)type, value);
+			}
+			
 			return;
 		}
 		
@@ -222,7 +266,7 @@ public class JsonWriterUtils {
 		}
 		
 		if(type.isCollection()){
-			EdmType elementType = type.asCollection().getElementType();
+			EdmType elementType = resolveType(context, type.asCollection().getElementType());
 			Enumerable<Object> enumerable = Enumerables.ofObject(value);
 			writer.startArray();
 			int i=0;
@@ -287,6 +331,21 @@ public class JsonWriterUtils {
 		}
 		
 		writer.endObject();
+	}
+	
+	private static EdmType resolveType(ODataWriterContext context,EdmType type){
+		if(type instanceof EdmUnresolvedTypeRef){
+			EdmFullQualifiedName fqName = new EdmFullQualifiedName(((EdmUnresolvedTypeRef)type).getFullQualifiedName());
+			EdmType resolvedType = context.getServices().findEntityType(fqName);
+			if(null == resolvedType){
+				resolvedType = context.getServices().findComplexType(fqName);
+			}
+			if(null == resolvedType){
+				throw ODataErrors.internalServerError("found unresolved type '" + fqName.getFqName() + "'");
+			}
+			return resolvedType;
+		}
+		return type;
 	}
 	
 	private static void writeNavigationProperties(ODataWriterContext context,JSONWriter writer,ODataEntity entity){
