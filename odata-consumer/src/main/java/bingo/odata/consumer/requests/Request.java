@@ -15,12 +15,14 @@ import bingo.lang.Strings;
 import bingo.lang.logging.Log;
 import bingo.lang.logging.LogFactory;
 import bingo.odata.ODataConstants;
+import bingo.odata.ODataConstants.ContentTypes;
 import bingo.odata.consumer.ODataConsumerContext;
 import bingo.odata.consumer.exceptions.ConnectFailedException;
 import bingo.odata.consumer.requests.behaviors.Behavior;
 
 import com.google.api.client.http.GenericUrl;
 import com.google.api.client.http.HttpContent;
+import com.google.api.client.http.HttpEncoding;
 import com.google.api.client.http.HttpHeaders;
 import com.google.api.client.http.HttpMethods;
 import com.google.api.client.http.HttpRequest;
@@ -43,6 +45,7 @@ public class Request {
 	protected String serviceRoot;
 	protected String resourcePath;
 	protected ODataConsumerContext context;
+	protected HttpRequest httpRequest;
 	
 	public Request(ODataConsumerContext context, String serviceRoot) {
 		this.serviceRoot = serviceRoot;
@@ -156,23 +159,24 @@ public class Request {
 		
 		this.setDefaultParameters();
 		
-		HttpRequest req = buildRequest(requestFactory);
+		httpRequest = buildRequest(requestFactory);
 		
-		handleBehaviors(req);
+		handleBehaviors(httpRequest);
 		
 		// let google http client not throw exception when response code > 300
 		// treat all response as normal response here.
-		req.setThrowExceptionOnExecuteError(false);
+		httpRequest.setThrowExceptionOnExecuteError(false);
 
-//		if(log.isDebugEnabled())  // TODO open after complete
-			report(req);
+		if(log.isInfoEnabled()){
+			log.info("Send Request:" + this);
+		}
 			
 		try {
-			Response response = new Response(req.execute());
+			Response response = new Response(httpRequest.execute());
 			log.info("Received Response:" + response);
 			return response;
 		} catch (IOException e) {
-			throw new ConnectFailedException(req.getUrl().toString());
+			throw new ConnectFailedException(httpRequest.getUrl().toString());
 		}
 	}
 
@@ -206,6 +210,7 @@ public class Request {
 		HttpHeaders httpHeaders = new HttpHeaders();
 		httpHeaders.putAll(headers);
 		httpHeaders.setAccept(accept);
+		httpHeaders.setContentType(ContentTypes.APPLICATION_JSON_UTF8);
 		return httpHeaders; 
 	}
 
@@ -217,17 +222,6 @@ public class Request {
 		String str = serviceRoot + getResourcePath() + "?" + getQueryString();
 		GenericUrl url = new GenericUrl(str);
 		return url;
-	}
-
-	private void report(HttpRequest req) {
-		String blank = " ", nextLine = "\n", tab = "\t", nt = nextLine + tab;
-		String str = "Send Request: " + 
-					nextLine + 
-					nt + req.getRequestMethod() + blank + req.getUrl().toString() +
-					nt + req.getHeaders().toString() + 
-					nextLine;
-		// TODO add content
-		log.info(str);
 	}
 	
 	protected String addQueryString(String url) {
@@ -259,5 +253,21 @@ public class Request {
 		if(Strings.isBlank(queryString2)) return queryString1;
 		
 		return queryString1 + "&" + queryString2;
+	}
+
+	@Override
+	public String toString() {
+		HttpHeaders httpHeaders = null;
+		if(null == this.httpRequest) {
+			httpHeaders = genHeaders();
+		} else {
+			httpHeaders = this.httpRequest.getHeaders();
+		}
+		String blank = " ", nextLine = "\n", tab = "\t", nt = nextLine + tab;
+		String str = nextLine + 
+				nt + this.getMethod() + blank + this.genUrl().toString() +
+				nt + httpHeaders.toString() + 
+				nextLine;
+		return str;
 	}
 }

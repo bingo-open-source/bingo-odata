@@ -126,7 +126,14 @@ public class Response {
 		if(jsonObject.isMap()) {
 			jsonMap = (Map<String, Object>) jsonObject.map().get("d");
 			if(1 == jsonMap.size() && null != jsonMap.get(funcName)) {
-				return jsonMap.get(funcName);
+				Object tempObject = jsonMap.get(funcName);
+				if(tempObject instanceof Map) {
+					 Object tempObject2 = ((Map<String, Object>)tempObject).get("results");
+					 if(null != tempObject2 && ((Map<String, Object>)tempObject).size() == 1) {
+						 return tempObject2;
+					 }
+				}
+				return tempObject;
 			}
 		}
 		throw new ResolveFailedException("Return Type");

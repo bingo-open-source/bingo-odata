@@ -100,7 +100,7 @@ public class FunctionRequest extends Request{
 	protected HttpContent genContent() {
 		if(getMethod().equals(HttpMethods.POST)) {
 			String json = JSON.encode(params, true);
-			HttpContent content = ByteArrayContent.fromString(ContentTypes.APPLICATION_JSON, json);
+			HttpContent content = ByteArrayContent.fromString(ContentTypes.APPLICATION_JSON_UTF8, json);
 			return content;
 		}
 		return null;
