@@ -1,9 +1,11 @@
 package bingo.odata.consumer.requests;
 
+import java.io.CharArrayReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -26,6 +28,7 @@ import bingo.odata.ODataReaderContext;
 import bingo.odata.ODataConstants.ContentTypes;
 import bingo.odata.consumer.ODataConsumerContext;
 import bingo.odata.consumer.exceptions.ResolveFailedException;
+import bingo.odata.consumer.ext.ODataDateConvertor;
 import bingo.odata.model.ODataComplexObject;
 import bingo.odata.model.ODataEntity;
 import bingo.odata.model.ODataEntitySet;
@@ -41,6 +44,10 @@ import com.google.api.client.http.HttpResponse;
 
 public class Response {
 	private HttpResponse httpResponse;
+	
+	static {
+		Converts.register(Date.class, new ODataDateConvertor());
+	}
 	
 	public Response(HttpResponse httpResponse) {
 		this.httpResponse = httpResponse;
@@ -95,39 +102,82 @@ public class Response {
 	}
 	
 	public <T> T convertToObject(Class<T> clazz, EdmType edmType, ODataConsumerContext context) {
-		if(edmType.isComplex() || edmType.getTypeKind() == EdmTypeKind.Reference) {
-			if(null != context.getFunctionImport()) {
-				String jsonString = this.getString(), funcName = context.getFunctionImport().getName();
-				JSONObject jsonObject = JSON.decode(jsonString);
-				if(jsonObject.isMap()) {
-					Map<String, Object> jsonMap = (Map<String, Object>) jsonObject.map().get("d");
-					if(1 == jsonMap.size() && null != jsonMap.get(funcName)) {
-						jsonMap = (Map<String, Object>) jsonMap.get(funcName);
-						return Converts.convert(jsonMap, clazz);
-					}
-				}
-				throw new ResolveFailedException("Complex Object");
-			} else {
-				// retrieve complex object not through function invoking. TODO
-				throw new NotImplementedException();
+		if(null != context.getFunctionImport()) {
+			// through function invoking.
+			// get ride of useless info.
+			String jsonString = this.getString(), funcName = context.getFunctionImport().getName();
+			Map<String, Object> jsonMap = extractValueFromFunctionResponseForMap(jsonString, funcName);
+			if(edmType.isComplex() || edmType.getTypeKind() == EdmTypeKind.Reference) {
+				// complex object return type.
+				return Converts.convert(jsonMap, clazz);
+			} else { 
+				// normal entity return type.
+				return convertToEntity(clazz, context, JSON.encode(jsonMap));
 			}
-		} else { // normal entityType.
-			ODataReader<ODataEntity> reader = context.getProtocol().getReader(
-					context.getVersion(), context.getFormat(), ODataObjectKind.Entity);
-			try {
-				ODataEntity entity = reader.read((ODataReaderContext)context, new InputStreamReader(this.getInputStream()));
-				return Converts.convert(entity.toMap(), clazz);
-			} catch (Throwable e) {
-				throw new ResolveFailedException(e);
+		} else {
+			// normal retrieve entity.
+			return convertToEntity(clazz, context, this.getString());
+		}
+	}
+	
+	public static Object extractValueFromFunctionResponse(String jsonString, String funcName) {
+		JSONObject jsonObject = JSON.decode(jsonString);
+		Map<String, Object> jsonMap = null;
+		if(jsonObject.isMap()) {
+			jsonMap = (Map<String, Object>) jsonObject.map().get("d");
+			if(1 == jsonMap.size() && null != jsonMap.get(funcName)) {
+				return jsonMap.get(funcName);
 			}
+		}
+		throw new ResolveFailedException("Return Type");
+	}	
+	public static Map<String, Object> extractValueFromFunctionResponseForMap(String jsonString, String funcName) {
+		return (Map<String, Object>) extractValueFromFunctionResponse(jsonString, funcName);
+	}	
+	public static List<Map<String, Object>> extractValueFromFunctionResponseForList(String jsonString, String funcName) {
+		return (List<Map<String, Object>>) extractValueFromFunctionResponse(jsonString, funcName);
+	}
+	
+	private <T> T convertToEntity(Class<T> clazz, ODataConsumerContext context, String string) {
+		ODataReader<ODataEntity> reader = context.getProtocol().getReader(
+				context.getVersion(), context.getFormat(), ODataObjectKind.Entity);
+		try {
+			ODataEntity entity = reader.read((ODataReaderContext)context, new CharArrayReader(string.toCharArray()));
+			return Converts.convert(entity.toMap(), clazz);
+		} catch (Throwable e) {
+			throw new ResolveFailedException(e);
 		}
 	}
 
 	public <T> List<T> convertToObjectList(Class<T> listClazz, EdmType edmType, ODataConsumerContext context) {
+		if(null != context.getFunctionImport()) {
+			// through function invoking.
+			// get ride of useless info.
+			String jsonString = this.getString(), funcName = context.getFunctionImport().getName();
+			List<Map<String, Object>> listMap = extractValueFromFunctionResponseForList(jsonString, funcName);
+			if(edmType.isComplex()
+					|| edmType.getTypeKind() == EdmTypeKind.Reference
+					|| (edmType.isCollection() && edmType.asCollection().getElementType().getTypeKind() == EdmTypeKind.Reference)) {
+				// complex object return type.
+				List<T> result = new ArrayList<T>();
+				for (Map<String, Object> map : listMap) {
+					result.add(Converts.convert(map, listClazz));
+				}
+				return result;
+			} else { 
+				// normal entity return type.
+				return convertToEntitySet(listClazz, context, JSON.encode(listMap));
+			}
+		} else {
+			// normal retrieve entity.
+			return convertToEntitySet(listClazz, context, this.getString());
+		}
+	}
+	private <T> List<T> convertToEntitySet(Class<T> listClazz, ODataConsumerContext context, String str) {
 		ODataReader<ODataEntitySet> reader = context.getProtocol().getReader(
 				context.getVersion(), context.getFormat(), ODataObjectKind.EntitySet);
 		try {
-			ODataEntitySet entitySet = reader.read((ODataReaderContext)context, new InputStreamReader(this.getInputStream()));
+			ODataEntitySet entitySet = reader.read((ODataReaderContext)context, new CharArrayReader(str.toCharArray()));
 			List<T> list = new ArrayList<T>();
 			for (ODataEntity entity : entitySet.getEntities()) {
 				list.add(Converts.convert(entity.toMap(), listClazz));
