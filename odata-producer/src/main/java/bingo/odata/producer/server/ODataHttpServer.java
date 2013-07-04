@@ -47,7 +47,7 @@ public class ODataHttpServer {
 	}
 	
 	public ODataHttpServer(int port,Object handler) {
-		this(8080,"",handler);
+		this(port,"",handler);
 	}
 	
 	public ODataHttpServer(String contextPath,Object handler) {
