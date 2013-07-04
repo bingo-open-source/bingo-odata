@@ -29,7 +29,7 @@ public class ODataConsumerConfigImpl implements ODataConsumerConfig {
 	protected ODataProtocol protocol = ODataProtocols.DEFAULT;
 	protected ODataFormat   defaultFormat = ODataFormat.Json;
 	protected ODataVersion  version = ODataVersion.V3;
-	protected boolean		printStackTrace = true;
+	protected boolean		isLogPrintHttpMessageBody = false;
 	protected boolean       autoDetectFormat = false;
 	protected boolean		verifyMetadata = true;
 	protected int			maxResults = 10;
@@ -51,12 +51,12 @@ public class ODataConsumerConfigImpl implements ODataConsumerConfig {
 		this.defaultFormat = defaultFormat;
 	}
 
-	public boolean isPrintStackTrace() {
-		return printStackTrace;
+	public boolean isLogPrintHttpMessageBody() {
+		return isLogPrintHttpMessageBody;
 	}
 
-	public void setPrintStackTrace(boolean printStackTrace) {
-		this.printStackTrace = printStackTrace;
+	public void setLogPrintHttpMessageBody(boolean isLogPrintHttpMessageBody) {
+		this.isLogPrintHttpMessageBody = isLogPrintHttpMessageBody;
 	}
 
 	public boolean isAutoDetectFormat() {

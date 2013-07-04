@@ -1,5 +1,6 @@
 package bingo.odata.consumer.requests;
 
+import java.io.ByteArrayInputStream;
 import java.io.CharArrayReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,6 +14,7 @@ import bingo.lang.Converts;
 import bingo.lang.Enumerables;
 import bingo.lang.Enums;
 import bingo.lang.Strings;
+import bingo.lang.convert.InputStreamConverter;
 import bingo.lang.exceptions.NotImplementedException;
 import bingo.lang.http.HttpContentTypes;
 import bingo.lang.json.JSON;
@@ -44,6 +46,7 @@ import com.google.api.client.http.HttpResponse;
 
 public class Response {
 	private HttpResponse httpResponse;
+	private String responseBody;
 	
 	static {
 		Converts.register(Date.class, new ODataDateConvertor());
@@ -67,6 +70,9 @@ public class Response {
 
 	public InputStream getInputStream() {
 		try {
+			if(null != responseBody) {
+				return new ByteArrayInputStream(responseBody.getBytes());
+			}
 			return httpResponse.getContent();
 		} catch (IOException e) {
 			throw new ResolveFailedException(e);
@@ -75,13 +81,19 @@ public class Response {
 	
 	public String getString() {
 		try {
+			if(null != responseBody) {
+				return responseBody;
+			}
 			return httpResponse.parseAsString();
 		} catch (IOException e) {
 			throw new ResolveFailedException(e);
 		}
 	}
-	
+
 	public String toString() {
+		return toString(false);
+	}
+	public String toString(boolean showBody) {
 		String blank = " ", next = "\n\t";
 		StringBuilder builder = new StringBuilder(next)
 					.append(next).append(httpResponse.getRequest().getRequestMethod())
@@ -90,15 +102,16 @@ public class Response {
 					.append(blank).append(httpResponse.getStatusMessage())
 					.append(next);
 		builder.append(httpResponse.getHeaders().toString()).append(next);
-//		if(!httpResponse.getContentType().equals(ContentTypes.MULTIPART_FORM_DATA)) {
-//			try {
-//				builder.append(httpResponse.parseAsString());
-//			} catch (IOException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//		}
-		return builder.toString();
+		if(showBody) {
+			try {
+				responseBody = new InputStreamConverter().convertToString(httpResponse.getContent());
+				builder.append(responseBody);
+			} catch (Throwable e) {
+				e.printStackTrace();
+				throw new RuntimeException(e);
+			}
+		}
+		return builder.append(next).toString();
 	}
 	
 	public <T> T convertToObject(Class<T> clazz, EdmType edmType, ODataConsumerContext context) {

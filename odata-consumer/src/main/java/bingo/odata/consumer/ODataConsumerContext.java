@@ -31,6 +31,7 @@ public class ODataConsumerContext extends ODataContextBase implements ODataWrite
 	private ODataVersion version;
 	private int maxResults;
 	private List<Behavior> behaviors;
+	private boolean isLogPrintHttpMessageBody;
 	
 	public ODataConsumerContext(ODataConsumerConfig config) {
 		this.setProtocol(config.getProtocol());
@@ -38,6 +39,7 @@ public class ODataConsumerContext extends ODataContextBase implements ODataWrite
 		this.setFormat(config.getDefaultFormat());
 		this.setMaxResults(config.getMaxResults());
 		this.setBehaviors(config.getClientBehaviors());
+		this.setLogPrintHttpMessageBody(config.isLogPrintHttpMessageBody());
 	}
 	
 	public boolean isConsumer() {
@@ -88,6 +90,14 @@ public class ODataConsumerContext extends ODataContextBase implements ODataWrite
 
 	public void setBehaviors(List<Behavior> behaviors) {
 		this.behaviors = behaviors;
+	}
+
+	public boolean isLogPrintHttpMessageBody() {
+		return isLogPrintHttpMessageBody;
+	}
+
+	public void setLogPrintHttpMessageBody(boolean isLogPrintHttpMessageBody) {
+		this.isLogPrintHttpMessageBody = isLogPrintHttpMessageBody;
 	}
 	
 }

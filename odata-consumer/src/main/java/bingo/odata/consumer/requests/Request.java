@@ -4,7 +4,9 @@ import static bingo.odata.ODataConstants.Headers.DATA_SERVICE_VERSION;
 import static bingo.odata.ODataConstants.Headers.MAX_DATA_SERVICE_VERSION;
 import static bingo.odata.ODataConstants.Headers.MIN_DATA_SERVICE_VERSION;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.StringReader;
 import java.net.ConnectException;
 import java.util.HashMap;
 import java.util.List;
@@ -12,6 +14,7 @@ import java.util.Map;
 
 import bingo.lang.Collections;
 import bingo.lang.Strings;
+import bingo.lang.convert.InputStreamConverter;
 import bingo.lang.logging.Log;
 import bingo.lang.logging.LogFactory;
 import bingo.odata.ODataConstants;
@@ -20,6 +23,7 @@ import bingo.odata.consumer.ODataConsumerContext;
 import bingo.odata.consumer.exceptions.ConnectFailedException;
 import bingo.odata.consumer.requests.behaviors.Behavior;
 
+import com.google.api.client.http.ByteArrayContent;
 import com.google.api.client.http.GenericUrl;
 import com.google.api.client.http.HttpContent;
 import com.google.api.client.http.HttpEncoding;
@@ -173,7 +177,8 @@ public class Request {
 			
 		try {
 			Response response = new Response(httpRequest.execute());
-			log.info("Received Response:" + response);
+			log.info("Received Response:" + (this.context.isLogPrintHttpMessageBody()?
+					response.toString(true) : response.toString(false)));
 			return response;
 		} catch (IOException e) {
 			throw new ConnectFailedException(httpRequest.getUrl().toString());
@@ -266,8 +271,25 @@ public class Request {
 		String blank = " ", nextLine = "\n", tab = "\t", nt = nextLine + tab;
 		String str = nextLine + 
 				nt + this.getMethod() + blank + this.genUrl().toString() +
-				nt + httpHeaders.toString() + 
-				nextLine;
-		return str;
+				nt + httpHeaders.toString();
+		if(this.context.isLogPrintHttpMessageBody()) {
+			HttpContent httpContent = null;
+			if(null == this.httpRequest) {
+				httpContent = genContent();
+			} else {
+				httpContent = this.httpRequest.getContent();
+			}
+			if(httpContent instanceof ByteArrayContent) {
+				String content = "";
+				try {
+					content = new InputStreamConverter().convertToString(((ByteArrayContent)httpContent).getInputStream());
+				} catch (Throwable e) {
+					e.printStackTrace();
+					throw new RuntimeException(e);
+				}
+				if(Strings.isNotBlank(content)) str += nt + content;
+			}
+		}
+		return str + nt;
 	}
 }

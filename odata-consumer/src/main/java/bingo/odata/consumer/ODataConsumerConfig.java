@@ -38,7 +38,9 @@ public interface ODataConsumerConfig {
 	
 	boolean isVerifyMetadata();
 	
-	boolean isPrintStackTrace();
+	boolean isLogPrintHttpMessageBody();
+	
+	void setLogPrintHttpMessageBody(boolean isLogPrintHttpMessageBody);
 	
 	boolean isAutoDetectFormat();
 	
