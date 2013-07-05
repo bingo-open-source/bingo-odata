@@ -498,6 +498,15 @@ public class ODataConsumerImpl implements ODataConsumer {
 	public <T> T invokeFunctionForEntity(String funcName, Map<String, Object> parameters, Class<T> clazz) {
 		return invokeFunctionForEntity(funcName, parameters, null, clazz);
 	}
+	
+	public <T> T invokeFunctionForType(String funcName, Map<String, Object> parameters, Class<T> clazz) {
+		return invokeFunctionForEntity(funcName, parameters, null, clazz);
+	}
+	
+	public <T> T invokeFunctionForType(String funcName, Map<String, Object> parameters, String entitySet, Class<T> clazz) {
+		return invokeFunctionForEntity(funcName, parameters, entitySet, clazz);
+	}
+	
 	public <T> T invokeFunctionForEntity(String funcName, Map<String, Object> parameters, String entitySet, Class<T> clazz) {
 		ensureMetadata();
 		

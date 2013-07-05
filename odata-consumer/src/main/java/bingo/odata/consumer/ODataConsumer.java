@@ -122,6 +122,10 @@ public interface ODataConsumer {
 	
 	<T> T	 					invokeFunctionForEntity(String funcName, Map<String, Object> parameters, String entitySet, Class<T> t);
 	
+	<T> T	 					invokeFunctionForType(String funcName, Map<String, Object> parameters, String entitySet, Class<T> t);
+	
+	<T> T	 					invokeFunctionForType(String funcName, Map<String, Object> parameters, Class<T> t);
+	
 	<T> List<T>					invokeFunctionForEntityList(String funcName, Map<String, Object> parameters, Class<T> listClass);
 	
 	<T> List<T>					invokeFunctionForEntityList(String funcName, Map<String, Object> parameters, String entitySet, Class<T> listClass);

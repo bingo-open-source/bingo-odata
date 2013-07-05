@@ -56,17 +56,12 @@ public class ODataConsumerContextHelper {
 	private static void initFunctionContext(ODataServices services, ODataConsumerContext context, EdmFunctionImport func, String entitySet) {
 		context.setFunctionImport(func);
 		
-		EdmEntityType edmEntityType = tryGetEntityTypeFromEdmType(func.getReturnType());
+		EdmEntitySet edmEntitySet = services.findEntitySet(entitySet);
 		
-		EdmEntitySet edmEntitySet = null;
+		EdmEntityType edmEntityType = services.findEntityType(edmEntitySet.getEntityType());
 		
-		if(null != edmEntityType) {
-			
-			edmEntitySet = services.findEntitySet(edmEntityType);
-			
-			context.setEntityType(edmEntityType);
-			context.setEntitySet(edmEntitySet);
-		}
+		context.setEntityType(edmEntityType);
+		context.setEntitySet(edmEntitySet);
 	}
 
 	private static EdmEntityType tryGetEntityTypeFromEdmType(EdmType returnType) {

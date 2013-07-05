@@ -13,6 +13,7 @@ import java.util.Map;
 import bingo.lang.Converts;
 import bingo.lang.Enumerables;
 import bingo.lang.Enums;
+import bingo.lang.Func1;
 import bingo.lang.Strings;
 import bingo.lang.convert.InputStreamConverter;
 import bingo.lang.exceptions.NotImplementedException;
@@ -31,8 +32,11 @@ import bingo.odata.ODataConstants.ContentTypes;
 import bingo.odata.consumer.ODataConsumerContext;
 import bingo.odata.consumer.exceptions.ResolveFailedException;
 import bingo.odata.consumer.ext.ODataDateConvertor;
+import bingo.odata.consumer.util.ODataConvertor;
+import bingo.odata.consumer.util.OdataJudger;
 import bingo.odata.model.ODataComplexObject;
 import bingo.odata.model.ODataEntity;
+import bingo.odata.model.ODataEntityBuilder;
 import bingo.odata.model.ODataEntitySet;
 import bingo.odata.model.ODataNamedValue;
 import bingo.odata.model.ODataNavigationProperty;
@@ -119,13 +123,19 @@ public class Response {
 			// through function invoking.
 			// get ride of useless info.
 			String jsonString = this.getString(), funcName = context.getFunctionImport().getName();
-			Map<String, Object> jsonMap = extractValueFromFunctionResponseForMap(jsonString, funcName);
-			if(edmType.isComplex() || edmType.getTypeKind() == EdmTypeKind.Reference) {
-				// complex object return type.
-				return Converts.convert(jsonMap, clazz);
-			} else { 
-				// normal entity return type.
-				return convertToEntity(clazz, context, JSON.encode(jsonMap));
+			Object object = extractValueFromFunctionResponse(jsonString, funcName);
+			if(object instanceof Map) {
+				Map<String, Object> jsonMap = (Map<String, Object>) object;
+				if(edmType.isEntity() || edmType.isEntityRef()) {
+					// normal entity return type.
+					return convertToEntity(clazz, context, JSON.encode(jsonMap));
+				} else { 
+					// complex object return type.
+					// and other type like int, boolean.
+					return Converts.convert(jsonMap, clazz);
+				}
+			} else {
+				return Converts.convert(object, clazz);
 			}
 		} else {
 			// normal retrieve entity.
@@ -159,16 +169,10 @@ public class Response {
 	}
 	
 	private <T> T convertToEntity(Class<T> clazz, ODataConsumerContext context, String string) {
-		ODataReader<ODataEntity> reader = context.getProtocol().getReader(
-				context.getVersion(), context.getFormat(), ODataObjectKind.Entity);
-		try {
-			ODataEntity entity = reader.read((ODataReaderContext)context, new CharArrayReader(string.toCharArray()));
-			return Converts.convert(entity.toMap(), clazz);
-		} catch (Throwable e) {
-			throw new ResolveFailedException(e);
-		}
+		ODataEntity entity = ODataConvertor.convertTo(ODataEntity.class, context, string);
+		return ODataConvertor.convertEntityToType(entity, clazz);
 	}
-
+	
 	public <T> List<T> convertToObjectList(Class<T> listClazz, EdmType edmType, ODataConsumerContext context) {
 		if(null != context.getFunctionImport()) {
 			// through function invoking.
@@ -179,11 +183,7 @@ public class Response {
 					|| edmType.getTypeKind() == EdmTypeKind.Reference
 					|| (edmType.isCollection() && edmType.asCollection().getElementType().getTypeKind() == EdmTypeKind.Reference)) {
 				// complex object return type.
-				List<T> result = new ArrayList<T>();
-				for (Map<String, Object> map : listMap) {
-					result.add(Converts.convert(map, listClazz));
-				}
-				return result;
+				return ODataConvertor.convertMapListToTypeList(listMap, listClazz);
 			} else { 
 				// normal entity return type.
 				return convertToEntitySet(listClazz, context, JSON.encode(listMap));
@@ -194,39 +194,28 @@ public class Response {
 		}
 	}
 	private <T> List<T> convertToEntitySet(Class<T> listClazz, ODataConsumerContext context, String str) {
-		ODataReader<ODataEntitySet> reader = context.getProtocol().getReader(
-				context.getVersion(), context.getFormat(), ODataObjectKind.EntitySet);
-		try {
-			ODataEntitySet entitySet = reader.read((ODataReaderContext)context, new CharArrayReader(str.toCharArray()));
-			List<T> list = new ArrayList<T>();
-			for (ODataEntity entity : entitySet.getEntities()) {
-				list.add(Converts.convert(entity.toMap(), listClazz));
-			}
-			return list;
-		} catch (Throwable e) {
-			throw new ResolveFailedException(e);
-		}
+		ODataEntitySet entitySet = ODataConvertor.convertTo(ODataEntitySet.class, context, getString());
+		return ODataConvertor.convertEntitySetToTypeList(entitySet, listClazz);
 	}
 	
 	public ODataValue convertToODataValue(EdmType edmType, ODataConsumerContext context) {
+		if(null != context.getFunctionImport()) {
+			if(OdataJudger.isEntity(edmType)) {
+				Map<String, Object> json = extractValueFromFunctionResponseForMap(
+						getString(), context.getFunctionImport().getName());
+				return ODataConvertor.convertToODataValue(ODataEntity.class, context, json);
+			}
+		}
 		ODataValueBuilder builder = new ODataValueBuilder();
 		try {
 			if(edmType.isCollection()) {
-				
 				builder.entitySet(this.convertToEntitySet(context));
-				
 			} else if(edmType.isEntity() || edmType.isEntityRef()) {
-				
 				builder.entity(this.convertToEntity(context));
-				
 			} else if(edmType.isComplex()) {
-				
 				// TODO 
-				
 			} else if(edmType.isSimple()) {
-				
 				// TODO
-				
 			}
 		} catch (Throwable e) {
 			throw new ResolveFailedException(e);
@@ -235,82 +224,30 @@ public class Response {
 	}
 	
 	public ODataError convertToError(ODataConsumerContext context) {
-		ODataReader<ODataError> reader = context.getProtocol().getReader(
-				context.getVersion(), context.getFormat(), ODataObjectKind.Error);
-		try {
-			ODataError error = reader.read((ODataReaderContext)context, new InputStreamReader(this.getInputStream()));
-			
-			error.setStatus(this.getStatus());
-			
-			return error;
-		} catch (Throwable e) {
-			throw new ResolveFailedException(e);
-		}
+		ODataError error = ODataConvertor.convertTo(ODataError.class, context, getString());
+		error.setStatus(this.getStatus());
+		return error;
 	}
 	
 	public String convertToString(ODataConsumerContext context) {
-		ODataReader<ODataNamedValue> reader = context.getProtocol().getReader(
-				context.getVersion(), context.getFormat(), ODataObjectKind.NamedValue);
-		try {
-			ODataNamedValue namedValue = reader.read((ODataReaderContext)context, new InputStreamReader(this.getInputStream()));
-			
-			return ((ODataRawValueImpl)namedValue.getValue()).getValue().toString();
-			
-		} catch (Throwable e) {
-			throw new ResolveFailedException(e);
-		}
+		ODataNamedValue namedValue = ODataConvertor.convertTo(ODataNamedValue.class, context, getString());
+		return ((ODataRawValueImpl)namedValue.getValue()).getValue().toString();
 	}
 	
 	public ODataEntity convertToEntity(ODataConsumerContext context) {
-		ODataReader<ODataEntity> reader = context.getProtocol().getReader(
-				context.getVersion(), context.getFormat(), ODataObjectKind.Entity);
-		
-		try {
-			ODataEntity oDataEntity = reader.read(
-					(ODataReaderContext)context, new InputStreamReader(this.getInputStream()));
-			
-			return oDataEntity;
-		} catch (Throwable e) {
-			throw new ResolveFailedException(e);
-		}
+		return ODataConvertor.convertTo(ODataEntity.class, context, getString());
 	}
 	
 	public ODataEntitySet convertToEntitySet(ODataConsumerContext context) {
-		ODataReader<ODataEntitySet> reader = context.getProtocol().getReader(
-				context.getVersion(), context.getFormat(), ODataObjectKind.EntitySet);
-		
-		try {
-			ODataEntitySet oDataEntitySet = reader.read(
-					(ODataReaderContext)context, new InputStreamReader(this.getInputStream()));
-			
-			return oDataEntitySet;
-		} catch (Throwable e) {
-			throw new ResolveFailedException(e);
-		}
+		return ODataConvertor.convertTo(ODataEntitySet.class, context, getString());
 	}
 	
 	public ODataProperty convertToProperty(ODataConsumerContext context) {
-		ODataReader<ODataProperty> reader = context.getProtocol().getReader(
-				context.getVersion(), context.getFormat(), ODataObjectKind.Property);
-		try {
-			
-			return reader.read((ODataReaderContext)context, new InputStreamReader(this.getInputStream()));
-			
-		} catch (Throwable e) {
-			throw new ResolveFailedException(e);
-		}
+		return ODataConvertor.convertTo(ODataProperty.class, context, getString());
 	}
 	
 	public ODataNavigationProperty convertToNavigationProperty(ODataConsumerContext context) {
-		ODataReader<ODataNavigationProperty> reader = context.getProtocol().getReader(
-				context.getVersion(), context.getFormat(), ODataObjectKind.Property);
-		try {
-			
-			return reader.read((ODataReaderContext)context, new InputStreamReader(this.getInputStream()));
-			
-		} catch (Throwable e) {
-			throw new ResolveFailedException(e);
-		}
+		return ODataConvertor.convertTo(ODataNavigationProperty.class, context, getString());
 	}
 	
 	public long convertToRawLong(ODataConsumerContext context) {

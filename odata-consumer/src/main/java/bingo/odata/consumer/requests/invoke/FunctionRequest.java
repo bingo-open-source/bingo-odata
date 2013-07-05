@@ -108,13 +108,15 @@ public class FunctionRequest extends Request{
 
 	private void prepareParams() {
 		Map<String, String> qualifiedParams = new LinkedHashMap<String, String>();
-		for (String key : params.keySet()) {
-			Object valueObject = params.get(key);
-			
-			// TODO maybe need to do some url-format convert for some Type, like Date.
-			String valueString = Objects.toString(valueObject);
-			
-			qualifiedParams.put(key, valueString);
+		if(null != params) {
+			for (String key : params.keySet()) {
+				Object valueObject = params.get(key);
+				
+				// TODO maybe need to do some url-format convert for some Type, like Date.
+				String valueString = Objects.toString(valueObject);
+				
+				qualifiedParams.put(key, valueString);
+			}
 		}
 		this.addParameters(qualifiedParams);
 	}
