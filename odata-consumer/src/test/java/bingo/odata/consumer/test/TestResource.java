@@ -1,4 +1,4 @@
-package bingo.odata.consumer;
+package bingo.odata.consumer.test;
 
 import java.util.LinkedHashMap;
 import java.util.Map;

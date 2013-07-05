@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import bingo.lang.Converts;
@@ -20,9 +21,11 @@ import bingo.odata.ODataQueryInfoParser;
 import bingo.odata.ODataQueryOptions;
 import bingo.odata.ODataServices;
 import bingo.odata.ODataUrlInfo;
-import bingo.odata.consumer.demo.DemoModelAndData;
-import bingo.odata.consumer.demo.DemoODataProducer;
 import bingo.odata.consumer.ext.OrderByDirection;
+import bingo.odata.consumer.test.TestResource;
+import bingo.odata.consumer.test.TestWithServerRunning;
+import bingo.odata.consumer.test.mock.DemoModelAndData;
+import bingo.odata.consumer.test.mock.DemoODataProducer;
 import bingo.odata.model.ODataEntity;
 import bingo.odata.model.ODataEntityBuilder;
 import bingo.odata.model.ODataEntitySet;
@@ -31,12 +34,17 @@ import bingo.odata.model.ODataNavigationProperty;
 import bingo.odata.model.ODataProperty;
 import bingo.odata.model.ODataValue;
 
-public class ODataConsumerImplTest {
+public class ODataConsumerImplTest extends TestWithServerRunning {
 	
 	ODataConsumer consumer = new ODataConsumerImpl(TestResource.serviceUrls.get("local"), false);
 	
 	public static void main(String[] args) {
 		new ODataConsumerImplTest().testRetrieveServiceMetadata();
+	}
+	
+	@Before
+	public void beforeMethod() {
+		consumer.config().setLogPrintHttpMessageBody(true);
 	}
 
 	@Test
@@ -164,13 +172,52 @@ public class ODataConsumerImplTest {
 		paramsMap.put("rating", 2);
 		Product product = consumer.invokeFunctionForEntity("getEntity", paramsMap, "Products", Product.class);
 		assertNotNull(product);
-		assertEquals("Bread", product.getName());
+		assertEquals("张三", product.getName());
+	}
+	
+	@Test
+	public void testInvokeFunction_returnInt() {
+		int product = consumer.invokeFunctionForType("getInt", null, "Products", Integer.class);
+		assertNotNull(product);
+		assertEquals(1024, product);
+	}
+	
+	@Test
+	public void testInvokeFunction_returnLong() {
+		long product = consumer.invokeFunctionForType("getLong", null, "Products", Long.class);
+		assertNotNull(product);
+		assertEquals(9876543210L, product);
+	}
+	
+	@Test
+	public void testInvokeFunction_returnDouble() {
+		double product = consumer.invokeFunctionForType("getDouble", null, "Products", Double.class);
+		assertNotNull(product);
+		assertEquals(3.1415926, product, 0.0001);
+	}
+	
+	@Test
+	public void testInvokeFunction_returnBoolean() {
+		Map<String, Object> paramsMap = new HashMap<String, Object>();
+		paramsMap.put("rating", 2);
+		Boolean product = consumer.invokeFunctionForType("getBoolean", paramsMap, "Products", Boolean.class);
+		assertNotNull(product);
+		assertEquals(true, product);
+	}
+	
+	@Test
+	public void testInvokeFunction_returnDate() {
+		Map<String, Object> paramsMap = new HashMap<String, Object>();
+		paramsMap.put("rating", 2);
+		Date product = consumer.invokeFunctionForType("getDate", paramsMap, "Products", Date.class);
+		assertNotNull(product);
+		assertEquals(new Date(123456789), product);
 	}
 
 	@Test
 	public void testInvokeFunction_returnListObject() {
 		Map<String, Object> paramsMap = new HashMap<String, Object>();
-		paramsMap.put("rating", 2);
+		paramsMap.put("rating", "参数");
 		List<Product> product = consumer.invokeFunctionForEntityList("getEntitySet", paramsMap, "Products", Product.class);
 		assertNotNull(product);
 		assertEquals(3, product.size());
@@ -184,7 +231,7 @@ public class ODataConsumerImplTest {
 		assertNotNull(product);
 		assertEquals(ODataObjectKind.Entity, product.getKind());
 		ODataEntity entity = (ODataEntity) product.getValue();
-		assertEquals("Bread", entity.getPropertyValue("Name"));
+		assertEquals("张三", entity.getPropertyValue("Name"));
 	}
 	
 	public class Product {

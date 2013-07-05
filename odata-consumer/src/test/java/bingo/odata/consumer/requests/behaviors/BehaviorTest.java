@@ -17,9 +17,10 @@ import bingo.lang.Strings;
 import bingo.lang.enumerable.ArrayEnumerable;
 import bingo.odata.consumer.ODataConsumer;
 import bingo.odata.consumer.ODataConsumerImpl;
-import bingo.odata.consumer.TestResource;
+import bingo.odata.consumer.test.TestResource;
+import bingo.odata.consumer.test.TestWithServerRunning;
 
-public class BehaviorTest {
+public class BehaviorTest extends TestWithServerRunning {
 	
 	static boolean execute;
 	@Test

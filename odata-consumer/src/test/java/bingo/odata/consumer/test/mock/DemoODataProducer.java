@@ -13,19 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.odata.consumer.demo;
+package bingo.odata.consumer.test.mock;
 
 import static bingo.meta.edm.EdmUtils.fullQualifiedName;
 
+import java.sql.Date;
 import java.util.UUID;
-
-import com.google.api.client.http.HttpMediaType;
 
 import bingo.lang.Assert;
 import bingo.lang.Dates;
 import bingo.lang.Enumerables;
 import bingo.lang.Strings;
 import bingo.lang.http.HttpMethods;
+import bingo.lang.json.JSON;
+import bingo.lang.json.JSONObject;
 import bingo.meta.edm.EdmAssociation;
 import bingo.meta.edm.EdmAssociationBuilder;
 import bingo.meta.edm.EdmBuilders;
@@ -38,31 +39,20 @@ import bingo.meta.edm.EdmEntityTypeBuilder;
 import bingo.meta.edm.EdmEntityTypeRef;
 import bingo.meta.edm.EdmFunctionImport;
 import bingo.meta.edm.EdmMultiplicity;
-import bingo.meta.edm.EdmNamedObject;
 import bingo.meta.edm.EdmNavigationProperty;
-import bingo.meta.edm.EdmParameter;
 import bingo.meta.edm.EdmParameterMode;
 import bingo.meta.edm.EdmProperty;
-import bingo.meta.edm.EdmPropertyBuilder;
 import bingo.meta.edm.EdmSchemaBuilder;
 import bingo.meta.edm.EdmSimpleType;
-import bingo.meta.edm.EdmSimpleTypeKind;
-import bingo.meta.edm.EdmType;
-import bingo.meta.edm.EdmTypeKind;
-import bingo.meta.edm.EdmTypes;
-import bingo.odata.ODataObject;
 import bingo.odata.ODataObjectKind;
 import bingo.odata.ODataQueryInfo;
 import bingo.odata.ODataServices;
-import bingo.odata.exceptions.ODataBadRequestException;
 import bingo.odata.model.ODataEntity;
 import bingo.odata.model.ODataEntityBuilder;
 import bingo.odata.model.ODataEntitySet;
 import bingo.odata.model.ODataEntitySetBuilder;
 import bingo.odata.model.ODataKey;
 import bingo.odata.model.ODataKeyImpl;
-import bingo.odata.model.ODataNamedValueImpl;
-import bingo.odata.model.ODataNavigationPropertyImpl;
 import bingo.odata.model.ODataParameters;
 import bingo.odata.model.ODataPropertyImpl;
 import bingo.odata.model.ODataRawValueImpl;
@@ -228,17 +218,17 @@ public class DemoODataProducer extends ODataProducerAdapter implements ODataProd
 			ODataEntityBuilder builder = new ODataEntityBuilder(entitySet, entityType);
 			builder.addProperty("ID",0)
 			 .setKey(new ODataKeyImpl(UUID.randomUUID().toString()))
-					 .addProperty("Name","Bread")
+					 .addProperty("Name","张三")
 					 .addProperty("Description","Whole grain bread")									 
 					 .addProperty("ReleaseDate",Dates.parse("1992-01-01"))
 					 .addProperty("DiscontinuedDate",Dates.parse("1999-10-01"))
 					 .addProperty("Rating",4)
 					 .addProperty("Price",2.5);
 			ODataEntity entity = builder.build();
-			return new ODataValueBuilder().entity(entity).build();
+			return new ODataValueBuilder().namedEntity(funcName, entity).build();
 		} else if(Strings.equals(funcName, "getEntitySet")) {
+			JSONObject jsonObject = JSON.decode(context.getRequest().getReader());
 			ODataEntitySetBuilder builder = new ODataEntitySetBuilder(context.getEntitySet(),entityType);
-			
 			if(entityType.getName().equalsIgnoreCase("Category")){
 				
 				builder.addEntity(builder.newEntity()
@@ -253,7 +243,7 @@ public class DemoODataProducer extends ODataProducerAdapter implements ODataProd
 				builder.addEntity(builder.newEntity()
 										 .setKey(new ODataKeyImpl("123456"))
 										 .addProperty("ID",0)
-										 .addProperty("Name","Bread")
+										 .addProperty("Name","张三")
 										 .addProperty("Description","Whole grain bread")									 
 										 .addProperty("ReleaseDate",Dates.parse("1992-01-01"))
 										 .addProperty("DiscontinuedDate",Dates.parse("1999-10-01"))
@@ -272,7 +262,6 @@ public class DemoODataProducer extends ODataProducerAdapter implements ODataProd
 						 .addProperty("Price",3.5)
 						 .build());
 
-				
 				builder.addEntity(builder.newEntity()
 						 .setKey(new ODataKeyImpl(UUID.randomUUID().toString()))
 						 .addProperty("ID",2)
@@ -285,7 +274,7 @@ public class DemoODataProducer extends ODataProducerAdapter implements ODataProd
 						 .build());
 			}
 			ODataEntitySet entitySet2 = builder.build();
-			return new ODataValueBuilder().entitySet(entitySet2).build();
+			return new ODataValueBuilder().namedEntitySet(funcName, entitySet2).build();
 			
 		} else if(Strings.equals(funcName, "getString")) {
 		    return new ODataValueBuilder().namedRawValue(funcName, EdmSimpleType.STRING, INVOKED_FUNCTION).build();
@@ -296,6 +285,18 @@ public class DemoODataProducer extends ODataProducerAdapter implements ODataProd
 		} else if(Strings.equals(funcName, "getInt")) {
 		    return new ODataValueBuilder().namedRawValue(funcName, EdmSimpleType.INT32, 1024).build();
 		    
+		} else if(Strings.equals(funcName, "getLong")) {
+			return new ODataValueBuilder().namedRawValue(funcName, EdmSimpleType.INT64, 9876543210L).build();
+			
+		} else if(Strings.equals(funcName, "getDouble")) {
+			return new ODataValueBuilder().namedRawValue(funcName, EdmSimpleType.DOUBLE, 3.1415926).build();
+			
+		} else if(Strings.equals(funcName, "getBoolean")) {
+			return new ODataValueBuilder().namedRawValue(funcName, EdmSimpleType.BOOLEAN, true).build();
+			
+		} else if(Strings.equals(funcName, "getDate")) {
+			return new ODataValueBuilder().namedRawValue(funcName, EdmSimpleType.DATETIME, new Date(123456789)).build();
+			
 		} else if(Strings.equals(funcName, "getRawInt")) {
 		    return new ODataValueImpl(ODataObjectKind.Raw, new ODataRawValueImpl(EdmSimpleType.INT32, 1024));
 		}
@@ -303,7 +304,7 @@ public class DemoODataProducer extends ODataProducerAdapter implements ODataProd
     }
 
 	private ODataServices loadDemoMetadata(){
-		EdmSchemaBuilder schema = DemoModelAndData.edmSchemaBuilder();
+		EdmSchemaBuilder schema = EdmBuilders.schema("ODataDemo","Self");
 		
 		//complex types
 		EdmComplexType address = DemoModelAndData.edmComplexTypes().get(0);	
@@ -374,6 +375,22 @@ public class DemoODataProducer extends ODataProducerAdapter implements ODataProd
 				.setEntitySet(products.getName())
 				.setReturnType(EdmSimpleType.INT32)
 				.build());
+		demoService.addFunctionImport(EdmBuilders.functionImport("getLong")
+				.setEntitySet(products.getName())
+				.setReturnType(EdmSimpleType.INT64)
+				.build());
+		demoService.addFunctionImport(EdmBuilders.functionImport("getDouble")
+				.setEntitySet(products.getName())
+				.setReturnType(EdmSimpleType.DOUBLE)
+				.build());
+		demoService.addFunctionImport(EdmBuilders.functionImport("getBoolean")
+				.setEntitySet(products.getName())
+				.setReturnType(EdmSimpleType.BOOLEAN)
+				.build());
+		demoService.addFunctionImport(EdmBuilders.functionImport("getDate")
+				.setEntitySet(products.getName())
+				.setReturnType(EdmSimpleType.DATETIME)
+				.build());
 		demoService.addFunctionImport(EdmBuilders.functionImport("getRawInt")
 				.setEntitySet(products.getName())
 				.setReturnType(EdmSimpleType.INT32)
@@ -381,7 +398,7 @@ public class DemoODataProducer extends ODataProducerAdapter implements ODataProd
 		demoService.addFunctionImport(EdmBuilders.functionImport("getEntity")
 				.setEntitySet(products.getName())
 //				.setReturnType(EdmCollectionType.of(productRef))
-				.setReturnType(EdmEntityTypeRef.of(schema.build(), product.build()))
+				.setReturnType(productRef)
 				.addParameter("rating", EdmSimpleType.INT32, EdmParameterMode.In)
 				.build());
 		demoService.addFunctionImport(EdmBuilders.functionImport("getEntitySet")
