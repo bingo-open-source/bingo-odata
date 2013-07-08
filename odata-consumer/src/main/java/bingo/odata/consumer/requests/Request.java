@@ -123,12 +123,15 @@ public class Request {
 	}
 
 	public String getQueryString() {
-		Object[] keys = parameters.keySet().toArray();
-		StringBuilder builder = new StringBuilder();
-		for (Object key : keys) {
-			builder.append(key).append("=").append(parameters.get(key)).append("&");
+		String queryString = "";
+		if(0 != parameters.size()) {
+			Object[] keys = parameters.keySet().toArray();
+			StringBuilder builder = new StringBuilder();
+			for (Object key : keys) {
+				builder.append(key).append("=").append(parameters.get(key)).append("&");
+			}
+			queryString = builder.substring(0, builder.length() - 1);
 		}
-		String queryString = builder.substring(0, builder.length() - 1);
 		queryString = this.addQueryString(queryString, additionalQueryString);
 		
 		queryString = queryString.replaceAll(" ", "%20");
@@ -159,11 +162,13 @@ public class Request {
 		
 		HttpRequestFactory requestFactory = HTTP_TRANSPORT.createRequestFactory();
 		
-		this.setDefaultHeaders();
+		this.setUpDefaultHeaders();
 		
-		this.setDefaultParameters();
+		this.setUpDefaultParameters();
 		
 		httpRequest = buildRequest(requestFactory);
+		
+		httpRequest.setConnectTimeout(5000);
 		
 		handleBehaviors(httpRequest);
 		
@@ -242,14 +247,18 @@ public class Request {
 		return url;
 	}
 
-	protected void setDefaultHeaders() {
+	protected void setUpDefaultHeaders() {
 		this.addHeader(DATA_SERVICE_VERSION, context.getVersion().getValue());
 		this.addHeader(MAX_DATA_SERVICE_VERSION, context.getVersion().getValue());
 		this.addHeader(MIN_DATA_SERVICE_VERSION, context.getVersion().getValue());
 		this.setAccept(context.getFormat().getContentType());
 	}
 	
-	protected void setDefaultParameters() {
+	protected void setUpDefaultParameters() {
+		this.setUpDefaultFormat();
+	}
+	
+	protected void setUpDefaultFormat() {
 		this.addParameter(ODataConstants.QueryOptions.FORMAT, context.getFormat().getValue());
 	}
 	
