@@ -152,6 +152,8 @@ public class ODataConsumerImpl implements ODataConsumer {
 		
 		Request request = new MetadataDocumentRequest(context, this.serviceRoot);
 		
+		request.setLog(false);
+		
 		Response resp = request.send();
 		
 		if(resp.getStatus() == 200) {

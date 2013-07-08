@@ -50,6 +50,7 @@ public class Request {
 	protected String resourcePath;
 	protected ODataConsumerContext context;
 	protected HttpRequest httpRequest;
+	protected boolean isLog = true;
 	
 	public Request(ODataConsumerContext context, String serviceRoot) {
 		this.serviceRoot = serviceRoot;
@@ -176,14 +177,17 @@ public class Request {
 		// treat all response as normal response here.
 		httpRequest.setThrowExceptionOnExecuteError(false);
 
-		if(log.isInfoEnabled()){
+		if(log.isInfoEnabled() && isLog){
 			log.info("Send Request:" + this);
 		}
 			
 		try {
 			Response response = new Response(httpRequest.execute());
-			log.info("Received Response:" + (this.context.isLogPrintHttpMessageBody()?
-					response.toString(true) : response.toString(false)));
+			
+			if(log.isInfoEnabled() && isLog) {
+				log.info("Received Response:" + (this.context.isLogPrintHttpMessageBody()?
+						response.toString(true) : response.toString(false)));
+			}
 			return response;
 		} catch (IOException e) {
 			throw new ConnectFailedException(httpRequest.getUrl().toString());
@@ -300,5 +304,17 @@ public class Request {
 			}
 		}
 		return str + nt;
+	}
+
+	public boolean isLog() {
+		return isLog;
+	}
+
+	/**
+	 * mainly used for test output.
+	 * @param isLog
+	 */
+	public void setLog(boolean isLog) {
+		this.isLog = isLog;
 	}
 }
