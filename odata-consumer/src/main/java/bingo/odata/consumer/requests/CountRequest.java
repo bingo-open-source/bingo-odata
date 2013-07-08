@@ -43,4 +43,10 @@ public class CountRequest extends Request {
 		return entitySet + URL_FRAGMENT_DIVIDER + "$count";
 	}
 
+	@Override
+	protected void setUpDefaultFormat() {
+		// not using default json format for some odata server may response error.
+		return;
+	}
+
 }
