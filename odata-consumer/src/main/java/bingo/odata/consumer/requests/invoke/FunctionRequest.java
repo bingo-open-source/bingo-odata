@@ -15,6 +15,7 @@
  */
 package bingo.odata.consumer.requests.invoke;
 
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -28,6 +29,8 @@ import bingo.lang.json.JSON;
 import bingo.odata.ODataConstants.ContentTypes;
 import bingo.odata.consumer.ODataConsumerContext;
 import bingo.odata.consumer.requests.Request;
+import bingo.odata.format.json.JsonWriterUtils;
+import bingo.odata.utils.InternalTypeUtils;
 
 
 public class FunctionRequest extends Request{
@@ -113,7 +116,12 @@ public class FunctionRequest extends Request{
 				Object valueObject = params.get(key);
 				
 				// TODO maybe need to do some url-format convert for some Type, like Date.
-				String valueString = Objects.toString(valueObject);
+				String valueString = null;
+				if(valueObject instanceof Date) {
+					valueString = JsonWriterUtils.formatDateTimeForJson((Date) valueObject);
+				} else {
+					valueString = Objects.toString(valueObject);
+				}
 				
 				qualifiedParams.put(key, valueString);
 			}
