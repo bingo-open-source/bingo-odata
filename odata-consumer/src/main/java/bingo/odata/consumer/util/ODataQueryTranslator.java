@@ -43,7 +43,9 @@ public class ODataQueryTranslator {
 		
 		if(!with$Filter) return resolvedString;
 		
-		return ODataConstants.QueryOptions.FILTER + "=" + resolvedString;
+		if(Strings.isNotBlank(resolvedString)) 
+			return ODataConstants.QueryOptions.FILTER + "=" + resolvedString;
+		else return resolvedString;
 	}
 	
 	private static String replaceHolder(String resolvedString, Map<String, Object> params) {
