@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.odata.consumer.requests.invoke;
+package bingo.odata.consumer.requests;
 
 import java.util.Date;
 import java.util.LinkedHashMap;
@@ -28,7 +28,6 @@ import bingo.lang.http.HttpMethods;
 import bingo.lang.json.JSON;
 import bingo.odata.ODataConstants.ContentTypes;
 import bingo.odata.consumer.ODataConsumerContext;
-import bingo.odata.consumer.requests.Request;
 import bingo.odata.format.json.JsonWriterUtils;
 import bingo.odata.utils.InternalTypeUtils;
 

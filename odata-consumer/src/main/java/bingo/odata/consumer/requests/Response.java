@@ -258,4 +258,9 @@ public class Response {
 			throw new ResolveFailedException(e);
 		}
 	}
+	
+	public Map<String, Object> convertToEntityMap(ODataConsumerContext context) {
+		String result = this.getString();
+		return JSON.decodeToMap(result);
+	}
 }

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.odata.consumer.requests.metadata;
+package bingo.odata.consumer.requests;
 
 import static bingo.odata.ODataConstants.Headers.DATA_SERVICE_VERSION;
 import static bingo.odata.ODataConstants.Headers.MAX_DATA_SERVICE_VERSION;
@@ -23,14 +23,13 @@ import com.google.api.client.http.GenericUrl;
 import com.google.api.client.http.HttpHeaders;
 
 import bingo.odata.consumer.ODataConsumerContext;
-import bingo.odata.consumer.requests.Request;
 
 
-public class MetadataDocumentRequest extends Request{
+public class MetadataRequest extends Request{
 	
 	private static final String METADATA_DOCUMENT = "$metadata";
 
-	public MetadataDocumentRequest(ODataConsumerContext context, String serviceRoot) {
+	public MetadataRequest(ODataConsumerContext context, String serviceRoot) {
 		super(context, serviceRoot);
 	}
 
@@ -52,14 +51,14 @@ public class MetadataDocumentRequest extends Request{
 	 * no need to set json format
 	 */
 	@Override
-	protected void setDefaultHeaders() {
+	protected void setUpDefaultHeaders() {
 		this.addHeader(DATA_SERVICE_VERSION, context.getVersion().getValue());
 		this.addHeader(MAX_DATA_SERVICE_VERSION, context.getVersion().getValue());
 		this.addHeader(MIN_DATA_SERVICE_VERSION, context.getVersion().getValue());
 	}
 
 	@Override
-	protected void setDefaultParameters() {
+	protected void setUpDefaultParameters() {
 		// empty
 	}
 	
