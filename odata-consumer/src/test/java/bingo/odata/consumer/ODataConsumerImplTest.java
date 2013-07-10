@@ -13,6 +13,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import bingo.lang.Converts;
+import bingo.lang.New;
 import bingo.meta.edm.EdmEntitySet;
 import bingo.meta.edm.EdmEntityType;
 import bingo.odata.ODataObjectKind;
@@ -53,7 +54,8 @@ public class ODataConsumerImplTest extends TestWithServerRunning {
 			ODataServices service = consumer.retrieveServiceMetadata();
 			assertNotNull(service);
 		} catch (Throwable e) {
-			System.out.println("failed");
+			fail();
+			throw new RuntimeException(e);
 		}
 	}
 
@@ -70,7 +72,7 @@ public class ODataConsumerImplTest extends TestWithServerRunning {
 		int result = consumer.insertEntity(entityType, obj);
 		assertEquals(1, result);
 		
-		result = consumer.insertEntity("Product", product);
+		result = consumer.insertEntityByMap("Product", product);
 		assertEquals(1, result);
 	}
 
@@ -93,7 +95,7 @@ public class ODataConsumerImplTest extends TestWithServerRunning {
 	public void testUpdateEntity() {
 		Map<String, Object> fields = new HashMap<String, Object>();
 		fields.put("name", "new name here");
-		int result = consumer.updateEntity("Product", "123456", fields);
+		int result = consumer.updateEntityByMap("Product", "123456", fields);
 		assertEquals(1, result);
 	}
 
@@ -107,7 +109,7 @@ public class ODataConsumerImplTest extends TestWithServerRunning {
 
 	@Test
 	public void testFindEntity() {
-		ODataEntity entity = consumer.findEntity("Product", "123456");
+		Map<String, Object> entity = consumer.findEntity("Product", "123456");
 		assertNotNull(entity);
 		System.out.println(entity);
 	}
@@ -140,17 +142,17 @@ public class ODataConsumerImplTest extends TestWithServerRunning {
 
 	@Test
 	public void testFindProperty() {
-		ODataProperty value = consumer.findProperty("Product", "123456", "name");
+		String value = consumer.findPropertyForString("Product", "123456", "name");
 		assertNotNull(value);
-		assertEquals(DemoODataProducer.INVOKED_FUNCTION, value.getValue().toString());
+		assertEquals(DemoODataProducer.INVOKED_FUNCTION, value);
 	}
 
-	@Test
-	public void testFindNavigationProperty() {
-		ODataNavigationProperty value = consumer.findNavigationProperty("Product", "123456", "name");
-		assertNotNull(value);
-		assertEquals(DemoODataProducer.INVOKED_FUNCTION, value.getRelatedEntity().getKeyString());
-	}
+//	@Test
+//	public void testFindNavigationProperty() {
+//		String value = consumer.findNavigationProperty("Product", "123456", "name", String.class);
+//		assertNotNull(value);
+//		assertEquals(DemoODataProducer.INVOKED_FUNCTION, value);
+//	}
 
 	@Test
 	public void testCount() {
@@ -176,6 +178,15 @@ public class ODataConsumerImplTest extends TestWithServerRunning {
 	}
 	
 	@Test
+	public void testInvokeFunction_paramDate() {
+		Map<String, Object> paramsMap = new HashMap<String, Object>();
+		paramsMap.put("startTime", new Date(987654321));
+		Date product = consumer.invokeFunctionForEntity("paramDate", paramsMap, "Products", Date.class);
+		assertNotNull(product);
+		assertEquals(987654321, product.getTime());
+	}
+	
+	@Test
 	public void testInvokeFunction_returnInt() {
 		int product = consumer.invokeFunctionForType("getInt", null, "Products", Integer.class);
 		assertNotNull(product);
@@ -198,18 +209,14 @@ public class ODataConsumerImplTest extends TestWithServerRunning {
 	
 	@Test
 	public void testInvokeFunction_returnBoolean() {
-		Map<String, Object> paramsMap = new HashMap<String, Object>();
-		paramsMap.put("rating", 2);
-		Boolean product = consumer.invokeFunctionForType("getBoolean", paramsMap, "Products", Boolean.class);
+		Boolean product = consumer.invokeFunctionForType("getBoolean", null, "Products", Boolean.class);
 		assertNotNull(product);
 		assertEquals(true, product);
 	}
 	
 	@Test
 	public void testInvokeFunction_returnDate() {
-		Map<String, Object> paramsMap = new HashMap<String, Object>();
-		paramsMap.put("rating", 2);
-		Date product = consumer.invokeFunctionForType("getDate", paramsMap, "Products", Date.class);
+		Date product = consumer.invokeFunctionForType("getDate", null, "Products", Date.class);
 		assertNotNull(product);
 		assertEquals(new Date(123456789), product);
 	}

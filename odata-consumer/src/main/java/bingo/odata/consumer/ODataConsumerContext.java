@@ -37,7 +37,6 @@ public class ODataConsumerContext extends ODataContextBase implements ODataWrite
 		this.setProtocol(config.getProtocol());
 		this.setVersion(config.getVersion());
 		this.setFormat(config.getDefaultFormat());
-		this.setMaxResults(config.getMaxResults());
 		this.setBehaviors(config.getClientBehaviors());
 		this.setLogPrintHttpMessageBody(config.isLogPrintHttpMessageBody());
 	}

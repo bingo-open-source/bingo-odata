@@ -39,15 +39,19 @@ public interface ODataConsumer {
 
 	ODataConsumerConfig 		config();
 	
-	void 						config(ODataConsumerConfig config);
+	ODataConsumer 				config(ODataConsumerConfig config);
 	
 	ODataServices 				services();
+	
+	ODataConsumer 				services(ODataServices services);
 	
 	// meta
 	ODataServices 				retrieveServiceMetadata();
 	
 	// create	
-	int 						insertEntity(String entityType, Map<String, Object> fields);
+	int 						insertEntityByMap(String entityType, Map<String, Object> fields);
+	
+	int 						insertEntityByObj(String entityType, Object object);
 	
 	int 						insertEntity(EdmEntityType entityType, ODataEntity entity);
 	
@@ -57,7 +61,9 @@ public interface ODataConsumer {
 	int 						deleteEntity(EdmEntityType entityType, ODataKey key);
 	
 	// update
-	int 						updateEntity(String entityName, Object key, Map<String, Object> updateFields);
+	int 						updateEntityByMap(String entityName, Object key, Map<String, Object> updateFields);
+	
+	int 						updateEntityByObj(String entityName, Object key, Object updateObject);
 	
 	int 						updateEntity(EdmEntityType entityType, ODataKey key, ODataEntity entity);
 	
@@ -82,21 +88,39 @@ public interface ODataConsumer {
 	
 	List<Map<String, Object>> 	findEntitySet(String entitySet, String where, Map<String, Object> params, String orderBy, String[] fields, String[] expand, Page page);
 	
+	<T> List<T>				 	findEntitySet(Class<T> clazz, String entitySet);
+	
+	<T> List<T> 				findEntitySet(Class<T> clazz, String entitySet, String where);
+	
+	<T> List<T> 				findEntitySet(Class<T> clazz, String entitySet, String where, Map<String, Object> params);
+	
+	<T> List<T> 				findEntitySet(Class<T> clazz, String entitySet, String where, Map<String, Object> params, String orderBy);
+	
+	<T> List<T> 				findEntitySet(Class<T> clazz, String entitySet, String where, Map<String, Object> params, String orderBy, String[] fields);
+	
+	<T> List<T> 				findEntitySet(Class<T> clazz, String entitySet, String where, Map<String, Object> params, String orderBy, String[] fields, String[] expand);
+	
+	<T> List<T> 				findEntitySet(Class<T> clazz, String entitySet, String where, Map<String, Object> params, String orderBy, String[] fields, String[] expand, Page page);
+	
 	ODataEntitySet 				findEntitySet(EdmEntitySet entitySet);
 	
 	ODataEntitySet 				findEntitySet(EdmEntitySet entitySet, ODataQueryInfo queryInfo);
 	
 	// query - entity
-	ODataEntity 				findEntity(String entityType, Object key);
+	Map<String, Object>			findEntity(String entitySet, Object key);
 	
-	ODataEntity 				findEntity(EdmEntityType entityType, ODataKey key);
+	<T> T 						findEntity(Class<T> clazz, String entitySet, Object key);
+	
+	ODataEntity 				findEntity(EdmEntitySet entitySet, ODataKey key);
 	
 	// query - property	
-	ODataProperty				findProperty(String entitType, Object key, String property);
+	<T> T						findProperty(String entitType, Object key, String property, Class<T> clazz);
+	
+	String						findPropertyForString(String entitType, Object key, String property);
 	
 	ODataProperty 				findProperty(EdmEntityType entitType, ODataKey key, EdmProperty property);
 	
-	ODataNavigationProperty		findNavigationProperty(String entitType, Object key, String property);
+	<T> T						findNavigationProperty(String entitType, Object key, String property, Class<T> clazz);
 	
 	ODataNavigationProperty		findNavigationProperty(EdmEntityType entitType, ODataKey key, EdmNavigationProperty property);
 

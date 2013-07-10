@@ -25,7 +25,7 @@ public class ODataConsumerContextHelper {
 		return initContext(consumer, null, entityType, key);
 	}
 	
-	private static ODataConsumerContext initContext(ODataConsumer consumer, String entitySet, String entityType, 
+	public static ODataConsumerContext initContext(ODataConsumer consumer, String entitySet, String entityType, 
 				Object key) {
 		ODataConsumerContext context = new ODataConsumerContext(consumer.config());
 		

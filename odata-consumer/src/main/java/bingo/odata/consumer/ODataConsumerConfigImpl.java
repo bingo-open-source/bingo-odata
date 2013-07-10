@@ -26,14 +26,14 @@ import bingo.odata.consumer.requests.behaviors.Behavior;
 
 public class ODataConsumerConfigImpl implements ODataConsumerConfig {
 
-	protected ODataProtocol protocol = ODataProtocols.DEFAULT;
-	protected ODataFormat   defaultFormat = ODataFormat.Json;
-	protected ODataVersion  version = ODataVersion.V3;
-	protected boolean		isLogPrintHttpMessageBody = false;
-	protected boolean       autoDetectFormat = false;
-	protected boolean		verifyMetadata = true;
-	protected int			maxResults = 10;
-	private List<Behavior> behaviors = new ArrayList<Behavior>();
+	protected String			producerUrl;
+	protected ODataProtocol 	protocol 					= ODataProtocols.DEFAULT;
+	protected ODataFormat   	defaultFormat 				= ODataFormat.Json;
+	protected ODataVersion  	version 					= ODataVersion.V3;
+	protected boolean			isLogPrintHttpMessageBody	= false;
+	protected boolean       	autoDetectFormat 			= false;
+	protected boolean			verifyMetadata 				= true;
+	private List<Behavior> 		behaviors 					= new ArrayList<Behavior>();
 	
 	public ODataProtocol getProtocol() {
 		return protocol;
@@ -67,14 +67,6 @@ public class ODataConsumerConfigImpl implements ODataConsumerConfig {
 		this.autoDetectFormat = autoDetectFormat;
 	}
 
-	public int getMaxResults() {
-		return maxResults;
-	}
-
-	public void setMaxResults(int maxResults) {
-		this.maxResults = maxResults;
-	}
-
 	public ODataVersion getVersion() {
 		return version;
 	}
@@ -102,6 +94,15 @@ public class ODataConsumerConfigImpl implements ODataConsumerConfig {
 
 	public ODataConsumerConfig setClientBehaviors(List<Behavior> behaviors) {
 		this.behaviors = behaviors;
+		return this;
+	}
+
+	public String getProducerUrl() {
+		return producerUrl;
+	}
+	
+	public ODataConsumerConfig setProducerUrl(String producerUrl) {
+		this.producerUrl = producerUrl;
 		return this;
 	}
 	

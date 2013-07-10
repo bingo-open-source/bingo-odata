@@ -23,26 +23,28 @@ import bingo.odata.ODataVersion;
 import bingo.odata.consumer.requests.behaviors.Behavior;
 
 public interface ODataConsumerConfig {
+	
+	String 					getProducerUrl();
+	
+	ODataConsumerConfig 	setProducerUrl(String producerUrl);
 
-	ODataProtocol getProtocol();
+	ODataProtocol 			getProtocol();
 	
-	ODataVersion getVersion();
+	ODataVersion 			getVersion();
 	
-	ODataFormat getDefaultFormat();
+	ODataFormat 			getDefaultFormat();
 
-	List<Behavior> getClientBehaviors();
+	List<Behavior> 			getClientBehaviors();
 	
-	ODataConsumerConfig addClientBehavior(Behavior behavior);
+	ODataConsumerConfig 	addClientBehavior(Behavior behavior);
 	
-	ODataConsumerConfig setClientBehaviors(List<Behavior> behaviors);
+	ODataConsumerConfig 	setClientBehaviors(List<Behavior> behaviors);
 	
-	boolean isVerifyMetadata();
+	boolean 				isVerifyMetadata();
 	
-	boolean isLogPrintHttpMessageBody();
+	boolean 				isLogPrintHttpMessageBody();
 	
-	void setLogPrintHttpMessageBody(boolean isLogPrintHttpMessageBody);
+	void 					setLogPrintHttpMessageBody(boolean isLogPrintHttpMessageBody);
 	
-	boolean isAutoDetectFormat();
-	
-	int getMaxResults();
+	boolean 				isAutoDetectFormat();
 }
