@@ -19,6 +19,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import bingo.lang.Collections;
+import bingo.lang.Maps;
+import bingo.lang.Strings;
 import bingo.lang.json.JSONObject;
 import bingo.meta.edm.EdmEntityType;
 import bingo.meta.edm.EdmNavigationProperty;
@@ -44,7 +46,7 @@ public class JsonEntityReader extends ODataJsonReader<ODataEntity> {
 		
 		Map<String,Object> map = json.map();
 		
-		if(map.entrySet().size() == 1 && map.keySet().iterator().next().equals("d")) {
+		if(map.size() == 1 && Maps.containsKeyIgnoreCase(map, "d")) {
 			map = (Map<String,Object>)map.get("d");
 		}
 		
@@ -82,6 +84,10 @@ public class JsonEntityReader extends ODataJsonReader<ODataEntity> {
 			
 				continue;
 			}
+			
+			// TODO handle named "odata.type" property.
+			// omitted so far.
+			if(Strings.equals(name, "odata.type")) continue;
 			
 			throw ODataErrors.badRequest("Unknow property '{0}'",name);
 		}

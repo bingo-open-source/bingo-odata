@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import bingo.lang.Collections;
+import bingo.lang.Maps;
 import bingo.lang.json.JSON;
 import bingo.lang.json.JSONObject;
 import bingo.meta.edm.EdmEntityType;
@@ -26,15 +27,25 @@ public class JsonEntitySetReader extends ODataJsonReader<ODataEntitySet> {
 		EdmEntityType entityType = context.getEntityType();
 
 		Map<String,Object> map = json.map();
-
-		if(map.entrySet().size() == 1 && map.keySet().iterator().next().equals("d")) {
-			map = (Map<String,Object>)map.get("d");
-		}
-
 		List<Map<String, Object>> list = null;
-		if(map.entrySet().size() == 1 && map.keySet().iterator().next().equals("results")) {
-			list = (List<Map<String,Object>>)map.get("results");
+		
+		// return format 1
+		if(2 == map.size() && Maps.containsKeyIgnoreCase(map, "odata.metadata")
+							&& Maps.containsKeyIgnoreCase(map, "value")) {
+			list = (List<Map<String, Object>>) map.get("value");
 		}
+		
+		// return format 2
+		if(Collections.isEmpty(list)) {
+			if(map.size() == 1 && Maps.containsKeyIgnoreCase(map, "d")) {
+				map = (Map<String,Object>)map.get("d");
+			}
+
+			if(map.size() == 1 && Maps.containsKeyIgnoreCase(map, "results")) {
+				list = (List<Map<String,Object>>)map.get("results");
+			}
+		}
+
 		
 		if(!Collections.isEmpty(list)) {
 			JsonEntityReader reader = new JsonEntityReader();
