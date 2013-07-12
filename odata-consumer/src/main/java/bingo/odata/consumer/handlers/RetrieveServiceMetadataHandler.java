@@ -23,7 +23,7 @@ public class RetrieveServiceMetadataHandler extends BaseHandler {
 		
 		Request request = new MetadataRequest(context, this.config.getProducerUrl());
 		
-		request.setLog(false);
+//		request.setLog(false);
 		
 		Response resp = request.send();
 		

@@ -58,13 +58,13 @@ public class FindPropertyHandler extends BaseHandler {
 		
 		Request request = new FindPropertyRequest(context, config.getProducerUrl())
 				.setEntitySet(context.getEntitySet().getName())
-				.setId(qualifiedKey(key)).setProperty(property);
+				.setId(context.getEntityKey().toKeyString(false)).setProperty(property);
 		
 		Response response = request.send();
 		
 		if(response.getStatus() == ODataResponseStatus.OK) {
 			
-			return response.convertToString(context);
+			return response.convertToProperty(context).getValue().toString();
 			
 		} else throw response.convertToError(context);
 	}

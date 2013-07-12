@@ -4,8 +4,12 @@ import java.util.Calendar;
 import java.util.Date;
 
 import bingo.lang.Converts;
+import bingo.lang.Strings;
 import bingo.lang.convert.AbstractDateConverter;
 import bingo.lang.convert.Converter;
+import bingo.lang.convert.DateTimeConverters;
+import bingo.odata.ODataConverts;
+import bingo.odata.utils.InternalTypeUtils;
 
 public class ODataDateConvertor extends AbstractDateConverter<Date> implements Converter<Date> {
 
@@ -35,8 +39,13 @@ public class ODataDateConvertor extends AbstractDateConverter<Date> implements C
 		if(string.startsWith(DATETIME_JSON_PREFIX)){
 			String longValue = string.substring(DATETIME_JSON_PREFIX.length(),string.length() - DATETIME_JSON_SUFFIX.length());
 			return new Date(Long.parseLong(longValue));
+		} if(Strings.indexOf(string, "T") == 10) {
+			return InternalTypeUtils.parseDateTime(string);
 		} else {
-			return Converts.convert(string, Date.class);
+			Converts.register(Date.class, new DateTimeConverters.DateTimeConverter());
+			Date date = Converts.convert(string, Date.class);
+			Converts.register(Date.class, new ODataDateConvertor());
+			return date;
 		}
 	}
 	

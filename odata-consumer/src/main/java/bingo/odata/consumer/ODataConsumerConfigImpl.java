@@ -55,8 +55,9 @@ public class ODataConsumerConfigImpl implements ODataConsumerConfig {
 		return isLogPrintHttpMessageBody;
 	}
 
-	public void setLogPrintHttpMessageBody(boolean isLogPrintHttpMessageBody) {
+	public ODataConsumerConfig setLogPrintHttpMessageBody(boolean isLogPrintHttpMessageBody) {
 		this.isLogPrintHttpMessageBody = isLogPrintHttpMessageBody;
+		return this;
 	}
 
 	public boolean isAutoDetectFormat() {

@@ -78,29 +78,29 @@ public interface ODataConsumer {
 	
 	List<Map<String, Object>> 	findEntitySet(String entitySet, String where);
 	
-	List<Map<String, Object>> 	findEntitySet(String entitySet, String where, Map<String, Object> params);
+	List<Map<String, Object>> 	findEntitySet(String entitySet, String where, Object paramObj);
 	
-	List<Map<String, Object>> 	findEntitySet(String entitySet, String where, Map<String, Object> params, String orderBy);
+	List<Map<String, Object>> 	findEntitySet(String entitySet, String where, Object paramObj, String orderBy);
 	
-	List<Map<String, Object>> 	findEntitySet(String entitySet, String where, Map<String, Object> params, String orderBy, String[] fields);
+	List<Map<String, Object>> 	findEntitySet(String entitySet, String where, Object paramObj, String orderBy, String[] fields);
 	
-	List<Map<String, Object>> 	findEntitySet(String entitySet, String where, Map<String, Object> params, String orderBy, String[] fields, String[] expand);
+	List<Map<String, Object>> 	findEntitySet(String entitySet, String where, Object paramObj, String orderBy, String[] fields, String[] expand);
 	
-	List<Map<String, Object>> 	findEntitySet(String entitySet, String where, Map<String, Object> params, String orderBy, String[] fields, String[] expand, Page page);
+	List<Map<String, Object>> 	findEntitySet(String entitySet, String where, Object paramObj, String orderBy, String[] fields, String[] expand, Page page);
 	
 	<T> List<T>				 	findEntitySet(Class<T> clazz, String entitySet);
 	
 	<T> List<T> 				findEntitySet(Class<T> clazz, String entitySet, String where);
 	
-	<T> List<T> 				findEntitySet(Class<T> clazz, String entitySet, String where, Map<String, Object> params);
+	<T> List<T> 				findEntitySet(Class<T> clazz, String entitySet, String where, Object paramObj);
 	
-	<T> List<T> 				findEntitySet(Class<T> clazz, String entitySet, String where, Map<String, Object> params, String orderBy);
+	<T> List<T> 				findEntitySet(Class<T> clazz, String entitySet, String where, Object paramObj, String orderBy);
 	
-	<T> List<T> 				findEntitySet(Class<T> clazz, String entitySet, String where, Map<String, Object> params, String orderBy, String[] fields);
+	<T> List<T> 				findEntitySet(Class<T> clazz, String entitySet, String where, Object paramObj, String orderBy, String[] fields);
 	
-	<T> List<T> 				findEntitySet(Class<T> clazz, String entitySet, String where, Map<String, Object> params, String orderBy, String[] fields, String[] expand);
+	<T> List<T> 				findEntitySet(Class<T> clazz, String entitySet, String where, Object paramObj, String orderBy, String[] fields, String[] expand);
 	
-	<T> List<T> 				findEntitySet(Class<T> clazz, String entitySet, String where, Map<String, Object> params, String orderBy, String[] fields, String[] expand, Page page);
+	<T> List<T> 				findEntitySet(Class<T> clazz, String entitySet, String where, Object paramObj, String orderBy, String[] fields, String[] expand, Page page);
 	
 	ODataEntitySet 				findEntitySet(EdmEntitySet entitySet);
 	
@@ -130,6 +130,10 @@ public interface ODataConsumer {
 	long 						count(EdmEntitySet entitySet);
 	
 	long 						count(String entitySet, String where);
+	
+	long 					 	count(String entitySet, String where, Object paramObj);
+	
+	long 					 	count(String entitySet, String where, Object paramObj, Page page);
 	
 	long 						count(EdmEntitySet entitySet, ODataQueryInfo queryInfo);
 	

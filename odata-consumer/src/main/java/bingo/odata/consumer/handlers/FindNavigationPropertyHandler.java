@@ -59,7 +59,7 @@ public class FindNavigationPropertyHandler extends BaseHandler {
 		
 		Request request = new FindNavigationPropertyRequest(context, config.getProducerUrl())
 				.setEntitySet(context.getEntitySet().getName())
-				.setId(qualifiedKey(key)).setNaviProperty(property);
+				.setId(context.getEntityKey().toKeyString(false)).setNaviProperty(property);
 		
 		Response response = request.send();
 		

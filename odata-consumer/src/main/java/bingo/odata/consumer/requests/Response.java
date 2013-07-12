@@ -14,6 +14,7 @@ import bingo.lang.Converts;
 import bingo.lang.Enumerables;
 import bingo.lang.Enums;
 import bingo.lang.Func1;
+import bingo.lang.Maps;
 import bingo.lang.Strings;
 import bingo.lang.convert.InputStreamConverter;
 import bingo.lang.exceptions.NotImplementedException;
@@ -147,8 +148,11 @@ public class Response {
 		JSONObject jsonObject = JSON.decode(jsonString);
 		Map<String, Object> jsonMap = null;
 		if(jsonObject.isMap()) {
-			jsonMap = (Map<String, Object>) jsonObject.map().get("d");
-			if(1 == jsonMap.size() && null != jsonMap.get(funcName)) {
+			jsonMap = jsonObject.map();
+			if(1 == jsonMap.size() && Maps.containsKeyIgnoreCase(jsonMap, "d")) {
+				jsonMap = (Map<String, Object>) jsonMap.get("d");
+			}
+			if(1 == jsonMap.size() && Maps.containsKeyIgnoreCase(jsonMap, funcName)) {
 				Object tempObject = jsonMap.get(funcName);
 				if(tempObject instanceof Map) {
 					 Object tempObject2 = ((Map<String, Object>)tempObject).get("results");
@@ -157,6 +161,11 @@ public class Response {
 					 }
 				}
 				return tempObject;
+			}
+			
+			// compatibility for some odata producer.
+			if(2 == jsonMap.size() && Maps.containsKeyIgnoreCase(jsonMap, "value")) {
+				return jsonMap.get("value");
 			}
 		}
 		throw new ResolveFailedException("Return Type");

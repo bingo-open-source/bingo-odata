@@ -9,7 +9,9 @@ public class TestResource {
 
 	static {
 		serviceUrls.put("local", "http://localhost:8080/demo");
-		serviceUrls.put("remote1", "http://services.odata.org/V3/OData/OData.svc");
+		serviceUrls.put("remoteRead", "http://services.odata.org/V3/OData/OData.svc");
+		
+		serviceUrls.put("remoteReadWrite", "http://services.odata.org/(S(0jz4rg2px243vhsgvybiyrkf))/OData/OData.svc/");
 //		serviceUrls.put("remote2", "");
 	}
 }

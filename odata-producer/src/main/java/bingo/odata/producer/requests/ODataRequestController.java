@@ -90,8 +90,8 @@ public class ODataRequestController {
 		
 		try{
 			urlInfo = ODataRequestUtils.createUrlInfo(request);
-			format  = ODataRequestUtils.dataServiceFormat(request, version, producer.config().isAutoDetectFormat()); //may be null
 			version = ODataRequestUtils.getAndCheckVersion(protocol,request);
+			format  = ODataRequestUtils.dataServiceFormat(request, version, producer.config().isAutoDetectFormat()); //may be null
 			
 	        context = new ODataProducerContext(request,producer,protocol,version,format,urlInfo);
 	        

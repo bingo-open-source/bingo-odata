@@ -44,7 +44,7 @@ public interface ODataConsumerConfig {
 	
 	boolean 				isLogPrintHttpMessageBody();
 	
-	void 					setLogPrintHttpMessageBody(boolean isLogPrintHttpMessageBody);
+	ODataConsumerConfig		setLogPrintHttpMessageBody(boolean isLogPrintHttpMessageBody);
 	
 	boolean 				isAutoDetectFormat();
 }

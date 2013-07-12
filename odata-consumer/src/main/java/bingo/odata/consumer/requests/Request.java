@@ -135,7 +135,7 @@ public class Request {
 		}
 		queryString = this.addQueryString(queryString, additionalQueryString);
 		
-		queryString = queryString.replaceAll(" ", "%20");
+		if(Strings.isNotBlank(queryString)) queryString = queryString.replaceAll(" ", "%20");
 		return queryString;
 	}
 	
@@ -169,7 +169,7 @@ public class Request {
 		
 		httpRequest = buildRequest(requestFactory);
 		
-		httpRequest.setConnectTimeout(5000);
+		httpRequest.setConnectTimeout(500000);
 		
 		handleBehaviors(httpRequest);
 		
@@ -233,7 +233,8 @@ public class Request {
 	}
 
 	protected GenericUrl genUrl() {
-		String str = serviceRoot + getResourcePath() + "?" + getQueryString();
+		String query = getQueryString();
+		String str = serviceRoot + getResourcePath() + (Strings.isNotBlank(query)? "?" + query : "");
 		GenericUrl url = new GenericUrl(str);
 		return url;
 	}
@@ -252,17 +253,25 @@ public class Request {
 	}
 
 	protected void setUpDefaultHeaders() {
+		this.setUpDefaultHeaders_odataVersion();
+		this.setUpDefaultHeaders_accept();
+	}
+	
+	protected void setUpDefaultHeaders_odataVersion() {
 		this.addHeader(DATA_SERVICE_VERSION, context.getVersion().getValue());
 		this.addHeader(MAX_DATA_SERVICE_VERSION, context.getVersion().getValue());
 		this.addHeader(MIN_DATA_SERVICE_VERSION, context.getVersion().getValue());
+	}
+	
+	protected void setUpDefaultHeaders_accept() {
 		this.setAccept(context.getFormat().getContentType());
 	}
 	
 	protected void setUpDefaultParameters() {
-		this.setUpDefaultFormat();
+		this.setUpDefaultParameters_format();
 	}
 	
-	protected void setUpDefaultFormat() {
+	protected void setUpDefaultParameters_format() {
 		this.addParameter(ODataConstants.QueryOptions.FORMAT, context.getFormat().getValue());
 	}
 	

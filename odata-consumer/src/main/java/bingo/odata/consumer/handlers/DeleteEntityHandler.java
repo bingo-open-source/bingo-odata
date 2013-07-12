@@ -22,10 +22,11 @@ public class DeleteEntityHandler extends BaseHandler {
 		if(config.isVerifyMetadata()) verifier.hasEntityType(entityType);
 		
 		ODataConsumerContext context = ODataConsumerContextHelper
-										.initEntityTypeContext(consumer, entityType);
+										.initEntityTypeContext(consumer, entityType, key);
 		
 		Request request = new DeleteEntityRequest(context, config.getProducerUrl())
-								.setEntitySet(context.getEntitySet().getName()).setId(qualifiedKey(key));
+								.setEntitySet(context.getEntitySet().getName())
+								.setId(context.getEntityKey().toKeyString(false));
 		
 		Response response = request.send();
 		

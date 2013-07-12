@@ -231,28 +231,27 @@ public class ODataConsumerImpl implements ODataConsumer {
 		return findEntitySet(entitySet, queryString, null, null, null, null, null);
 	}
 	
-	public List<Map<String, Object>> findEntitySet(String entitySet, String where,
-			Map<String, Object> params) {
+	public List<Map<String, Object>> findEntitySet(String entitySet, String where, Object params) {
 		return findEntitySet(entitySet, where, params, null, null, null, null);
 	}
 
 	public List<Map<String, Object>> findEntitySet(String entitySet, String where,
-			Map<String, Object> params, String orderBy) {
+			Object params, String orderBy) {
 		return findEntitySet(entitySet, where, params, orderBy, null, null, null);
 	}
 
 	public List<Map<String, Object>> findEntitySet(String entitySet, String where,
-			Map<String, Object> params, String orderBy, String[] fields) {
+			Object params, String orderBy, String[] fields) {
 		return findEntitySet(entitySet, where, params, orderBy, fields, null, null);
 	}
 	
 	public List<Map<String, Object>> findEntitySet(String entitySet, String where,
-			Map<String, Object> params, String orderBy, String[] fields, String[] expand) {
+			Object params, String orderBy, String[] fields, String[] expand) {
 		return findEntitySet(entitySet, where, params, orderBy, fields, expand, null);
 	}
 
 	public List<Map<String, Object>> findEntitySet(String entitySet, String where,
-			Map<String, Object> params, String orderBy, String[] fields, String[] expand, Page page) {
+			Object params, String orderBy, String[] fields, String[] expand, Page page) {
 		return Handlers.get(FindEntitySetHandler.class, consumerWithMetadata())
 				.findEntitySet(entitySet, where, params, orderBy, fields, expand, page);
 	}
@@ -264,28 +263,27 @@ public class ODataConsumerImpl implements ODataConsumer {
 		return findEntitySet(clazz, entitySet, queryString, null, null, null, null, null);
 	}
 	
-	public <T> List<T>	findEntitySet(Class<T> clazz, String entitySet, String where,
-			Map<String, Object> params) {
+	public <T> List<T>	findEntitySet(Class<T> clazz, String entitySet, String where, Object params) {
 		return findEntitySet(clazz, entitySet, where, params, null, null, null, null);
 	}
 
 	public <T> List<T>	findEntitySet(Class<T> clazz, String entitySet, String where,
-			Map<String, Object> params, String orderBy) {
+			Object params, String orderBy) {
 		return findEntitySet(clazz, entitySet, where, params, orderBy, null, null, null);
 	}
 
 	public <T> List<T>	findEntitySet(Class<T> clazz, String entitySet, String where,
-			Map<String, Object> params, String orderBy, String[] fields) {
+			Object params, String orderBy, String[] fields) {
 		return findEntitySet(clazz, entitySet, where, params, orderBy, fields, null, null);
 	}
 	
 	public <T> List<T>	findEntitySet(Class<T> clazz, String entitySet, String where,
-			Map<String, Object> params, String orderBy, String[] fields, String[] expand) {
+			Object params, String orderBy, String[] fields, String[] expand) {
 		return findEntitySet(clazz, entitySet, where, params, orderBy, fields, expand, null);
 	}
 
 	public <T> List<T>	findEntitySet(Class<T> clazz, String entitySet, String where,
-			Map<String, Object> params, String orderBy, String[] fields, String[] expand, Page page) {
+			Object params, String orderBy, String[] fields, String[] expand, Page page) {
 		return Handlers.get(FindEntitySetHandler.class, consumerWithMetadata())
 				.findEntitySet(clazz, entitySet, where, params, orderBy, fields, expand, page);
 	}
@@ -333,18 +331,22 @@ public class ODataConsumerImpl implements ODataConsumer {
 	public long count(String entitySet) {
 		return count(entitySet, null);
 	}
-
-	public long count(EdmEntitySet entitySet, ODataQueryInfo queryInfo) {
-		return count(entitySet.getName(), ODataQueryInfoParser.toQueryString(queryInfo), false);
+	
+	public long count(String entitySet, String where) {
+		return count(entitySet, where, null, null);
 	}
 	
-	public long count(String entitySet, String queryString) {
-		return count(entitySet, queryString, true);
+	public long count(String entitySet, String where, Object params) {
+		return count(entitySet, where, params, null);
+	}
+	
+	public long count(String entitySet, String where, Object params, Page page) {
+		return Handlers.get(CountHandler.class, consumerWithMetadata())
+				.count(entitySet, where, params, page);
 	}
 
-	private long count(String entitySet, String queryString, boolean resolveQueryString) {
-		return Handlers.get(CountHandler.class, consumerWithMetadata())
-				.count(entitySet, queryString, resolveQueryString);
+	public long count(EdmEntitySet entitySet, ODataQueryInfo queryInfo) {
+		return Handlers.get(CountHandler.class, consumerWithMetadata()).count(entitySet, queryInfo);
 	}
 
 	public String invokeFunctionForRawResult(String funcName, Map<String, Object> parameters) {

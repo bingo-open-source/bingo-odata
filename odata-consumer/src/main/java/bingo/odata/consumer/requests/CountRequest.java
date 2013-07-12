@@ -44,9 +44,14 @@ public class CountRequest extends Request {
 	}
 
 	@Override
-	protected void setUpDefaultFormat() {
+	protected void setUpDefaultParameters_format() {
 		// not using default json format for some odata server may response error.
-		return;
+	}
+
+	@Override
+	protected void setUpDefaultHeaders_accept() {
+		// not using default json format for some odata server may response error.
+		this.setAccept("");
 	}
 
 }

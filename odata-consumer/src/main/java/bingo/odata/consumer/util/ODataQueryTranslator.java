@@ -34,7 +34,7 @@ public class ODataQueryTranslator {
 		return translateFilter(originalString, null, with$Filter);
 	}
 
-	public static String translateFilter(String originalString, Map<String, Object> params, boolean with$Filter) {
+	public static String translateFilter(String originalString, Object params, boolean with$Filter) {
 		String resolvedString = null;
 		
 		resolvedString = translateOperation(originalString);
@@ -48,11 +48,18 @@ public class ODataQueryTranslator {
 		else return resolvedString;
 	}
 	
-	private static String replaceHolder(String resolvedString, Map<String, Object> params) {
-		if(null != params) {
-			for (String key : params.keySet()) {
-				resolvedString = Strings.replace(resolvedString, ":" + key, params.get(key).toString());
+	private static String replaceHolder(String resolvedString, Object paramObj) {
+		if(paramObj instanceof Map) {
+			Map<String, Object> params = (Map<String, Object>) paramObj;
+			if(null != params) {
+				for (String key : params.keySet()) {
+					String valueString = ODataUrlFormatter.formatValue(params.get(key).toString());
+					resolvedString = Strings.replace(resolvedString, ":" + key, valueString);
+				}
 			}
+		} else if(Strings.contains(resolvedString, "?")){
+			String valueString = ODataUrlFormatter.formatValue(paramObj);
+			resolvedString = Strings.replace(resolvedString, "?", valueString);
 		}
 		return resolvedString;
 	}

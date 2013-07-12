@@ -24,10 +24,11 @@ public class UpdateEntityHandler extends BaseHandler {
 		if(config.isVerifyMetadata()) verifier.hasFields(entityType, updateFields);
 		
 		ODataConsumerContext context = ODataConsumerContextHelper
-					.initEntityTypeContext(consumer, entityType);
+					.initEntityTypeContext(consumer, entityType, key);
 		
 		Request request = new UpdateEntityRequest(context, config.getProducerUrl())
-					.setEntitySet(context.getEntitySet().getName()).setId(qualifiedKey(key)).setFields(updateFields);
+					.setEntitySet(context.getEntitySet().getName())
+					.setId(context.getEntityKey().toKeyString(false)).setFields(updateFields);
 		
 		Response response = request.send();
 		

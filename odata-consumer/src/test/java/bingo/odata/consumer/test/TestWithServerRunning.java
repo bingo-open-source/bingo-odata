@@ -9,9 +9,11 @@ public class TestWithServerRunning {
 
 	private static Thread thread;
 	private static int layer = 0;
+	protected static boolean enabled = true;
 	
 	@BeforeClass
 	public static void before() {
+		if(!enabled) return;
 		try {
 			if(null == thread) {
 				thread = new DemoODataServer();
@@ -27,6 +29,7 @@ public class TestWithServerRunning {
 	
 	@AfterClass
 	public static void after() {
+		if(!enabled) return;
 		try {
 			layer--;
 			if(0 == layer) {

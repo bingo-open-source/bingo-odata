@@ -35,7 +35,7 @@ public class FindEntitySetHandler extends BaseHandler {
 	}
 
 	public <T> List<T> findEntitySet(Class<T> clazz, String entitySet, String where,
-			Map<String, Object> params, String orderBy, String[] fields, String[] expand, Page page) {
+			Object params, String orderBy, String[] fields, String[] expand, Page page) {
 		List<Map<String, Object>> list = findEntitySet(entitySet, where, params, orderBy, fields, expand, page);
 		List<T> tList = new ArrayList<T>();
 		for (Map<String, Object> map : list) {
@@ -45,7 +45,7 @@ public class FindEntitySetHandler extends BaseHandler {
 		return tList;
 	}
 	public List<Map<String, Object>> findEntitySet(String entitySet, String where,
-			Map<String, Object> params, String orderBy, String[] fields, String[] expand, Page page) {
+			Object params, String orderBy, String[] fields, String[] expand, Page page) {
 		
 		String whereParamed = Strings.isBlank(where)? 
 									null : ODataQueryTranslator.translateFilter(where, params, false);

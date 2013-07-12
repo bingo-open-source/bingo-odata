@@ -27,7 +27,8 @@ public class FindEntityHandler extends BaseHandler {
 					.initEntityTypeContext(consumer, entityType, key);
 		
 		Request request = new FindEntityRequest(context, config.getProducerUrl())
-					.setEntitySet(context.getEntitySet().getName()).setId(qualifiedKey(key));
+					.setEntitySet(context.getEntitySet().getName())
+					.setId(context.getEntityKey().toKeyString(false));
 		
 		Response response = request.send();
 		

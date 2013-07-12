@@ -23,6 +23,7 @@ import bingo.odata.ODataQueryOptions;
 import bingo.odata.ODataServices;
 import bingo.odata.ODataUrlInfo;
 import bingo.odata.consumer.ext.OrderByDirection;
+import bingo.odata.consumer.ext.Page;
 import bingo.odata.consumer.test.TestResource;
 import bingo.odata.consumer.test.TestWithServerRunning;
 import bingo.odata.consumer.test.mock.DemoModelAndData;
@@ -37,6 +38,7 @@ import bingo.odata.model.ODataValue;
 
 public class ODataConsumerImplTest extends TestWithServerRunning {
 	
+//	ODataConsumer consumer = new ODataConsumerImpl(TestResource.serviceUrls.get("remoteReadWrite"), false);
 	ODataConsumer consumer = new ODataConsumerImpl(TestResource.serviceUrls.get("local"), false);
 	
 	public static void main(String[] args) {
@@ -94,8 +96,8 @@ public class ODataConsumerImplTest extends TestWithServerRunning {
 	@Test
 	public void testUpdateEntity() {
 		Map<String, Object> fields = new HashMap<String, Object>();
-		fields.put("name", "new name here");
-		int result = consumer.updateEntityByMap("Product", "123456", fields);
+		fields.put("Name", "new name here");
+		int result = consumer.updateEntityByMap("Product", 0, fields);
 		assertEquals(1, result);
 	}
 
@@ -109,7 +111,7 @@ public class ODataConsumerImplTest extends TestWithServerRunning {
 
 	@Test
 	public void testFindEntity() {
-		Map<String, Object> entity = consumer.findEntity("Product", "123456");
+		Map<String, Object> entity = consumer.findEntity("Product", 0);
 		assertNotNull(entity);
 		System.out.println(entity);
 	}
@@ -124,10 +126,12 @@ public class ODataConsumerImplTest extends TestWithServerRunning {
 	@Test
 	public void testQuery() {
 		List<Map<String, Object>> entitySet = consumer.query("Products")
-				.where("name=:name")
-				.param("name", "bread")
-				.orderBy("id", OrderByDirection.asc).orderBy("name", OrderByDirection.desc)
-				.expand("friend", "any").page(3).select("name")
+//				.where("Name=:name")
+//				.param("name", "Bread")
+//				.orderBy("ID", OrderByDirection.asc).orderBy("name", OrderByDirection.desc)
+//				.expand("friend", "any")
+				.page(1, 3)
+				.select("Name")
 				.exec();
 		assertNotNull(entitySet);
 		assertEquals(3, entitySet.size());
@@ -159,6 +163,12 @@ public class ODataConsumerImplTest extends TestWithServerRunning {
 		long result = consumer.count("Products");
 		assertEquals(3, result);
 	}
+	
+	@Test
+	public void testCount_withCondition() {
+		long result = consumer.count("Products", "ID>?", 5, new Page(1, 3));
+		assertEquals(3, result);
+	}
 
 	@Test
 	public void testInvokeFunction_forString() {
@@ -167,6 +177,15 @@ public class ODataConsumerImplTest extends TestWithServerRunning {
 		String responseString = consumer.invokeFunctionForString("getString", paramsMap, "Products");
 		assertEquals(DemoODataProducer.INVOKED_FUNCTION, responseString);
 	}
+	
+//	@Test
+//	public void testInvokeFunction() {
+//		Map<String, Object> paramsMap = new HashMap<String, Object>();
+//		paramsMap.put("rating", 4);
+//		List<Product> product = consumer.invokeFunctionForEntityList("GetProductsByRating", paramsMap, "Products", Product.class);
+//		assertNotNull(product);
+//		assertEquals(1, product.size());
+//	}
 	
 	@Test
 	public void testInvokeFunction_returnObject() {
@@ -180,10 +199,10 @@ public class ODataConsumerImplTest extends TestWithServerRunning {
 	@Test
 	public void testInvokeFunction_paramDate() {
 		Map<String, Object> paramsMap = new HashMap<String, Object>();
-		paramsMap.put("startTime", new Date(987654321));
+		paramsMap.put("startTime", new Date(987654321000L));
 		Date product = consumer.invokeFunctionForEntity("paramDate", paramsMap, "Products", Date.class);
 		assertNotNull(product);
-		assertEquals(987654321, product.getTime());
+		assertEquals(987654321000L, product.getTime());
 	}
 	
 	@Test

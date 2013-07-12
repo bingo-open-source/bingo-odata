@@ -37,7 +37,7 @@ public class ODataConsumerContextHelper {
 			context.setEntityType(consumer.services().findEntityType(context.getEntitySet().getEntityType().getName()));
 		}
 		
-		if(Strings.isBlank(key)){
+		if(!Strings.isBlank(key)){
 			context.setEntityKey(new ODataKeyImpl(key));
 		}
 		

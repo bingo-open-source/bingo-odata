@@ -89,13 +89,14 @@ public class QueryBuilderImpl implements QueryBuilder {
 
 	public List<Map<String, Object>> exec() {
 		StringBuilder orderByBuilder = new StringBuilder();
+		String orderBy = null;
 		if(orderBys.size() > 0) {
 			for (String field : orderBys.keySet()) {
 				orderByBuilder.append(field).append(" ").append(orderBys.get(field)).append(",");
 			}
+			orderBy = orderByBuilder.substring(0, orderByBuilder.length() - 1);
 		}
-		return consumer.findEntitySet(entitySet, where, params, 
-				orderByBuilder.substring(0, orderByBuilder.length() - 1), 
+		return consumer.findEntitySet(entitySet, where, params, orderBy, 
 				Collections.toStringArray(selects), Collections.toStringArray(expands), page);
 	}
 

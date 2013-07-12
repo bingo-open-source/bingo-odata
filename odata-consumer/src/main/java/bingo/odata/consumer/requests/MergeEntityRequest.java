@@ -63,7 +63,7 @@ public class MergeEntityRequest extends Request {
 	}
 	@Override
 	protected HttpContent genContent() {
-		String json = JSON.encode(fields);
+		String json = JSON.encode(fields, true);
 		HttpContent content = ByteArrayContent.fromString(accept, json);
 		return content;
 	}

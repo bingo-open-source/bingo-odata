@@ -29,9 +29,4 @@ public class BaseHandler {
 		this.consumer = consumer;
 		this.config = consumer.config();
 	}
-	
-	protected String qualifiedKey(Object key) {
-		if(Strings.startsWith(key.toString(), "'") && Strings.endsWith(key.toString(), "'")) return key.toString();
-		return "'" + key + "'";
-	}
 }

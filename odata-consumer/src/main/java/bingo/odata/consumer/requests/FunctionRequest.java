@@ -47,7 +47,8 @@ public class FunctionRequest extends Request{
 	public String getResourcePath() {
 		if(Strings.isBlank(entitySet)) {
 			return function;
-		} else return entitySet + URL_FRAGMENT_DIVIDER + function;
+//		} else return entitySet + URL_FRAGMENT_DIVIDER + function;
+		} else return function;
 	}
 
 
@@ -117,7 +118,10 @@ public class FunctionRequest extends Request{
 				// TODO maybe need to do some url-format convert for some Type, like Date.
 				String valueString = null;
 				if(valueObject instanceof Date) {
-					valueString = JsonWriterUtils.formatDateTimeForJson((Date) valueObject);
+					if(Strings.equals(this.method, HttpMethods.GET))
+						valueString = InternalTypeUtils.formatDateTime((Date) valueObject);
+					else
+						valueString = JsonWriterUtils.formatDateTimeForJson((Date) valueObject);
 				} else {
 					valueString = Objects.toString(valueObject);
 				}

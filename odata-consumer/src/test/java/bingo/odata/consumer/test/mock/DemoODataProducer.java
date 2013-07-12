@@ -53,6 +53,7 @@ import bingo.odata.model.ODataEntitySet;
 import bingo.odata.model.ODataEntitySetBuilder;
 import bingo.odata.model.ODataKey;
 import bingo.odata.model.ODataKeyImpl;
+import bingo.odata.model.ODataParameter;
 import bingo.odata.model.ODataParameters;
 import bingo.odata.model.ODataPropertyImpl;
 import bingo.odata.model.ODataRawValueImpl;
@@ -228,7 +229,7 @@ public class DemoODataProducer extends ODataProducerAdapter implements ODataProd
 			return new ODataValueBuilder().namedEntity(funcName, entity).build();
 		} else if(Strings.equals(funcName, "getEntitySet")) {
 			JSONObject jsonObject = JSON.decode(context.getRequest().getReader());
-			ODataEntitySetBuilder builder = new ODataEntitySetBuilder(context.getEntitySet(),entityType);
+			ODataEntitySetBuilder builder = new ODataEntitySetBuilder(entitySet,entityType);
 			if(entityType.getName().equalsIgnoreCase("Category")){
 				
 				builder.addEntity(builder.newEntity()
@@ -296,6 +297,12 @@ public class DemoODataProducer extends ODataProducerAdapter implements ODataProd
 			
 		} else if(Strings.equals(funcName, "getDate")) {
 			return new ODataValueBuilder().namedRawValue(funcName, EdmSimpleType.DATETIME, new Date(123456789)).build();
+			
+		} else if(Strings.equals(funcName, "paramDate")) {
+			ODataParameter param = parameters.getParameter("startTime");
+			System.out.println(param.getType());
+			System.out.println(param.getValue());
+			return new ODataValueBuilder().namedRawValue(funcName, param.getType(), param.getValue()).build();
 			
 		} else if(Strings.equals(funcName, "getRawInt")) {
 		    return new ODataValueImpl(ODataObjectKind.Raw, new ODataRawValueImpl(EdmSimpleType.INT32, 1024));
@@ -389,6 +396,11 @@ public class DemoODataProducer extends ODataProducerAdapter implements ODataProd
 				.build());
 		demoService.addFunctionImport(EdmBuilders.functionImport("getDate")
 				.setEntitySet(products.getName())
+				.setReturnType(EdmSimpleType.DATETIME)
+				.build());
+		demoService.addFunctionImport(EdmBuilders.functionImport("paramDate")
+				.setEntitySet(products.getName())
+				.addParameter("startTime", EdmSimpleType.DATETIME, EdmParameterMode.In)
 				.setReturnType(EdmSimpleType.DATETIME)
 				.build());
 		demoService.addFunctionImport(EdmBuilders.functionImport("getRawInt")

@@ -2,6 +2,7 @@ package bingo.odata.format.json;
 
 import java.util.Map;
 
+import bingo.lang.Maps;
 import bingo.lang.json.JSONObject;
 import bingo.meta.edm.EdmEntityType;
 import bingo.meta.edm.EdmProperty;
@@ -23,7 +24,7 @@ public class JsonPropertyReader extends ODataJsonReader<ODataProperty> {
 
 		Map<String,Object> map = json.map();
 		
-		if(map.entrySet().size() == 1 && map.keySet().iterator().next().equals("d")) {
+		if(map.size() == 1 && Maps.containsKeyIgnoreCase(map, "d")) {
 			map = (Map<String,Object>)map.get("d");
 		}
 		
