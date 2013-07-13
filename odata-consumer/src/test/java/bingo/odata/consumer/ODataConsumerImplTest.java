@@ -11,6 +11,9 @@ import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 
 import bingo.lang.Converts;
 import bingo.lang.New;
@@ -124,6 +127,13 @@ public class ODataConsumerImplTest extends TestWithServerRunning {
 	}
 	
 	@Test
+	public void testFindEntitySet_withCondition() {
+		List<Map<String, Object>> entitySet = consumer.findEntitySet("Products", "name=bread");
+		assertNotNull(entitySet);
+		assertEquals(3, entitySet.size());
+	}
+
+	@Test
 	public void testQuery() {
 		List<Map<String, Object>> entitySet = consumer.query("Products")
 //				.where("Name=:name")
@@ -137,13 +147,6 @@ public class ODataConsumerImplTest extends TestWithServerRunning {
 		assertEquals(3, entitySet.size());
 	}
 	
-	@Test
-	public void testFindEntitySet_withCondition() {
-		List<Map<String, Object>> entitySet = consumer.findEntitySet("Products", "name=bread");
-		assertNotNull(entitySet);
-		assertEquals(3, entitySet.size());
-	}
-
 	@Test
 	public void testFindProperty() {
 		String value = consumer.findPropertyForString("Product", "123456", "name");

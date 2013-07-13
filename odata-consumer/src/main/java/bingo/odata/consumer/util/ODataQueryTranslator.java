@@ -15,11 +15,15 @@ public class ODataQueryTranslator {
 
 		// take care of the order.
 		operationMapping.put("!=", " ne ");
+		operationMapping.put("<>", " ne ");
 		operationMapping.put(">=", " ge ");
 		operationMapping.put("<=", " le ");
+		operationMapping.put("==", " eq ");
 		operationMapping.put("=", " eq ");
 		operationMapping.put(">", " gt ");
 		operationMapping.put("<", " lt ");
+		operationMapping.put("||", " or ");
+		operationMapping.put("&&", " and ");
 	}
 	
 	public static String translateFilter(String originalString) {
