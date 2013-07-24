@@ -30,11 +30,11 @@ public class ODataConsumerContextHelper {
 		ODataConsumerContext context = new ODataConsumerContext(consumer.config());
 		
 		if(Strings.isNotBlank(entityType)) {
-			context.setEntityType(consumer.services().findEntityType(entityType));
-			context.setEntitySet(consumer.services().findEntitySet(context.getEntityType()));
+			context.setEntityType(consumer.cachedGetServiceMetadata().findEntityType(entityType));
+			context.setEntitySet(consumer.cachedGetServiceMetadata().findEntitySet(context.getEntityType()));
 		} else if(Strings.isNotBlank(entitySet)) {
-			context.setEntitySet(consumer.services().findEntitySet(entitySet));
-			context.setEntityType(consumer.services().findEntityType(context.getEntitySet().getEntityType().getName()));
+			context.setEntitySet(consumer.cachedGetServiceMetadata().findEntitySet(entitySet));
+			context.setEntityType(consumer.cachedGetServiceMetadata().findEntityType(context.getEntitySet().getEntityType().getName()));
 		}
 		
 		if(!Strings.isBlank(key)){
@@ -48,7 +48,7 @@ public class ODataConsumerContextHelper {
 
 		ODataConsumerContext context = new ODataConsumerContext(consumer.config());
 
-		initFunctionContext(consumer.services(), context, func, entitySet);
+		initFunctionContext(consumer.cachedGetServiceMetadata(), context, func, entitySet);
 		
 		return context;
 	}

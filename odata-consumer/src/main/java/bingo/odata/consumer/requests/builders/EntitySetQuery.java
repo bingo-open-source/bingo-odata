@@ -8,51 +8,51 @@ import bingo.odata.consumer.ODataConsumer;
 import bingo.odata.consumer.ext.OrderByDirection;
 import bingo.odata.consumer.ext.Page;
 
-public interface QueryBuilder {
+public interface EntitySetQuery {
 	
-	QueryBuilder entitySet(String entitySet);
+	EntitySetQuery entitySet(String entitySet);
 	
-	QueryBuilder where(String where);
+	EntitySetQuery where(String where);
 	
-	QueryBuilder param(String key, Object value);
+	EntitySetQuery param(String key, Object value);
 	
 	/**
 	 * these params are added to current params, not replaced them!
 	 * @param params
 	 * @return
 	 */
-	QueryBuilder params(Map<String, Object> params);
+	EntitySetQuery params(Map<String, Object> params);
 	
 	/**
 	 * default order direction is Asc.
 	 * @param field
 	 * @return
 	 */
-	QueryBuilder orderBy(String field);
+	EntitySetQuery orderBy(String field);
 	
-	QueryBuilder orderBy(String field, OrderByDirection direction);
+	EntitySetQuery orderBy(String field, OrderByDirection direction);
 	
-	QueryBuilder orderBys(LinkedHashMap<String, OrderByDirection> orderBys);
+	EntitySetQuery orderBys(LinkedHashMap<String, OrderByDirection> orderBys);
 	
 	/**
 	 * Not calling this method or calling select("*") will select all fields.
 	 * @param fields
 	 * @return
 	 */
-	QueryBuilder select(String... fields);
+	EntitySetQuery select(String... fields);
 	
-	QueryBuilder expand(String... expands);
+	EntitySetQuery expand(String... expands);
 	
-	QueryBuilder page(Page page);
+	EntitySetQuery page(Page page);
 	
 	/**
 	 * default page size is 10.
 	 * @param page
 	 * @return
 	 */
-	QueryBuilder page(int page);
+	EntitySetQuery page(int page);
 	
-	QueryBuilder page(int page, int pageSize);
+	EntitySetQuery page(int page, int pageSize);
 	
-	List<Map<String, Object>> exec();
+	List<Map<String, Object>> execute();
 }

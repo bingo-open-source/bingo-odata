@@ -23,8 +23,8 @@ public class Handlers {
 			try {
 				Constructor<T> constructor = clazz.getDeclaredConstructor(ODataConsumer.class, 
 												ODataServices.class, ODataMetadataVerifier.class);
-				T t = constructor.newInstance(consumer, consumer.services(), 
-												new ODataMetadataVerifier(consumer.services()));
+				T t = constructor.newInstance(consumer, consumer.cachedGetServiceMetadata(), 
+												new ODataMetadataVerifier(consumer.cachedGetServiceMetadata()));
 				handlers.put(keyString, t);
 				return t;
 			} catch (Exception e) {

@@ -75,7 +75,7 @@ import bingo.odata.consumer.requests.FindEntitySetRequest;
 import bingo.odata.consumer.requests.FindPropertyRequest;
 import bingo.odata.consumer.requests.UpdateEntityRequest;
 import bingo.odata.consumer.requests.behaviors.Behavior;
-import bingo.odata.consumer.requests.builders.QueryBuilder;
+import bingo.odata.consumer.requests.builders.EntitySetQuery;
 import bingo.odata.consumer.requests.builders.QueryBuilderImpl;
 import bingo.odata.consumer.util.ODataConsumerContextHelper;
 import bingo.odata.consumer.util.ODataConvertor;
@@ -123,7 +123,7 @@ public class ODataConsumerImpl implements ODataConsumer {
 	}
 
 	private ODataConsumer consumerWithMetadata() {
-		if(null == services) services = retrieveServiceMetadata();
+		if(null == services) services = refreshServiceMetadata();
 		return this;
 	}
 
@@ -136,7 +136,7 @@ public class ODataConsumerImpl implements ODataConsumer {
 		return this;
 	}
 	
-	public ODataServices services() {
+	public ODataServices cachedGetServiceMetadata() {
 		return services;
 	}
 	
@@ -150,7 +150,7 @@ public class ODataConsumerImpl implements ODataConsumer {
 	 * 
 	 * {@link ODataServices} represents the Metadata Document.
 	 */
-	public ODataServices retrieveServiceMetadata() throws ConnectFailedException{
+	public ODataServices refreshServiceMetadata() throws ConnectFailedException{
 		return new RetrieveServiceMetadataHandler(this)
 				.retrieveServiceMetadata();
 	}
@@ -219,7 +219,7 @@ public class ODataConsumerImpl implements ODataConsumer {
 	 * get the entity set from producer.
 	 */
 
-	public QueryBuilder	query(String entitySet) {
+	public EntitySetQuery	queryEntitySet(String entitySet) {
 		return new QueryBuilderImpl(this).entitySet(entitySet);
 	}
 	
