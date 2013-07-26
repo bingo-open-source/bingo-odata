@@ -56,7 +56,7 @@ public class ODataConsumerImplTest extends TestWithServerRunning {
 	@Test
 	public void testRetrieveServiceMetadata() {
 		try {
-			ODataServices service = consumer.retrieveServiceMetadata();
+			ODataServices service = consumer.refreshServiceMetadata();
 			assertNotNull(service);
 		} catch (Throwable e) {
 			fail();
@@ -70,9 +70,9 @@ public class ODataConsumerImplTest extends TestWithServerRunning {
 		product.put("ID", "987654321");
 		product.put("name", "chenkai");
 		product.put("description", "postbychenkai");
-		consumer.retrieveServiceMetadata();
-		EdmEntitySet entitySet = consumer.services().findEntitySet("Products");
-		EdmEntityType entityType = consumer.services().findEntityType("Product");
+		consumer.refreshServiceMetadata();
+		EdmEntitySet entitySet = consumer.cachedGetServiceMetadata().findEntitySet("Products");
+		EdmEntityType entityType = consumer.cachedGetServiceMetadata().findEntityType("Product");
 		ODataEntity obj = new ODataEntityBuilder(entitySet, entityType).addProperties(product).build();
 		int result = consumer.insertEntity(entityType, obj);
 		assertEquals(1, result);
@@ -89,9 +89,9 @@ public class ODataConsumerImplTest extends TestWithServerRunning {
 
 	@Test
 	public void testDeleteEntity_usingOdataModel() {
-		consumer.retrieveServiceMetadata();
-		EdmEntitySet entitySet = consumer.services().findEntitySet("Products");
-		EdmEntityType entityType = consumer.services().findEntityType("Product");
+		consumer.refreshServiceMetadata();
+		EdmEntitySet entitySet = consumer.cachedGetServiceMetadata().findEntitySet("Products");
+		EdmEntityType entityType = consumer.cachedGetServiceMetadata().findEntityType("Product");
 		int result = consumer.deleteEntity(entityType, new ODataKeyImpl("123456"));
 		assertEquals(1, result);
 	}
@@ -135,14 +135,14 @@ public class ODataConsumerImplTest extends TestWithServerRunning {
 
 	@Test
 	public void testQuery() {
-		List<Map<String, Object>> entitySet = consumer.query("Products")
+		List<Map<String, Object>> entitySet = consumer.queryEntitySet("Products")
 //				.where("Name=:name")
 //				.param("name", "Bread")
 //				.orderBy("ID", OrderByDirection.asc).orderBy("name", OrderByDirection.desc)
 //				.expand("friend", "any")
 				.page(1, 3)
 				.select("Name")
-				.exec();
+				.execute();
 		assertNotNull(entitySet);
 		assertEquals(3, entitySet.size());
 	}

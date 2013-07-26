@@ -26,7 +26,7 @@ import bingo.meta.edm.EdmProperty;
 import bingo.odata.ODataQueryInfo;
 import bingo.odata.ODataServices;
 import bingo.odata.consumer.ext.Page;
-import bingo.odata.consumer.requests.builders.QueryBuilder;
+import bingo.odata.consumer.requests.builders.EntitySetQuery;
 import bingo.odata.model.ODataEntity;
 import bingo.odata.model.ODataEntitySet;
 import bingo.odata.model.ODataKey;
@@ -41,12 +41,12 @@ public interface ODataConsumer {
 	
 	ODataConsumer 				config(ODataConsumerConfig config);
 	
-	ODataServices 				services();
-	
 	ODataConsumer 				services(ODataServices services);
 	
+	ODataServices 				cachedGetServiceMetadata();
+	
 	// meta
-	ODataServices 				retrieveServiceMetadata();
+	ODataServices 				refreshServiceMetadata();
 	
 	// create	
 	int 						insertEntityByMap(String entityType, Map<String, Object> fields);
@@ -72,7 +72,7 @@ public interface ODataConsumer {
 //	int 						mergeEntity(EdmEntityType entityType, ODataKey key, ODataEntity entity);
 	
 	// query - entitySet
-	QueryBuilder			 	query(String entitySet);
+	EntitySetQuery			 	queryEntitySet(String entitySet);
 	
 	List<Map<String, Object>> 	findEntitySet(String entitySet);
 	
