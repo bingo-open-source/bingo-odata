@@ -11,14 +11,14 @@ public class OAuthBehavior implements Behavior {
   private String accessToken;
 
   public OAuthBehavior(String accessToken) {
-    this.accessToken = accessToken;
+	  this.accessToken = accessToken;
   }
 
   public HttpRequest transform(HttpRequest request) {
 	  HttpHeaders headers = request.getHeaders();
 	  headers.setAuthorization(HEADER_PREFIX + accessToken);
 	  request.setHeaders(headers);
-    return request;
+	  return request;
   }
 
 }

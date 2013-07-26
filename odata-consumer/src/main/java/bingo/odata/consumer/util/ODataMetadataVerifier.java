@@ -36,16 +36,16 @@ public class ODataMetadataVerifier {
 	}
 	
 	public EdmEntityType hasEntityType(String entityType, String property) {
-		EdmEntityType edmEntityType = hasEntityType(entityType);
 		Assert.notBlank(property);
+		EdmEntityType edmEntityType = hasEntityType(entityType);
 		EdmProperty edmProperty = edmEntityType.findProperty(property);
 		if(null == edmProperty) throw new ODataVerifiedFailException("Property", property);
 		return edmEntityType;
 	}
 	
 	public EdmEntityType hasEntityTypeWithNavigationProp(String entityType, String naviProperty) {
-		EdmEntityType edmEntityType = hasEntityType(entityType);
 		Assert.notBlank(naviProperty);
+		EdmEntityType edmEntityType = hasEntityType(entityType);
 		EdmNavigationProperty edmProperty = edmEntityType.findNavigationProperty(naviProperty);
 		if(null == edmProperty) throw new ODataVerifiedFailException("Property", naviProperty);
 		return edmEntityType;
@@ -58,7 +58,7 @@ public class ODataMetadataVerifier {
 		return set;
 	}
 	
-	public void hasFields(String entityType, Map<String, Object> fields) {
+	public EdmEntityType hasFields(String entityType, Map<String, Object> fields) {
 		Assert.notNull(fields);
 		EdmEntityType type = hasEntityType(entityType);
 		Object[] keys = fields.keySet().toArray();
@@ -66,6 +66,7 @@ public class ODataMetadataVerifier {
 			EdmProperty property = type.findProperty(key.toString());
 			if(null == property) throw new ODataVerifiedFailException("Entity Property in " + entityType, key.toString());
 		}
+		return type;
 	}
 	
 	public EdmFunctionImport[] hasFunction(String functionName) {

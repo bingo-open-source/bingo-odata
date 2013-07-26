@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import bingo.lang.Assert;
 import bingo.lang.Collections;
 import bingo.lang.Strings;
 import bingo.lang.convert.InputStreamConverter;
@@ -53,14 +54,15 @@ public class Request {
 	protected boolean isLog = true;
 	
 	public Request(ODataConsumerContext context, String serviceRoot) {
+		Assert.notNull(context);
+		Assert.notBlank(serviceRoot);
 		this.serviceRoot = serviceRoot;
 		this.context = context;
 	}
 	
 	public Request(ODataConsumerContext context, String serviceRoot, String resourcePath) {
-		this.serviceRoot = serviceRoot;
+		this(context, serviceRoot);
 		this.resourcePath = resourcePath;
-		this.context = context;
 	}
 
 	public String getAccept() {
@@ -100,6 +102,7 @@ public class Request {
 	}
 
 	public String getMethod() {
+		Assert.notBlank(method);
 		return method;
 	}
 
@@ -169,7 +172,7 @@ public class Request {
 		
 		httpRequest = buildRequest(requestFactory);
 		
-		httpRequest.setConnectTimeout(500000);
+//		httpRequest.setConnectTimeout(500000);
 		
 		handleBehaviors(httpRequest);
 		
@@ -202,25 +205,25 @@ public class Request {
 		List<Behavior> behaviors = context.getBehaviors();
 		if(!Collections.isEmpty(behaviors)) {
 			for (Behavior behavior : behaviors) {
-				req = behavior.transform(req);
+				if(null != behavior) req = behavior.transform(req);
 			}
 		}
 	}
 
-	protected HttpRequest buildRequest(HttpRequestFactory requestFactory) {
+	private HttpRequest buildRequest(HttpRequestFactory requestFactory) {
 		HttpRequest req = null;
 		try {
 			req = requestFactory.buildRequest(getMethod(), new GenericUrl(), null);
-			req.setUrl(genUrl());
-			req.setHeaders(genHeaders());
-			req.setContent(genContent());
+			req.setUrl(generateUrl());
+			req.setHeaders(generateHeaders());
+			req.setContent(generateContent());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return req;
 	}
 
-	protected HttpHeaders genHeaders() {
+	protected HttpHeaders generateHeaders() {
 		HttpHeaders httpHeaders = new HttpHeaders();
 		httpHeaders.putAll(headers);
 		httpHeaders.setAccept(accept);
@@ -228,11 +231,11 @@ public class Request {
 		return httpHeaders; 
 	}
 
-	protected HttpContent genContent() {
+	protected HttpContent generateContent() {
 		return null;
 	}
 
-	protected GenericUrl genUrl() {
+	protected GenericUrl generateUrl() {
 		String query = getQueryString();
 		String str = serviceRoot + getResourcePath() + (Strings.isNotBlank(query)? "?" + query : "");
 		GenericUrl url = new GenericUrl(str);
@@ -286,18 +289,18 @@ public class Request {
 	public String toString() {
 		HttpHeaders httpHeaders = null;
 		if(null == this.httpRequest) {
-			httpHeaders = genHeaders();
+			httpHeaders = generateHeaders();
 		} else {
 			httpHeaders = this.httpRequest.getHeaders();
 		}
 		String blank = " ", nextLine = "\n", tab = "\t", nt = nextLine + tab;
 		String str = nextLine + 
-				nt + this.getMethod() + blank + this.genUrl().toString() +
+				nt + this.getMethod() + blank + this.generateUrl().toString() +
 				nt + httpHeaders.toString();
 		if(this.context.isLogPrintHttpMessageBody()) {
 			HttpContent httpContent = null;
 			if(null == this.httpRequest) {
-				httpContent = genContent();
+				httpContent = generateContent();
 			} else {
 				httpContent = this.httpRequest.getContent();
 			}

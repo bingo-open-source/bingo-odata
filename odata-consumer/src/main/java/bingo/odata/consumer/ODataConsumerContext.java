@@ -18,6 +18,7 @@ package bingo.odata.consumer;
 import java.util.ArrayList;
 import java.util.List;
 
+import bingo.lang.Assert;
 import bingo.odata.ODataContextBase;
 import bingo.odata.ODataFormat;
 import bingo.odata.ODataReaderContext;
@@ -34,6 +35,7 @@ public class ODataConsumerContext extends ODataContextBase implements ODataWrite
 	private boolean isLogPrintHttpMessageBody;
 	
 	public ODataConsumerContext(ODataConsumerConfig config) {
+		Assert.notNull(config);
 		this.setProtocol(config.getProtocol());
 		this.setVersion(config.getVersion());
 		this.setFormat(config.getDefaultFormat());

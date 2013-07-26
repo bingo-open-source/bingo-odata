@@ -35,7 +35,7 @@ public class FindEntitySetRequest extends Request{
 	}
 
 	@Override
-	protected GenericUrl genUrl() {
+	protected GenericUrl generateUrl() {
 		String string = this.serviceRoot + entitySet;
 		string = addQueryString(string);
 		GenericUrl url = new GenericUrl(string);

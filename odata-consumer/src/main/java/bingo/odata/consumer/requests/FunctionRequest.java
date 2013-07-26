@@ -37,7 +37,7 @@ public class FunctionRequest extends Request{
 	private String entitySet = "";
 	private String function;
 	private String httpMethod;
-	private Map<String, Object> params;
+	private Map<String, Object> funcParams;
 
 	public FunctionRequest(ODataConsumerContext context, String serviceRoot) {
 		super(context, serviceRoot);
@@ -51,19 +51,17 @@ public class FunctionRequest extends Request{
 		} else return function;
 	}
 
-
 	public String getFunction() {
 		return function;
 	}
-
 
 	public FunctionRequest setFunction(String function) {
 		this.function = function;
 		return this;
 	}
 
-	public FunctionRequest setParams(Map<String, Object> params) {
-		this.params = params;
+	public FunctionRequest setFuncParams(Map<String, Object> funcParams) {
+		this.funcParams = funcParams;
 		return this;
 	}
 
@@ -95,30 +93,35 @@ public class FunctionRequest extends Request{
 	@Override
 	protected void beforeSend() {
 		if(getMethod().equals(HttpMethods.GET)) {
-			prepareParams();
+			prepareFuncParams();
 		}
 	}
 
 	@Override
-	protected HttpContent genContent() {
+	protected HttpContent generateContent() {
 		if(getMethod().equals(HttpMethods.POST)) {
-			String json = JSON.encode(params, true);
+			String json = JSON.encode(getQualifiedFuncParams(), true);
 			HttpContent content = ByteArrayContent.fromString(ContentTypes.APPLICATION_JSON_UTF8, json);
 			return content;
 		}
 		return null;
 	}
 
-	private void prepareParams() {
-		Map<String, String> qualifiedParams = new LinkedHashMap<String, String>();
-		if(null != params) {
-			for (String key : params.keySet()) {
-				Object valueObject = params.get(key);
+	private void prepareFuncParams() {
+		Map<String, String> qualifiedFuncParams = getQualifiedFuncParams();
+		this.addParameters(qualifiedFuncParams);
+	}
+
+	private Map<String, String> getQualifiedFuncParams() {
+		Map<String, String> qualifiedFuncParams = new LinkedHashMap<String, String>();
+		if(null != funcParams) {
+			for (String key : funcParams.keySet()) {
+				Object valueObject = funcParams.get(key);
 				
 				// TODO maybe need to do some url-format convert for some Type, like Date.
 				String valueString = null;
 				if(valueObject instanceof Date) {
-					if(Strings.equals(this.method, HttpMethods.GET))
+					if(Strings.equals(getMethod(), HttpMethods.GET))
 						valueString = InternalTypeUtils.formatDateTime((Date) valueObject);
 					else
 						valueString = JsonWriterUtils.formatDateTimeForJson((Date) valueObject);
@@ -126,9 +129,9 @@ public class FunctionRequest extends Request{
 					valueString = Objects.toString(valueObject);
 				}
 				
-				qualifiedParams.put(key, valueString);
+				qualifiedFuncParams.put(key, valueString);
 			}
 		}
-		this.addParameters(qualifiedParams);
+		return qualifiedFuncParams;
 	}
 }

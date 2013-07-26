@@ -55,14 +55,14 @@ public class InsertEntityRequest extends Request {
 	}
 
 	@Override
-	protected HttpContent genContent() {
+	protected HttpContent generateContent() {
 		String json = JSON.encode(entity, true);
 		HttpContent content = ByteArrayContent.fromString(accept, json);
 		return content;
 	}
 
 	@Override
-	protected GenericUrl genUrl() {
+	protected GenericUrl generateUrl() {
 		String string = serviceRoot + entityType;
 		string = addQueryString(string);
 		GenericUrl url = new GenericUrl(string);

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import bingo.lang.Assert;
 import bingo.lang.Converts;
 import bingo.lang.Func1;
 import bingo.lang.json.JSON;
@@ -57,6 +58,8 @@ public class ODataConvertor {
 	
 	public static <T extends ODataObject> T convertTo(Class<T> t,
 			ODataConsumerContext context, Reader valueJson) {
+		Assert.notNull(context);
+		Assert.notNull(valueJson);
 		ODataObjectKind objectKind = getObjectKindFromObject(t);
 		ODataReader<T> reader = context.getProtocol().getReader(
 				context.getVersion(), context.getFormat(), objectKind);
@@ -69,6 +72,7 @@ public class ODataConvertor {
 	}
 	
 	public static <T extends ODataObject> ODataObjectKind getObjectKindFromObject(Class<T> t) {
+		Assert.notNull(t);
 		ODataObjectKind objectKind = null;
 		if(ODataEntity.class.isAssignableFrom(t)) objectKind = ODataObjectKind.Entity;
 		if(ODataEntitySet.class.isAssignableFrom(t)) objectKind = ODataObjectKind.EntitySet;
@@ -82,10 +86,12 @@ public class ODataConvertor {
 	}
 	
 	public static <T> T convertEntityToType(ODataEntity entity, Class<T> clazz) {
+		Assert.notNull(entity);
 		return Converts.convert(entity.toMap(), clazz);
 	}
 	
 	public static <T> List<T> convertEntitySetToTypeList(ODataEntitySet entitySet, Class<T> clazz) {
+		Assert.notNull(entitySet);
 		List<T> result = new ArrayList<T>();
 		for (ODataEntity entity : entitySet.getEntities()) {
 			result.add(Converts.convert(entity, clazz));
@@ -94,6 +100,7 @@ public class ODataConvertor {
 	}
 	
 	public static <T> List<T> convertMapListToTypeList(List<Map<String, Object>> mapList, Class<T> clazz) {
+		Assert.notNull(mapList);
 		List<T> result = new ArrayList<T>();
 		for (Map<String, Object> map : mapList) {
 			result.add(Converts.convert(map, clazz));

@@ -33,7 +33,7 @@ public class InvokeFunctionHandler extends BaseHandler {
 		
 		Request request = new FunctionRequest(context, config.getProducerUrl())
 					.setHttpMethod(null == func? null:func.getHttpMethod())
-					.setEntitySet(entitySet).setFunction(funcName).setParams(parameters);
+					.setEntitySet(entitySet).setFunction(funcName).setFuncParams(parameters);
 		
 		Response response = request.send();
 		
@@ -54,7 +54,7 @@ public class InvokeFunctionHandler extends BaseHandler {
 					.initFunctionContext(consumer, func, entitySet);
 		
 		Request request = new FunctionRequest(context, config.getProducerUrl()).setHttpMethod(func.getHttpMethod())
-					.setEntitySet(entitySet).setFunction(funcName).setParams(parameters);
+					.setEntitySet(entitySet).setFunction(funcName).setFuncParams(parameters);
 		
 		Response response = request.send();
 		
@@ -75,7 +75,7 @@ public class InvokeFunctionHandler extends BaseHandler {
 					.initFunctionContext(consumer, func, entitySet);
 		
 		Request request = new FunctionRequest(context, config.getProducerUrl()).setHttpMethod(func.getHttpMethod())
-					.setEntitySet(entitySet).setFunction(funcName).setParams(parameters);
+					.setEntitySet(entitySet).setFunction(funcName).setFuncParams(parameters);
 		
 		Response response = request.send();
 		
@@ -97,7 +97,7 @@ public class InvokeFunctionHandler extends BaseHandler {
 					.initFunctionContext(consumer, func, entitySet);
 	
 		Request request = new FunctionRequest(context, config.getProducerUrl()).setHttpMethod(func.getHttpMethod())
-					.setEntitySet(entitySet).setFunction(funcName).setParams(parameters);
+					.setEntitySet(entitySet).setFunction(funcName).setFuncParams(parameters);
 		
 		Response response = request.send();
 		
@@ -119,7 +119,7 @@ public class InvokeFunctionHandler extends BaseHandler {
 		
 		Request request = new FunctionRequest(context, config.getProducerUrl())
 					.setHttpMethod(null == func? null:func.getHttpMethod())
-					.setEntitySet(entitySet).setFunction(funcName).setParams(parameters);
+					.setEntitySet(entitySet).setFunction(funcName).setFuncParams(parameters);
 		
 		Response response = request.send();
 		

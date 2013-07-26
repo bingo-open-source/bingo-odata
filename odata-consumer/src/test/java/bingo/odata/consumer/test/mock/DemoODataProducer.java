@@ -304,6 +304,12 @@ public class DemoODataProducer extends ODataProducerAdapter implements ODataProd
 			System.out.println(param.getValue());
 			return new ODataValueBuilder().namedRawValue(funcName, param.getType(), param.getValue()).build();
 			
+		} else if(Strings.equals(funcName, "paramDateInPost")) {
+			ODataParameter param = parameters.getParameter("startTime");
+			System.out.println(param.getType());
+			System.out.println(param.getValue());
+			return new ODataValueBuilder().namedRawValue(funcName, param.getType(), param.getValue()).build();
+			
 		} else if(Strings.equals(funcName, "getRawInt")) {
 		    return new ODataValueImpl(ODataObjectKind.Raw, new ODataRawValueImpl(EdmSimpleType.INT32, 1024));
 		}
@@ -402,6 +408,13 @@ public class DemoODataProducer extends ODataProducerAdapter implements ODataProd
 				.setEntitySet(products.getName())
 				.addParameter("startTime", EdmSimpleType.DATETIME, EdmParameterMode.In)
 				.setReturnType(EdmSimpleType.DATETIME)
+				.setHttpMethod(HttpMethods.GET)
+				.build());
+		demoService.addFunctionImport(EdmBuilders.functionImport("paramDateInPost")
+				.setEntitySet(products.getName())
+				.addParameter("startTime", EdmSimpleType.DATETIME, EdmParameterMode.In)
+				.setReturnType(EdmSimpleType.DATETIME)
+				.setHttpMethod(HttpMethods.POST)
 				.build());
 		demoService.addFunctionImport(EdmBuilders.functionImport("getRawInt")
 				.setEntitySet(products.getName())

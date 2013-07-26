@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import bingo.lang.Assert;
 import bingo.lang.Converts;
 import bingo.lang.Enumerables;
 import bingo.lang.Enums;
@@ -58,6 +59,7 @@ public class Response {
 	}
 	
 	public Response(HttpResponse httpResponse) {
+		Assert.notNull(httpResponse);
 		this.httpResponse = httpResponse;
 	}
 
@@ -109,7 +111,9 @@ public class Response {
 		builder.append(httpResponse.getHeaders().toString()).append(next);
 		if(showBody) {
 			try {
-				responseBody = new InputStreamConverter().convertToString(httpResponse.getContent());
+				if(Strings.isBlank(responseBody)) {
+					responseBody = new InputStreamConverter().convertToString(httpResponse.getContent());
+				}
 				builder.append(responseBody);
 			} catch (Throwable e) {
 				e.printStackTrace();
@@ -120,6 +124,8 @@ public class Response {
 	}
 	
 	public <T> T convertToObject(Class<T> clazz, EdmType edmType, ODataConsumerContext context) {
+		Assert.notNull(clazz);
+		Assert.notNull(context);
 		if(null != context.getFunctionImport()) {
 			// through function invoking.
 			// get ride of useless info.
@@ -145,6 +151,8 @@ public class Response {
 	}
 	
 	public static Object extractValueFromFunctionResponse(String jsonString, String funcName) {
+		Assert.notBlank(jsonString);
+		Assert.notBlank(funcName);
 		JSONObject jsonObject = JSON.decode(jsonString);
 		Map<String, Object> jsonMap = null;
 		if(jsonObject.isMap()) {
@@ -183,6 +191,8 @@ public class Response {
 	}
 	
 	public <T> List<T> convertToObjectList(Class<T> listClazz, EdmType edmType, ODataConsumerContext context) {
+		Assert.notNull(listClazz);
+		Assert.notNull(context);
 		if(null != context.getFunctionImport()) {
 			// through function invoking.
 			// get ride of useless info.
@@ -208,6 +218,7 @@ public class Response {
 	}
 	
 	public ODataValue convertToODataValue(EdmType edmType, ODataConsumerContext context) {
+		Assert.notNull(edmType);
 		if(null != context.getFunctionImport()) {
 			if(OdataJudger.isEntity(edmType)) {
 				Map<String, Object> json = extractValueFromFunctionResponseForMap(

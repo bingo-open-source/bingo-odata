@@ -34,15 +34,15 @@ public class MetadataRequest extends Request{
 	}
 
 	@Override
-	protected GenericUrl genUrl() {
+	protected GenericUrl generateUrl() {
 		String str = serviceRoot + METADATA_DOCUMENT;
 		GenericUrl url = new GenericUrl(str);
 		return url;
 	}
 
 	@Override
-	protected HttpHeaders genHeaders() {
-		HttpHeaders headers = super.genHeaders();
+	protected HttpHeaders generateHeaders() {
+		HttpHeaders headers = super.generateHeaders();
 		headers.setAccept("application/xml");
 		return headers;
 	}

@@ -12,7 +12,7 @@ import bingo.odata.consumer.ODataConsumer;
 import bingo.odata.consumer.ext.OrderByDirection;
 import bingo.odata.consumer.ext.Page;
 
-public class QueryBuilderImpl implements QueryBuilder {
+public class QueryBuilderImpl implements EntitySetQuery {
 	
 	private ODataConsumer consumer;
 	private String entitySet;
@@ -27,67 +27,67 @@ public class QueryBuilderImpl implements QueryBuilder {
 		this.consumer = consumer;
 	}
 	
-	public QueryBuilder entitySet(String entitySet) {
+	public EntitySetQuery entitySet(String entitySet) {
 		this.entitySet = entitySet;
 		return this;
 	}
 
-	public QueryBuilder where(String where) {
+	public EntitySetQuery where(String where) {
 		this.where = where;
 		return this;
 	}
 
-	public QueryBuilder param(String key, Object value) {
+	public EntitySetQuery param(String key, Object value) {
 		params.put(key, value);
 		return this;
 	}
 
-	public QueryBuilder params(Map<String, Object> params) {
+	public EntitySetQuery params(Map<String, Object> params) {
 		params.putAll(params);
 		return this;
 	}
 
-	public QueryBuilder orderBy(String field) {
+	public EntitySetQuery orderBy(String field) {
 		this.orderBys.put(field, OrderByDirection.asc);
 		return this;
 	}
 
-	public QueryBuilder orderBy(String field, OrderByDirection direction) {
+	public EntitySetQuery orderBy(String field, OrderByDirection direction) {
 		this.orderBys.put(field, direction);
 		return this;
 	}
 
-	public QueryBuilder orderBys(LinkedHashMap<String, OrderByDirection> orderBys) {
+	public EntitySetQuery orderBys(LinkedHashMap<String, OrderByDirection> orderBys) {
 		this.orderBys.putAll(orderBys);
 		return this;
 	}
 
-	public QueryBuilder select(String... fields) {
+	public EntitySetQuery select(String... fields) {
 		this.selects.addAll(Collections.listOf(fields));
 		return this;
 	}
 
-	public QueryBuilder expand(String... expands) {
+	public EntitySetQuery expand(String... expands) {
 		this.expands.addAll(Collections.listOf(expands));
 		return this;
 	}
 
-	public QueryBuilder page(Page page) {
+	public EntitySetQuery page(Page page) {
 		this.page = page;
 		return this;
 	}
 
-	public QueryBuilder page(int page) {
+	public EntitySetQuery page(int page) {
 		this.page = new Page(page);
 		return this;
 	}
 
-	public QueryBuilder page(int page, int pageSize) {
+	public EntitySetQuery page(int page, int pageSize) {
 		this.page = new Page(page, pageSize);
 		return this;
 	}
 
-	public List<Map<String, Object>> exec() {
+	public List<Map<String, Object>> execute() {
 		StringBuilder orderByBuilder = new StringBuilder();
 		String orderBy = null;
 		if(orderBys.size() > 0) {
