@@ -91,7 +91,7 @@ public class ODataKeyImpl implements ODataKey {
 						if(!isFirstItem){
 							key.append(',');
 						}
-						key.append(keyString(item.getValue()));
+						key.append(keyString(item));
 		            }
 				});
 		

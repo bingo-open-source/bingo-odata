@@ -15,13 +15,17 @@
  */
 package bingo.odata.format.json;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import bingo.lang.Collections;
 import bingo.lang.Maps;
+import bingo.lang.NamedValue;
 import bingo.lang.Strings;
 import bingo.lang.json.JSONObject;
+import bingo.lang.tuple.MutableNamedEntry;
 import bingo.meta.edm.EdmEntityType;
 import bingo.meta.edm.EdmNavigationProperty;
 import bingo.meta.edm.EdmProperty;
@@ -31,6 +35,7 @@ import bingo.odata.ODataReaderContext;
 import bingo.odata.format.ODataJsonReader;
 import bingo.odata.model.ODataEntity;
 import bingo.odata.model.ODataEntityBuilder;
+import bingo.odata.model.ODataKey;
 import bingo.odata.model.ODataKeyImpl;
 
 public class JsonEntityReader extends ODataJsonReader<ODataEntity> {
@@ -50,6 +55,8 @@ public class JsonEntityReader extends ODataJsonReader<ODataEntity> {
 			map = (Map<String,Object>)map.get("d");
 		}
 		
+		List<NamedValue<Object>> keys = new ArrayList<NamedValue<Object>>();
+		
 		for(Entry<String, Object> entry : map.entrySet()){
 			String name = entry.getKey();
 
@@ -67,8 +74,10 @@ public class JsonEntityReader extends ODataJsonReader<ODataEntity> {
 				EdmType type = p.getType();
 				if(type.isSimple()){
 					if(entityType.getKeys().toSet().contains(name)) {
-						builder.setKey(new ODataKeyImpl(value));
-					} else builder.addProperty(name,JsonReaderUtils.readValue(type.asSimple(),value));
+						NamedValue<Object> keyNamedValue = new MutableNamedEntry<Object>(name, value);
+						keys.add(keyNamedValue);
+					}
+					builder.addProperty(name,JsonReaderUtils.readValue(type.asSimple(),value));
 				}else{
 					throw ODataErrors.notImplemented("complex type not implemented");
 				}
@@ -90,6 +99,19 @@ public class JsonEntityReader extends ODataJsonReader<ODataEntity> {
 			if(Strings.equals(name, "odata.type")) continue;
 			
 			throw ODataErrors.badRequest("Unknow property '{0}'",name);
+		}
+		
+		// handle key(s).
+		if(!Collections.isEmpty(keys)) {
+			ODataKey oDataKey = null;
+			if(keys.size() == 1) {
+				// single key
+				oDataKey = new ODataKeyImpl(keys.get(0).getValue());
+			} else {
+				// multi keys
+				oDataKey = new ODataKeyImpl(keys);
+			}
+			builder.setKey(oDataKey);
 		}
 		
 		return builder.build();
