@@ -5,6 +5,7 @@ import bingo.lang.logging.LogFactory;
 import bingo.odata.ODataServices;
 import bingo.odata.consumer.ODataConsumer;
 import bingo.odata.consumer.ODataConsumerContext;
+import bingo.odata.consumer.ODataConsumerImpl;
 import bingo.odata.consumer.exceptions.ConnectFailedException;
 import bingo.odata.consumer.requests.MetadataRequest;
 import bingo.odata.consumer.requests.Request;
@@ -32,7 +33,7 @@ public class RetrieveServiceMetadataHandler extends BaseHandler {
 			
 			if(null != services) {
 				this.services = services;
-				this.consumer.services(services);
+				((ODataConsumerImpl)this.consumer).services(services);
 				this.verifier = new ODataMetadataVerifier(services);
 			}
 			

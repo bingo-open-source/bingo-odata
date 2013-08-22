@@ -22,11 +22,11 @@ public class BaseHandler {
 		this.consumer = consumer;
 		this.services = services;
 		this.verifier = verifier;
-		this.config = consumer.config();
+		this.config = consumer.getConfig();
 	}
 	
 	protected BaseHandler(ODataConsumer consumer) {
 		this.consumer = consumer;
-		this.config = consumer.config();
+		this.config = consumer.getConfig();
 	}
 }

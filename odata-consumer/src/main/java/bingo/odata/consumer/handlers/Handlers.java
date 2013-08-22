@@ -15,7 +15,7 @@ public class Handlers {
 
 	@SuppressWarnings("unchecked")
 	public static <T extends BaseHandler> T get(Class<T> clazz, ODataConsumer consumer) {
-		String keyString = generateKey(consumer.config().getProducerUrl(), clazz.getSimpleName()); 
+		String keyString = generateKey(consumer.getConfig().getProducerUrl(), clazz.getSimpleName()); 
 		
 		Object valueObject = handlers.get(keyString);
 		
@@ -23,8 +23,8 @@ public class Handlers {
 			try {
 				Constructor<T> constructor = clazz.getDeclaredConstructor(ODataConsumer.class, 
 												ODataServices.class, ODataMetadataVerifier.class);
-				T t = constructor.newInstance(consumer, consumer.cachedGetServiceMetadata(), 
-												new ODataMetadataVerifier(consumer.cachedGetServiceMetadata()));
+				T t = constructor.newInstance(consumer, consumer.getServiceMetadata(), 
+												new ODataMetadataVerifier(consumer.getServiceMetadata()));
 				handlers.put(keyString, t);
 				return t;
 			} catch (Exception e) {
