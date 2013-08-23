@@ -165,21 +165,25 @@ public class ODataConsumerImpl implements ODataConsumer {
 	}
 
 	
-	public int insertEntity(EdmEntityType entityType, ODataEntity entity) {
-		return insertEntityByMap(entityType.getName(), entity.toMap());
+	public ODataEntity insertEntity(EdmEntityType entityType, ODataEntity entity) {
+		Map<String, Object> properties = insertEntityByMap(entityType.getName(), entity.toMap());
+		EdmEntitySet entitySet = getServiceMetadata().findEntitySet(entityType);
+		ODataEntity returnEntity = new ODataEntityBuilder(entitySet, entityType)
+									.addProperties(properties).build();
+		return returnEntity;
 	}
 	
-	public int insertEntityByObj(String entityType, Object object) {
+	public Map<String, Object> insertEntityByObj(String entityType, Object object) {
 		return insertEntityByMap(entityType, JSON.decodeToMap(JSON.encode(object)));
 	}
 
-	public int insertEntityByMap(String entityType, Map<String, Object> object) {
+	public Map<String, Object> insertEntityByMap(String entityType, Map<String, Object> object) {
 		return Handlers.get(InsertEntityHandler.class, consumerWithMetadata())
 					.insertEntityByMap(entityType, object);
 	}
 	
 	@SuppressWarnings("unchecked")
-	public int insert(String entityName, Object entity) {
+	public Map<String, Object> insert(String entityName, Object entity) {
 		Assert.notBlank(entityName);
 		Assert.notNull(entity);
 		if(entity instanceof Map) {
@@ -189,36 +193,36 @@ public class ODataConsumerImpl implements ODataConsumer {
 		}
 	}
 	
-	public int	insert(ODataEntity entity) {
+	public ODataEntity insert(ODataEntity entity) {
 		return insertEntity(entity.getEntityType(), entity);
 	}
 
 	/**
 	 * send a delete certain id entity command to producer. 
 	 */
-	public int delete(String entityName, Object key) {
+	public boolean delete(String entityName, Object key) {
 		return Handlers.get(DeleteEntityHandler.class, consumerWithMetadata()).deleteEntity(entityName, key);
 	}
 
-	public int delete(EdmEntityType entityType, ODataKey key) {
+	public boolean delete(EdmEntityType entityType, ODataKey key) {
 		return delete(entityType.getName(), key.toKeyString(false));
 	}
 
-	public int update(ODataEntity entity) {
+	public boolean update(ODataEntity entity) {
 		return updateEntityByMap(entity.getEntityType().getName(), 
 				entity.getKey().toKeyString(false), entity.toMap());
 	}
 
-	public int updateEntityByMap(String entityType, Object key, Map<String, Object> updateFields) {
+	public boolean updateEntityByMap(String entityType, Object key, Map<String, Object> updateFields) {
 		return Handlers.get(UpdateEntityHandler.class, consumerWithMetadata())
 				.updateEntity(entityType, key, updateFields);
 	}
 
-	public int updateEntityByObj(String entityType, Object key, Object updateObject) {
+	public boolean updateEntityByObj(String entityType, Object key, Object updateObject) {
 		return updateEntityByMap(entityType, key, JSON.decodeToMap(JSON.encode(updateObject)));
 	}
 	
-	public int update(String entityName, Object key, Object updateEntity) {
+	public boolean update(String entityName, Object key, Object updateEntity) {
 		Assert.notBlank(entityName);
 		Assert.notNull(key);
 		Assert.notNull(updateEntity);

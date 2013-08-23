@@ -73,33 +73,33 @@ public class ODataConsumerImplTest extends TestWithServerRunning {
 		EdmEntitySet entitySet = consumer.getServiceMetadata().findEntitySet("Products");
 		EdmEntityType entityType = consumer.getServiceMetadata().findEntityType("Product");
 		ODataEntity obj = new ODataEntityBuilder(entitySet, entityType).addProperties(product).build();
-		int result = consumer.insert(obj);
-		assertEquals(1, result);
+		ODataEntity result = consumer.insert(obj);
+		assertNotNull(result);
 		
-		result = consumer.insert("Product", product);
-		assertEquals(1, result);
+		Map<String, Object> result1 = consumer.insert("Product", product);
+		assertNotNull(result1);
 	}
 
 	@Test
 	public void testDeleteEntity() {
-		int result = consumer.delete("Product", "123456");
-		assertEquals(1, result);
+		boolean result = consumer.delete("Product", "123456");
+		assertEquals(true, result);
 	}
 
 	@Test
 	public void testDeleteEntity_usingOdataModel() {
 		EdmEntitySet entitySet = consumer.getServiceMetadata().findEntitySet("Products");
 		EdmEntityType entityType = consumer.getServiceMetadata().findEntityType("Product");
-		int result = consumer.delete(entityType, new ODataKeyImpl("123456"));
-		assertEquals(1, result);
+		boolean result = consumer.delete(entityType, new ODataKeyImpl("123456"));
+		assertEquals(true, result);
 	}
 	
 	@Test
 	public void testUpdateEntity() {
 		Map<String, Object> fields = new HashMap<String, Object>();
 		fields.put("Name", "new name here");
-		int result = consumer.update("Product", 0, fields);
-		assertEquals(1, result);
+		boolean result = consumer.update("Product", 0, fields);
+		assertEquals(true, result);
 	}
 
 //	@Test PATCH method not supported!

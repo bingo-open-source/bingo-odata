@@ -19,7 +19,7 @@ public class UpdateEntityHandler extends BaseHandler {
 		super(consumer, services, verifier);
 	}
 	
-	public int updateEntity(String entityType, Object key, Map<String, Object> updateFields) {
+	public boolean updateEntity(String entityType, Object key, Map<String, Object> updateFields) {
 		
 		if(config.isVerifyMetadata()) verifier.hasFields(entityType, updateFields);
 		
@@ -33,7 +33,7 @@ public class UpdateEntityHandler extends BaseHandler {
 		Response response = request.send();
 		
 		if(response.getStatus() == ODataResponseStatus.NoContent) {
-			return 1;
+			return true;
 		} else {
 			throw response.convertToError(context);
 		}

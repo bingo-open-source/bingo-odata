@@ -20,7 +20,7 @@ public class InsertEntityHandler extends BaseHandler{
 		super(consumer, services, verifier);
 	}
 	
-	public int insertEntityByMap(String entityType, Map<String, Object> object) {
+	public Map<String, Object> insertEntityByMap(String entityType, Map<String, Object> object) {
 		
 		if(config.isVerifyMetadata()) verifier.hasFields(entityType, object);
 		
@@ -33,7 +33,7 @@ public class InsertEntityHandler extends BaseHandler{
 		Response response = request.send();
 		
 		if(response.getStatus() == ODataResponseStatus.Created) {
-			return 1;
+			return response.convertToEntity(context).toMap();
 		} else {
 			throw response.convertToError(context);
 		}

@@ -340,19 +340,19 @@ public interface ODataConsumer {
 	ODataServices 				getServiceMetadata(boolean forceRefresh);
 	
 	// create
-	int 						insert(String entityName, Object entity);
+	Map<String, Object>			insert(String entityName, Object entity);
 	
-	int 						insert(ODataEntity entity);
+	ODataEntity					insert(ODataEntity entity);
 	
 	// delete
-	int 						delete(String entityName, Object key);
+	boolean						delete(String entityName, Object key);
 	
-	int 						delete(EdmEntityType entityType, ODataKey key);
+	boolean						delete(EdmEntityType entityType, ODataKey key);
 	
 	// update
-	int 						update(String entityName, Object key, Object updateEntity);
+	boolean						update(String entityName, Object key, Object updateEntity);
 	
-	int 						update(ODataEntity entity);
+	boolean						update(ODataEntity entity);
 	
 	// query
 	EntityQuery			 		query(String entityName);

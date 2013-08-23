@@ -17,7 +17,7 @@ public class DeleteEntityHandler extends BaseHandler {
 		super(consumer, services, verifier);
 	}
 	
-	public int deleteEntity(String entityType, Object key) {
+	public boolean deleteEntity(String entityType, Object key) {
 		
 		if(config.isVerifyMetadata()) verifier.hasEntityType(entityType);
 		
@@ -31,7 +31,7 @@ public class DeleteEntityHandler extends BaseHandler {
 		Response response = request.send();
 		
 		if(response.getStatus() == ODataResponseStatus.OK) {
-			return 1;
+			return true;
 		} else {
 			throw response.convertToError(context);
 		}
