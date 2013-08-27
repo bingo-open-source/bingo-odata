@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import bingo.lang.Collections;
@@ -159,14 +160,8 @@ public class ODataQueryInfoParser {
 		} else return null;
 	}
 	
-	public static String toParamsString(Map<String, String> paramMap) {
-		if(null == paramMap || paramMap.size() == 0) return null;
-		StringBuilder str = new StringBuilder();
-		for (String key : paramMap.keySet()) {
-			String value = paramMap.get(key);
-			str.append(key + "=" + value + "&");
-		}
-		return str.substring(0, str.length() - 1);
+	public static String toParamString(Entry<String, String> entry) {
+		return entry.getKey() + "=" + entry.getValue();
 	}
 	
 	public static String toQueryString(ODataQueryInfo queryInfo) {
@@ -180,7 +175,11 @@ public class ODataQueryInfoParser {
 		set.add(toOrderByString(queryInfo.getOrderBy()));
 		set.add(toSkipTokenString(queryInfo.getSkipToken()));
 		set.add(toTopString(queryInfo.getTop()));
-		set.add(toParamsString(queryInfo.getParams()));
+		if(null != queryInfo.getParams()) {
+			for (Entry<String, String> entry : queryInfo.getParams().entrySet()) {
+				set.add(toParamString(entry));
+			}
+		}
 		set.remove(null);
 		return Strings.join(set, "&");
 	}
