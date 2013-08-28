@@ -167,7 +167,9 @@ public class Request {
 		
 		httpRequest = buildRequest(requestFactory);
 		
-//		httpRequest.setConnectTimeout(500000);
+		if(null != context.getConnectTimeout()) {
+			httpRequest.setConnectTimeout(context.getConnectTimeout());
+		}
 		
 		handleBehaviors(httpRequest);
 		

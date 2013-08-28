@@ -34,6 +34,7 @@ public class ODataConsumerConfigImpl implements ODataConsumerConfig {
 	protected boolean       	autoDetectFormat 			= false;
 	protected boolean			verifyMetadata 				= true;
 	private List<Behavior> 		behaviors 					= new ArrayList<Behavior>();
+	private Integer				connectTimeout				= null;
 	
 	public ODataProtocol getProtocol() {
 		return protocol;
@@ -104,6 +105,15 @@ public class ODataConsumerConfigImpl implements ODataConsumerConfig {
 	
 	public ODataConsumerConfig setProducerUrl(String producerUrl) {
 		this.producerUrl = producerUrl;
+		return this;
+	}
+
+	public Integer getConnectTimeout() {
+		return connectTimeout;
+	}
+	
+	public ODataConsumerConfig setConnectTimeout(Integer millis) {
+		this.connectTimeout = millis;
 		return this;
 	}
 	

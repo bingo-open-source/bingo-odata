@@ -47,4 +47,6 @@ public interface ODataConsumerConfig {
 	ODataConsumerConfig		setLogPrintHttpMessageBody(boolean isLogPrintHttpMessageBody);
 	
 	boolean 				isAutoDetectFormat();
+	
+	Integer					getConnectTimeout();
 }
