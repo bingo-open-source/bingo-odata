@@ -40,6 +40,7 @@ import bingo.odata.model.ODataKeyImpl;
 
 public class JsonEntityReader extends ODataJsonReader<ODataEntity> {
 
+	@SuppressWarnings("unchecked")
 	@Override
     protected ODataEntity read(ODataReaderContext context, JSONObject json) {
 		if(json.isNull() || json.isArray()){
@@ -68,8 +69,6 @@ public class JsonEntityReader extends ODataJsonReader<ODataEntity> {
 			
 			if(null != p){
 				Object value = entry.getValue();
-				
-				//TODO : support ComplexType
 				
 				EdmType type = p.getType();
 				if(type.isSimple()){

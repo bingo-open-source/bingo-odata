@@ -7,7 +7,6 @@ import bingo.lang.Collections;
 import bingo.lang.Maps;
 import bingo.lang.json.JSON;
 import bingo.lang.json.JSONObject;
-import bingo.meta.edm.EdmEntityType;
 import bingo.odata.ODataErrors;
 import bingo.odata.ODataReaderContext;
 import bingo.odata.format.ODataJsonReader;
@@ -17,6 +16,7 @@ import bingo.odata.model.ODataEntitySetBuilder;
 
 public class JsonEntitySetReader extends ODataJsonReader<ODataEntitySet> {
 
+	@SuppressWarnings("unchecked")
 	@Override
 	protected ODataEntitySet read(ODataReaderContext context, JSONObject json) {
 		if(json.isNull() || json.isArray()){
@@ -24,7 +24,6 @@ public class JsonEntitySetReader extends ODataJsonReader<ODataEntitySet> {
 		}
 		
 		ODataEntitySetBuilder builder = new ODataEntitySetBuilder(context.getEntitySet(), context.getEntityType());
-		EdmEntityType entityType = context.getEntityType();
 
 		Map<String,Object> map = json.map();
 		List<Map<String, Object>> list = null;

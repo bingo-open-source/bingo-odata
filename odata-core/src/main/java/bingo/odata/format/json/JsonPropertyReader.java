@@ -6,16 +6,15 @@ import bingo.lang.Maps;
 import bingo.lang.json.JSONObject;
 import bingo.meta.edm.EdmEntityType;
 import bingo.meta.edm.EdmProperty;
-import bingo.odata.ODataError;
 import bingo.odata.ODataErrors;
 import bingo.odata.ODataReaderContext;
 import bingo.odata.format.ODataJsonReader;
 import bingo.odata.model.ODataProperty;
-import bingo.odata.model.ODataPropertyBuilder;
 import bingo.odata.model.ODataPropertyImpl;
 
 public class JsonPropertyReader extends ODataJsonReader<ODataProperty> {
 
+	@SuppressWarnings("unchecked")
 	@Override
 	protected ODataProperty read(ODataReaderContext context, JSONObject json) {
 		if(json.isNull() || json.isArray()){

@@ -1,7 +1,5 @@
 package bingo.odata.expression;
 
-import static org.junit.Assert.*;
-
 import org.junit.Test;
 
 public class ExpressionsTest {
@@ -14,6 +12,5 @@ public class ExpressionsTest {
 		ex.visit(visitor);
 		System.out.println(visitor.toString());
 	}
-
 
 }

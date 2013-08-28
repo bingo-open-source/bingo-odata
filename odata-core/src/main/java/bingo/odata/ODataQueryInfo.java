@@ -18,7 +18,6 @@ package bingo.odata;
 import java.util.List;
 import java.util.Map;
 
-import bingo.lang.Collections;
 import bingo.lang.Immutables;
 import bingo.odata.expression.BoolExpression;
 import bingo.odata.expression.EntitySimpleProperty;

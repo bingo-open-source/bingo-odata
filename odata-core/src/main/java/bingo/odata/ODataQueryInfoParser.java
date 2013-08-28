@@ -15,11 +15,9 @@
  */
 package bingo.odata;
 
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
@@ -27,13 +25,12 @@ import bingo.lang.Collections;
 import bingo.lang.Enums;
 import bingo.lang.Strings;
 import bingo.odata.expression.BoolExpression;
-import bingo.odata.expression.Expression;
 import bingo.odata.expression.EntitySimpleProperty;
+import bingo.odata.expression.Expression;
 import bingo.odata.expression.ExpressionParser;
 import bingo.odata.expression.FilterExpressionVisitor;
 import bingo.odata.expression.OrderByExpression;
 import bingo.odata.expression.OrderByExpression.Direction;
-import bingo.odata.expression.PrintExpressionVisitor;
 
 public class ODataQueryInfoParser {
 	
