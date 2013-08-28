@@ -100,7 +100,7 @@ public class FunctionRequest extends Request{
 	@Override
 	protected HttpContent generateContent() {
 		if(getMethod().equals(HttpMethods.POST)) {
-			String json = JSON.encode(getQualifiedFuncParams(), true);
+			String json = JSON.encode(getQualifiedFuncParamsForPost(), true);
 			HttpContent content = ByteArrayContent.fromString(ContentTypes.APPLICATION_JSON_UTF8, json);
 			return content;
 		}
@@ -108,11 +108,11 @@ public class FunctionRequest extends Request{
 	}
 
 	private void prepareFuncParams() {
-		Map<String, String> qualifiedFuncParams = getQualifiedFuncParams();
+		Map<String, String> qualifiedFuncParams = getQualifiedFuncParamsForGet();
 		this.addParameters(qualifiedFuncParams);
 	}
 
-	private Map<String, String> getQualifiedFuncParams() {
+	private Map<String, String> getQualifiedFuncParamsForGet() {
 		Map<String, String> qualifiedFuncParams = new LinkedHashMap<String, String>();
 		if(null != funcParams) {
 			for (String key : funcParams.keySet()) {
@@ -121,15 +121,34 @@ public class FunctionRequest extends Request{
 				// TODO maybe need to do some url-format convert for some Type, like Date.
 				String valueString = null;
 				if(valueObject instanceof Date) {
-					if(Strings.equals(getMethod(), HttpMethods.GET))
-						valueString = InternalTypeUtils.formatDateTime((Date) valueObject);
-					else
-						valueString = JsonWriterUtils.formatDateTimeForJson((Date) valueObject);
+					valueString = InternalTypeUtils.formatDateTime((Date) valueObject);
 				} else {
 					valueString = Objects.toString(valueObject);
 				}
 				
 				qualifiedFuncParams.put(key, valueString);
+			}
+		}
+		return qualifiedFuncParams;
+	}
+	
+	private Map<String, Object> getQualifiedFuncParamsForPost() {
+		Map<String, Object> qualifiedFuncParams = new LinkedHashMap<String, Object>();
+		if(null != funcParams) {
+			for (String key : funcParams.keySet()) {
+				Object valueObject = funcParams.get(key);
+				if(null == valueObject) continue;
+				// TODO maybe need to do some url-format convert for some Type, like Date.
+				Object value = null;
+				if(valueObject instanceof Date) {
+					value = JsonWriterUtils.formatDateTimeForJson((Date) valueObject);
+				} else if(valueObject.getClass().isPrimitive()) {
+					value = Objects.toString(valueObject);
+				} else {
+					value = valueObject;
+				}
+				
+				qualifiedFuncParams.put(key, value);
 			}
 		}
 		return qualifiedFuncParams;

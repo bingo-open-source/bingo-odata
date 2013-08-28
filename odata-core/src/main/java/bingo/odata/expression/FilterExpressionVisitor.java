@@ -133,7 +133,7 @@ public class FilterExpressionVisitor implements ExpressionVisitor {
 	}
 
 	public boolean visit(AndExpression expr) {
-		throw new UnsupportedOperationException();
+		return visitTmpl2(expr, " and ");
 	}
 
 	public boolean visit(CastExpression expr) {
@@ -162,6 +162,15 @@ public class FilterExpressionVisitor implements ExpressionVisitor {
 	}
 
 	private boolean visitTmpl(BinaryExpression expr, String op) {
+		FilterExpressionVisitor visitorLeft = new FilterExpressionVisitor();
+		FilterExpressionVisitor visitorRight = new FilterExpressionVisitor();
+		expr.getLHS().visit(visitorLeft);
+		expr.getRHS().visit(visitorRight);
+		push(visitorLeft.toString() + op + visitorRight.toString());
+		return false;
+	}
+	
+	private boolean visitTmpl2(BinaryBoolExpression expr, String op) {
 		FilterExpressionVisitor visitorLeft = new FilterExpressionVisitor();
 		FilterExpressionVisitor visitorRight = new FilterExpressionVisitor();
 		expr.getLHS().visit(visitorLeft);
@@ -215,7 +224,10 @@ public class FilterExpressionVisitor implements ExpressionVisitor {
 	}
 
 	public boolean visit(NotExpression expr) {
-		throw new UnsupportedOperationException();
+		FilterExpressionVisitor visitor = new FilterExpressionVisitor();
+		expr.getExpression().visit(visitor);
+		push("not " + visitor.toString());
+		return false;
 	}
 
 	public boolean visit(OrExpression expr) {
@@ -227,7 +239,10 @@ public class FilterExpressionVisitor implements ExpressionVisitor {
 	}
 
 	public boolean visit(BoolParenExpression expr) {
-		throw new UnsupportedOperationException();
+		FilterExpressionVisitor visitor = new FilterExpressionVisitor();
+		expr.getExpression().visit(visitor);
+		push("(" + visitor.toString() + ") ");
+		return false;
 	}
 
 	public boolean visit(ReplaceMethodCallExpression expr) {
