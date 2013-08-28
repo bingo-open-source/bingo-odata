@@ -7,7 +7,6 @@ import bingo.lang.Strings;
 import bingo.lang.json.JSON;
 import bingo.meta.edm.EdmEntityType;
 import bingo.meta.edm.EdmNavigationProperty;
-import bingo.meta.edm.EdmProperty;
 import bingo.odata.ODataResponseStatus;
 import bingo.odata.ODataServices;
 import bingo.odata.consumer.ODataConsumer;
@@ -20,7 +19,6 @@ import bingo.odata.consumer.util.ODataConvertor;
 import bingo.odata.consumer.util.ODataMetadataVerifier;
 import bingo.odata.model.ODataKey;
 import bingo.odata.model.ODataNavigationProperty;
-import bingo.odata.model.ODataProperty;
 
 public class FindNavigationPropertyHandler extends BaseHandler {
 

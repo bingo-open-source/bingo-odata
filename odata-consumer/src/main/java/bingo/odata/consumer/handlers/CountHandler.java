@@ -1,7 +1,5 @@
 package bingo.odata.consumer.handlers;
 
-import java.util.Map;
-
 import bingo.lang.Strings;
 import bingo.meta.edm.EdmEntitySet;
 import bingo.odata.ODataQueryInfo;

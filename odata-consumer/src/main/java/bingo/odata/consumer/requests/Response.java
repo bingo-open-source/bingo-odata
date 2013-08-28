@@ -1,49 +1,33 @@
 package bingo.odata.consumer.requests;
 
 import java.io.ByteArrayInputStream;
-import java.io.CharArrayReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import bingo.lang.Assert;
 import bingo.lang.Converts;
-import bingo.lang.Enumerables;
-import bingo.lang.Enums;
-import bingo.lang.Func1;
 import bingo.lang.Maps;
 import bingo.lang.Strings;
 import bingo.lang.convert.InputStreamConverter;
-import bingo.lang.exceptions.NotImplementedException;
-import bingo.lang.http.HttpContentTypes;
+import bingo.lang.exceptions.UnsupportedException;
 import bingo.lang.json.JSON;
 import bingo.lang.json.JSONObject;
-import bingo.meta.edm.EdmSimpleType;
 import bingo.meta.edm.EdmType;
 import bingo.meta.edm.EdmTypeKind;
-import bingo.odata.ODataConverts;
 import bingo.odata.ODataError;
-import bingo.odata.ODataObjectKind;
-import bingo.odata.ODataReader;
-import bingo.odata.ODataReaderContext;
-import bingo.odata.ODataConstants.ContentTypes;
 import bingo.odata.consumer.ODataConsumerContext;
 import bingo.odata.consumer.exceptions.ResolveFailedException;
 import bingo.odata.consumer.ext.ODataDateConvertor;
 import bingo.odata.consumer.util.ODataConvertor;
 import bingo.odata.consumer.util.OdataJudger;
-import bingo.odata.model.ODataComplexObject;
 import bingo.odata.model.ODataEntity;
-import bingo.odata.model.ODataEntityBuilder;
 import bingo.odata.model.ODataEntitySet;
 import bingo.odata.model.ODataNamedValue;
 import bingo.odata.model.ODataNavigationProperty;
 import bingo.odata.model.ODataProperty;
-import bingo.odata.model.ODataRawValue;
 import bingo.odata.model.ODataRawValueImpl;
 import bingo.odata.model.ODataValue;
 import bingo.odata.model.ODataValueBuilder;
@@ -132,6 +116,7 @@ public class Response {
 			String jsonString = this.getString(), funcName = context.getFunctionImport().getName();
 			Object object = extractValueFromFunctionResponse(jsonString, funcName);
 			if(object instanceof Map) {
+				@SuppressWarnings("unchecked")
 				Map<String, Object> jsonMap = (Map<String, Object>) object;
 				if(edmType.isEntity() || edmType.isEntityRef()) {
 					// normal entity return type.
@@ -150,6 +135,7 @@ public class Response {
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	public static Object extractValueFromFunctionResponse(String jsonString, String funcName) {
 		Assert.notBlank(jsonString);
 		Assert.notBlank(funcName);
@@ -178,9 +164,11 @@ public class Response {
 		}
 		throw new ResolveFailedException("Return Type");
 	}	
+	@SuppressWarnings("unchecked")
 	public static Map<String, Object> extractValueFromFunctionResponseForMap(String jsonString, String funcName) {
 		return (Map<String, Object>) extractValueFromFunctionResponse(jsonString, funcName);
 	}	
+	@SuppressWarnings("unchecked")
 	public static List<Map<String, Object>> extractValueFromFunctionResponseForList(String jsonString, String funcName) {
 		return (List<Map<String, Object>>) extractValueFromFunctionResponse(jsonString, funcName);
 	}
@@ -233,9 +221,9 @@ public class Response {
 			} else if(edmType.isEntity() || edmType.isEntityRef()) {
 				builder.entity(this.convertToEntity(context));
 			} else if(edmType.isComplex()) {
-				// TODO 
+				throw new UnsupportedException();
 			} else if(edmType.isSimple()) {
-				// TODO
+				throw new UnsupportedException();
 			}
 		} catch (Throwable e) {
 			throw new ResolveFailedException(e);

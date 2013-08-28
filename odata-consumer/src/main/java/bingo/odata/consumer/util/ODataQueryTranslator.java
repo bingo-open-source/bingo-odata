@@ -54,6 +54,7 @@ public class ODataQueryTranslator {
 	
 	private static String replaceHolder(String resolvedString, Object paramObj) {
 		if(paramObj instanceof Map) {
+			@SuppressWarnings("unchecked")
 			Map<String, Object> params = (Map<String, Object>) paramObj;
 			if(null != params) {
 				for (String key : params.keySet()) {

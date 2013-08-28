@@ -17,14 +17,13 @@ package bingo.odata.consumer.requests;
 
 import java.util.Map;
 
+import bingo.lang.json.JSON;
+import bingo.odata.consumer.ODataConsumerContext;
+
 import com.google.api.client.http.ByteArrayContent;
 import com.google.api.client.http.GenericUrl;
 import com.google.api.client.http.HttpContent;
 import com.google.api.client.http.HttpMethods;
-import com.google.api.client.http.UrlEncodedContent;
-
-import bingo.lang.json.JSON;
-import bingo.odata.consumer.ODataConsumerContext;
 
 
 public class InsertEntityRequest extends Request {

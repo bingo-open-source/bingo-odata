@@ -15,11 +15,6 @@
  */
 package bingo.odata.consumer;
 
-import static bingo.odata.consumer.util.ODataConsumerContextHelper.initEntitySetContext;
-import static bingo.odata.consumer.util.ODataConsumerContextHelper.initEntityTypeContext;
-
-import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -28,26 +23,13 @@ import bingo.lang.Collections;
 import bingo.lang.Converts;
 import bingo.lang.Strings;
 import bingo.lang.json.JSON;
-import bingo.lang.logging.Log;
-import bingo.lang.logging.LogFactory;
-import bingo.meta.edm.EdmCollectionType;
 import bingo.meta.edm.EdmEntitySet;
 import bingo.meta.edm.EdmEntityType;
 import bingo.meta.edm.EdmFunctionImport;
 import bingo.meta.edm.EdmNavigationProperty;
 import bingo.meta.edm.EdmProperty;
-import bingo.meta.edm.EdmSimpleType;
-import bingo.meta.edm.EdmType;
-import bingo.odata.ODataConverts;
-import bingo.odata.ODataObjectKind;
 import bingo.odata.ODataQueryInfo;
-import bingo.odata.ODataQueryInfoParser;
-import bingo.odata.ODataReader;
-import bingo.odata.ODataReaderContext;
-import bingo.odata.ODataResponseStatus;
 import bingo.odata.ODataServices;
-import bingo.odata.consumer.exceptions.ConnectFailedException;
-import bingo.odata.consumer.exceptions.ResolveFailedException;
 import bingo.odata.consumer.ext.Page;
 import bingo.odata.consumer.handlers.CountHandler;
 import bingo.odata.consumer.handlers.DeleteEntityHandler;
@@ -61,19 +43,6 @@ import bingo.odata.consumer.handlers.InvokeFunctionHandler;
 import bingo.odata.consumer.handlers.MergeEntityHandler;
 import bingo.odata.consumer.handlers.RetrieveServiceMetadataHandler;
 import bingo.odata.consumer.handlers.UpdateEntityHandler;
-import bingo.odata.consumer.requests.DeleteEntityRequest;
-import bingo.odata.consumer.requests.FindNavigationPropertyRequest;
-import bingo.odata.consumer.requests.FunctionRequest;
-import bingo.odata.consumer.requests.InsertEntityRequest;
-import bingo.odata.consumer.requests.MergeEntityRequest;
-import bingo.odata.consumer.requests.MetadataRequest;
-import bingo.odata.consumer.requests.Request;
-import bingo.odata.consumer.requests.Response;
-import bingo.odata.consumer.requests.CountRequest;
-import bingo.odata.consumer.requests.FindEntityRequest;
-import bingo.odata.consumer.requests.FindEntitySetRequest;
-import bingo.odata.consumer.requests.FindPropertyRequest;
-import bingo.odata.consumer.requests.UpdateEntityRequest;
 import bingo.odata.consumer.requests.behaviors.Behavior;
 import bingo.odata.consumer.requests.builders.EntityQuery;
 import bingo.odata.consumer.requests.builders.EntityQueryImpl;
@@ -81,12 +50,6 @@ import bingo.odata.consumer.requests.builders.FunctionInvoker;
 import bingo.odata.consumer.requests.builders.FunctionInvokerImpl;
 import bingo.odata.consumer.util.ODataConsumerContextHelper;
 import bingo.odata.consumer.util.ODataConvertor;
-import bingo.odata.consumer.util.ODataMetadataVerifier;
-import bingo.odata.consumer.util.ODataQueryTranslator;
-import bingo.odata.exceptions.ODataNotImplementedException;
-import bingo.odata.expression.BoolExpression;
-import bingo.odata.expression.EntitySimpleProperty;
-import bingo.odata.expression.OrderByExpression;
 import bingo.odata.model.ODataEntity;
 import bingo.odata.model.ODataEntityBuilder;
 import bingo.odata.model.ODataEntitySet;
@@ -222,6 +185,7 @@ public class ODataConsumerImpl implements ODataConsumer {
 		return updateEntityByMap(entityType, key, JSON.decodeToMap(JSON.encode(updateObject)));
 	}
 	
+	@SuppressWarnings("unchecked")
 	public boolean update(String entityName, Object key, Object updateEntity) {
 		Assert.notBlank(entityName);
 		Assert.notNull(key);

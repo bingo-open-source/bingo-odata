@@ -6,7 +6,6 @@ import bingo.lang.Converts;
 import bingo.lang.Strings;
 import bingo.lang.json.JSON;
 import bingo.meta.edm.EdmEntityType;
-import bingo.meta.edm.EdmNavigationProperty;
 import bingo.meta.edm.EdmProperty;
 import bingo.odata.ODataResponseStatus;
 import bingo.odata.ODataServices;

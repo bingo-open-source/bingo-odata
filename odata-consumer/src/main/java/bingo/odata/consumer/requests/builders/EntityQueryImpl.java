@@ -8,11 +8,8 @@ import java.util.Map;
 
 import bingo.lang.Assert;
 import bingo.lang.Collections;
-import bingo.lang.New;
 import bingo.meta.edm.EdmEntitySet;
 import bingo.meta.edm.EdmEntityType;
-import bingo.odata.consumer.ODataConsumer;
-import bingo.odata.consumer.ODataConsumerConfigImpl;
 import bingo.odata.consumer.ODataConsumerImpl;
 import bingo.odata.consumer.exceptions.UnexpectedResultException;
 import bingo.odata.consumer.ext.OrderByDirection;

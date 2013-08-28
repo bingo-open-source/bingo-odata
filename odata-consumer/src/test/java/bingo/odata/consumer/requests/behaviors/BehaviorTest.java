@@ -1,24 +1,16 @@
 package bingo.odata.consumer.requests.behaviors;
 
-import static org.junit.Assert.*;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import com.google.api.client.http.HttpRequest;
-
-import bingo.lang.Arrays;
-import bingo.lang.Collections;
-import bingo.lang.Strings;
-import bingo.lang.enumerable.ArrayEnumerable;
 import bingo.odata.consumer.ODataConsumer;
 import bingo.odata.consumer.ODataConsumerImpl;
 import bingo.odata.consumer.test.TestResource;
 import bingo.odata.consumer.test.TestWithServerRunning;
+
+import com.google.api.client.http.HttpRequest;
 
 public class BehaviorTest extends TestWithServerRunning {
 	
@@ -26,6 +18,7 @@ public class BehaviorTest extends TestWithServerRunning {
 	@Test
 	public void testBehaviorDoExecute() {
 		execute = false;
+		@SuppressWarnings("unused")
 		ODataConsumer consumer = new ODataConsumerImpl(TestResource.serviceUrls.get("local"), new Behavior() {
 			public HttpRequest transform(HttpRequest request) {
 				execute = true;
@@ -39,6 +32,7 @@ public class BehaviorTest extends TestWithServerRunning {
 	@Test
 	public void testBehaviorOrder() {
 		order = 0;
+		@SuppressWarnings("unused")
 		ODataConsumer consumer = new ODataConsumerImpl(TestResource.serviceUrls.get("local")
 		, new Behavior() {
 			public HttpRequest transform(HttpRequest request) {

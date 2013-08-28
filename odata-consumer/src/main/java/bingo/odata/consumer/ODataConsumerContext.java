@@ -15,7 +15,6 @@
  */
 package bingo.odata.consumer;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import bingo.lang.Assert;

@@ -4,10 +4,7 @@ import static bingo.odata.ODataConstants.Headers.DATA_SERVICE_VERSION;
 import static bingo.odata.ODataConstants.Headers.MAX_DATA_SERVICE_VERSION;
 import static bingo.odata.ODataConstants.Headers.MIN_DATA_SERVICE_VERSION;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.StringReader;
-import java.net.ConnectException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,12 +24,10 @@ import bingo.odata.consumer.requests.behaviors.Behavior;
 import com.google.api.client.http.ByteArrayContent;
 import com.google.api.client.http.GenericUrl;
 import com.google.api.client.http.HttpContent;
-import com.google.api.client.http.HttpEncoding;
 import com.google.api.client.http.HttpHeaders;
 import com.google.api.client.http.HttpMethods;
 import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpRequestFactory;
-import com.google.api.client.http.HttpResponseException;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 
@@ -136,14 +131,14 @@ public class Request {
 			}
 			queryString = builder.substring(0, builder.length() - 1);
 		}
-		queryString = this.addQueryString(queryString, additionalQueryString);
+		queryString = addQueryString(queryString, additionalQueryString);
 		
 		if(Strings.isNotBlank(queryString)) queryString = queryString.replaceAll(" ", "%20");
 		return queryString;
 	}
 	
 	public Request addAdditionalQueryString(String queryString) {
-		additionalQueryString = this.addQueryString(this.additionalQueryString, queryString);
+		additionalQueryString = addQueryString(this.additionalQueryString, queryString);
 		return this;
 	}
 

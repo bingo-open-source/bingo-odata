@@ -8,7 +8,6 @@ import bingo.lang.Strings;
 import bingo.lang.convert.AbstractDateConverter;
 import bingo.lang.convert.Converter;
 import bingo.lang.convert.DateTimeConverters;
-import bingo.odata.ODataConverts;
 import bingo.odata.utils.InternalTypeUtils;
 
 public class ODataDateConvertor extends AbstractDateConverter<Date> implements Converter<Date> {

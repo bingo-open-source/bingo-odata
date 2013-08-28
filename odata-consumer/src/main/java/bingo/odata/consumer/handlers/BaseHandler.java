@@ -1,7 +1,6 @@
 package bingo.odata.consumer.handlers;
 
 import bingo.lang.Assert;
-import bingo.lang.Strings;
 import bingo.odata.ODataServices;
 import bingo.odata.consumer.ODataConsumer;
 import bingo.odata.consumer.ODataConsumerConfig;

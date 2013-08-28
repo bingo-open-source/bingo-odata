@@ -16,7 +16,6 @@
 package bingo.odata.consumer.requests;
 
 import bingo.lang.Assert;
-import bingo.odata.ODataConstants;
 import bingo.odata.consumer.ODataConsumerContext;
 
 

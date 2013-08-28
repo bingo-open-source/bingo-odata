@@ -1,11 +1,9 @@
 package bingo.odata.consumer.util;
 
 import bingo.lang.Strings;
-import bingo.meta.edm.EdmCollectionType;
 import bingo.meta.edm.EdmEntitySet;
 import bingo.meta.edm.EdmEntityType;
 import bingo.meta.edm.EdmFunctionImport;
-import bingo.meta.edm.EdmType;
 import bingo.odata.ODataServices;
 import bingo.odata.consumer.ODataConsumer;
 import bingo.odata.consumer.ODataConsumerContext;
@@ -68,18 +66,5 @@ public class ODataConsumerContextHelper {
 			context.setEntityType(edmEntityType);
 			context.setEntitySet(edmEntitySet);
 		}
-	}
-
-	private static EdmEntityType tryGetEntityTypeFromEdmType(EdmType returnType) {
-		if(returnType.isCollection()) {
-			EdmCollectionType collectionType = returnType.asCollection();
-			EdmType eleEdmType = collectionType.getElementType();
-			return tryGetEntityTypeFromEdmType(eleEdmType);
-		}
-		if(returnType.isEntity()) {
-			EdmEntityType entityType = returnType.asEntity();
-			return entityType;
-		}
-		return null;
 	}
 }

@@ -16,8 +16,6 @@
 package bingo.odata.consumer.test.mock;
 import javax.servlet.http.HttpServletRequest;
 
-import org.junit.Test;
-
 import bingo.odata.producer.requests.ODataRequestController;
 import bingo.odata.producer.server.ODataHttpHandler;
 import bingo.odata.producer.server.ODataHttpServer;
@@ -41,8 +39,8 @@ public class DemoODataServer extends Thread {
 		try {
 			server.start().join();
 		} catch (Throwable e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 	}
 

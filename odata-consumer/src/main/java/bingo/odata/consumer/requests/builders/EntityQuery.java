@@ -4,7 +4,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import bingo.odata.consumer.ODataConsumer;
 import bingo.odata.consumer.ext.OrderByDirection;
 import bingo.odata.consumer.ext.Page;
 

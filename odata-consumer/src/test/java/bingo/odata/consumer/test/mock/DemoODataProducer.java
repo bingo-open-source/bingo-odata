@@ -25,8 +25,6 @@ import bingo.lang.Dates;
 import bingo.lang.Enumerables;
 import bingo.lang.Strings;
 import bingo.lang.http.HttpMethods;
-import bingo.lang.json.JSON;
-import bingo.lang.json.JSONObject;
 import bingo.meta.edm.EdmAssociation;
 import bingo.meta.edm.EdmAssociationBuilder;
 import bingo.meta.edm.EdmBuilders;
@@ -228,7 +226,6 @@ public class DemoODataProducer extends ODataProducerAdapter implements ODataProd
 			ODataEntity entity = builder.build();
 			return new ODataValueBuilder().namedEntity(funcName, entity).build();
 		} else if(Strings.equals(funcName, "getEntitySet")) {
-			JSONObject jsonObject = JSON.decode(context.getRequest().getReader());
 			ODataEntitySetBuilder builder = new ODataEntitySetBuilder(entitySet,entityType);
 			if(entityType.getName().equalsIgnoreCase("Category")){
 				

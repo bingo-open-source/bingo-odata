@@ -3,7 +3,6 @@ package bingo.odata.consumer.util;
 import java.util.Map;
 
 import bingo.lang.Assert;
-import bingo.lang.Collections;
 import bingo.lang.Strings;
 import bingo.meta.edm.EdmEntitySet;
 import bingo.meta.edm.EdmEntityType;

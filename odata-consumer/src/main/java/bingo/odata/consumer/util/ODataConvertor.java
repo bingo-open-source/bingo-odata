@@ -8,7 +8,6 @@ import java.util.Map;
 
 import bingo.lang.Assert;
 import bingo.lang.Converts;
-import bingo.lang.Func1;
 import bingo.lang.json.JSON;
 import bingo.odata.ODataError;
 import bingo.odata.ODataObject;
