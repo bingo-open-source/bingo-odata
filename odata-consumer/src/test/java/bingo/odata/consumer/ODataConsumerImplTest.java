@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -152,14 +153,14 @@ public class ODataConsumerImplTest extends TestWithServerRunning {
 	@Test
 	public void testInvokeFunction_forString() {
 		String responseString = consumer.invokeFunction("getString").param("rating", 22)
-				.entity("Product").getStringResult();
+				.entity("Product").invokeForStringResult();
 		assertEquals(DemoODataProducer.INVOKED_FUNCTION, responseString);
 	}
 
 	@Test
 	public void testInvokeFunction_returnObject() {
 		Product product = consumer.invokeFunction("getEntity").param("rating", 2)
-				.entity("Product").getTypeResult(Product.class);
+				.entity("Product").invokeForTypeResult(Product.class);
 		assertNotNull(product);
 		assertEquals("张三", product.getName());
 	}
@@ -168,7 +169,7 @@ public class ODataConsumerImplTest extends TestWithServerRunning {
 	public void testInvokeFunction_paramDate() {
 		Date product = consumer.invokeFunction("paramDate")
 				.param("startTime", new Date(987654321000L))
-				.entity("Product").getTypeResult(Date.class);
+				.entity("Product").invokeForTypeResult(Date.class);
 		assertNotNull(product);
 		assertEquals(987654321000L, product.getTime());
 	}
@@ -176,7 +177,7 @@ public class ODataConsumerImplTest extends TestWithServerRunning {
 	@Test
 	public void testInvokeFunction_returnInt() {
 		int product = consumer.invokeFunction("getInt")
-				.entity("Product").getTypeResult(Integer.class);
+				.entity("Product").invokeForTypeResult(Integer.class);
 		assertNotNull(product);
 		assertEquals(1024, product);
 	}
@@ -184,7 +185,7 @@ public class ODataConsumerImplTest extends TestWithServerRunning {
 	@Test
 	public void testInvokeFunction_returnLong() {
 		long product = consumer.invokeFunction("getLong")
-				.entity("Product").getTypeResult(Long.class);
+				.entity("Product").invokeForTypeResult(Long.class);
 		assertNotNull(product);
 		assertEquals(9876543210L, product);
 	}
@@ -192,7 +193,7 @@ public class ODataConsumerImplTest extends TestWithServerRunning {
 	@Test
 	public void testInvokeFunction_returnDouble() {
 		double product = consumer.invokeFunction("getDouble")
-				.entity("Product").getTypeResult(Double.class);
+				.entity("Product").invokeForTypeResult(Double.class);
 		assertNotNull(product);
 		assertEquals(3.1415926, product, 0.0001);
 	}
@@ -200,7 +201,7 @@ public class ODataConsumerImplTest extends TestWithServerRunning {
 	@Test
 	public void testInvokeFunction_returnBoolean() {
 		Boolean product = consumer.invokeFunction("getBoolean")
-				.entity("Product").getTypeResult(Boolean.class);
+				.entity("Product").invokeForTypeResult(Boolean.class);
 		assertNotNull(product);
 		assertEquals(true, product);
 	}
@@ -208,7 +209,7 @@ public class ODataConsumerImplTest extends TestWithServerRunning {
 	@Test
 	public void testInvokeFunction_returnDate() {
 		Date product = consumer.invokeFunction("getDate")
-				.entity("Product").getTypeResult(Date.class);
+				.entity("Product").invokeForTypeResult(Date.class);
 		assertNotNull(product);
 		assertEquals(new Date(123456789), product);
 	}
@@ -216,15 +217,26 @@ public class ODataConsumerImplTest extends TestWithServerRunning {
 	@Test
 	public void testInvokeFunction_returnListObject() {
 		List<Product> product = consumer.invokeFunction("getEntitySet").param("rating", "参数")
-				.entity("Product").getTypeListResult(Product.class);
+				.entity("Product").invokeForTypeListResult(Product.class);
 		assertNotNull(product);
 		assertEquals(3, product.size());
 	}
 	
 	@Test
+	public void testInvokeFunction_returnVoid() {
+		try {
+			consumer.invokeFunction("getEntitySet").param("rating", "参数")
+			.entity("Product").invoke();
+			Assert.assertTrue(true);
+		} catch (Throwable e) {
+			Assert.fail();
+		}
+	}
+	
+	@Test
 	public void testInvokeFunction_returnODataValue() {
 		ODataValue product = consumer.invokeFunction("getEntity").param("rating", 2)
-				.entity("Product").getODataValueResult();
+				.entity("Product").invokeForODataValueResult();
 		assertNotNull(product);
 		assertEquals(ODataObjectKind.Entity, product.getKind());
 		

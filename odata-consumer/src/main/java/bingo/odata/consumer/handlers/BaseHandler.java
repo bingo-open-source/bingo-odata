@@ -16,6 +16,7 @@ public class BaseHandler {
 								, ODataServices services
 								, ODataMetadataVerifier verifier) {
 		Assert.notNull(consumer);
+		Assert.notNull(consumer.getConfig());
 		Assert.notNull(services);
 		Assert.notNull(verifier);
 		this.consumer = consumer;
@@ -25,6 +26,8 @@ public class BaseHandler {
 	}
 	
 	protected BaseHandler(ODataConsumer consumer) {
+		Assert.notNull(consumer);
+		Assert.notNull(consumer.getConfig());
 		this.consumer = consumer;
 		this.config = consumer.getConfig();
 	}

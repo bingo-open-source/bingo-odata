@@ -73,14 +73,31 @@ public class ODataConvertor {
 	public static <T extends ODataObject> ODataObjectKind getObjectKindFromObject(Class<T> t) {
 		Assert.notNull(t);
 		ODataObjectKind objectKind = null;
-		if(ODataEntity.class.isAssignableFrom(t)) objectKind = ODataObjectKind.Entity;
-		if(ODataEntitySet.class.isAssignableFrom(t)) objectKind = ODataObjectKind.EntitySet;
-		if(ODataError.class.isAssignableFrom(t)) objectKind = ODataObjectKind.Error;
-		if(ODataComplexObject.class.isAssignableFrom(t)) objectKind = ODataObjectKind.ComplexObject;
-		if(ODataNamedValue.class.isAssignableFrom(t)) objectKind = ODataObjectKind.NamedValue;
-		if(ODataProperty.class.isAssignableFrom(t)) objectKind = ODataObjectKind.Property;
-		if(ODataNavigationProperty.class.isAssignableFrom(t)) objectKind = ODataObjectKind.Property;
-		if(ODataRawValue.class.isAssignableFrom(t)) objectKind = ODataObjectKind.Raw;
+		
+		if(ODataEntity.class.isAssignableFrom(t)) 
+			objectKind = ODataObjectKind.Entity;
+		
+		else if(ODataEntitySet.class.isAssignableFrom(t)) 
+			objectKind = ODataObjectKind.EntitySet;
+		
+		else if(ODataError.class.isAssignableFrom(t)) 
+			objectKind = ODataObjectKind.Error;
+		
+		else if(ODataComplexObject.class.isAssignableFrom(t)) 
+			objectKind = ODataObjectKind.ComplexObject;
+		
+		else if(ODataNamedValue.class.isAssignableFrom(t)) 
+			objectKind = ODataObjectKind.NamedValue;
+		
+		else if(ODataProperty.class.isAssignableFrom(t)) 
+			objectKind = ODataObjectKind.Property;
+		
+		else if(ODataNavigationProperty.class.isAssignableFrom(t)) 
+			objectKind = ODataObjectKind.Property;
+		
+		else if(ODataRawValue.class.isAssignableFrom(t)) 
+			objectKind = ODataObjectKind.Raw;
+		
 		return objectKind;
 	}
 	

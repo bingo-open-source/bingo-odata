@@ -14,7 +14,7 @@ import com.google.api.client.http.HttpRequest;
 
 public class BehaviorTest extends TestWithServerRunning {
 	
-	static boolean execute;
+	boolean execute;
 	@Test
 	public void testBehaviorDoExecute() {
 		execute = false;
@@ -28,7 +28,7 @@ public class BehaviorTest extends TestWithServerRunning {
 		assertTrue(execute);
 	}
 	
-	static int order;
+	int order;
 	@Test
 	public void testBehaviorOrder() {
 		order = 0;

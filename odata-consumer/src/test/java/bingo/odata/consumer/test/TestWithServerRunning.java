@@ -7,7 +7,7 @@ import bingo.odata.consumer.test.mock.DemoODataServer;
 
 public class TestWithServerRunning {
 
-	private static Thread thread;
+	static Thread thread;
 	private static int layer = 0;
 	protected static boolean enabled = true;
 	

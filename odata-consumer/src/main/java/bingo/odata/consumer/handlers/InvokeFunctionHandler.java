@@ -24,9 +24,7 @@ public class InvokeFunctionHandler extends BaseHandler {
 	
 	public String forRawResult(String funcName, Map<String, Object> parameters, String entitySet) {
 		
-		EdmFunctionImport func = null;
-		
-		if(config.isVerifyMetadata()) func = verifier.hasFunction(entitySet, funcName);
+		EdmFunctionImport func = verifier.hasFunction(entitySet, funcName);
 
 		ODataConsumerContext context = ODataConsumerContextHelper
 					.initFunctionContext(consumer, func, entitySet);
@@ -46,9 +44,7 @@ public class InvokeFunctionHandler extends BaseHandler {
 	
 	public <T> T forEntity(String funcName, Map<String, Object> parameters, String entitySet, Class<T> clazz) {
 		
-		EdmFunctionImport func = null;
-	
-		if(config.isVerifyMetadata()) func = verifier.hasFunction(entitySet, funcName);
+		EdmFunctionImport func = verifier.hasFunction(entitySet, funcName);
 
 		ODataConsumerContext context = ODataConsumerContextHelper
 					.initFunctionContext(consumer, func, entitySet);
@@ -67,9 +63,7 @@ public class InvokeFunctionHandler extends BaseHandler {
 	
 	public ODataValue forODataValue(String funcName, Map<String, Object> parameters, String entitySet) {
 		
-		EdmFunctionImport func = null;
-
-		if(config.isVerifyMetadata()) func = verifier.hasFunction(entitySet, funcName);
+		EdmFunctionImport func = verifier.hasFunction(entitySet, funcName);
 
 		ODataConsumerContext context = ODataConsumerContextHelper
 					.initFunctionContext(consumer, func, entitySet);
@@ -86,12 +80,29 @@ public class InvokeFunctionHandler extends BaseHandler {
 		} else throw response.convertToError(context);
 	}
 	
+	public void forVoid(String funcName, Map<String, Object> parameters, String entitySet) {
+		
+		EdmFunctionImport func = verifier.hasFunction(entitySet, funcName);
+		
+		ODataConsumerContext context = ODataConsumerContextHelper
+				.initFunctionContext(consumer, func, entitySet);
+		
+		Request request = new FunctionRequest(context, config.getProducerUrl()).setHttpMethod(func.getHttpMethod())
+				.setEntitySet(entitySet).setFunction(funcName).setFuncParams(parameters);
+		
+		Response response = request.send();
+		
+		if(response.getStatus() == ODataResponseStatus.OK) {
+			
+			return;
+			
+		} else throw response.convertToError(context);
+	}
+	
 	public <T> List<T> forEntityList(String funcName,
 			Map<String, Object> parameters, String entitySet, Class<T> listClass) {
 		
-		EdmFunctionImport func = null;
-	
-		if(config.isVerifyMetadata()) func = verifier.hasFunction(entitySet, funcName);
+		EdmFunctionImport func = verifier.hasFunction(entitySet, funcName);
 
 		ODataConsumerContext context = ODataConsumerContextHelper
 					.initFunctionContext(consumer, func, entitySet);

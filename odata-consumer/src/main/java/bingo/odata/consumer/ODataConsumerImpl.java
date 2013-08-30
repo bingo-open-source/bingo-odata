@@ -319,10 +319,10 @@ public class ODataConsumerImpl implements ODataConsumer {
 				.findProperty(entityType, key, property);
 	}
 	
-//	public <T> T findProperty(String entityType, Object key, String property, Class<T> clazz) {
-//		return Handlers.get(FindPropertyHandler.class, consumerWithMetadata())
-//				.findProperty(entityType, key, property, clazz);
-//	}
+	public <T> T findProperty(String entityType, Object key, String property, Class<T> clazz) {
+		return Handlers.get(FindPropertyHandler.class, consumerWithMetadata())
+				.findProperty(entityType, key, property, clazz);
+	}
 	
 	public String findPropertyForString(String entityType, Object key, String property) {
 		return Handlers.get(FindPropertyHandler.class, consumerWithMetadata())
@@ -331,11 +331,6 @@ public class ODataConsumerImpl implements ODataConsumer {
 	
 	public String findProperty(String entityName, Object key, String property) {
 		return findPropertyForString(entityName, key, property);
-	}
-	
-	public <T> T findProperty(String entityName, Object key, String property,
-			Class<T> clazz) {
-		return findProperty(entityName, key, property, clazz);
 	}
 
 	public ODataNavigationProperty findNavigationProperty(EdmEntityType entityType, 
@@ -436,7 +431,12 @@ public class ODataConsumerImpl implements ODataConsumer {
 				.forString(funcName, parameters, entitySet);
 	}
 	
+	public void invokeFunctionForVoid(String funcName, Map<String, Object> parameters, String entitySet) {
+		Handlers.get(InvokeFunctionHandler.class, consumerWithMetadata())
+				.forVoid(funcName, parameters, entitySet);
+	}
+	
 	public FunctionInvoker invokeFunction(String funcName) {
-		return new FunctionInvokerImpl(this).invoke(funcName);
+		return new FunctionInvokerImpl(this).func(funcName);
 	}
 }

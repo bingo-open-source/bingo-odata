@@ -31,7 +31,7 @@ public class DemoODataServer extends Thread {
 	}
 	
 	public static void main(String[] args) {
-		new DemoODataServer().run();
+		new DemoODataServer().start();
 	}
 	
 	public void run() {

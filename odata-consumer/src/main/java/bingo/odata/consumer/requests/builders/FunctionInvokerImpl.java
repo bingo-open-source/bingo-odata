@@ -22,7 +22,7 @@ public class FunctionInvokerImpl implements FunctionInvoker {
 		this.consumer = oDataConsumerImpl;
 	}
 
-	public FunctionInvoker invoke(String funcName) {
+	public FunctionInvoker func(String funcName) {
 		this.func = funcName;
 		return this;
 	}
@@ -41,23 +41,28 @@ public class FunctionInvokerImpl implements FunctionInvoker {
 		this.params.putAll(params);
 		return this;
 	}
+	
+	public void invoke() {
+		consumer.invokeFunctionForVoid(func, params, 
+				null == entity? null : getEntitySetName(entity));
+	}
 
-	public String getStringResult() {
+	public String invokeForStringResult() {
 		return consumer.invokeFunctionForString(func, params, 
 				null == entity? null : getEntitySetName(entity));
 	}
 
-	public <T> T getTypeResult(Class<T> t) {
+	public <T> T invokeForTypeResult(Class<T> t) {
 		return consumer.invokeFunctionForType(func, params, 
 				null == entity? null : getEntitySetName(entity), t);
 	}
 
-	public <T> List<T> getTypeListResult(Class<T> t) {
+	public <T> List<T> invokeForTypeListResult(Class<T> t) {
 		return consumer.invokeFunctionForEntityList(func, params, 
 				null == entity? null : getEntitySetName(entity), t);
 	}
 
-	public ODataValue getODataValueResult() {
+	public ODataValue invokeForODataValueResult() {
 		return consumer.invokeFunctionForODataValue(func, params, 
 				null == entity? null : getEntitySetName(entity));
 	}

@@ -6,8 +6,8 @@ import java.util.Map;
 import bingo.odata.model.ODataValue;
 
 public interface FunctionInvoker {
-
-	FunctionInvoker 			invoke(String funcName);
+	
+	FunctionInvoker				func(String name);
 	
 	FunctionInvoker 			entity(String name);
 	
@@ -15,11 +15,13 @@ public interface FunctionInvoker {
 	
 	FunctionInvoker 			params(Map<String, Object> params);
 	
-	String							getStringResult();
+	void 						invoke();
 	
-	<T> T							getTypeResult(Class<T> t);
+	String						invokeForStringResult();
 	
-	<T> List<T>						getTypeListResult(Class<T> t);
+	<T> T						invokeForTypeResult(Class<T> t);
 	
-	ODataValue						getODataValueResult();
+	<T> List<T>					invokeForTypeListResult(Class<T> t);
+	
+	ODataValue					invokeForODataValueResult();
 }
