@@ -92,7 +92,8 @@ public class InvokeFunctionHandler extends BaseHandler {
 		
 		Response response = request.send();
 		
-		if(response.getStatus() == ODataResponseStatus.OK) {
+		if(response.getStatus() == ODataResponseStatus.OK 
+				|| response.getStatus() == ODataResponseStatus.NoContent) {
 			
 			return;
 			
